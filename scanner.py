@@ -488,6 +488,17 @@ canvas.spark{{width:100%;height:36px}}
 .lookup-status{{font-size:12px;color:var(--muted)}}
 #lookup-result{{margin-bottom:8px}}
 #lookup-result .card{{border:2px solid var(--accent)}}
+.monitor-badge{{font-size:10px;background:var(--accent);color:#fff;border-radius:4px;
+  padding:1px 6px;font-weight:600;margin-right:6px;white-space:nowrap}}
+.monitor-rm{{background:none;border:none;color:var(--muted);font-size:14px;
+  cursor:pointer;margin-left:auto;padding:0 4px;line-height:1}}
+.monitor-rm:hover{{color:var(--red)}}
+.monitor-add-btn{{display:block;width:100%;margin-top:10px;padding:7px;
+  background:var(--accent);color:#fff;border:none;border-radius:8px;
+  font-size:13px;font-weight:600;cursor:pointer}}
+.monitor-add-btn:hover{{opacity:.85}}
+.monitor-add-btn:disabled{{background:var(--bg3);color:var(--muted);cursor:default}}
+.card-ph{{opacity:.6}}
 .filter-bar{{display:flex;gap:8px;flex-wrap:wrap;align-items:center;
   padding:12px 0 4px;border-bottom:1px solid var(--border);margin-bottom:4px}}
 .flt{{background:var(--bg3);border:1px solid var(--border);border-radius:6px;
@@ -701,6 +712,9 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
       <div class="flt-pe">
         Div Yield ≥&nbsp;<input class="flt-inp" id="f-divy-min" placeholder="%" type="number" step="0.1" min="0">%
       </div>
+      <div class="flt-pe">
+        Upside ≥&nbsp;<input class="flt-inp" id="f-upside-min" placeholder="%" type="number" step="5">%
+      </div>
       <input class="flt-inp flt-sym" id="f-sym" placeholder="🔍 Symbol…" type="text" style="min-width:110px">
       <button class="flt-reset" id="f-reset">✕ Clear</button>
       <span class="flt-count" id="f-count"></span>
@@ -783,7 +797,7 @@ window.addEventListener('load', () => document.querySelectorAll('canvas.spark').
 
 // ── Combined filter engine ─────────────────────────────────────────────────────
 const TOTAL_CARDS = document.querySelectorAll('.card[data-sig]').length;
-const fState = {{ signal:'ALL', mcapMin:'', mcapMax:'', analyst:'', chg:'', exit:'', scoreMin:'', scoreMax:'', revGrowMin:'', epsGrowMin:'', peMin:'', peMax:'', fwdPeMin:'', fwdPeMax:'', betaMax:'', wk52Min:'', divYieldMin:'', symSearch:'', sector:'' }};
+const fState = {{ signal:'ALL', mcapMin:'', mcapMax:'', analyst:'', chg:'', exit:'', scoreMin:'', scoreMax:'', revGrowMin:'', epsGrowMin:'', peMin:'', peMax:'', fwdPeMin:'', fwdPeMax:'', betaMax:'', wk52Min:'', divYieldMin:'', upsideMin:'', symSearch:'', sector:'' }};
 
 // Populate sector dropdown from card data
 (function() {{
@@ -814,7 +828,8 @@ function applyFilters() {{
     const fwdpe   = parseFloat(card.dataset.fwdpe) || 0;
     const beta    = card.dataset.beta  !== '' ? parseFloat(card.dataset.beta)  : null;
     const wk52    = card.dataset.wk52  !== '' ? parseFloat(card.dataset.wk52)  : null;
-    const divy    = card.dataset.divy  !== '' ? parseFloat(card.dataset.divy)  : null;
+    const divy    = card.dataset.divy   !== '' ? parseFloat(card.dataset.divy)   : null;
+    const upside  = card.dataset.upside !== '' ? parseFloat(card.dataset.upside) : null;
     const cardSym = (card.dataset.sym  || '').toUpperCase();
     let show = true;
 
@@ -869,6 +884,10 @@ function applyFilters() {{
     if (fState.divYieldMin !== '') {{
       if (divy === null || divy < parseFloat(fState.divYieldMin)) show = false;
     }}
+    // Upside to target minimum
+    if (fState.upsideMin !== '') {{
+      if (upside === null || upside < parseFloat(fState.upsideMin)) show = false;
+    }}
     // Symbol search
     if (fState.symSearch && !cardSym.includes(fState.symSearch.toUpperCase())) show = false;
     // Sector
@@ -908,18 +927,19 @@ document.getElementById('f-fwdpe-max').addEventListener('input', e => {{ fState.
 document.getElementById('f-beta-max').addEventListener('input', e => {{ fState.betaMax = e.target.value; applyFilters(); }});
 document.getElementById('f-wk52-min').addEventListener('input', e => {{ fState.wk52Min = e.target.value; applyFilters(); }});
 document.getElementById('f-divy-min').addEventListener('input', e => {{ fState.divYieldMin = e.target.value; applyFilters(); }});
+document.getElementById('f-upside-min').addEventListener('input', e => {{ fState.upsideMin = e.target.value; applyFilters(); }});
 document.getElementById('f-sym').addEventListener('input', e => {{ fState.symSearch = e.target.value; applyFilters(); }});
 document.getElementById('f-reset').addEventListener('click', () => {{
   fState.signal = 'ALL';
   fState.mcapMin = fState.mcapMax = '';
   fState.analyst = fState.chg = fState.exit = fState.sector = '';
   fState.peMin = fState.peMax = fState.fwdPeMin = fState.fwdPeMax = fState.betaMax = fState.wk52Min = '';
-  fState.divYieldMin = fState.symSearch = '';
+  fState.divYieldMin = fState.upsideMin = fState.symSearch = '';
   fState.scoreMin = fState.scoreMax = fState.revGrowMin = fState.epsGrowMin = '';
   ['f-analyst','f-chg','f-exit','f-sector'].forEach(id => document.getElementById(id).value = '');
   ['f-mcap-min','f-mcap-max','f-score-min','f-score-max','f-revgrow-min','f-epsgrow-min',
    'f-pe-min','f-pe-max','f-fwdpe-min','f-fwdpe-max','f-beta-max','f-wk52-min',
-   'f-divy-min','f-sym'].forEach(id => document.getElementById(id).value = '');
+   'f-divy-min','f-upside-min','f-sym'].forEach(id => document.getElementById(id).value = '');
   document.querySelectorAll('.kpi-btn').forEach(b => b.classList.remove('active-filter'));
   document.querySelector('.kpi-btn[data-filter="ALL"]').classList.add('active-filter');
   applyFilters();
@@ -942,12 +962,96 @@ document.querySelectorAll('.kpi-btn').forEach(btn => {{
 // Init count
 applyFilters();
 
-// ── Quick Lookup ───────────────────────────────────────────────────────────────
+// ── Quick Lookup + Monitor ─────────────────────────────────────────────────────
+const MONITOR_KEY = 'pivot_monitor_v1';
+function getMonitor() {{ try {{ return JSON.parse(localStorage.getItem(MONITOR_KEY)||'[]'); }} catch {{ return []; }} }}
+function saveMonitor(arr) {{ try {{ localStorage.setItem(MONITOR_KEY, JSON.stringify([...new Set(arr)])); }} catch {{}} }}
+
+function wireCard(card, sym, removable) {{
+  card.querySelectorAll('canvas.spark').forEach(c => drawSpark(c));
+  card.querySelectorAll('.ticker-link').forEach(el => {{
+    el.addEventListener('click', () => {{
+      document.querySelectorAll('.tab,.tab-panel').forEach(e => e.classList.remove('active'));
+      document.querySelector('[data-panel="p-timeline"]').classList.add('active');
+      document.getElementById('p-timeline').classList.add('active');
+    }});
+  }});
+  if (removable) {{
+    const rmBtn = document.createElement('button');
+    rmBtn.className = 'monitor-rm';
+    rmBtn.title = 'Remove from monitor';
+    rmBtn.textContent = '✕';
+    rmBtn.addEventListener('click', () => {{
+      saveMonitor(getMonitor().filter(s => s !== sym));
+      card.remove();
+      applyFilters();
+    }});
+    card.querySelector('.card-header').appendChild(rmBtn);
+  }}
+}}
+
+async function fetchCard(sym) {{
+  const r = await fetch(`/api/scan?symbol=${{encodeURIComponent(sym)}}`);
+  return r.json();
+}}
+
+function injectToGrid(data, sym) {{
+  const grid = document.querySelector('.grid');
+  const existing = grid.querySelector(`[data-sym="${{sym}}"]`);
+  if (existing) existing.remove();
+  const wrap = document.createElement('div');
+  wrap.innerHTML = data.html;
+  const card = wrap.firstElementChild;
+  const badge = document.createElement('span');
+  badge.className = 'monitor-badge';
+  badge.textContent = '★ Custom';
+  card.querySelector('.card-header').prepend(badge);
+  grid.prepend(card);
+  wireCard(card, sym, true);
+  applyFilters();
+}}
+
+// Load monitored symbols on startup
+(async function() {{
+  const syms = getMonitor();
+  if (!syms.length) return;
+  const grid = document.querySelector('.grid');
+  // Placeholders first
+  const phs = syms.map(sym => {{
+    const ph = document.createElement('div');
+    ph.className = 'card card-ph';
+    ph.dataset.sym = sym;
+    ph.innerHTML = `<div class="card-header"><span class="ticker">${{sym}}</span><span class="monitor-badge">★ Custom</span></div><p style="font-size:12px;color:var(--muted);padding:8px">Evaluating…</p>`;
+    grid.prepend(ph);
+    return ph;
+  }});
+  await Promise.all(syms.map(async (sym, i) => {{
+    try {{
+      const data = await fetchCard(sym);
+      if (data.html) {{
+        const wrap = document.createElement('div');
+        wrap.innerHTML = data.html;
+        const card = wrap.firstElementChild;
+        const badge = document.createElement('span');
+        badge.className = 'monitor-badge';
+        badge.textContent = '★ Custom';
+        card.querySelector('.card-header').prepend(badge);
+        phs[i].replaceWith(card);
+        wireCard(card, sym, true);
+      }} else {{
+        phs[i].querySelector('p').textContent = `Error: ${{data.error||'n/a'}}`;
+      }}
+    }} catch {{ phs[i].remove(); }}
+  }}));
+  applyFilters();
+}})();
+
+// Quick Lookup
 (function() {{
   const inp = document.getElementById('f-lookup');
   const btn = document.getElementById('f-lookup-btn');
   const status = document.getElementById('lookup-status');
-  const result = document.getElementById('lookup-result');
+  const resultBox = document.getElementById('lookup-result');
 
   async function runLookup() {{
     const sym = inp.value.trim().toUpperCase();
@@ -955,27 +1059,37 @@ applyFilters();
     btn.classList.add('loading');
     btn.textContent = '…';
     status.textContent = `Fetching ${{sym}}…`;
-    result.innerHTML = '';
+    resultBox.innerHTML = '';
     try {{
-      const r = await fetch(`/api/scan?symbol=${{encodeURIComponent(sym)}}`);
-      const data = await r.json();
+      const data = await fetchCard(sym);
       if (data.error) {{
         status.textContent = `⚠ ${{data.error}}`;
       }} else {{
-        result.innerHTML = data.html;
-        status.textContent = `${{sym}}: ${{data.signal}} · score ${{data.score}}/140`;
-        result.querySelectorAll('canvas.spark').forEach(c => drawSpark(c));
-        // Wire ticker-link click on injected card
-        result.querySelectorAll('.ticker-link').forEach(el => {{
-          el.addEventListener('click', () => {{
-            document.querySelectorAll('.tab,.tab-panel').forEach(e => e.classList.remove('active'));
-            document.querySelector('[data-panel="p-timeline"]').classList.add('active');
-            document.getElementById('p-timeline').classList.add('active');
-          }});
+        resultBox.innerHTML = data.html;
+        const card = resultBox.firstElementChild;
+        wireCard(card, sym, false);
+
+        // Add to Monitor button
+        const alreadyIn = getMonitor().includes(sym);
+        const addBtn = document.createElement('button');
+        addBtn.className = 'monitor-add-btn';
+        addBtn.textContent = alreadyIn ? '✓ In Monitor' : '+ Add to Monitor';
+        addBtn.disabled = alreadyIn;
+        addBtn.addEventListener('click', () => {{
+          const m = getMonitor();
+          if (!m.includes(sym)) {{
+            saveMonitor([...m, sym]);
+            injectToGrid(data, sym);
+            addBtn.textContent = '✓ In Monitor';
+            addBtn.disabled = true;
+          }}
         }});
+        card.appendChild(addBtn);
+
+        status.textContent = `${{sym}}: ${{data.signal}} · score ${{data.score}}/140`;
       }}
     }} catch(e) {{
-      status.textContent = '⚠ Network error — check connection';
+      status.textContent = '⚠ Network error';
     }}
     btn.classList.remove('loading');
     btn.textContent = 'Evaluate';
@@ -1411,7 +1525,8 @@ def _card(r):
     tgt  = r.get("target_px")
     wk52 = r.get("wk52_chg")
 
-    tgt_upside = f"{((tgt/close-1)*100):+.0f}%" if (tgt and close and close > 0) else "n/a"
+    tgt_upside  = f"{((tgt/close-1)*100):+.0f}%" if (tgt and close and close > 0) else "n/a"
+    upside_attr = f"{(tgt/close-1)*100:.1f}" if (tgt and close and close > 0) else ""
     wk52_html  = f"{wk52*100:+.0f}%" if wk52 is not None else "n/a"
     wk52_cls   = "chg-pos" if (wk52 and wk52 > 0) else "chg-neg" if wk52 else ""
 
@@ -1447,7 +1562,7 @@ def _card(r):
     target_html  = (f'<span style="font-size:11px;color:var(--muted)">Target '
                     f'<b>${_f(tgt,0)}</b> ({tgt_upside})</span>') if tgt else ""
 
-    return f"""<div class="card" data-sig="{sig}" data-exit="{exit_attr}" data-score="{score}" data-mktcap="{mktcap_b}" data-pe="{pe_attr}" data-fwdpe="{fpe_attr}" data-daychg="{chg_attr}" data-analyst="{anlst_attr}" data-sector="{sec_attr}" data-epsgrow="{epsg_attr}" data-revgrow="{revg_attr}" data-beta="{beta_attr}" data-wk52="{wk52_attr}" data-divy="{divy_attr}" data-sym="{sym}">
+    return f"""<div class="card" data-sig="{sig}" data-exit="{exit_attr}" data-score="{score}" data-mktcap="{mktcap_b}" data-pe="{pe_attr}" data-fwdpe="{fpe_attr}" data-daychg="{chg_attr}" data-analyst="{anlst_attr}" data-sector="{sec_attr}" data-epsgrow="{epsg_attr}" data-revgrow="{revg_attr}" data-beta="{beta_attr}" data-wk52="{wk52_attr}" data-divy="{divy_attr}" data-upside="{upside_attr}" data-sym="{sym}">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="{sym}" title="Click to see {sym} timeline">{sym}</span>
     <span class="price">${_f(close,2)}</span>
