@@ -23,7 +23,7 @@ SYMBOLS = [
     "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "META", "TSLA",
     "AVGO", "ORCL", "NFLX", "AMD", "CSCO", "QCOM", "TXN", "CRM", "ASML",
 ]
-REPORT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public", "index.html")
+REPORT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
 OPEN_BROWSER = "--no-browser" not in sys.argv
 HISTORY_DAYS = 90
 RSI_LOWER    = 40
