@@ -65,6 +65,44 @@ SYMBOLS = [
     "IWM",
     # E-commerce
     "SHOP",
+    # Semis / hardware additions
+    "AMAT", "ON", "TSM", "NXPI", "DELL", "INTC", "BABA", "IREN", "AMBA",
+    # Software additions
+    "IBM", "DT",
+    # Sector ETFs (comprehensive coverage)
+    "XLK", "XLF", "XLE", "XLV", "XLI", "XLC", "XLP", "XBI",
+    # Commodities ETFs
+    "GLD", "SLV",
+    # Market / thematic ETFs
+    "MAGS", "QTUM", "SQQQ",
+    # Quantum computing
+    "QBTS", "RGTI",
+    # Healthcare / defense / energy
+    "UNH", "HWM", "OKLO",
+    # International / Korea
+    "EWY",
+    # Fintech / gaming / crypto
+    "COIN", "HOOD", "SOFI", "TTWO",
+    # Sector ETFs — additional
+    "XLRE", "XLU", "XLY",
+    # Consumer
+    "COST", "LULU", "NKE",
+    # Pharma / biotech
+    "LLY", "ABBV", "PFE", "GEHC",
+    # Defense
+    "LMT", "ITA",
+    # Energy / clean energy
+    "CEG", "FSLR", "NEE",
+    # AI infrastructure / optical
+    "VRT", "CRDO", "ALAB", "COHR", "CRWV",
+    # Bitcoin miners
+    "MSTR", "MARA", "CORZ",
+    # SaaS / collaboration
+    "TEAM", "MNDY",
+    # China ADRs
+    "JD", "PDD",
+    # Other
+    "GLW",
 ]
 REPORT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
 OPEN_BROWSER = "--no-browser" not in sys.argv
@@ -605,8 +643,24 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
         <span>–</span><input class="flt-inp" id="f-score-max" placeholder="120" type="number" min="0" max="120" step="20">
       </div>
       <div class="flt-pe">
+        Rev Grw ≥&nbsp;<input class="flt-inp" id="f-revgrow-min" placeholder="%" type="number" step="1">%
+      </div>
+      <div class="flt-pe">
+        EPS Grw ≥&nbsp;<input class="flt-inp" id="f-epsgrow-min" placeholder="%" type="number" step="1">%
+      </div>
+      <div class="flt-pe">
         P/E:&nbsp;<input class="flt-inp" id="f-pe-min" placeholder="min" type="number" min="0" step="1">
         <span>–</span><input class="flt-inp" id="f-pe-max" placeholder="max" type="number" min="0" step="1">
+      </div>
+      <div class="flt-pe">
+        Fwd P/E:&nbsp;<input class="flt-inp" id="f-fwdpe-min" placeholder="min" type="number" min="0" step="1">
+        <span>–</span><input class="flt-inp" id="f-fwdpe-max" placeholder="max" type="number" min="0" step="1">
+      </div>
+      <div class="flt-pe">
+        Beta ≤&nbsp;<input class="flt-inp" id="f-beta-max" placeholder="e.g. 1.5" type="number" step="0.1">
+      </div>
+      <div class="flt-pe">
+        52W Chg ≥&nbsp;<input class="flt-inp" id="f-wk52-min" placeholder="%" type="number" step="1">%
       </div>
       <button class="flt-reset" id="f-reset">✕ Clear</button>
       <span class="flt-count" id="f-count"></span>
@@ -689,7 +743,7 @@ window.addEventListener('load', () => document.querySelectorAll('canvas.spark').
 
 // ── Combined filter engine ─────────────────────────────────────────────────────
 const TOTAL_CARDS = document.querySelectorAll('.card[data-sig]').length;
-const fState = {{ signal:'ALL', mktcap:'', analyst:'', chg:'', exit:'', scoreMin:'', scoreMax:'', peMin:'', peMax:'', sector:'' }};
+const fState = {{ signal:'ALL', mktcap:'', analyst:'', chg:'', exit:'', scoreMin:'', scoreMax:'', revGrowMin:'', epsGrowMin:'', peMin:'', peMax:'', fwdPeMin:'', fwdPeMax:'', betaMax:'', wk52Min:'', sector:'' }};
 
 // Populate sector dropdown from card data
 (function() {{
@@ -707,14 +761,19 @@ const fState = {{ signal:'ALL', mktcap:'', analyst:'', chg:'', exit:'', scoreMin
 function applyFilters() {{
   let shown = 0;
   document.querySelectorAll('.card[data-sig]').forEach(card => {{
-    const sig    = card.dataset.sig;
-    const hasExit= card.dataset.exit === 'true';
-    const score  = parseFloat(card.dataset.score) || 0;
-    const mcap   = parseFloat(card.dataset.mktcap) || 0;
-    const analyst= card.dataset.analyst || '';
-    const daychg = parseFloat(card.dataset.daychg) || 0;
-    const pe     = parseFloat(card.dataset.pe) || 0;
-    const sector = card.dataset.sector || '';
+    const sig     = card.dataset.sig;
+    const hasExit = card.dataset.exit === 'true';
+    const score   = parseFloat(card.dataset.score) || 0;
+    const mcap    = parseFloat(card.dataset.mktcap) || 0;
+    const analyst = card.dataset.analyst || '';
+    const daychg  = parseFloat(card.dataset.daychg) || 0;
+    const pe      = parseFloat(card.dataset.pe) || 0;
+    const sector  = card.dataset.sector || '';
+    const epsgrow = card.dataset.epsgrow !== '' ? parseFloat(card.dataset.epsgrow) : null;
+    const revgrow = card.dataset.revgrow !== '' ? parseFloat(card.dataset.revgrow) : null;
+    const fwdpe   = parseFloat(card.dataset.fwdpe) || 0;
+    const beta    = card.dataset.beta  !== '' ? parseFloat(card.dataset.beta)  : null;
+    const wk52    = card.dataset.wk52  !== '' ? parseFloat(card.dataset.wk52)  : null;
     let show = true;
 
     // Signal (KPI buttons)
@@ -747,9 +806,28 @@ function applyFilters() {{
     // Entry score range
     if (fState.scoreMin !== '' && score < parseFloat(fState.scoreMin)) show = false;
     if (fState.scoreMax !== '' && score > parseFloat(fState.scoreMax)) show = false;
+    // Revenue growth minimum (stored as %, e.g. 10 = 10%)
+    if (fState.revGrowMin !== '') {{
+      if (revgrow === null || revgrow < parseFloat(fState.revGrowMin)) show = false;
+    }}
+    // EPS growth minimum
+    if (fState.epsGrowMin !== '') {{
+      if (epsgrow === null || epsgrow < parseFloat(fState.epsGrowMin)) show = false;
+    }}
     // P/E range
     if (fState.peMin !== '' && pe > 0 && pe < parseFloat(fState.peMin)) show = false;
     if (fState.peMax !== '' && pe > 0 && pe > parseFloat(fState.peMax)) show = false;
+    // Fwd P/E range
+    if (fState.fwdPeMin !== '' && fwdpe > 0 && fwdpe < parseFloat(fState.fwdPeMin)) show = false;
+    if (fState.fwdPeMax !== '' && fwdpe > 0 && fwdpe > parseFloat(fState.fwdPeMax)) show = false;
+    // Beta max
+    if (fState.betaMax !== '') {{
+      if (beta === null || beta > parseFloat(fState.betaMax)) show = false;
+    }}
+    // 52W Change minimum
+    if (fState.wk52Min !== '') {{
+      if (wk52 === null || wk52 < parseFloat(fState.wk52Min)) show = false;
+    }}
     // Sector
     if (fState.sector && sector !== fState.sector) show = false;
 
@@ -780,16 +858,30 @@ function applyFilters() {{
 }});
 document.getElementById('f-score-min').addEventListener('input', e => {{ fState.scoreMin = e.target.value; applyFilters(); }});
 document.getElementById('f-score-max').addEventListener('input', e => {{ fState.scoreMax = e.target.value; applyFilters(); }});
+document.getElementById('f-revgrow-min').addEventListener('input', e => {{ fState.revGrowMin = e.target.value; applyFilters(); }});
+document.getElementById('f-epsgrow-min').addEventListener('input', e => {{ fState.epsGrowMin = e.target.value; applyFilters(); }});
 document.getElementById('f-pe-min').addEventListener('input', e => {{ fState.peMin = e.target.value; applyFilters(); }});
 document.getElementById('f-pe-max').addEventListener('input', e => {{ fState.peMax = e.target.value; applyFilters(); }});
+document.getElementById('f-fwdpe-min').addEventListener('input', e => {{ fState.fwdPeMin = e.target.value; applyFilters(); }});
+document.getElementById('f-fwdpe-max').addEventListener('input', e => {{ fState.fwdPeMax = e.target.value; applyFilters(); }});
+document.getElementById('f-beta-max').addEventListener('input', e => {{ fState.betaMax = e.target.value; applyFilters(); }});
+document.getElementById('f-wk52-min').addEventListener('input', e => {{ fState.wk52Min = e.target.value; applyFilters(); }});
 document.getElementById('f-reset').addEventListener('click', () => {{
   fState.signal = 'ALL';
-  fState.mktcap = fState.analyst = fState.chg = fState.exit = fState.sector = fState.peMin = fState.peMax = '';
+  fState.mktcap = fState.analyst = fState.chg = fState.exit = fState.sector = '';
+  fState.peMin = fState.peMax = fState.fwdPeMin = fState.fwdPeMax = fState.betaMax = fState.wk52Min = '';
+  fState.scoreMin = fState.scoreMax = fState.revGrowMin = fState.epsGrowMin = '';
   ['f-mktcap','f-analyst','f-chg','f-exit','f-sector'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('f-score-min').value = '';
   document.getElementById('f-score-max').value = '';
+  document.getElementById('f-revgrow-min').value = '';
+  document.getElementById('f-epsgrow-min').value = '';
   document.getElementById('f-pe-min').value = '';
   document.getElementById('f-pe-max').value = '';
+  document.getElementById('f-fwdpe-min').value = '';
+  document.getElementById('f-fwdpe-max').value = '';
+  document.getElementById('f-beta-max').value = '';
+  document.getElementById('f-wk52-min').value = '';
   document.querySelectorAll('.kpi-btn').forEach(b => b.classList.remove('active-filter'));
   document.querySelector('.kpi-btn[data-filter="ALL"]').classList.add('active-filter');
   applyFilters();
@@ -1245,11 +1337,16 @@ def _card(r):
     anlst_lbl, anlst_col = ANALYST_LABELS.get(anlst or "", ("n/a", "muted"))
 
     # Data attributes for JS filtering
-    mktcap_b   = f"{mcap/1e9:.2f}" if mcap else "0"
-    pe_attr    = f"{pe:.1f}" if pe else "0"
-    chg_attr   = f"{day_chg:.2f}" if day_chg is not None else "0"
-    anlst_attr = anlst or ""
-    sec_attr   = (sector or "").replace('"', "")
+    mktcap_b    = f"{mcap/1e9:.2f}" if mcap else "0"
+    pe_attr     = f"{pe:.1f}" if pe else "0"
+    fpe_attr    = f"{fpe:.1f}" if fpe else "0"
+    chg_attr    = f"{day_chg:.2f}" if day_chg is not None else "0"
+    anlst_attr  = anlst or ""
+    sec_attr    = (sector or "").replace('"', "")
+    epsg_attr   = f"{epsg*100:.1f}" if epsg is not None else ""
+    revg_attr   = f"{revg*100:.1f}" if revg is not None else ""
+    beta_attr   = f"{beta:.2f}" if beta is not None else ""
+    wk52_attr   = f"{wk52*100:.1f}" if wk52 is not None else ""
 
     def fi(lbl, val, cls=""):
         return (f'<div class="fund-item"><div class="fund-label">{lbl}</div>'
@@ -1268,7 +1365,7 @@ def _card(r):
     target_html  = (f'<span style="font-size:11px;color:var(--muted)">Target '
                     f'<b>${_f(tgt,0)}</b> ({tgt_upside})</span>') if tgt else ""
 
-    return f"""<div class="card" data-sig="{sig}" data-exit="{exit_attr}" data-score="{score}" data-mktcap="{mktcap_b}" data-pe="{pe_attr}" data-daychg="{chg_attr}" data-analyst="{anlst_attr}" data-sector="{sec_attr}">
+    return f"""<div class="card" data-sig="{sig}" data-exit="{exit_attr}" data-score="{score}" data-mktcap="{mktcap_b}" data-pe="{pe_attr}" data-fwdpe="{fpe_attr}" data-daychg="{chg_attr}" data-analyst="{anlst_attr}" data-sector="{sec_attr}" data-epsgrow="{epsg_attr}" data-revgrow="{revg_attr}" data-beta="{beta_attr}" data-wk52="{wk52_attr}">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="{sym}" title="Click to see {sym} timeline">{sym}</span>
     <span class="price">${_f(close,2)}</span>
