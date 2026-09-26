@@ -158,7 +158,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
 <div class="page">
   <div>
     <h1>Pivot Scanner</h1>
-    <div class="subtitle">Generated Saturday, September 26 2026 — 15:15</div>
+    <div class="subtitle">Generated Saturday, September 26 2026 — 15:22</div>
   </div>
   <div class="kpi-row">
     <div class="kpi kpi-btn" data-filter="ALL"><div class="kpi-label">All Symbols</div><div class="kpi-val">129</div></div>
@@ -229,14 +229,10 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
 
   <div id="p-today" class="tab-panel active">
     <div class="filter-bar">
-      <select class="flt" id="f-mktcap" title="Market Cap">
-        <option value="">Mkt Cap: All</option>
-        <option value="mega">Mega ($200B+)</option>
-        <option value="large">Large ($10B–$200B)</option>
-        <option value="mid">Mid ($2B–$10B)</option>
-        <option value="small">Small ($300M–$2B)</option>
-        <option value="micro">Micro (&lt;$300M)</option>
-      </select>
+      <div class="flt-pe">
+        Mkt Cap $B:&nbsp;<input class="flt-inp" id="f-mcap-min" placeholder="min" type="number" min="0" step="10">
+        <span>–</span><input class="flt-inp" id="f-mcap-max" placeholder="max" type="number" min="0" step="10">
+      </div>
       <select class="flt" id="f-analyst" title="Analyst Rating">
         <option value="">Analyst: All</option>
         <option value="strong_buy">⬆ Strong Buy</option>
@@ -4234,7 +4230,7 @@ window.addEventListener('load', () => document.querySelectorAll('canvas.spark').
 
 // ── Combined filter engine ─────────────────────────────────────────────────────
 const TOTAL_CARDS = document.querySelectorAll('.card[data-sig]').length;
-const fState = { signal:'ALL', mktcap:'', analyst:'', chg:'', exit:'', scoreMin:'', scoreMax:'', revGrowMin:'', epsGrowMin:'', peMin:'', peMax:'', fwdPeMin:'', fwdPeMax:'', betaMax:'', wk52Min:'', divYieldMin:'', symSearch:'', sector:'' };
+const fState = { signal:'ALL', mcapMin:'', mcapMax:'', analyst:'', chg:'', exit:'', scoreMin:'', scoreMax:'', revGrowMin:'', epsGrowMin:'', peMin:'', peMax:'', fwdPeMin:'', fwdPeMax:'', betaMax:'', wk52Min:'', divYieldMin:'', symSearch:'', sector:'' };
 
 // Populate sector dropdown from card data
 (function() {
@@ -4276,14 +4272,9 @@ function applyFilters() {
       if (fState.signal === 'HOLD'  && sig !== 'HOLD')  show = false;
       if (fState.signal === 'EXIT'  && !hasExit)        show = false;
     }
-    // Market cap (in $B stored in data-mktcap)
-    if (fState.mktcap) {
-      if (fState.mktcap === 'mega'  && mcap < 200)                     show = false;
-      if (fState.mktcap === 'large' && (mcap < 10  || mcap >= 200))    show = false;
-      if (fState.mktcap === 'mid'   && (mcap < 2   || mcap >= 10))     show = false;
-      if (fState.mktcap === 'small' && (mcap < 0.3 || mcap >= 2))      show = false;
-      if (fState.mktcap === 'micro' && mcap >= 0.3)                    show = false;
-    }
+    // Market cap range ($B)
+    if (fState.mcapMin !== '' && mcap < parseFloat(fState.mcapMin)) show = false;
+    if (fState.mcapMax !== '' && mcap > parseFloat(fState.mcapMax)) show = false;
     // Analyst rating
     if (fState.analyst) {
       if (fState.analyst === 'sell') {
@@ -4337,20 +4328,18 @@ function applyFilters() {
   document.getElementById('f-count').textContent = `${shown} of ${TOTAL_CARDS} symbols`;
 
   // Mark active filter dropdowns
-  ['f-mktcap','f-analyst','f-chg','f-exit','f-sector'].forEach(id => {
+  ['f-analyst','f-chg','f-exit','f-sector'].forEach(id => {
     const el = document.getElementById(id);
     el.classList.toggle('active', !!el.value);
   });
 }
 
 // Wire up filter controls
-['f-mktcap','f-analyst','f-chg','f-exit','f-sector'].forEach(id => {
+document.getElementById('f-mcap-min').addEventListener('input', e => { fState.mcapMin = e.target.value; applyFilters(); });
+document.getElementById('f-mcap-max').addEventListener('input', e => { fState.mcapMax = e.target.value; applyFilters(); });
+['f-analyst','f-chg','f-exit','f-sector'].forEach(id => {
+  const keyMap = {'f-analyst':'analyst','f-chg':'chg','f-exit':'exit','f-sector':'sector'};
   document.getElementById(id).addEventListener('change', e => {
-    fState[id.replace('f-','').replace('-','').replace('mktcap','mktcap')
-               .replace('analyst','analyst').replace('chg','chg')
-               .replace('exit','exit').replace('sector','sector')] = e.target.value;
-    // map id to fState key
-    const keyMap = {'f-mktcap':'mktcap','f-analyst':'analyst','f-chg':'chg','f-exit':'exit','f-sector':'sector'};
     fState[keyMap[id]] = e.target.value;
     applyFilters();
   });
@@ -4369,23 +4358,15 @@ document.getElementById('f-divy-min').addEventListener('input', e => { fState.di
 document.getElementById('f-sym').addEventListener('input', e => { fState.symSearch = e.target.value; applyFilters(); });
 document.getElementById('f-reset').addEventListener('click', () => {
   fState.signal = 'ALL';
-  fState.mktcap = fState.analyst = fState.chg = fState.exit = fState.sector = '';
+  fState.mcapMin = fState.mcapMax = '';
+  fState.analyst = fState.chg = fState.exit = fState.sector = '';
   fState.peMin = fState.peMax = fState.fwdPeMin = fState.fwdPeMax = fState.betaMax = fState.wk52Min = '';
   fState.divYieldMin = fState.symSearch = '';
   fState.scoreMin = fState.scoreMax = fState.revGrowMin = fState.epsGrowMin = '';
-  ['f-mktcap','f-analyst','f-chg','f-exit','f-sector'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('f-score-min').value = '';
-  document.getElementById('f-score-max').value = '';
-  document.getElementById('f-revgrow-min').value = '';
-  document.getElementById('f-epsgrow-min').value = '';
-  document.getElementById('f-pe-min').value = '';
-  document.getElementById('f-pe-max').value = '';
-  document.getElementById('f-fwdpe-min').value = '';
-  document.getElementById('f-fwdpe-max').value = '';
-  document.getElementById('f-beta-max').value = '';
-  document.getElementById('f-wk52-min').value = '';
-  document.getElementById('f-divy-min').value = '';
-  document.getElementById('f-sym').value = '';
+  ['f-analyst','f-chg','f-exit','f-sector'].forEach(id => document.getElementById(id).value = '');
+  ['f-mcap-min','f-mcap-max','f-score-min','f-score-max','f-revgrow-min','f-epsgrow-min',
+   'f-pe-min','f-pe-max','f-fwdpe-min','f-fwdpe-max','f-beta-max','f-wk52-min',
+   'f-divy-min','f-sym'].forEach(id => document.getElementById(id).value = '');
   document.querySelectorAll('.kpi-btn').forEach(b => b.classList.remove('active-filter'));
   document.querySelector('.kpi-btn[data-filter="ALL"]').classList.add('active-filter');
   applyFilters();
