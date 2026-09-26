@@ -1049,7 +1049,11 @@ function injectToGrid(data, sym) {{
 
 // Load monitored symbols on startup
 (async function() {{
-  const syms = getMonitor();
+  // Remove any tickers from Monitor that are already static default cards
+  const staticSyms = new Set([...document.querySelectorAll('.card[data-sym]')].map(c => c.dataset.sym));
+  const cleaned = getMonitor().filter(s => !staticSyms.has(s));
+  if (cleaned.length !== getMonitor().length) saveMonitor(cleaned);
+  const syms = cleaned;
   if (!syms.length) return;
   const grid = document.querySelector('.grid');
   // Placeholders first
