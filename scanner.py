@@ -19,8 +19,13 @@ except ImportError:
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 SYMBOLS = [
+    # Broad market
     "QQQ", "SPY",
+    # Sector ETFs
+    "SOXX", "IGV", "DRAM",
+    # Mega-cap tech
     "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "META", "TSLA",
+    # Large-cap tech
     "AVGO", "ORCL", "NFLX", "AMD", "CSCO", "QCOM", "TXN", "CRM", "ASML",
 ]
 REPORT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
