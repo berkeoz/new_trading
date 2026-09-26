@@ -103,6 +103,20 @@ SYMBOLS = [
     "JD", "PDD",
     # Other
     "GLW",
+    # Memory / storage (AI supercycle)
+    "SNDK", "SKHY",
+    # Optical networking
+    "LITE", "SMTC",
+    # Bitcoin miners
+    "WULF", "CIFR",
+    # Solar
+    "RUN",
+    # Grid / energy infrastructure
+    "GEV",
+    # Consumer internet
+    "SNAP", "OSCR",
+    # Speculative / small-cap
+    "KEEL", "PRTS", "WYFI", "TE",
 ]
 REPORT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
 OPEN_BROWSER = "--no-browser" not in sys.argv
@@ -142,7 +156,7 @@ def _obv(close, volume):
 
 # ── Day extraction ─────────────────────────────────────────────────────────────
 def _day(df, rsi_s, ml_s, sl_s, hist_s, sk_s, sd_s, obv_s, vol_ma_s,
-         ma20_s, ma50_s, ma200_s, idx):
+         ma20_s, ma50_s, ma200_s, ma5_s, ma10_s, idx):
     n = len(df)
     def v(s, i=idx):
         pos = n + i if i < 0 else i
@@ -170,6 +184,8 @@ def _day(df, rsi_s, ml_s, sl_s, hist_s, sk_s, sd_s, obv_s, vol_ma_s,
         "obv_prev":       v(obv_s,    idx-1),
         "volume":         v(df["volume"]),
         "vol_ma20":       v(vol_ma_s),
+        "ma5":            v(ma5_s),
+        "ma10":           v(ma10_s),
     }
 
 # ── Entry scoring ──────────────────────────────────────────────────────────────
@@ -181,6 +197,8 @@ def _score_entry(d):
     vol, vol_ma = d.get("volume"), d.get("vol_ma20")
     obv, obv_p = d.get("obv"), d.get("obv_prev")
 
+    ma5, ma10 = d.get("ma5"), d.get("ma10")
+
     r1 = bool(rsi is not None and rsi < RSI_LOWER)
     r2 = bool(hist is not None and hist < 0 and hist_prev is not None and hist > hist_prev)
     r3 = bool(sk and sd and sk_p is not None and sd_p is not None
@@ -188,8 +206,9 @@ def _score_entry(d):
     r4 = bool(vol and vol_ma and vol > vol_ma)
     r5 = bool(c and ma50 and c <= ma50 * 1.01)
     r6 = bool(obv is not None and obv_p is not None and obv > obv_p)
+    r7 = bool(ma5 is not None and ma10 is not None and ma5 > ma10)
 
-    rules = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6}
+    rules = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7}
     score = sum(20 for v in rules.values() if v)
     sig = "BUY" if score >= SIGNAL_MIN else "WATCH" if score >= 40 else "HOLD"
 
@@ -207,6 +226,7 @@ def _score_entry(d):
                "fail": f"Volume {_fv(vol)} < avg {_fv(vol_ma)}"},
         "R5": {"passed": r5, "ok": "Price ≤ MA50 × 1.01", "fail": f"Price {_f1(pct_ma50)}% above MA50"},
         "R6": {"passed": r6, "ok": "OBV rising", "fail": "OBV falling"},
+        "R7": {"passed": r7, "ok": f"MA5 {_f(ma5,2)} &gt; MA10 {_f(ma10,2)}", "fail": f"MA5 {_f(ma5,2)} ≤ MA10 {_f(ma10,2)}"},
     }
     return {"entry_score": score, "entry_signal": sig, "entry_rules": rule_details}
 
@@ -289,6 +309,8 @@ def analyze_symbol(ticker):
         df.columns = [c[0].lower() if isinstance(c, tuple) else c.lower() for c in df.columns]
 
         close, high, low, volume = df["close"], df["high"], df["low"], df["volume"]
+        ma5   = close.rolling(5).mean()
+        ma10  = close.rolling(10).mean()
         ma20  = close.rolling(20).mean()
         ma50  = close.rolling(50).mean()
         ma200 = close.rolling(200).mean()
@@ -298,7 +320,7 @@ def analyze_symbol(ticker):
         obv_s          = _obv(close, volume)
         vol_ma_s       = volume.rolling(20).mean()
 
-        args = (df, rsi_s, ml_s, sl_s, hist_s, sk_s, sd_s, obv_s, vol_ma_s, ma20, ma50, ma200)
+        args = (df, rsi_s, ml_s, sl_s, hist_s, sk_s, sd_s, obv_s, vol_ma_s, ma20, ma50, ma200, ma5, ma10)
 
         # Today's snapshot
         today = _day(*args, idx=-1)
@@ -455,6 +477,17 @@ h1{{font-size:1.4rem;font-weight:700}}
 .note-exit{{color:var(--orange);background:#fb923c10;border:1px solid #fb923c30}}
 canvas.spark{{width:100%;height:36px}}
 /* Filter bar */
+.lookup-bar{{display:flex;gap:8px;align-items:center;padding:12px 0 8px}}
+.lookup-inp{{flex:1;max-width:320px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;padding:7px 12px}}
+.lookup-inp:focus{{outline:none;border-color:var(--accent)}}
+.lookup-btn{{background:var(--accent);color:#fff;border:none;border-radius:8px;
+  font-size:13px;font-weight:600;padding:7px 16px;cursor:pointer}}
+.lookup-btn:hover{{opacity:.85}}
+.lookup-btn.loading{{opacity:.6;cursor:default}}
+.lookup-status{{font-size:12px;color:var(--muted)}}
+#lookup-result{{margin-bottom:8px}}
+#lookup-result .card{{border:2px solid var(--accent)}}
 .filter-bar{{display:flex;gap:8px;flex-wrap:wrap;align-items:center;
   padding:12px 0 4px;border-bottom:1px solid var(--border);margin-bottom:4px}}
 .flt{{background:var(--bg3);border:1px solid var(--border);border-radius:6px;
@@ -569,7 +602,8 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
           <b>R3</b> Stochastic %K crosses above %D while both &lt; 50 — early bullish flip<br>
           <b>R4</b> Volume above 20-day average — buyers stepping in with conviction<br>
           <b>R5</b> Price ≤ MA50 × 1.01 — stock is near or below its 50-day average (value zone)<br>
-          <b>R6</b> OBV (On-Balance Volume) rising — money flowing into the stock
+          <b>R6</b> OBV (On-Balance Volume) rising — money flowing into the stock<br>
+          <b>R7</b> MA5 &gt; MA10 — short-term momentum trending up (bullish crossover)
         </div>
       </div>
       <div class="leg-section">
@@ -609,6 +643,12 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
   </div>
 
   <div id="p-today" class="tab-panel active">
+    <div class="lookup-bar">
+      <input class="lookup-inp" id="f-lookup" placeholder="Quick lookup: type a ticker + Enter" type="text" autocomplete="off" spellcheck="false">
+      <button class="lookup-btn" id="f-lookup-btn">Evaluate</button>
+      <span class="lookup-status" id="lookup-status"></span>
+    </div>
+    <div id="lookup-result"></div>
     <div class="filter-bar">
       <div class="flt-pe">
         Mkt Cap $B:&nbsp;<input class="flt-inp" id="f-mcap-min" placeholder="min" type="number" min="0" step="10">
@@ -680,7 +720,7 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
     <div class="tl-list">{tl_html}</div>
   </div>
 
-  <footer>Entry: 6 rules × 20 pts — score ≥60 = BUY · Exit: ≥2 signals incl. ≥1 independent · Data from Yahoo Finance, updated daily after market close</footer>
+  <footer>Entry: 7 rules × 20 pts — score ≥60 = BUY · ≥40 = WATCH · Exit: ≥2 signals incl. ≥1 independent · Data from Yahoo Finance, updated daily after market close</footer>
 </div>
 
 <!-- Enlarged chart modal -->
@@ -901,6 +941,49 @@ document.querySelectorAll('.kpi-btn').forEach(btn => {{
 
 // Init count
 applyFilters();
+
+// ── Quick Lookup ───────────────────────────────────────────────────────────────
+(function() {{
+  const inp = document.getElementById('f-lookup');
+  const btn = document.getElementById('f-lookup-btn');
+  const status = document.getElementById('lookup-status');
+  const result = document.getElementById('lookup-result');
+
+  async function runLookup() {{
+    const sym = inp.value.trim().toUpperCase();
+    if (!sym) return;
+    btn.classList.add('loading');
+    btn.textContent = '…';
+    status.textContent = `Fetching ${{sym}}…`;
+    result.innerHTML = '';
+    try {{
+      const r = await fetch(`/api/scan?symbol=${{encodeURIComponent(sym)}}`);
+      const data = await r.json();
+      if (data.error) {{
+        status.textContent = `⚠ ${{data.error}}`;
+      }} else {{
+        result.innerHTML = data.html;
+        status.textContent = `${{sym}}: ${{data.signal}} · score ${{data.score}}/140`;
+        result.querySelectorAll('canvas.spark').forEach(c => drawSpark(c));
+        // Wire ticker-link click on injected card
+        result.querySelectorAll('.ticker-link').forEach(el => {{
+          el.addEventListener('click', () => {{
+            document.querySelectorAll('.tab,.tab-panel').forEach(e => e.classList.remove('active'));
+            document.querySelector('[data-panel="p-timeline"]').classList.add('active');
+            document.getElementById('p-timeline').classList.add('active');
+          }});
+        }});
+      }}
+    }} catch(e) {{
+      status.textContent = '⚠ Network error — check connection';
+    }}
+    btn.classList.remove('loading');
+    btn.textContent = 'Evaluate';
+  }}
+
+  inp.addEventListener('keydown', e => {{ if (e.key === 'Enter') runLookup(); }});
+  btn.addEventListener('click', runLookup);
+}})();
 
 // Click ticker name → switch to timeline tab and scroll to that ticker
 document.querySelectorAll('.ticker-link').forEach(el => {{
@@ -1375,7 +1458,7 @@ def _card(r):
     {sector_html} {analyst_html} {target_html}
   </div>
   <canvas class="spark" data-prices='{spark}'></canvas>
-  <div class="score-bar"><div class="score-fill" style="width:{min(score/120*100,100):.0f}%;background:{sc}"></div></div>
+  <div class="score-bar"><div class="score-fill" style="width:{min(score/140*100,100):.0f}%;background:{sc}"></div></div>
   <div class="rules">{rules_html}</div>
   <div class="inds">{inds}</div>
   <div class="fund-row">{funds}</div>
@@ -1423,7 +1506,7 @@ def main():
         else:
             sig, score = r.get("entry_signal","?"), r.get("entry_score",0)
             exit_w = " ⚠ EXIT" if r.get("exit_signal") else ""
-            print(f"{sig:<10} score={score:3d}/120  RSI={_f(r.get('rsi'))}{exit_w}")
+            print(f"{sig:<10} score={score:3d}/140  RSI={_f(r.get('rsi'))}{exit_w}")
         results.append(r)
 
     html = build_html(results)
