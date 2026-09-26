@@ -158,7 +158,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
 <div class="page">
   <div>
     <h1>Pivot Scanner</h1>
-    <div class="subtitle">Generated Saturday, September 26 2026 — 12:52</div>
+    <div class="subtitle">Generated Saturday, September 26 2026 — 12:57</div>
   </div>
   <div class="kpi-row">
     <div class="kpi kpi-btn" data-filter="ALL"><div class="kpi-label">All Symbols</div><div class="kpi-val">67</div></div>
@@ -258,13 +258,17 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
         <option value="">Sector: All</option>
       </select>
       <div class="flt-pe">
+        Score:&nbsp;<input class="flt-inp" id="f-score-min" placeholder="0" type="number" min="0" max="120" step="20">
+        <span>–</span><input class="flt-inp" id="f-score-max" placeholder="120" type="number" min="0" max="120" step="20">
+      </div>
+      <div class="flt-pe">
         P/E:&nbsp;<input class="flt-inp" id="f-pe-min" placeholder="min" type="number" min="0" step="1">
         <span>–</span><input class="flt-inp" id="f-pe-max" placeholder="max" type="number" min="0" step="1">
       </div>
       <button class="flt-reset" id="f-reset">✕ Clear</button>
       <span class="flt-count" id="f-count"></span>
     </div>
-    <div class="grid"><div class="card" data-sig="BUY" data-exit="false" data-mktcap="142.20" data-pe="15.3" data-daychg="0.58" data-analyst="buy" data-sector="Technology">
+    <div class="grid"><div class="card" data-sig="BUY" data-exit="false" data-score="100" data-mktcap="142.20" data-pe="15.3" data-daychg="0.58" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="UBER" title="Click to see UBER timeline">UBER</span>
     <span class="price">$69.62</span>
@@ -281,7 +285,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$142B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">15.3</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">15.8</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.16</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+85.5%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+12.2%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-30%</div></div></div>
   
 </div>
-<div class="card" data-sig="BUY" data-exit="true" data-mktcap="46.47" data-pe="23.3" data-daychg="0.38" data-analyst="strong_buy" data-sector="Utilities">
+<div class="card" data-sig="BUY" data-exit="true" data-score="80" data-mktcap="46.47" data-pe="23.3" data-daychg="0.38" data-analyst="strong_buy" data-sector="Utilities">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="VST" title="Click to see VST timeline">VST</span>
     <span class="price">$138.46</span>
@@ -298,7 +302,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$46B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">23.3</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">13.4</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.41</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-neg">-6.2%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-neg">-5.5%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+66.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-30%</div></div></div>
   <div class="note note-exit">Price &lt; MA200 · Price &lt; MA20 on vol</div>
 </div>
-<div class="card" data-sig="BUY" data-exit="false" data-mktcap="0" data-pe="16.6" data-daychg="0.11" data-analyst="" data-sector="Small Blend">
+<div class="card" data-sig="BUY" data-exit="false" data-score="80" data-mktcap="0" data-pe="16.6" data-daychg="0.11" data-analyst="" data-sector="Small Blend">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="IWM" title="Click to see IWM timeline">IWM</span>
     <span class="price">$281.97</span>
@@ -315,7 +319,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">16.6</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+90.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   
 </div>
-<div class="card" data-sig="BUY" data-exit="false" data-mktcap="0" data-pe="15.9" data-daychg="0.56" data-analyst="" data-sector="Natural Resources">
+<div class="card" data-sig="BUY" data-exit="false" data-score="60" data-mktcap="0" data-pe="15.9" data-daychg="0.56" data-analyst="" data-sector="Natural Resources">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="COPX" title="Click to see COPX timeline">COPX</span>
     <span class="price">$86.73</span>
@@ -332,7 +336,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">15.9</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+207.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   
 </div>
-<div class="card" data-sig="BUY" data-exit="true" data-mktcap="0" data-pe="0" data-daychg="-0.04" data-analyst="" data-sector="High Yield Bond">
+<div class="card" data-sig="BUY" data-exit="true" data-score="60" data-mktcap="0" data-pe="0" data-daychg="-0.04" data-analyst="" data-sector="High Yield Bond">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="HYG" title="Click to see HYG timeline">HYG</span>
     <span class="price">$77.86</span>
@@ -349,7 +353,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+588.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   <div class="note note-exit">OBV falling · Price &lt; MA200 · MACD bearish · Price &lt; MA20 on vol</div>
 </div>
-<div class="card" data-sig="BUY" data-exit="false" data-mktcap="3832.84" data-pe="28.7" data-daychg="3.66" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="BUY" data-exit="false" data-score="60" data-mktcap="3832.84" data-pe="28.7" data-daychg="3.66" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="MSFT" title="Click to see MSFT timeline">MSFT</span>
     <span class="price">$516.17</span>
@@ -366,7 +370,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$3.83T</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">28.7</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">21.8</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.11</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+31.7%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+17.7%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+76.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-3%</div></div></div>
   
 </div>
-<div class="card" data-sig="BUY" data-exit="true" data-mktcap="296.24" data-pe="22.4" data-daychg="-0.79" data-analyst="buy" data-sector="Communication Services">
+<div class="card" data-sig="BUY" data-exit="true" data-score="60" data-mktcap="296.24" data-pe="22.4" data-daychg="-0.79" data-analyst="buy" data-sector="Communication Services">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="NFLX" title="Click to see NFLX timeline">NFLX</span>
     <span class="price">$71.15</span>
@@ -383,7 +387,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$296B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">22.4</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">18.7</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.53</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+11.1%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+13.4%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-41%</div></div></div>
   <div class="note note-exit">OBV falling · Price &lt; MA200</div>
 </div>
-<div class="card" data-sig="BUY" data-exit="false" data-mktcap="118.52" data-pe="0" data-daychg="0.58" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="BUY" data-exit="false" data-score="60" data-mktcap="118.52" data-pe="0" data-daychg="0.58" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="SNOW" title="Click to see SNOW timeline">SNOW</span>
     <span class="price">$335.94</span>
@@ -400,7 +404,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$119B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">111.5</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.33</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+35.1%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+49%</div></div></div>
   
 </div>
-<div class="card" data-sig="BUY" data-exit="true" data-mktcap="93.60" data-pe="13.1" data-daychg="-1.45" data-analyst="hold" data-sector="Technology">
+<div class="card" data-sig="BUY" data-exit="true" data-score="60" data-mktcap="93.60" data-pe="13.1" data-daychg="-1.45" data-analyst="hold" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="ADBE" title="Click to see ADBE timeline">ADBE</span>
     <span class="price">$235.47</span>
@@ -417,7 +421,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$94B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">13.1</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">8.5</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.42</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+10.5%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+12.9%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-34%</div></div></div>
   <div class="note note-exit">OBV falling · Price &lt; MA200</div>
 </div>
-<div class="card" data-sig="BUY" data-exit="false" data-mktcap="9.18" data-pe="0" data-daychg="3.90" data-analyst="buy" data-sector="Industrials">
+<div class="card" data-sig="BUY" data-exit="false" data-score="60" data-mktcap="9.18" data-pe="0" data-daychg="3.90" data-analyst="buy" data-sector="Industrials">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="AAL" title="Click to see AAL timeline">AAL</span>
     <span class="price">$13.87</span>
@@ -434,7 +438,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$9B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">6.8</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.33</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-neg">-88.2%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+16.3%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+17%</div></div></div>
   
 </div>
-<div class="card" data-sig="BUY" data-exit="true" data-mktcap="167.36" data-pe="19.2" data-daychg="-0.22" data-analyst="buy" data-sector="Consumer Cyclical">
+<div class="card" data-sig="BUY" data-exit="true" data-score="60" data-mktcap="167.36" data-pe="19.2" data-daychg="-0.22" data-analyst="buy" data-sector="Consumer Cyclical">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="MCD" title="Click to see MCD timeline">MCD</span>
     <span class="price">$236.50</span>
@@ -451,7 +455,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$167B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">19.2</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">17.1</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">0.41</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+5.7%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+3.7%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+326.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-22%</div></div></div>
   <div class="note note-exit">OBV falling · Price &lt; MA200 · MACD bearish · Price &lt; MA20 on vol</div>
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="4206.12" data-pe="17.3" data-daychg="0.46" data-analyst="strong_buy" data-sector="Communication Services">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="4206.12" data-pe="17.3" data-daychg="0.46" data-analyst="strong_buy" data-sector="Communication Services">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="GOOGL" title="Click to see GOOGL timeline">GOOGL</span>
     <span class="price">$343.92</span>
@@ -468,7 +472,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$4.21T</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">17.3</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">23.1</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.23</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+294.0%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+24.2%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+26.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+40%</div></div></div>
   
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="2693.02" data-pe="20.1" data-daychg="0.12" data-analyst="strong_buy" data-sector="Consumer Cyclical">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="2693.02" data-pe="20.1" data-daychg="0.12" data-analyst="strong_buy" data-sector="Consumer Cyclical">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="AMZN" title="Click to see AMZN timeline">AMZN</span>
     <span class="price">$249.67</span>
@@ -485,7 +489,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$2.69T</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">20.1</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">24.0</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.44</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+242.3%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+19.6%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+12%</div></div></div>
   
 </div>
-<div class="card" data-sig="WATCH" data-exit="true" data-mktcap="1684.18" data-pe="45.6" data-daychg="0.70" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="WATCH" data-exit="true" data-score="40" data-mktcap="1684.18" data-pe="45.6" data-daychg="0.70" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="AVGO" title="Click to see AVGO timeline">AVGO</span>
     <span class="price">$352.81</span>
@@ -502,7 +506,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$1.68T</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">45.6</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">18.2</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.46</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+215.3%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+85.5%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+74.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+8%</div></div></div>
   <div class="note note-exit">MACD hist rolling over · Price &lt; MA200</div>
 </div>
-<div class="card" data-sig="WATCH" data-exit="true" data-mktcap="420.67" data-pe="32.0" data-daychg="-0.25" data-analyst="buy" data-sector="Technology">
+<div class="card" data-sig="WATCH" data-exit="true" data-score="40" data-mktcap="420.67" data-pe="32.0" data-daychg="-0.25" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="CSCO" title="Click to see CSCO timeline">CSCO</span>
     <span class="price">$106.70</span>
@@ -519,7 +523,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$421B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">32.0</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">19.0</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">0.99</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+52.1%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+17.6%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+157.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+58%</div></div></div>
   <div class="note note-exit">OBV falling · MACD bearish · Price &lt; MA20 on vol</div>
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="215.72" data-pe="23.1" data-daychg="3.97" data-analyst="hold" data-sector="Technology">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="215.72" data-pe="23.1" data-daychg="3.97" data-analyst="hold" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="QCOM" title="Click to see QCOM timeline">QCOM</span>
     <span class="price">$201.97</span>
@@ -536,7 +540,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$216B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">23.1</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">19.8</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.68</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-neg">-23.0%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-neg">-4.0%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+182.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+22%</div></div></div>
   
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="331.42" data-pe="313.5" data-daychg="1.30" data-analyst="buy" data-sector="Technology">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="331.42" data-pe="313.5" data-daychg="1.30" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="ARM" title="Click to see ARM timeline">ARM</span>
     <span class="price">$310.32</span>
@@ -553,7 +557,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$331B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">313.5</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">101.6</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">3.89</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+108.3%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+22.4%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+119%</div></div></div>
   
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="164.70" data-pe="17.0" data-daychg="1.44" data-analyst="none" data-sector="Technology">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="164.70" data-pe="17.0" data-daychg="1.44" data-analyst="none" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="WDC" title="Click to see WDC timeline">WDC</span>
     <span class="price">$456.81</span>
@@ -570,7 +574,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$165B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">17.0</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">14.4</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">2.18</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+984.1%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+43.8%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+13.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+291%</div></div></div>
   
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="15.34" data-pe="0" data-daychg="3.37" data-analyst="buy" data-sector="Healthcare">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="15.34" data-pe="0" data-daychg="3.37" data-analyst="buy" data-sector="Healthcare">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="TEM" title="Click to see TEM timeline">TEM</span>
     <span class="price">$85.01</span>
@@ -587,7 +591,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$15B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">-10469.2</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">3.72</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+21.6%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+5%</div></div></div>
   
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="12.81" data-pe="28.5" data-daychg="0.64" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="12.81" data-pe="28.5" data-daychg="0.64" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="GRAB" title="Click to see GRAB timeline">GRAB</span>
     <span class="price">$3.13</span>
@@ -604,7 +608,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$13B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">28.5</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">22.9</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">0.89</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+21.9%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-49%</div></div></div>
   
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="85.03" data-pe="384.9" data-daychg="8.27" data-analyst="buy" data-sector="Industrials">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="85.03" data-pe="384.9" data-daychg="8.27" data-analyst="buy" data-sector="Industrials">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="BE" title="Click to see BE timeline">BE</span>
     <span class="price">$288.70</span>
@@ -621,7 +625,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$85B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">384.9</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">58.6</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">3.81</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+165.5%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+292%</div></div></div>
   
 </div>
-<div class="card" data-sig="WATCH" data-exit="true" data-mktcap="3.46" data-pe="0" data-daychg="-0.59" data-analyst="hold" data-sector="Industrials">
+<div class="card" data-sig="WATCH" data-exit="true" data-score="40" data-mktcap="3.46" data-pe="0" data-daychg="-0.59" data-analyst="hold" data-sector="Industrials">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="SMR" title="Click to see SMR timeline">SMR</span>
     <span class="price">$8.42</span>
@@ -638,7 +642,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$3B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">-12.8</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">2.31</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-neg">-99.1%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-78%</div></div></div>
   <div class="note note-exit">OBV falling · Price &lt; MA200</div>
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="24.05" data-pe="0" data-daychg="1.23" data-analyst="none" data-sector="Technology">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="24.05" data-pe="0" data-daychg="1.23" data-analyst="none" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="ASTS" title="Click to see ASTS timeline">ASTS</span>
     <span class="price">$61.81</span>
@@ -655,7 +659,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$24B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">-47.9</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">2.73</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+2626.6%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+25%</div></div></div>
   
 </div>
-<div class="card" data-sig="WATCH" data-exit="true" data-mktcap="6.34" data-pe="0" data-daychg="-1.08" data-analyst="buy" data-sector="Industrials">
+<div class="card" data-sig="WATCH" data-exit="true" data-score="40" data-mktcap="6.34" data-pe="0" data-daychg="-1.08" data-analyst="buy" data-sector="Industrials">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="PL" title="Click to see PL timeline">PL</span>
     <span class="price">$17.43</span>
@@ -672,7 +676,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$6B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">-13944.0</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">2.11</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+58.1%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+36%</div></div></div>
   <div class="note note-exit">OBV falling · Price &lt; MA200 · Price &lt; MA20 on vol</div>
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="18.43" data-pe="0" data-daychg="1.11" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="18.43" data-pe="0" data-daychg="1.11" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="IONQ" title="Click to see IONQ timeline">IONQ</span>
     <span class="price">$45.48</span>
@@ -689,7 +693,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$18B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">-34.8</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">3.29</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+286.8%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-30%</div></div></div>
   
 </div>
-<div class="card" data-sig="WATCH" data-exit="true" data-mktcap="145.17" data-pe="46.5" data-daychg="1.42" data-analyst="none" data-sector="Healthcare">
+<div class="card" data-sig="WATCH" data-exit="true" data-score="40" data-mktcap="145.17" data-pe="46.5" data-daychg="1.42" data-analyst="none" data-sector="Healthcare">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="ISRG" title="Click to see ISRG timeline">ISRG</span>
     <span class="price">$405.18</span>
@@ -706,7 +710,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$145B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">46.5</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">33.5</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.47</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+26.5%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+18.5%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-9%</div></div></div>
   <div class="note note-exit">MACD hist rolling over · Price &lt; MA200</div>
 </div>
-<div class="card" data-sig="WATCH" data-exit="true" data-mktcap="8.61" data-pe="0" data-daychg="0.37" data-analyst="none" data-sector="Technology">
+<div class="card" data-sig="WATCH" data-exit="true" data-score="40" data-mktcap="8.61" data-pe="0" data-daychg="0.37" data-analyst="none" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="AAOI" title="Click to see AAOI timeline">AAOI</span>
     <span class="price">$101.40</span>
@@ -723,7 +727,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$9B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">22.0</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">3.78</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+86.4%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+291%</div></div></div>
   <div class="note note-exit">MACD hist rolling over · Price &lt; MA200</div>
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="96.28" data-pe="525.7" data-daychg="4.36" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="96.28" data-pe="525.7" data-daychg="4.36" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="DDOG" title="Click to see DDOG timeline">DDOG</span>
     <span class="price">$268.13</span>
@@ -740,7 +744,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$96B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">525.7</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">90.2</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.49</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+1498.5%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+35.6%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+77%</div></div></div>
   
 </div>
-<div class="card" data-sig="WATCH" data-exit="false" data-mktcap="28.42" data-pe="13.3" data-daychg="4.22" data-analyst="hold" data-sector="Technology">
+<div class="card" data-sig="WATCH" data-exit="false" data-score="40" data-mktcap="28.42" data-pe="13.3" data-daychg="4.22" data-analyst="hold" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="SMCI" title="Click to see SMCI timeline">SMCI</span>
     <span class="price">$43.26</span>
@@ -757,7 +761,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$28B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">13.3</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">8.1</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">2.00</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+434.7%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+93.2%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-7%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="0" data-pe="30.3" data-daychg="0.46" data-analyst="" data-sector="Large Growth">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="0" data-pe="30.3" data-daychg="0.46" data-analyst="" data-sector="Large Growth">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="QQQ" title="Click to see QQQ timeline">QQQ</span>
     <span class="price">$744.50</span>
@@ -774,7 +778,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">30.3</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+42.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="0" data-pe="24.9" data-daychg="0.54" data-analyst="" data-sector="Large Blend">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="0" data-pe="24.9" data-daychg="0.54" data-analyst="" data-sector="Large Blend">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="SPY" title="Click to see SPY timeline">SPY</span>
     <span class="price">$771.35</span>
@@ -791,7 +795,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">24.9</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+98.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="0" data-pe="42.1" data-daychg="1.17" data-analyst="" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="0" data-pe="42.1" data-daychg="1.17" data-analyst="" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="SOXX" title="Click to see SOXX timeline">SOXX</span>
     <span class="price">$572.68</span>
@@ -808,7 +812,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">42.1</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+29.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="0" data-pe="13.2" data-daychg="1.96" data-analyst="" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="0" data-pe="13.2" data-daychg="1.96" data-analyst="" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="DRAM" title="Click to see DRAM timeline">DRAM</span>
     <span class="price">$61.91</span>
@@ -825,7 +829,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">13.2</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="0" data-pe="41.4" data-daychg="1.01" data-analyst="" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="0" data-pe="41.4" data-daychg="1.01" data-analyst="" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="SMH" title="Click to see SMH timeline">SMH</span>
     <span class="price">$606.56</span>
@@ -842,7 +846,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">41.4</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+20.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="0" data-pe="50.4" data-daychg="3.50" data-analyst="" data-sector="Trading--Leveraged Equity">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="0" data-pe="50.4" data-daychg="3.50" data-analyst="" data-sector="Trading--Leveraged Equity">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="SOXL" title="Click to see SOXL timeline">SOXL</span>
     <span class="price">$151.45</span>
@@ -859,7 +863,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">50.4</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+1.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="0" data-pe="25.5" data-daychg="0.78" data-analyst="" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="0" data-pe="25.5" data-daychg="0.78" data-analyst="" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="CHAT" title="Click to see CHAT timeline">CHAT</span>
     <span class="price">$92.98</span>
@@ -876,7 +880,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">25.5</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+192.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="0" data-pe="0" data-daychg="0.45" data-analyst="" data-sector="Trading--Leveraged Equity">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="0" data-pe="0" data-daychg="0.45" data-analyst="" data-sector="Trading--Leveraged Equity">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="NVDL" title="Click to see NVDL timeline">NVDL</span>
     <span class="price">$35.72</span>
@@ -893,7 +897,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="0" data-pe="0" data-daychg="-3.64" data-analyst="" data-sector="Commodities Focused">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="20" data-mktcap="0" data-pe="0" data-daychg="-3.64" data-analyst="" data-sector="Commodities Focused">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="UNG" title="Click to see UNG timeline">UNG</span>
     <span class="price">$11.13</span>
@@ -910,7 +914,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   <div class="note note-exit">Stoch bear cross · OBV falling · Price &lt; MA200</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="1959.87" data-pe="0" data-daychg="0.44" data-analyst="buy" data-sector="Industrials">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="1959.87" data-pe="0" data-daychg="0.44" data-analyst="buy" data-sector="Industrials">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="SPCX" title="Click to see SPCX timeline">SPCX</span>
     <span class="price">$148.68</span>
@@ -927,7 +931,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$1.96T</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">85.3</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+91.9%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-8%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="4977.64" data-pe="39.1" data-daychg="1.53" data-analyst="buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="4977.64" data-pe="39.1" data-daychg="1.53" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="AAPL" title="Click to see AAPL timeline">AAPL</span>
     <span class="price">$341.07</span>
@@ -944,7 +948,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$4.98T</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">39.1</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">35.6</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.08</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+28.7%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+16.4%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+32.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+32%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="5434.77" data-pe="28.5" data-daychg="0.22" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="5434.77" data-pe="28.5" data-daychg="0.22" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="NVDA" title="Click to see NVDA timeline">NVDA</span>
     <span class="price">$225.07</span>
@@ -961,7 +965,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$5.43T</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">28.5</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">14.4</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">2.22</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+127.8%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+105.9%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+44.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+24%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="1914.86" data-pe="28.3" data-daychg="-3.33" data-analyst="strong_buy" data-sector="Communication Services">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="20" data-mktcap="1914.86" data-pe="28.3" data-daychg="-3.33" data-analyst="strong_buy" data-sector="Communication Services">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="META" title="Click to see META timeline">META</span>
     <span class="price">$751.66</span>
@@ -978,7 +982,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$1.91T</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">28.3</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">21.5</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.24</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-neg">-13.4%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+28.0%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+28.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+5%</div></div></div>
   <div class="note note-exit">RSI &gt;70 falling · MACD hist rolling over · Stoch bear cross · OBV falling</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="1469.67" data-pe="344.5" data-daychg="-1.54" data-analyst="buy" data-sector="Consumer Cyclical">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="20" data-mktcap="1469.67" data-pe="344.5" data-daychg="-1.54" data-analyst="buy" data-sector="Consumer Cyclical">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="TSLA" title="Click to see TSLA timeline">TSLA</span>
     <span class="price">$372.11</span>
@@ -995,7 +999,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$1.47T</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">344.5</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">171.3</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.84</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-neg">-3.0%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+25.5%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-16%</div></div></div>
   <div class="note note-exit">MACD hist rolling over · Stoch bear cross · OBV falling · Price &lt; MA200</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="414.55" data-pe="21.5" data-daychg="-1.75" data-analyst="buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="20" data-mktcap="414.55" data-pe="21.5" data-daychg="-1.75" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="ORCL" title="Click to see ORCL timeline">ORCL</span>
     <span class="price">$137.10</span>
@@ -1012,7 +1016,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$415B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">21.5</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">12.5</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.73</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+54.5%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+29.6%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+146.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-52%</div></div></div>
   <div class="note note-exit">OBV falling · Price &lt; MA200 · MACD bearish</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="1029.49" data-pe="161.3" data-daychg="0.22" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="1029.49" data-pe="161.3" data-daychg="0.22" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="AMD" title="Click to see AMD timeline">AMD</span>
     <span class="price">$630.63</span>
@@ -1029,7 +1033,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$1.03T</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">161.3</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">40.5</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">2.48</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+159.5%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+50.1%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+291%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="253.95" data-pe="42.2" data-daychg="2.74" data-analyst="buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="253.95" data-pe="42.2" data-daychg="2.74" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="TXN" title="Click to see TXN timeline">TXN</span>
     <span class="price">$278.07</span>
@@ -1046,7 +1050,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$254B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">42.2</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">26.1</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.31</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+51.8%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+22.8%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+219.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+52%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="669.85" data-pe="60.2" data-daychg="1.24" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="669.85" data-pe="60.2" data-daychg="1.24" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="ASML" title="Click to see ASML timeline">ASML</span>
     <span class="price">$1743.94</span>
@@ -1063,7 +1067,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$670B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">60.2</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">29.5</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.36</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+28.5%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+21.3%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+52.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+79%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="1222.32" data-pe="24.4" data-daychg="0.16" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="20" data-mktcap="1222.32" data-pe="24.4" data-daychg="0.16" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="MU" title="Click to see MU timeline">MU</span>
     <span class="price">$1082.28</span>
@@ -1080,7 +1084,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$1.22T</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">24.4</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">6.8</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">2.22</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+1368.5%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+345.7%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+5.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+560%</div></div></div>
   <div class="note note-exit">MACD hist rolling over · Stoch bear cross</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="235.40" data-pe="87.0" data-daychg="1.15" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="235.40" data-pe="87.0" data-daychg="1.15" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="MRVL" title="Click to see MRVL timeline">MRVL</span>
     <span class="price">$261.94</span>
@@ -1097,7 +1101,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$235B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">87.0</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">38.8</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">2.25</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+50.0%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+36.5%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+9.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+218%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="11.41" data-pe="48.2" data-daychg="0.58" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="11.41" data-pe="48.2" data-daychg="0.58" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="RMBS" title="Click to see RMBS timeline">RMBS</span>
     <span class="price">$105.16</span>
@@ -1114,7 +1118,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$11B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">48.2</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">28.3</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.87</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+15.1%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+20.4%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+1%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="28.83" data-pe="34.8" data-daychg="-1.89" data-analyst="buy" data-sector="Communication Services">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="20" data-mktcap="28.83" data-pe="34.8" data-daychg="-1.89" data-analyst="buy" data-sector="Communication Services">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="RDDT" title="Click to see RDDT timeline">RDDT</span>
     <span class="price">$149.84</span>
@@ -1131,7 +1135,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$29B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">34.8</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">15.5</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">2.02</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+177.8%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+61.1%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-37%</div></div></div>
   <div class="note note-exit">MACD hist rolling over · OBV falling · Price &lt; MA200</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="47.28" data-pe="0" data-daychg="0.46" data-analyst="none" data-sector="Industrials">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="20" data-mktcap="47.28" data-pe="0" data-daychg="0.46" data-analyst="none" data-sector="Industrials">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="RKLB" title="Click to see RKLB timeline">RKLB</span>
     <span class="price">$73.95</span>
@@ -1148,7 +1152,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$47B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">1623.1</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">2.61</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+62.0%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+57%</div></div></div>
   <div class="note note-exit">Stoch bear cross · Price &lt; MA200</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="11.80" data-pe="15.4" data-daychg="-6.51" data-analyst="none" data-sector="Consumer Cyclical">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="20" data-mktcap="11.80" data-pe="15.4" data-daychg="-6.51" data-analyst="none" data-sector="Consumer Cyclical">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="GME" title="Click to see GME timeline">GME</span>
     <span class="price">$23.39</span>
@@ -1165,7 +1169,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$12B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">15.4</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">12.6</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.71</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+64.5%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-neg">-18.7%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-14%</div></div></div>
   <div class="note note-exit">MACD hist rolling over · Stoch bear cross · OBV falling</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="3.41" data-pe="0" data-daychg="7.15" data-analyst="none" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="3.41" data-pe="0" data-daychg="7.15" data-analyst="none" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="AEHR" title="Click to see AEHR timeline">AEHR</span>
     <span class="price">$104.39</span>
@@ -1182,7 +1186,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$3B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">75.5</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">3.07</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+33.7%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+220%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="260.51" data-pe="65.6" data-daychg="0.41" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="20" data-mktcap="260.51" data-pe="65.6" data-daychg="0.41" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="ANET" title="Click to see ANET timeline">ANET</span>
     <span class="price">$206.55</span>
@@ -1199,7 +1203,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$261B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">65.6</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">39.8</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.62</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+35.7%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+37.7%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+44%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="0" data-pe="33.0" data-daychg="-1.06" data-analyst="" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="0" data-mktcap="0" data-pe="33.0" data-daychg="-1.06" data-analyst="" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="IGV" title="Click to see IGV timeline">IGV</span>
     <span class="price">$106.01</span>
@@ -1216,7 +1220,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">33.0</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+2.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   <div class="note note-exit">Stoch bear cross · OBV falling · MACD bearish</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="0" data-pe="0" data-daychg="-0.32" data-analyst="" data-sector="Health">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="0" data-mktcap="0" data-pe="0" data-daychg="-0.32" data-analyst="" data-sector="Health">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="ARKG" title="Click to see ARKG timeline">ARKG</span>
     <span class="price">$53.36</span>
@@ -1233,7 +1237,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val ">n/a</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="192.60" data-pe="21.4" data-daychg="-1.76" data-analyst="buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="0" data-mktcap="192.60" data-pe="21.4" data-daychg="-1.76" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="CRM" title="Click to see CRM timeline">CRM</span>
     <span class="price">$234.02</span>
@@ -1250,7 +1254,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$193B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">21.4</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">14.6</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.20</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+118.9%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+10.8%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">+75.0%</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-5%</div></div></div>
   <div class="note note-exit">OBV falling · MACD bearish</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="455.79" data-pe="162.1" data-daychg="-1.52" data-analyst="buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="0" data-mktcap="455.79" data-pe="162.1" data-daychg="-1.52" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="PLTR" title="Click to see PLTR timeline">PLTR</span>
     <span class="price">$189.67</span>
@@ -1267,7 +1271,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$456B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">162.1</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">81.6</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.62</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-pos">+215.4%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+92.8%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+6%</div></div></div>
   <div class="note note-exit">MACD hist rolling over · Stoch bear cross · OBV falling</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="124.28" data-pe="0" data-daychg="-2.73" data-analyst="buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="0" data-mktcap="124.28" data-pe="0" data-daychg="-2.73" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="NET" title="Click to see NET timeline">NET</span>
     <span class="price">$349.02</span>
@@ -1284,7 +1288,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$124B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">208.2</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.66</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+35.9%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+60%</div></div></div>
   <div class="note note-exit">MACD hist rolling over · OBV falling</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="64.52" data-pe="0" data-daychg="-2.53" data-analyst="buy" data-sector="Communication Services">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="0" data-mktcap="64.52" data-pe="0" data-daychg="-2.53" data-analyst="buy" data-sector="Communication Services">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="NBIS" title="Click to see NBIS timeline">NBIS</span>
     <span class="price">$237.33</span>
@@ -1301,7 +1305,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$65B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">-67.9</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.44</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+454.0%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+115%</div></div></div>
   
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="140.21" data-pe="84.8" data-daychg="-1.57" data-analyst="strong_buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="0" data-mktcap="140.21" data-pe="84.8" data-daychg="-1.57" data-analyst="strong_buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="NOW" title="Click to see NOW timeline">NOW</span>
     <span class="price">$135.62</span>
@@ -1318,7 +1322,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$140B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">84.8</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">27.1</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">0.97</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val chg-neg">-21.9%</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+24.0%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-28%</div></div></div>
   <div class="note note-exit">OBV falling · MACD bearish</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="306.54" data-pe="914.0" data-daychg="-3.89" data-analyst="buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="0" data-mktcap="306.54" data-pe="914.0" data-daychg="-3.89" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="PANW" title="Click to see PANW timeline">PANW</span>
     <span class="price">$374.74</span>
@@ -1335,7 +1339,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$307B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">914.0</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">76.8</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">0.91</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+34.5%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+91%</div></div></div>
   <div class="note note-exit">MACD hist rolling over · Stoch bear cross · OBV falling</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="24.26" data-pe="17.8" data-daychg="-4.30" data-analyst="buy" data-sector="Financial Services">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="0" data-mktcap="24.26" data-pe="17.8" data-daychg="-4.30" data-analyst="buy" data-sector="Financial Services">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="CRCL" title="Click to see CRCL timeline">CRCL</span>
     <span class="price">$89.00</span>
@@ -1352,7 +1356,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$24B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">17.8</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">58.2</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+6.6%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-neg">-30%</div></div></div>
   <div class="note note-exit">OBV falling · MACD bearish</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="2.50" data-pe="0" data-daychg="-0.57" data-analyst="none" data-sector="Industrials">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="0" data-mktcap="2.50" data-pe="0" data-daychg="-0.57" data-analyst="none" data-sector="Industrials">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="LUNR" title="Click to see LUNR timeline">LUNR</span>
     <span class="price">$15.61</span>
@@ -1369,7 +1373,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$3B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">-100.7</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.85</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+309.8%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+53%</div></div></div>
   <div class="note note-exit">Stoch bear cross · OBV falling · Price &lt; MA200</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="true" data-mktcap="258.16" data-pe="8404.3" data-daychg="-2.90" data-analyst="buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="true" data-score="0" data-mktcap="258.16" data-pe="8404.3" data-daychg="-2.90" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="CRWD" title="Click to see CRWD timeline">CRWD</span>
     <span class="price">$252.13</span>
@@ -1386,7 +1390,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="fund-row"><div class="fund-item"><div class="fund-label">Mkt Cap</div><div class="fund-val ">$258B</div></div><div class="fund-item"><div class="fund-label">P/E</div><div class="fund-val ">8404.3</div></div><div class="fund-item"><div class="fund-label">Fwd P/E</div><div class="fund-val ">157.0</div></div><div class="fund-item"><div class="fund-label">Beta</div><div class="fund-val ">1.25</div></div><div class="fund-item"><div class="fund-label">EPS Grw</div><div class="fund-val ">n/a</div></div><div class="fund-item"><div class="fund-label">Rev Grw</div><div class="fund-val chg-pos">+25.8%</div></div><div class="fund-item"><div class="fund-label">Div Yield</div><div class="fund-val ">—</div></div><div class="fund-item"><div class="fund-label">52W Chg</div><div class="fund-val chg-pos">+106%</div></div></div>
   <div class="note note-exit">MACD hist rolling over · Stoch bear cross · OBV falling</div>
 </div>
-<div class="card" data-sig="HOLD" data-exit="false" data-mktcap="184.59" data-pe="96.1" data-daychg="-2.00" data-analyst="buy" data-sector="Technology">
+<div class="card" data-sig="HOLD" data-exit="false" data-score="0" data-mktcap="184.59" data-pe="96.1" data-daychg="-2.00" data-analyst="buy" data-sector="Technology">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="SHOP" title="Click to see SHOP timeline">SHOP</span>
     <span class="price">$142.25</span>
@@ -2350,7 +2354,7 @@ window.addEventListener('load', () => document.querySelectorAll('canvas.spark').
 
 // ── Combined filter engine ─────────────────────────────────────────────────────
 const TOTAL_CARDS = document.querySelectorAll('.card[data-sig]').length;
-const fState = { signal:'ALL', mktcap:'', analyst:'', chg:'', exit:'', peMin:'', peMax:'', sector:'' };
+const fState = { signal:'ALL', mktcap:'', analyst:'', chg:'', exit:'', scoreMin:'', scoreMax:'', peMin:'', peMax:'', sector:'' };
 
 // Populate sector dropdown from card data
 (function() {
@@ -2370,6 +2374,7 @@ function applyFilters() {
   document.querySelectorAll('.card[data-sig]').forEach(card => {
     const sig    = card.dataset.sig;
     const hasExit= card.dataset.exit === 'true';
+    const score  = parseFloat(card.dataset.score) || 0;
     const mcap   = parseFloat(card.dataset.mktcap) || 0;
     const analyst= card.dataset.analyst || '';
     const daychg = parseFloat(card.dataset.daychg) || 0;
@@ -2404,6 +2409,9 @@ function applyFilters() {
     // Exit signal
     if (fState.exit === 'yes' && !hasExit) show = false;
     if (fState.exit === 'no'  && hasExit)  show = false;
+    // Entry score range
+    if (fState.scoreMin !== '' && score < parseFloat(fState.scoreMin)) show = false;
+    if (fState.scoreMax !== '' && score > parseFloat(fState.scoreMax)) show = false;
     // P/E range
     if (fState.peMin !== '' && pe > 0 && pe < parseFloat(fState.peMin)) show = false;
     if (fState.peMax !== '' && pe > 0 && pe > parseFloat(fState.peMax)) show = false;
@@ -2435,12 +2443,16 @@ function applyFilters() {
     applyFilters();
   });
 });
+document.getElementById('f-score-min').addEventListener('input', e => { fState.scoreMin = e.target.value; applyFilters(); });
+document.getElementById('f-score-max').addEventListener('input', e => { fState.scoreMax = e.target.value; applyFilters(); });
 document.getElementById('f-pe-min').addEventListener('input', e => { fState.peMin = e.target.value; applyFilters(); });
 document.getElementById('f-pe-max').addEventListener('input', e => { fState.peMax = e.target.value; applyFilters(); });
 document.getElementById('f-reset').addEventListener('click', () => {
   fState.signal = 'ALL';
   fState.mktcap = fState.analyst = fState.chg = fState.exit = fState.sector = fState.peMin = fState.peMax = '';
   ['f-mktcap','f-analyst','f-chg','f-exit','f-sector'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-score-min').value = '';
+  document.getElementById('f-score-max').value = '';
   document.getElementById('f-pe-min').value = '';
   document.getElementById('f-pe-max').value = '';
   document.querySelectorAll('.kpi-btn').forEach(b => b.classList.remove('active-filter'));

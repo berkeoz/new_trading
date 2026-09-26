@@ -601,6 +601,10 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
         <option value="">Sector: All</option>
       </select>
       <div class="flt-pe">
+        Score:&nbsp;<input class="flt-inp" id="f-score-min" placeholder="0" type="number" min="0" max="120" step="20">
+        <span>–</span><input class="flt-inp" id="f-score-max" placeholder="120" type="number" min="0" max="120" step="20">
+      </div>
+      <div class="flt-pe">
         P/E:&nbsp;<input class="flt-inp" id="f-pe-min" placeholder="min" type="number" min="0" step="1">
         <span>–</span><input class="flt-inp" id="f-pe-max" placeholder="max" type="number" min="0" step="1">
       </div>
@@ -685,7 +689,7 @@ window.addEventListener('load', () => document.querySelectorAll('canvas.spark').
 
 // ── Combined filter engine ─────────────────────────────────────────────────────
 const TOTAL_CARDS = document.querySelectorAll('.card[data-sig]').length;
-const fState = {{ signal:'ALL', mktcap:'', analyst:'', chg:'', exit:'', peMin:'', peMax:'', sector:'' }};
+const fState = {{ signal:'ALL', mktcap:'', analyst:'', chg:'', exit:'', scoreMin:'', scoreMax:'', peMin:'', peMax:'', sector:'' }};
 
 // Populate sector dropdown from card data
 (function() {{
@@ -705,6 +709,7 @@ function applyFilters() {{
   document.querySelectorAll('.card[data-sig]').forEach(card => {{
     const sig    = card.dataset.sig;
     const hasExit= card.dataset.exit === 'true';
+    const score  = parseFloat(card.dataset.score) || 0;
     const mcap   = parseFloat(card.dataset.mktcap) || 0;
     const analyst= card.dataset.analyst || '';
     const daychg = parseFloat(card.dataset.daychg) || 0;
@@ -739,6 +744,9 @@ function applyFilters() {{
     // Exit signal
     if (fState.exit === 'yes' && !hasExit) show = false;
     if (fState.exit === 'no'  && hasExit)  show = false;
+    // Entry score range
+    if (fState.scoreMin !== '' && score < parseFloat(fState.scoreMin)) show = false;
+    if (fState.scoreMax !== '' && score > parseFloat(fState.scoreMax)) show = false;
     // P/E range
     if (fState.peMin !== '' && pe > 0 && pe < parseFloat(fState.peMin)) show = false;
     if (fState.peMax !== '' && pe > 0 && pe > parseFloat(fState.peMax)) show = false;
@@ -770,12 +778,16 @@ function applyFilters() {{
     applyFilters();
   }});
 }});
+document.getElementById('f-score-min').addEventListener('input', e => {{ fState.scoreMin = e.target.value; applyFilters(); }});
+document.getElementById('f-score-max').addEventListener('input', e => {{ fState.scoreMax = e.target.value; applyFilters(); }});
 document.getElementById('f-pe-min').addEventListener('input', e => {{ fState.peMin = e.target.value; applyFilters(); }});
 document.getElementById('f-pe-max').addEventListener('input', e => {{ fState.peMax = e.target.value; applyFilters(); }});
 document.getElementById('f-reset').addEventListener('click', () => {{
   fState.signal = 'ALL';
   fState.mktcap = fState.analyst = fState.chg = fState.exit = fState.sector = fState.peMin = fState.peMax = '';
   ['f-mktcap','f-analyst','f-chg','f-exit','f-sector'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-score-min').value = '';
+  document.getElementById('f-score-max').value = '';
   document.getElementById('f-pe-min').value = '';
   document.getElementById('f-pe-max').value = '';
   document.querySelectorAll('.kpi-btn').forEach(b => b.classList.remove('active-filter'));
@@ -1256,7 +1268,7 @@ def _card(r):
     target_html  = (f'<span style="font-size:11px;color:var(--muted)">Target '
                     f'<b>${_f(tgt,0)}</b> ({tgt_upside})</span>') if tgt else ""
 
-    return f"""<div class="card" data-sig="{sig}" data-exit="{exit_attr}" data-mktcap="{mktcap_b}" data-pe="{pe_attr}" data-daychg="{chg_attr}" data-analyst="{anlst_attr}" data-sector="{sec_attr}">
+    return f"""<div class="card" data-sig="{sig}" data-exit="{exit_attr}" data-score="{score}" data-mktcap="{mktcap_b}" data-pe="{pe_attr}" data-daychg="{chg_attr}" data-analyst="{anlst_attr}" data-sector="{sec_attr}">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="{sym}" title="Click to see {sym} timeline">{sym}</span>
     <span class="price">${_f(close,2)}</span>
