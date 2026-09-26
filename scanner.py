@@ -305,6 +305,8 @@ h1{{font-size:1.4rem;font-weight:700}}
   padding:16px;display:flex;flex-direction:column;gap:12px}}
 .card-header{{display:flex;align-items:center;gap:8px;flex-wrap:wrap}}
 .ticker{{font-size:1.1rem;font-weight:700;font-family:'JetBrains Mono',monospace}}
+.ticker-link{{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}}
+.ticker-link:hover{{color:var(--accent)}}
 .price{{font-size:.95rem;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;margin-right:auto}}
 .badge{{display:inline-block;padding:3px 9px;border-radius:4px;font-size:11px;
   font-weight:700;letter-spacing:.05em;text-transform:uppercase}}
@@ -312,7 +314,9 @@ h1{{font-size:1.4rem;font-weight:700}}
 .badge-watch{{background:#fbbf2422;color:var(--yellow);border:1px solid #fbbf2444}}
 .badge-hold{{background:#7b82a022;color:var(--muted);border:1px solid #7b82a033}}
 .badge-gate{{background:#f8717122;color:var(--red);border:1px solid #f8717133}}
-.badge-exit{{background:#fb923c22;color:var(--orange);border:1px solid #fb923c44}}
+.badge-profittake{{background:#34d39922;color:var(--green);border:1px solid #34d39966}}
+.badge-stoploss{{background:#f8717133;color:var(--red);border:1px solid #f87171}}
+.badge-caution{{background:#fbbf2422;color:var(--yellow);border:1px solid #fbbf2444}}
 .score-bar{{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}}
 .score-fill{{height:100%;border-radius:3px}}
 .rules{{display:flex;flex-direction:column;gap:3px}}
@@ -331,11 +335,14 @@ h1{{font-size:1.4rem;font-weight:700}}
 canvas.spark{{width:100%;height:36px}}
 /* Timeline */
 .tl-list{{display:flex;flex-direction:column;gap:8px;padding-top:16px}}
-.tl-card{{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}}
+.tl-card{{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:relative}}
 .tl-header{{display:flex;align-items:center;gap:10px;padding:10px 16px 6px}}
 .tl-sym{{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;min-width:56px}}
 .tl-price{{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;margin-right:auto}}
-canvas.tl{{width:100%;height:90px;display:block;padding:0 16px 10px}}
+canvas.tl{{width:100%;height:130px;display:block;padding:0 16px 10px}}
+.tl-tooltip{{position:absolute;background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;padding:5px 10px;font-size:12px;pointer-events:none;
+  opacity:0;transition:opacity .1s;white-space:nowrap;z-index:10}}
 .tl-legend{{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);
   padding:0 16px 10px}}
 .leg{{display:flex;align-items:center;gap:5px}}
@@ -413,6 +420,18 @@ function drawSpark(canvas) {{
 }}
 
 window.addEventListener('load', () => document.querySelectorAll('canvas.spark').forEach(drawSpark));
+
+// Click ticker name → switch to timeline tab and scroll to that ticker
+document.querySelectorAll('.ticker-link').forEach(el => {{
+  el.addEventListener('click', () => {{
+    document.querySelectorAll('.tab,.tab-panel').forEach(e => e.classList.remove('active'));
+    document.querySelector('[data-panel="p-timeline"]').classList.add('active');
+    document.getElementById('p-timeline').classList.add('active');
+    drawTimelines();
+    const card = document.getElementById('tl-' + el.dataset.sym);
+    if (card) setTimeout(() => card.scrollIntoView({{behavior:'smooth',block:'start'}}), 80);
+  }});
+}});
 
 // Timeline charts
 const HIST = {hist_json};
@@ -556,6 +575,24 @@ function drawOneTL(canvas) {{
     ctx.font='bold 9px Inter,system-ui';
     ctx.fillText('$'+last.close.toFixed(2), W-2, py-2);
   }}
+
+  // Hover tooltip — show date, price, signal
+  const tip = document.getElementById('tt-'+sym);
+  canvas.addEventListener('mousemove', e => {{
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left - pad;
+    const idx = Math.round(mx / bw - 0.5);
+    if (idx < 0 || idx >= bars.length) {{ tip.style.opacity=0; return; }}
+    const b = bars[idx];
+    if (!b.close) {{ tip.style.opacity=0; return; }}
+    const sigLabel = {{BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'— HOLD',GATE_FAIL:'✕ DOWNTREND'}}[b.signal]||b.signal;
+    tip.innerHTML = `<b>${{b.date}}</b>&nbsp; ${{b.close.toFixed(2)}} &nbsp;<span style="color:${{SIG_LINE[b.signal]||'#7b82a0'}}">${{sigLabel}}</span>${{b.exit?' &nbsp;<span style="color:#fb923c">EXIT</span>':''}}`;
+    const tx = Math.min(e.clientX - rect.left + 10, rect.width - tip.offsetWidth - 4);
+    tip.style.left = tx + 'px';
+    tip.style.top  = (e.clientY - rect.top - 36) + 'px';
+    tip.style.opacity = 1;
+  }});
+  canvas.addEventListener('mouseleave', () => {{ tip.style.opacity=0; }});
 }}
 </script>
 </body>
@@ -563,7 +600,20 @@ function drawOneTL(canvas) {{
 
 def _badge(sig, score):
     cls = {"BUY":"badge-buy","WATCH":"badge-watch","HOLD":"badge-hold","GATE_FAIL":"badge-gate"}.get(sig,"badge-hold")
-    return f'<span class="badge {cls}">{sig} {score}/120</span>'
+    label = {"BUY":"↑ BUY","WATCH":"◉ WATCH","HOLD":"— HOLD","GATE_FAIL":"✕ DOWNTREND"}.get(sig, sig)
+    return f'<span class="badge {cls}">{label} {score}/120</span>'
+
+def _exit_badge(r):
+    if not r.get("exit_signal"): return ""
+    ind = r.get("exit_ind_fired", [])
+    if "E7" in ind:
+        return '<span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>'
+    if any(e in ind for e in ["E1","E2","E3"]):
+        fired = " + ".join(e for e in ["E1","E2","E3"] if e in ind)
+        return f'<span class="badge badge-profittake" title="Overbought — {fired} fired">↑ PROFIT TAKE</span>'
+    pair = r.get("exit_pair_fired",[])
+    fired = " + ".join(ind + pair)
+    return f'<span class="badge badge-caution" title="Momentum weakening — {fired}">⚠ CAUTION</span>'
 
 def _card(r):
     if r.get("error"):
@@ -607,16 +657,21 @@ def _card(r):
             ind("Vol ratio", f"{vol_ratio:.1f}×" if vol_ratio else "n/a",
                 "green" if (vol_ratio and vol_ratio>1) else ""))
 
-    exit_b  = '<span class="badge badge-exit">EXIT ⚠</span>' if r.get("exit_signal") else ""
-    gate_n  = f'<div class="note note-gate">Gate blocked: {r["gate_reason"]}</div>' if r.get("gate_reason") else ""
-    exit_n  = ""
+    exit_b = _exit_badge(r)
+    gate_n = f'<div class="note note-gate"><b>Downtrend block:</b> {r["gate_reason"]} — entry rules not evaluated</div>' if r.get("gate_reason") else ""
+    exit_n = ""
     if r.get("exit_signal"):
-        fired = r.get("exit_ind_fired",[]) + r.get("exit_pair_fired",[])
-        exit_n = f'<div class="note note-exit">⚠ Exit signals fired: {" + ".join(fired)}</div>'
+        ind = r.get("exit_ind_fired",[])
+        pair = r.get("exit_pair_fired",[])
+        descriptions = {"E1":"RSI>70 falling","E2":"MACD hist rolling over","E3":"Stoch bear cross",
+                        "E4":"MACD bearish","E5":"Price<MA20 on vol","E6":"OBV falling","E7":"Price<MA200"}
+        fired_desc = " · ".join(descriptions.get(e,e) for e in ind+pair)
+        exit_n = f'<div class="note note-exit">{fired_desc}</div>'
 
+    sym = r["symbol"]
     return f"""<div class="card">
   <div class="card-header">
-    <span class="ticker">{r["symbol"]}</span>
+    <span class="ticker ticker-link" data-sym="{sym}" title="Click to see {sym} timeline">{sym}</span>
     <span class="price">${_f(close,2)}</span>
     {_badge(sig,score)} {exit_b}
   </div>
@@ -631,14 +686,15 @@ def _tl_row(r):
     if r.get("error"): return ""
     sig, score = r.get("entry_signal","HOLD"), r.get("entry_score",0)
     close = r.get("close",0)
-    return f"""<div class="tl-card">
+    sym = r["symbol"]
+    return f"""<div class="tl-card" id="tl-{sym}">
   <div class="tl-header">
-    <span class="tl-sym">{r["symbol"]}</span>
+    <span class="tl-sym">{sym}</span>
     <span class="tl-price">${_f(close,2)}</span>
-    {_badge(sig,score)}
-    {'<span class="badge badge-exit">EXIT ⚠</span>' if r.get("exit_signal") else ""}
+    {_badge(sig,score)} {_exit_badge(r)}
   </div>
-  <canvas class="tl" data-sym="{r["symbol"]}"></canvas>
+  <canvas class="tl" data-sym="{sym}"></canvas>
+  <div class="tl-tooltip" id="tt-{sym}"></div>
 </div>"""
 
 # ── Run ────────────────────────────────────────────────────────────────────────
