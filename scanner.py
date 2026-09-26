@@ -117,10 +117,10 @@ def _score_entry(d):
     pct_ma50  = ((c/ma50-1)*100) if (c and ma50) else None
 
     rule_details = {
-        "R1": {"passed": r1, "ok": f"RSI {_f(rsi)} < {RSI_LOWER}", "fail": f"RSI {_f(rsi)}"},
-        "R2": {"passed": r2, "ok": f"MACD hist {_f(hist,2)} < 0 and rising",
+        "R1": {"passed": r1, "ok": f"RSI {_f(rsi)} &lt; {RSI_LOWER}", "fail": f"RSI {_f(rsi)}"},
+        "R2": {"passed": r2, "ok": f"MACD hist {_f(hist,2)} &lt; 0 and rising",
                "fail": f"MACD hist {_f(hist,2)} ({'rising' if macd_imp else 'falling'})"},
-        "R3": {"passed": r3, "ok": f"Stoch K {_f(sk)} crossed above D {_f(sd)} (<50)",
+        "R3": {"passed": r3, "ok": f"Stoch K {_f(sk)} crossed above D {_f(sd)} (&lt;50)",
                "fail": f"Stoch K={_f(sk)} D={_f(sd)}, no cross"},
         "R4": {"passed": r4, "ok": f"Volume {_fv(vol)} > avg {_fv(vol_ma)} ({_f(vol_ratio)}×)",
                "fail": f"Volume {_fv(vol)} < avg {_fv(vol_ma)}"},
@@ -379,27 +379,6 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
     <div class="kpi kpi-btn" data-filter="EXIT"><div class="kpi-label">Exit signals</div><div class="kpi-val" style="color:var(--orange)">{exit_c}</div></div>
   </div>
 
-  <div class="tabs">
-    <div class="tab active" data-panel="p-today">Today's Signals</div>
-    <div class="tab" data-panel="p-timeline">Signal Timeline (90 days)</div>
-  </div>
-
-  <div id="p-today" class="tab-panel active">
-    <div class="grid">{cards_html}</div>
-  </div>
-
-  <div id="p-timeline" class="tab-panel">
-    <div class="tl-legend" style="padding-top:12px">
-      <span class="leg"><span class="leg-sq" style="background:#34d39930;border:1px solid #34d39966"></span>BUY zone</span>
-      <span class="leg"><span class="leg-sq" style="background:#fbbf2430;border:1px solid #fbbf2466"></span>WATCH zone</span>
-      <span class="leg"><span class="leg-sq" style="background:#7b82a015;border:1px solid #7b82a040"></span>HOLD</span>
-      <span class="leg" style="color:var(--green)">▼ PROFIT TAKE day</span>
-      <span class="leg" style="color:var(--red)">▼ STOP LOSS day</span>
-      <span class="leg" style="color:var(--yellow)">▼ CAUTION day</span>
-    </div>
-    <div class="tl-list">{tl_html}</div>
-  </div>
-
   <details class="legend">
     <summary>📖 Signal Legend — click to expand</summary>
     <div class="legend-body">
@@ -453,6 +432,28 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
       </div>
     </div>
   </details>
+
+  <div class="tabs">
+    <div class="tab active" data-panel="p-today">Today's Signals</div>
+    <div class="tab" data-panel="p-timeline">Signal Timeline (90 days)</div>
+  </div>
+
+  <div id="p-today" class="tab-panel active">
+    <div class="grid">{cards_html}</div>
+  </div>
+
+  <div id="p-timeline" class="tab-panel">
+    <div class="tl-legend" style="padding-top:12px">
+      <span class="leg"><span class="leg-sq" style="background:#34d39930;border:1px solid #34d39966"></span>BUY zone</span>
+      <span class="leg"><span class="leg-sq" style="background:#fbbf2430;border:1px solid #fbbf2466"></span>WATCH zone</span>
+      <span class="leg"><span class="leg-sq" style="background:#7b82a015;border:1px solid #7b82a040"></span>HOLD</span>
+      <span class="leg" style="color:var(--green)">▼ PROFIT TAKE day</span>
+      <span class="leg" style="color:var(--red)">▼ STOP LOSS day</span>
+      <span class="leg" style="color:var(--yellow)">▼ CAUTION day</span>
+    </div>
+    <div class="tl-list">{tl_html}</div>
+  </div>
+
   <footer>Entry: 6 rules × 20 pts — score ≥60 = BUY · Exit: ≥2 signals incl. ≥1 independent · Data from Yahoo Finance, updated daily after market close</footer>
 </div>
 
@@ -543,15 +544,12 @@ const SIG_LINE = {{
   GATE_FAIL: '#f87171',
 }};
 
-let tlDrawn = false;
 function drawTimelines() {{
-  if (tlDrawn) return;
   // Double rAF: first fires after tab becomes display:block, second after layout reflow
   requestAnimationFrame(() => requestAnimationFrame(() => {{
     document.querySelectorAll('canvas.tl').forEach(c => {{
       if (c.offsetWidth > 0) drawOneTL(c);
     }});
-    tlDrawn = true;
   }}));
 }}
 
@@ -763,8 +761,8 @@ def _card(r):
     if r.get("exit_signal"):
         ind = r.get("exit_ind_fired",[])
         pair = r.get("exit_pair_fired",[])
-        descriptions = {"E1":"RSI>70 falling","E2":"MACD hist rolling over","E3":"Stoch bear cross",
-                        "E4":"MACD bearish","E5":"Price<MA20 on vol","E6":"OBV falling","E7":"Price<MA200"}
+        descriptions = {"E1":"RSI &gt;70 falling","E2":"MACD hist rolling over","E3":"Stoch bear cross",
+                        "E4":"MACD bearish","E5":"Price &lt; MA20 on vol","E6":"OBV falling","E7":"Price &lt; MA200"}
         fired_desc = " · ".join(descriptions.get(e,e) for e in ind+pair)
         exit_n = f'<div class="note note-exit">{fired_desc}</div>'
 

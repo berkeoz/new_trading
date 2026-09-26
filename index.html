@@ -112,7 +112,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
 <div class="page">
   <div>
     <h1>Pivot Scanner</h1>
-    <div class="subtitle">Generated Saturday, September 26 2026 — 11:45</div>
+    <div class="subtitle">Generated Saturday, September 26 2026 — 11:56</div>
   </div>
   <div class="kpi-row">
     <div class="kpi kpi-btn" data-filter="ALL"><div class="kpi-label">All Symbols</div><div class="kpi-val">18</div></div>
@@ -121,6 +121,60 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <div class="kpi kpi-btn" data-filter="HOLD"><div class="kpi-label">— HOLD</div><div class="kpi-val" style="color:var(--muted)">4</div></div>
     <div class="kpi kpi-btn" data-filter="EXIT"><div class="kpi-label">Exit signals</div><div class="kpi-val" style="color:var(--orange)">7</div></div>
   </div>
+
+  <details class="legend">
+    <summary>📖 Signal Legend — click to expand</summary>
+    <div class="legend-body">
+      <div class="leg-section">
+        <div class="leg-title">Entry Signals (score 0–120, 20 pts each)</div>
+        <div class="leg-grid">
+          <div class="leg-item badge-buy-bg"><b>↑ BUY</b> ≥60 pts</div>
+          <div class="leg-desc">At least 3 of 6 entry conditions are met. This is the trigger to consider opening or adding to a position.</div>
+          <div class="leg-item badge-watch-bg"><b>◉ WATCH</b> 40–59 pts</div>
+          <div class="leg-desc">2 of 6 conditions met — setup is forming but not ready. Monitor daily; may become a BUY.</div>
+          <div class="leg-item badge-hold-bg"><b>— HOLD</b> 0–39 pts</div>
+          <div class="leg-desc">Fewer than 2 conditions met. No action — stock is not in an oversold dip. If you own it, keep holding.</div>
+        </div>
+        <div class="leg-rules">
+          <b>The 6 entry rules (20 pts each):</b><br>
+          <b>R1</b> RSI(14) &lt; 40 — stock is oversold on momentum<br>
+          <b>R2</b> MACD histogram &lt; 0 but rising — selling pressure is easing<br>
+          <b>R3</b> Stochastic %K crosses above %D while both &lt; 50 — early bullish flip<br>
+          <b>R4</b> Volume above 20-day average — buyers stepping in with conviction<br>
+          <b>R5</b> Price ≤ MA50 × 1.01 — stock is near or below its 50-day average (value zone)<br>
+          <b>R6</b> OBV (On-Balance Volume) rising — money flowing into the stock
+        </div>
+      </div>
+      <div class="leg-section">
+        <div class="leg-title">Exit Signals (shown when you should consider selling)</div>
+        <div class="leg-grid">
+          <div class="leg-item" style="background:#34d39915;border-color:#34d39966"><b style="color:var(--green)">↑ PROFIT TAKE</b></div>
+          <div class="leg-desc">Stock has run up and is now <b>overbought</b>. RSI &gt; 70 and falling, MACD histogram turning negative from above zero, or Stochastic doing a bearish cross from overbought. If you entered on a BUY signal and the stock has gained — <b>this is your sell signal.</b></div>
+          <div class="leg-item" style="background:#f8717115;border-color:#f87171"><b style="color:var(--red)">⬇ STOP LOSS</b></div>
+          <div class="leg-desc">Price has broken <b>below its 200-day moving average</b> — the long-term trend has reversed. If you're holding a position, this is a hard exit to protect capital.</div>
+          <div class="leg-item" style="background:#fbbf2415;border-color:#fbbf2466"><b style="color:var(--yellow)">⚠ CAUTION</b></div>
+          <div class="leg-desc">Momentum is weakening (MACD bearish, OBV falling, or price slipping below MA20 on volume) but the stock is not yet overbought. <b>Not a sell signal by itself</b> — watch closely for a PROFIT TAKE to follow.</div>
+        </div>
+      </div>
+      <div class="leg-section">
+        <div class="leg-title">Timeline Chart Colors</div>
+        <div class="leg-grid">
+          <div class="leg-item" style="background:#34d39930;border-color:#34d39966">Green zone</div>
+          <div class="leg-desc">BUY signal was active on those days — entry conditions were met.</div>
+          <div class="leg-item" style="background:#fbbf2430;border-color:#fbbf2466">Yellow zone</div>
+          <div class="leg-desc">WATCH — setup was forming but not complete.</div>
+          <div class="leg-item" style="background:#7b82a015;border-color:#7b82a040">Grey zone</div>
+          <div class="leg-desc">HOLD — no significant entry conditions active.</div>
+          <div class="leg-item" style="color:var(--green)">▼ Green triangle</div>
+          <div class="leg-desc">PROFIT TAKE exit signal fired on that day.</div>
+          <div class="leg-item" style="color:var(--red)">▼ Red triangle</div>
+          <div class="leg-desc">STOP LOSS exit signal fired — price broke below MA200.</div>
+          <div class="leg-item" style="color:var(--yellow)">▼ Yellow triangle</div>
+          <div class="leg-desc">CAUTION exit signal fired — momentum weakening.</div>
+        </div>
+      </div>
+    </div>
+  </details>
 
   <div class="tabs">
     <div class="tab active" data-panel="p-today">Today's Signals</div>
@@ -136,7 +190,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   </div>
   <canvas class="spark" data-prices='[389.76, 386.01, 388.11, 382.62, 383.64, 384.38, 390.26, 384.21, 394.89, 400.35, 393.08, 401.53, 397.0, 389.61, 380.86, 380.98, 388.37, 392.61, 389.81, 450.25, 463.85, 486.73, 491.88, 486.54, 498.92, 499.05, 505.11, 502.86, 491.5, 495.95, 494.47, 479.45, 480.73, 483.4, 481.15, 483.24, 487.31, 491.71, 496.37, 505.06, 513.53, 507.29, 501.02, 496.82, 510.12, 499.7, 493.95, 491.65, 492.44, 495.63, 505.41, 497.12, 490.3, 497.75, 493.78, 501.61, 498.0, 500.59, 497.93, 516.17]'></canvas>
   <div class="score-bar"><div class="score-fill" style="width:50%;background:#34d399"></div></div>
-  <div class="rules"><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R1</span><span class="rt ">RSI 63.3</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R2</span><span class="rt p">MACD hist -0.80 < 0 and rising</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R3</span><span class="rt ">Stoch K=62.4 D=51.9, no cross</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R4</span><span class="rt p">Volume 38.2M > avg 21.8M (1.7×)</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R5</span><span class="rt ">Price +8.6% above MA50</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R6</span><span class="rt p">OBV rising</span></div></div>
+  <div class="rules"><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R1</span><span class="rt ">RSI 63.3</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R2</span><span class="rt p">MACD hist -0.80 &lt; 0 and rising</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R3</span><span class="rt ">Stoch K=62.4 D=51.9, no cross</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R4</span><span class="rt p">Volume 38.2M > avg 21.8M (1.7×)</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R5</span><span class="rt ">Price +8.6% above MA50</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R6</span><span class="rt p">OBV rising</span></div></div>
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">63.3</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val red">-0.80</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">62.4/51.9</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+8.6%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+19.9%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val green">1.7×</div></div></div>
   
 </div>
@@ -148,9 +202,9 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   </div>
   <canvas class="spark" data-prices='[77.65, 76.02, 76.18, 75.59, 75.47, 73.37, 73.83, 73.53, 73.68, 74.35, 68.95, 67.6, 68.67, 68.53, 68.89, 70.09, 70.4, 72.39, 73.63, 73.17, 71.71, 73.33, 73.57, 74.2, 73.69, 74.14, 76.29, 74.79, 74.21, 78.24, 78.16, 76.02, 77.77, 80.22, 80.14, 79.59, 80.01, 82.23, 81.46, 79.84, 81.72, 81.05, 80.81, 82.73, 82.67, 78.25, 76.77, 76.03, 76.01, 77.4, 80.32, 77.9, 76.41, 75.31, 71.79, 73.36, 72.16, 71.36, 71.72, 71.15]'></canvas>
   <div class="score-bar"><div class="score-fill" style="width:50%;background:#34d399"></div></div>
-  <div class="rules"><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R1</span><span class="rt p">RSI 37.1 < 40</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R2</span><span class="rt p">MACD hist -0.86 < 0 and rising</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R3</span><span class="rt ">Stoch K=10.5 D=13.0, no cross</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R4</span><span class="rt ">Volume 23.2M < avg 32.4M</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R5</span><span class="rt p">Price ≤ MA50 × 1.01</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R6</span><span class="rt ">OBV falling</span></div></div>
+  <div class="rules"><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R1</span><span class="rt p">RSI 37.1 &lt; 40</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R2</span><span class="rt p">MACD hist -0.86 &lt; 0 and rising</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R3</span><span class="rt ">Stoch K=10.5 D=13.0, no cross</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R4</span><span class="rt ">Volume 23.2M < avg 32.4M</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R5</span><span class="rt p">Price ≤ MA50 × 1.01</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R6</span><span class="rt ">OBV falling</span></div></div>
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val green">37.1</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val red">-0.86</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">10.5/13.0</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val green">-5.8%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val red">-16.0%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.7×</div></div></div>
-  <div class="note note-exit">OBV falling · Price<MA200</div>
+  <div class="note note-exit">OBV falling · Price &lt; MA200</div>
 </div>
 <div class="card" data-sig="WATCH" data-exit="false">
   <div class="card-header">
@@ -186,7 +240,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="score-bar"><div class="score-fill" style="width:33%;background:#fbbf24"></div></div>
   <div class="rules"><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R1</span><span class="rt ">RSI 44.0</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R2</span><span class="rt ">MACD hist 1.22 (falling)</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R3</span><span class="rt ">Stoch K=47.6 D=58.4, no cross</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R4</span><span class="rt ">Volume 16.2M < avg 27.4M</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R5</span><span class="rt p">Price ≤ MA50 × 1.01</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R6</span><span class="rt p">OBV rising</span></div></div>
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">44.0</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">1.22</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">47.6/58.4</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val green">-6.2%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val red">-3.9%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.6×</div></div></div>
-  <div class="note note-exit">MACD hist rolling over · Price<MA200</div>
+  <div class="note note-exit">MACD hist rolling over · Price &lt; MA200</div>
 </div>
 <div class="card" data-sig="WATCH" data-exit="true">
   <div class="card-header">
@@ -198,7 +252,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="score-bar"><div class="score-fill" style="width:33%;background:#fbbf24"></div></div>
   <div class="rules"><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R1</span><span class="rt ">RSI 41.7</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R2</span><span class="rt ">MACD hist -0.12 (falling)</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R3</span><span class="rt ">Stoch K=28.4 D=33.5, no cross</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R4</span><span class="rt p">Volume 19.9M > avg 18.1M (1.1×)</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R5</span><span class="rt p">Price ≤ MA50 × 1.01</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R6</span><span class="rt ">OBV falling</span></div></div>
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">41.7</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val red">-0.12</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">28.4/33.5</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val green">-5.1%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+10.5%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val green">1.1×</div></div></div>
-  <div class="note note-exit">OBV falling · MACD bearish · Price<MA20 on vol</div>
+  <div class="note note-exit">OBV falling · MACD bearish · Price &lt; MA20 on vol</div>
 </div>
 <div class="card" data-sig="WATCH" data-exit="false">
   <div class="card-header">
@@ -270,7 +324,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="score-bar"><div class="score-fill" style="width:17%;background:#7b82a0"></div></div>
   <div class="rules"><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R1</span><span class="rt ">RSI 71.4</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R2</span><span class="rt ">MACD hist 11.73 (falling)</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R3</span><span class="rt ">Stoch K=89.9 D=90.6, no cross</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R4</span><span class="rt p">Volume 25.8M > avg 22.9M (1.1×)</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R5</span><span class="rt ">Price +22.2% above MA50</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R6</span><span class="rt ">OBV falling</span></div></div>
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val red">71.4</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">11.73</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">89.9/90.6</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+22.2%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+20.2%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val green">1.1×</div></div></div>
-  <div class="note note-exit">RSI>70 falling · MACD hist rolling over · Stoch bear cross · OBV falling</div>
+  <div class="note note-exit">RSI &gt;70 falling · MACD hist rolling over · Stoch bear cross · OBV falling</div>
 </div>
 <div class="card" data-sig="HOLD" data-exit="true">
   <div class="card-header">
@@ -282,7 +336,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="score-bar"><div class="score-fill" style="width:17%;background:#7b82a0"></div></div>
   <div class="rules"><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R1</span><span class="rt ">RSI 55.3</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R2</span><span class="rt ">MACD hist 1.08 (falling)</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R3</span><span class="rt ">Stoch K=70.6 D=77.1, no cross</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R4</span><span class="rt p">Volume 45.9M > avg 39.7M (1.2×)</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R5</span><span class="rt ">Price +6.9% above MA50</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R6</span><span class="rt ">OBV falling</span></div></div>
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">55.3</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">1.08</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">70.6/77.1</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+6.9%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val red">-5.9%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val green">1.2×</div></div></div>
-  <div class="note note-exit">MACD hist rolling over · Stoch bear cross · OBV falling · Price<MA200</div>
+  <div class="note note-exit">MACD hist rolling over · Stoch bear cross · OBV falling · Price &lt; MA200</div>
 </div>
 <div class="card" data-sig="HOLD" data-exit="true">
   <div class="card-header">
@@ -294,7 +348,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="score-bar"><div class="score-fill" style="width:17%;background:#7b82a0"></div></div>
   <div class="rules"><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R1</span><span class="rt ">RSI 40.6</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R2</span><span class="rt ">MACD hist -1.56 (falling)</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R3</span><span class="rt ">Stoch K=14.5 D=21.0, no cross</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R4</span><span class="rt ">Volume 23.5M < avg 33.3M</span></div><div class="rule"><span class="ri" style="color:var(--green)">✓</span><span class="rk" style="color:var(--green)">R5</span><span class="rt p">Price ≤ MA50 × 1.01</span></div><div class="rule"><span class="ri" style="color:var(--red)">✗</span><span class="rk" style="color:var(--red)">R6</span><span class="rt ">OBV falling</span></div></div>
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">40.6</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val red">-1.56</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">14.5/21.0</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val green">-3.6%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val red">-16.3%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.7×</div></div></div>
-  <div class="note note-exit">OBV falling · Price<MA200 · MACD bearish</div>
+  <div class="note note-exit">OBV falling · Price &lt; MA200 · MACD bearish</div>
 </div>
 <div class="card" data-sig="HOLD" data-exit="false">
   <div class="card-header">
@@ -519,59 +573,6 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
 </div></div>
   </div>
 
-  <details class="legend">
-    <summary>📖 Signal Legend — click to expand</summary>
-    <div class="legend-body">
-      <div class="leg-section">
-        <div class="leg-title">Entry Signals (score 0–120, 20 pts each)</div>
-        <div class="leg-grid">
-          <div class="leg-item badge-buy-bg"><b>↑ BUY</b> ≥60 pts</div>
-          <div class="leg-desc">At least 3 of 6 entry conditions are met. This is the trigger to consider opening or adding to a position.</div>
-          <div class="leg-item badge-watch-bg"><b>◉ WATCH</b> 40–59 pts</div>
-          <div class="leg-desc">2 of 6 conditions met — setup is forming but not ready. Monitor daily; may become a BUY.</div>
-          <div class="leg-item badge-hold-bg"><b>— HOLD</b> 0–39 pts</div>
-          <div class="leg-desc">Fewer than 2 conditions met. No action — stock is not in an oversold dip. If you own it, keep holding.</div>
-        </div>
-        <div class="leg-rules">
-          <b>The 6 entry rules (20 pts each):</b><br>
-          <b>R1</b> RSI(14) &lt; 40 — stock is oversold on momentum<br>
-          <b>R2</b> MACD histogram &lt; 0 but rising — selling pressure is easing<br>
-          <b>R3</b> Stochastic %K crosses above %D while both &lt; 50 — early bullish flip<br>
-          <b>R4</b> Volume above 20-day average — buyers stepping in with conviction<br>
-          <b>R5</b> Price ≤ MA50 × 1.01 — stock is near or below its 50-day average (value zone)<br>
-          <b>R6</b> OBV (On-Balance Volume) rising — money flowing into the stock
-        </div>
-      </div>
-      <div class="leg-section">
-        <div class="leg-title">Exit Signals (shown when you should consider selling)</div>
-        <div class="leg-grid">
-          <div class="leg-item" style="background:#34d39915;border-color:#34d39966"><b style="color:var(--green)">↑ PROFIT TAKE</b></div>
-          <div class="leg-desc">Stock has run up and is now <b>overbought</b>. RSI &gt; 70 and falling, MACD histogram turning negative from above zero, or Stochastic doing a bearish cross from overbought. If you entered on a BUY signal and the stock has gained — <b>this is your sell signal.</b></div>
-          <div class="leg-item" style="background:#f8717115;border-color:#f87171"><b style="color:var(--red)">⬇ STOP LOSS</b></div>
-          <div class="leg-desc">Price has broken <b>below its 200-day moving average</b> — the long-term trend has reversed. If you're holding a position, this is a hard exit to protect capital.</div>
-          <div class="leg-item" style="background:#fbbf2415;border-color:#fbbf2466"><b style="color:var(--yellow)">⚠ CAUTION</b></div>
-          <div class="leg-desc">Momentum is weakening (MACD bearish, OBV falling, or price slipping below MA20 on volume) but the stock is not yet overbought. <b>Not a sell signal by itself</b> — watch closely for a PROFIT TAKE to follow.</div>
-        </div>
-      </div>
-      <div class="leg-section">
-        <div class="leg-title">Timeline Chart Colors</div>
-        <div class="leg-grid">
-          <div class="leg-item" style="background:#34d39930;border-color:#34d39966">Green zone</div>
-          <div class="leg-desc">BUY signal was active on those days — entry conditions were met.</div>
-          <div class="leg-item" style="background:#fbbf2430;border-color:#fbbf2466">Yellow zone</div>
-          <div class="leg-desc">WATCH — setup was forming but not complete.</div>
-          <div class="leg-item" style="background:#7b82a015;border-color:#7b82a040">Grey zone</div>
-          <div class="leg-desc">HOLD — no significant entry conditions active.</div>
-          <div class="leg-item" style="color:var(--green)">▼ Green triangle</div>
-          <div class="leg-desc">PROFIT TAKE exit signal fired on that day.</div>
-          <div class="leg-item" style="color:var(--red)">▼ Red triangle</div>
-          <div class="leg-desc">STOP LOSS exit signal fired — price broke below MA200.</div>
-          <div class="leg-item" style="color:var(--yellow)">▼ Yellow triangle</div>
-          <div class="leg-desc">CAUTION exit signal fired — momentum weakening.</div>
-        </div>
-      </div>
-    </div>
-  </details>
   <footer>Entry: 6 rules × 20 pts — score ≥60 = BUY · Exit: ≥2 signals incl. ≥1 independent · Data from Yahoo Finance, updated daily after market close</footer>
 </div>
 
@@ -662,15 +663,12 @@ const SIG_LINE = {
   GATE_FAIL: '#f87171',
 };
 
-let tlDrawn = false;
 function drawTimelines() {
-  if (tlDrawn) return;
   // Double rAF: first fires after tab becomes display:block, second after layout reflow
   requestAnimationFrame(() => requestAnimationFrame(() => {
     document.querySelectorAll('canvas.tl').forEach(c => {
       if (c.offsetWidth > 0) drawOneTL(c);
     });
-    tlDrawn = true;
   }));
 }
 
