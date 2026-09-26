@@ -90,7 +90,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
 <div class="page">
   <div>
     <h1>Pivot Scanner</h1>
-    <div class="subtitle">Generated Saturday, September 26 2026 — 11:39</div>
+    <div class="subtitle">Generated Saturday, September 26 2026 — 11:43</div>
   </div>
   <div class="kpi-row">
     <div class="kpi"><div class="kpi-label">Symbols</div><div class="kpi-val">18</div></div>
@@ -564,8 +564,13 @@ const SIG_LINE = {
 let tlDrawn = false;
 function drawTimelines() {
   if (tlDrawn) return;
-  tlDrawn = true;
-  document.querySelectorAll('canvas.tl').forEach(drawOneTL);
+  // Double rAF: first fires after tab becomes display:block, second after layout reflow
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.querySelectorAll('canvas.tl').forEach(c => {
+      if (c.offsetWidth > 0) drawOneTL(c);
+    });
+    tlDrawn = true;
+  }));
 }
 
 function drawOneTL(canvas) {

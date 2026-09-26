@@ -445,8 +445,13 @@ const SIG_LINE = {{
 let tlDrawn = false;
 function drawTimelines() {{
   if (tlDrawn) return;
-  tlDrawn = true;
-  document.querySelectorAll('canvas.tl').forEach(drawOneTL);
+  // Double rAF: first fires after tab becomes display:block, second after layout reflow
+  requestAnimationFrame(() => requestAnimationFrame(() => {{
+    document.querySelectorAll('canvas.tl').forEach(c => {{
+      if (c.offsetWidth > 0) drawOneTL(c);
+    }});
+    tlDrawn = true;
+  }}));
 }}
 
 function drawOneTL(canvas) {{
