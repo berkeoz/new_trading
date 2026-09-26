@@ -179,6 +179,24 @@ def _score_exit(d):
             "exit_ind_fired":ind_fired,"exit_pair_fired":pair_fired}
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
+def _fmt_mcap(v):
+    if v is None: return "n/a"
+    if v >= 1e12: return f"${v/1e12:.2f}T"
+    if v >= 1e9:  return f"${v/1e9:.0f}B"
+    return f"${v/1e6:.0f}M"
+
+def _fmt_pct(v):
+    if v is None: return "n/a"
+    return f"{v*100:+.1f}%"
+
+ANALYST_LABELS = {
+    "strong_buy":  ("⬆ Strong Buy", "green"),
+    "buy":         ("↑ Buy",         "green"),
+    "hold":        ("— Hold",        "muted"),
+    "sell":        ("↓ Sell",        "red"),
+    "strong_sell": ("⬇ Strong Sell", "red"),
+}
+
 def _f(v, dec=1):
     if v is None: return "n/a"
     return f"{v:.{dec}f}"
@@ -223,6 +241,31 @@ def analyze_symbol(ticker):
         today.update(_score_entry(today))
         today.update(_score_exit(today))
         today["error"] = None
+
+        # Daily % change
+        if len(close) >= 2:
+            today["day_chg"] = (float(close.iloc[-1]) / float(close.iloc[-2]) - 1) * 100
+        else:
+            today["day_chg"] = None
+
+        # Fundamentals from ticker.info
+        try:
+            info = yf.Ticker(ticker).info
+            today["mkt_cap"]     = info.get("marketCap")
+            today["pe_trailing"] = info.get("trailingPE")
+            today["pe_forward"]  = info.get("forwardPE")
+            today["eps_growth"]  = info.get("earningsGrowth")
+            today["rev_growth"]  = info.get("revenueGrowth")
+            today["beta"]        = info.get("beta")
+            today["div_yield"]   = info.get("dividendYield")
+            today["sector"]      = info.get("sector") or info.get("category", "")
+            today["analyst"]     = info.get("recommendationKey")
+            today["target_px"]   = info.get("targetMeanPrice")
+            today["wk52_chg"]    = info.get("52WeekChange")
+        except Exception:
+            for k in ("mkt_cap","pe_trailing","pe_forward","eps_growth","rev_growth",
+                      "beta","div_yield","sector","analyst","target_px","wk52_chg"):
+                today.setdefault(k, None)
 
         # 90-day signal history
         n = len(df)
@@ -343,6 +386,16 @@ h1{{font-size:1.4rem;font-weight:700}}
 .note-gate{{color:var(--red);background:#f8717110;border:1px solid #f8717130}}
 .note-exit{{color:var(--orange);background:#fb923c10;border:1px solid #fb923c30}}
 canvas.spark{{width:100%;height:36px}}
+.chg-pos{{color:var(--green)}}.chg-neg{{color:var(--red)}}
+.sector-tag{{font-size:10px;color:var(--muted);background:var(--bg3);
+  border-radius:3px;padding:1px 6px;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;max-width:160px}}
+.fund-row{{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}}
+.fund-item{{background:var(--bg3);border-radius:6px;padding:5px 8px}}
+.fund-label{{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}}
+.fund-val{{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}}
+.analyst-badge{{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;
+  border-radius:4px;background:var(--bg3)}}
 /* Timeline */
 .tl-list{{display:flex;flex-direction:column;gap:8px;padding-top:16px}}
 .tl-card{{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:relative}}
@@ -972,16 +1025,69 @@ def _card(r):
 
     sym = r["symbol"]
     exit_attr = 'true' if r.get("exit_signal") else 'false'
+
+    # Daily change
+    day_chg = r.get("day_chg")
+    if day_chg is not None:
+        chg_cls = "chg-pos" if day_chg >= 0 else "chg-neg"
+        chg_html = f'<span class="{chg_cls}" style="font-size:12px;font-weight:600">{day_chg:+.2f}%</span>'
+    else:
+        chg_html = ""
+
+    # Sector tag
+    sector = r.get("sector") or ""
+    sector_html = f'<span class="sector-tag">{sector}</span>' if sector else ""
+
+    # Fundamentals row
+    pe   = r.get("pe_trailing")
+    fpe  = r.get("pe_forward")
+    mcap = r.get("mkt_cap")
+    beta = r.get("beta")
+    epsg = r.get("eps_growth")
+    revg = r.get("rev_growth")
+    divy = r.get("div_yield")
+    anlst= r.get("analyst")
+    tgt  = r.get("target_px")
+    wk52 = r.get("wk52_chg")
+
+    tgt_upside = f"{((tgt/close-1)*100):+.0f}%" if (tgt and close and close > 0) else "n/a"
+    wk52_html  = f"{wk52*100:+.0f}%" if wk52 is not None else "n/a"
+    wk52_cls   = "chg-pos" if (wk52 and wk52 > 0) else "chg-neg" if wk52 else ""
+
+    anlst_lbl, anlst_col = ANALYST_LABELS.get(anlst or "", ("n/a", "muted"))
+
+    def fi(lbl, val, cls=""):
+        return (f'<div class="fund-item"><div class="fund-label">{lbl}</div>'
+                f'<div class="fund-val {cls}">{val}</div></div>')
+
+    funds = (fi("Mkt Cap",   _fmt_mcap(mcap)) +
+             fi("P/E",       _f(pe,1) if pe else "n/a") +
+             fi("Fwd P/E",   _f(fpe,1) if fpe else "n/a") +
+             fi("Beta",      _f(beta,2) if beta else "n/a") +
+             fi("EPS Grw",   _fmt_pct(epsg), "chg-pos" if (epsg and epsg>0) else "chg-neg" if epsg else "") +
+             fi("Rev Grw",   _fmt_pct(revg), "chg-pos" if (revg and revg>0) else "chg-neg" if revg else "") +
+             fi("Div Yield", _fmt_pct(divy) if divy else "—") +
+             fi("52W Chg",   wk52_html, wk52_cls))
+
+    analyst_html = f'<span class="analyst-badge" style="color:var(--{anlst_col})">{anlst_lbl}</span>'
+    target_html  = (f'<span style="font-size:11px;color:var(--muted)">Target '
+                    f'<b>${_f(tgt,0)}</b> ({tgt_upside})</span>') if tgt else ""
+
     return f"""<div class="card" data-sig="{sig}" data-exit="{exit_attr}">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="{sym}" title="Click to see {sym} timeline">{sym}</span>
     <span class="price">${_f(close,2)}</span>
+    {chg_html}
     {_badge(sig,score)} {exit_b}
+  </div>
+  <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+    {sector_html} {analyst_html} {target_html}
   </div>
   <canvas class="spark" data-prices='{spark}'></canvas>
   <div class="score-bar"><div class="score-fill" style="width:{min(score/120*100,100):.0f}%;background:{sc}"></div></div>
   <div class="rules">{rules_html}</div>
   <div class="inds">{inds}</div>
+  <div class="fund-row">{funds}</div>
   {exit_n}
 </div>"""
 
@@ -990,10 +1096,23 @@ def _tl_row(r):
     sig, score = r.get("entry_signal","HOLD"), r.get("entry_score",0)
     close = r.get("close",0)
     sym = r["symbol"]
+    day_chg = r.get("day_chg")
+    chg_html = ""
+    if day_chg is not None:
+        cls = "chg-pos" if day_chg >= 0 else "chg-neg"
+        chg_html = f'<span class="{cls}" style="font-size:11px;font-weight:600">{day_chg:+.2f}%</span>'
+    sector = r.get("sector") or ""
+    sec_html = f'<span class="sector-tag">{sector}</span>' if sector else ""
+    mcap = _fmt_mcap(r.get("mkt_cap"))
+    pe   = _f(r.get("pe_trailing"),1) if r.get("pe_trailing") else "—"
     return f"""<div class="tl-card" id="tl-{sym}">
   <div class="tl-header">
     <span class="tl-sym">{sym}</span>
     <span class="tl-price">${_f(close,2)}</span>
+    {chg_html}
+    <span style="font-size:11px;color:var(--muted)">Cap {mcap}</span>
+    <span style="font-size:11px;color:var(--muted)">P/E {pe}</span>
+    {sec_html}
     {_badge(sig,score)} {_exit_badge(r)}
   </div>
   <canvas class="tl" data-sym="{sym}"></canvas>
