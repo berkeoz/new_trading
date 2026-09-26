@@ -402,6 +402,137 @@ def analyze_symbol(ticker):
     except Exception as e:
         return {"symbol": ticker, "error": str(e)}
 
+# ── Market Breakdown ───────────────────────────────────────────────────────────
+def _breakdown_card(r, horizon=""):
+    sym   = r.get("symbol","")
+    sig   = r.get("entry_signal","HOLD")
+    score = r.get("entry_score", 0)
+    beta  = r.get("beta")
+    fpe   = r.get("pe_forward")
+    close = r.get("close")
+    tgt   = r.get("target_px")
+    upside = ((tgt/close - 1)*100) if (tgt and close and close > 0) else None
+    epsg  = r.get("eps_growth")
+    if epsg: epsg = epsg * 100  # yfinance returns as decimal
+    revg  = r.get("rev_growth")
+    if revg: revg = revg * 100
+    divy  = r.get("div_yield")
+    if divy: divy = divy * 100
+    has_exit = r.get("exit_signal", False)
+    analyst = r.get("analyst","")
+
+    def _v(v, fmt=".1f", suffix=""):
+        return f"{v:{fmt}}{suffix}" if v is not None else "—"
+    def _col(v, lo, hi):
+        if v is None: return "var(--muted)"
+        if v >= hi: return "var(--green)"
+        if v >= lo: return "var(--amber)"
+        return "var(--red)"
+
+    sig_cls  = "sig-buy" if sig == "BUY" else "sig-watch"
+    bar_w    = min(score/140*100, 100)
+    bar_col  = "var(--green)" if score>=60 else "var(--amber)" if score>=40 else "var(--red)"
+
+    exit_tag = '<span style="font-size:10px;padding:1px 6px;border-radius:8px;background:#f43f5e18;color:#f43f5e;border:1px solid #f43f5e33;margin-left:auto">⚠ exit</span>' if has_exit else (f'<span style="font-size:10px;padding:1px 6px;border-radius:8px;margin-left:auto;background:#60a5fa18;color:#60a5fa;border:1px solid #60a5fa33">{horizon}</span>' if horizon else '')
+
+    m1_label = "Fwd P/E"; m1_val = _v(fpe,"f")+"×" if fpe else "—"; m1_col = _col(fpe, 15, 25) if fpe else "var(--muted)"
+    m2_label = "Upside";  m2_val = (f"+{upside:.1f}%" if upside and upside>0 else f"{upside:.1f}%" if upside else "—"); m2_col = _col(upside, 10, 25) if upside else "var(--muted)"
+    m3_label = "Beta";    m3_val = _v(beta,".2f"); m3_col = ("var(--green)" if beta and beta<0.8 else "var(--amber)" if beta and beta<1.5 else "var(--red)") if beta else "var(--muted)"
+    m4_label = "EPS Gr"  if epsg else "Rev Gr"
+    m4_val   = (f"+{epsg:.0f}%" if epsg and epsg>0 else f"{epsg:.0f}%" if epsg else (f"+{revg:.0f}%" if revg and revg>0 else f"{revg:.0f}%" if revg else "—"))
+    m4_col   = _col(epsg or revg, 10, 30)
+
+    if divy:
+        m3_label = "Div Yield"; m3_val = f"{divy:.1f}%"; m3_col = "var(--green)"
+
+    analyst_nice = {"strong_buy":"Strong Buy","buy":"Buy","hold":"Hold","sell":"Sell","strong_sell":"Strong Sell"}.get(analyst, analyst.replace("_"," ").title() if analyst else "—")
+
+    return f"""<div class="bd-card">
+  <div class="bd-top"><span class="bd-ticker">{sym}</span><span class="bd-sig {sig_cls}">{sig}</span>{exit_tag}</div>
+  <div class="bd-bar-row"><div class="bd-bar-out"><div class="bd-bar-in" style="width:{bar_w:.0f}%;background:{bar_col}"></div></div><span class="bd-score">{score}/140</span></div>
+  <div class="bd-metrics">
+    <div class="bd-m"><span class="bd-ml">{m1_label}</span><span class="bd-mv" style="color:{m1_col}">{m1_val}</span></div>
+    <div class="bd-m"><span class="bd-ml">{m2_label}</span><span class="bd-mv" style="color:{m2_col}">{m2_val}</span></div>
+    <div class="bd-m"><span class="bd-ml">{m3_label}</span><span class="bd-mv" style="color:{m3_col}">{m3_val}</span></div>
+    <div class="bd-m"><span class="bd-ml">{m4_label}</span><span class="bd-mv" style="color:{m4_col}">{m4_val}</span></div>
+  </div>
+  <div class="bd-analyst">{analyst_nice}</div>
+</div>"""
+
+
+def _build_breakdown(results):
+    ok = [r for r in results if not r.get("error") and r.get("entry_signal") in ("BUY","WATCH")]
+
+    def _f(r, key): return r.get(key) or 0
+    def _upside(r):
+        c, t = r.get("close"), r.get("target_px")
+        return ((t/c - 1)*100) if (t and c and c > 0) else 0
+    def _epsg(r):
+        v = r.get("eps_growth")
+        return (v * 100) if v else 0
+    def _revg(r):
+        v = r.get("rev_growth")
+        return (v * 100) if v else 0
+    def _mcap_b(r):
+        m = r.get("mkt_cap")
+        return (m / 1e9) if m else 0
+
+    # Group 1: Defensive — BUY, beta<0.9, no exit
+    defensive = sorted(
+        [r for r in ok if r.get("entry_signal")=="BUY" and _f(r,"beta") and _f(r,"beta")<0.9 and not r.get("exit_signal") and _mcap_b(r)>1],
+        key=lambda r: (-r.get("entry_score",0), -_upside(r))
+    )[:8]
+
+    # Group 2: Quality growth — BUY, beta 0.8-1.65, eps or rev growth >15%, no exit
+    quality = sorted(
+        [r for r in ok if r.get("entry_signal")=="BUY"
+         and 0.8 <= _f(r,"beta") <= 1.65
+         and (_epsg(r) > 15 or _revg(r) > 15)
+         and not r.get("exit_signal") and _mcap_b(r)>1],
+        key=lambda r: (-r.get("entry_score",0), -_upside(r))
+    )[:8]
+
+    # Group 3: Momentum — BUY, beta>1.5 or rev_growth>40%
+    momentum = sorted(
+        [r for r in ok if r.get("entry_signal")=="BUY"
+         and (_f(r,"beta") > 1.5 or _revg(r) > 40)
+         and not r.get("exit_signal") and _mcap_b(r)>0.5],
+        key=lambda r: (-r.get("entry_score",0), -_upside(r))
+    )[:7]
+
+    # Watchlist — WATCH, strong_buy/buy analyst, upside>20%
+    watchlist = sorted(
+        [r for r in ok if r.get("entry_signal")=="WATCH"
+         and r.get("analyst") in ("strong_buy","buy")
+         and _upside(r) > 20
+         and _mcap_b(r)>1],
+        key=lambda r: -_upside(r)
+    )[:6]
+
+    def _section(icon, title, subtitle, cards_html, accent, horizon_chips):
+        chips = "".join(f'<span class="bd-chip" style="background:{c[1]}18;color:{c[1]};border:1px solid {c[1]}33">{c[0]}</span>' for c in horizon_chips)
+        return f"""<div class="bd-section">
+  <div class="bd-sec-hdr" style="border-bottom-color:{accent}">
+    <div class="bd-icon" style="background:{accent}22">{icon}</div>
+    <div><div class="bd-sec-title">{title}</div><div class="bd-chips">{chips}</div></div>
+    <div class="bd-sec-sub">{subtitle}</div>
+  </div>
+  <div class="bd-grid">{cards_html}</div>
+</div>"""
+
+    d_html = "".join(_breakdown_card(r, "months–year") for r in defensive) or "<p style='color:var(--muted);font-size:13px'>No picks today.</p>"
+    q_html = "".join(_breakdown_card(r, "weeks–months") for r in quality)   or "<p style='color:var(--muted);font-size:13px'>No picks today.</p>"
+    m_html = "".join(_breakdown_card(r, "days–weeks") for r in momentum)    or "<p style='color:var(--muted);font-size:13px'>No picks today.</p>"
+    w_html = "".join(_breakdown_card(r, "") for r in watchlist)             or "<p style='color:var(--muted);font-size:13px'>No picks today.</p>"
+
+    s1 = _section("🛡", "Defensive / Low Risk",        "Beta &lt;0.9 · Income · Capital preservation", d_html, "#10b981", [("Months","#f59e0b"),("Year","#10b981")])
+    s2 = _section("⚖", "Quality Growth / Balanced",    "Beta 0.8–1.6 · EPS/Rev growth &gt;15%",        q_html, "#f59e0b", [("Weeks","#a78bfa"),("Months","#f59e0b")])
+    s3 = _section("🚀", "High Momentum / Max Return",   "Beta &gt;1.5 or Rev growth &gt;40%",            m_html, "#f43f5e", [("Days","#60a5fa"),("Weeks","#a78bfa")])
+    s4 = _section("👁", "Watchlist — One Signal Away",  "WATCH · analyst buy · &gt;20% upside",          w_html, "#a78bfa", [("Weeks","#a78bfa"),("Months","#f59e0b")])
+
+    return s1 + s2 + s3 + s4
+
+
 # ── HTML ───────────────────────────────────────────────────────────────────────
 def build_html(results):
     ts = datetime.now().strftime("%A, %B %d %Y — %H:%M")
@@ -413,10 +544,11 @@ def build_html(results):
     rs = sorted(results, key=lambda r:(3 if r.get("error") else order.get(r.get("entry_signal","HOLD"),2),
                                         -r.get("entry_score",0)))
 
-    cards_html = "\n".join(_card(r) for r in rs)
-    tl_html    = "\n".join(_tl_row(r) for r in rs if not r.get("error"))
-    hist_json  = json.dumps({r["symbol"]:r.get("history",[])
-                              for r in results if not r.get("error")})
+    cards_html     = "\n".join(_card(r) for r in rs)
+    tl_html        = "\n".join(_tl_row(r) for r in rs if not r.get("error"))
+    hist_json      = json.dumps({r["symbol"]:r.get("history",[])
+                                  for r in results if not r.get("error")})
+    breakdown_html = _build_breakdown(results)
 
     return f"""<!doctype html>
 <html lang="en">
@@ -527,6 +659,36 @@ canvas.spark{{width:100%;height:36px}}
 .monitor-add-btn:hover{{opacity:.85}}
 .monitor-add-btn:disabled{{background:var(--bg3);color:var(--muted);cursor:default}}
 .card-ph{{opacity:.6}}
+/* Breakdown tab */
+#p-breakdown{{padding:16px 0}}
+.bd-section{{margin-bottom:36px}}
+.bd-sec-hdr{{display:flex;align-items:center;gap:10px;padding-bottom:10px;
+  border-bottom:2px solid var(--border);margin-bottom:12px}}
+.bd-icon{{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;
+  justify-content:center;font-size:14px;flex-shrink:0}}
+.bd-sec-title{{font-size:13px;font-weight:700;letter-spacing:.01em}}
+.bd-sec-sub{{font-size:11px;color:var(--muted);margin-left:auto}}
+.bd-chips{{display:flex;gap:5px;flex-wrap:wrap;margin-top:3px}}
+.bd-chip{{font-size:10px;padding:1px 7px;border-radius:10px;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase}}
+.bd-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}}
+.bd-card{{background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:12px 12px 10px;display:flex;flex-direction:column;gap:7px;transition:border-color .15s}}
+.bd-card:hover{{border-color:var(--accent)}}
+.bd-top{{display:flex;align-items:center;gap:7px}}
+.bd-ticker{{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600}}
+.bd-sig{{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.05em}}
+.sig-buy{{background:#34d39920;color:var(--green)}}
+.sig-watch{{background:#fbbf2420;color:var(--yellow)}}
+.bd-bar-row{{display:flex;align-items:center;gap:6px}}
+.bd-bar-out{{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden}}
+.bd-bar-in{{height:100%;border-radius:2px}}
+.bd-score{{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);white-space:nowrap}}
+.bd-metrics{{display:grid;grid-template-columns:1fr 1fr;gap:3px 8px}}
+.bd-m{{display:flex;flex-direction:column;gap:1px}}
+.bd-ml{{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}}
+.bd-mv{{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600}}
+.bd-analyst{{font-size:10px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px}}
 .filter-bar{{display:flex;gap:8px;flex-wrap:wrap;align-items:center;
   padding:12px 0 4px;border-bottom:1px solid var(--border);margin-bottom:4px}}
 .flt{{background:var(--bg3);border:1px solid var(--border);border-radius:6px;
@@ -680,6 +842,7 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
   <div class="tabs">
     <div class="tab active" data-panel="p-today">Today's Signals</div>
     <div class="tab" data-panel="p-timeline">Signal Timeline (90 days)</div>
+    <div class="tab" data-panel="p-breakdown">Market Breakdown</div>
   </div>
 
   <div id="p-today" class="tab-panel active">
@@ -766,6 +929,10 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
       <span class="leg" style="color:var(--yellow)">▼ CAUTION day</span>
     </div>
     <div class="tl-list">{tl_html}</div>
+  </div>
+
+  <div id="p-breakdown" class="tab-panel">
+    {breakdown_html}
   </div>
 
   <footer>Entry: 7 rules × 20 pts — score ≥60 = BUY · ≥40 = WATCH · Exit: ≥2 signals incl. ≥1 independent · Data from Yahoo Finance, updated daily after market close</footer>
