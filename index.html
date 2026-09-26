@@ -84,13 +84,31 @@ canvas.tl{width:100%;height:130px;display:block;padding:0 16px 10px}
 .leg{display:flex;align-items:center;gap:5px}
 .leg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
+.legend{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:0}
+.legend summary{padding:12px 16px;cursor:pointer;font-weight:600;font-size:13px;
+  list-style:none;display:flex;align-items:center;gap:8px;color:var(--text)}
+.legend summary::-webkit-details-marker{display:none}
+.legend summary::after{content:'›';margin-left:auto;transition:transform .2s;font-size:16px}
+.legend[open] summary::after{transform:rotate(90deg)}
+.legend-body{padding:0 16px 16px;display:flex;flex-direction:column;gap:20px}
+.leg-section{display:flex;flex-direction:column;gap:8px}
+.leg-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.leg-grid{display:grid;grid-template-columns:160px 1fr;gap:6px 12px;align-items:start}
+.leg-item{display:flex;align-items:center;padding:4px 10px;border-radius:5px;
+  border:1px solid var(--border);font-size:12px;font-weight:600}
+.badge-buy-bg{background:#34d39915;border-color:#34d39966;color:var(--green)}
+.badge-watch-bg{background:#fbbf2415;border-color:#fbbf2466;color:var(--yellow)}
+.badge-hold-bg{background:#7b82a015;border-color:#7b82a040;color:var(--muted)}
+.leg-desc{font-size:12px;color:var(--muted);line-height:1.5;padding-top:4px}
+.leg-rules{font-size:12px;color:var(--muted);line-height:1.9;background:var(--bg3);
+  border-radius:6px;padding:10px 12px}
 </style>
 </head>
 <body>
 <div class="page">
   <div>
     <h1>Pivot Scanner</h1>
-    <div class="subtitle">Generated Saturday, September 26 2026 — 11:43</div>
+    <div class="subtitle">Generated Saturday, September 26 2026 — 11:44</div>
   </div>
   <div class="kpi-row">
     <div class="kpi"><div class="kpi-label">Symbols</div><div class="kpi-val">18</div></div>
@@ -496,7 +514,60 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
 </div></div>
   </div>
 
-  <footer>Entry score: R1 RSI&lt;40 · R2 MACD hist &lt;0 rising · R3 Stoch bull cross · R4 Vol above avg · R5 Price≤MA50 · R6 OBV rising — 20pts each, score ≥60 = BUY · Exit: ≥2 signals incl. ≥1 independent</footer>
+  <details class="legend">
+    <summary>📖 Signal Legend — click to expand</summary>
+    <div class="legend-body">
+      <div class="leg-section">
+        <div class="leg-title">Entry Signals (score 0–120, 20 pts each)</div>
+        <div class="leg-grid">
+          <div class="leg-item badge-buy-bg"><b>↑ BUY</b> ≥60 pts</div>
+          <div class="leg-desc">At least 3 of 6 entry conditions are met. This is the trigger to consider opening or adding to a position.</div>
+          <div class="leg-item badge-watch-bg"><b>◉ WATCH</b> 40–59 pts</div>
+          <div class="leg-desc">2 of 6 conditions met — setup is forming but not ready. Monitor daily; may become a BUY.</div>
+          <div class="leg-item badge-hold-bg"><b>— HOLD</b> 0–39 pts</div>
+          <div class="leg-desc">Fewer than 2 conditions met. No action — stock is not in an oversold dip. If you own it, keep holding.</div>
+        </div>
+        <div class="leg-rules">
+          <b>The 6 entry rules (20 pts each):</b><br>
+          <b>R1</b> RSI(14) &lt; 40 — stock is oversold on momentum<br>
+          <b>R2</b> MACD histogram &lt; 0 but rising — selling pressure is easing<br>
+          <b>R3</b> Stochastic %K crosses above %D while both &lt; 50 — early bullish flip<br>
+          <b>R4</b> Volume above 20-day average — buyers stepping in with conviction<br>
+          <b>R5</b> Price ≤ MA50 × 1.01 — stock is near or below its 50-day average (value zone)<br>
+          <b>R6</b> OBV (On-Balance Volume) rising — money flowing into the stock
+        </div>
+      </div>
+      <div class="leg-section">
+        <div class="leg-title">Exit Signals (shown when you should consider selling)</div>
+        <div class="leg-grid">
+          <div class="leg-item" style="background:#34d39915;border-color:#34d39966"><b style="color:var(--green)">↑ PROFIT TAKE</b></div>
+          <div class="leg-desc">Stock has run up and is now <b>overbought</b>. RSI &gt; 70 and falling, MACD histogram turning negative from above zero, or Stochastic doing a bearish cross from overbought. If you entered on a BUY signal and the stock has gained — <b>this is your sell signal.</b></div>
+          <div class="leg-item" style="background:#f8717115;border-color:#f87171"><b style="color:var(--red)">⬇ STOP LOSS</b></div>
+          <div class="leg-desc">Price has broken <b>below its 200-day moving average</b> — the long-term trend has reversed. If you're holding a position, this is a hard exit to protect capital.</div>
+          <div class="leg-item" style="background:#fbbf2415;border-color:#fbbf2466"><b style="color:var(--yellow)">⚠ CAUTION</b></div>
+          <div class="leg-desc">Momentum is weakening (MACD bearish, OBV falling, or price slipping below MA20 on volume) but the stock is not yet overbought. <b>Not a sell signal by itself</b> — watch closely for a PROFIT TAKE to follow.</div>
+        </div>
+      </div>
+      <div class="leg-section">
+        <div class="leg-title">Timeline Chart Colors</div>
+        <div class="leg-grid">
+          <div class="leg-item" style="background:#34d39930;border-color:#34d39966">Green zone</div>
+          <div class="leg-desc">BUY signal was active on those days — entry conditions were met.</div>
+          <div class="leg-item" style="background:#fbbf2430;border-color:#fbbf2466">Yellow zone</div>
+          <div class="leg-desc">WATCH — setup was forming but not complete.</div>
+          <div class="leg-item" style="background:#7b82a015;border-color:#7b82a040">Grey zone</div>
+          <div class="leg-desc">HOLD — no significant entry conditions active.</div>
+          <div class="leg-item" style="color:var(--green)">▼ Green triangle</div>
+          <div class="leg-desc">PROFIT TAKE exit signal fired on that day.</div>
+          <div class="leg-item" style="color:var(--red)">▼ Red triangle</div>
+          <div class="leg-desc">STOP LOSS exit signal fired — price broke below MA200.</div>
+          <div class="leg-item" style="color:var(--yellow)">▼ Yellow triangle</div>
+          <div class="leg-desc">CAUTION exit signal fired — momentum weakening.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+  <footer>Entry: 6 rules × 20 pts — score ≥60 = BUY · Exit: ≥2 signals incl. ≥1 independent · Data from Yahoo Finance, updated daily after market close</footer>
 </div>
 
 <script>
