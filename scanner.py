@@ -21,20 +21,38 @@ except ImportError:
 SYMBOLS = [
     # Broad market
     "QQQ", "SPY",
-    # Sector ETFs
-    "SOXX", "IGV", "DRAM",
-    # Mega-cap tech
+    # Sector ETFs — tech & semis
+    "SOXX", "IGV", "DRAM", "SMH", "SOXL", "CHAT", "ARKG", "NVDL",
+    # Sector ETFs — other
+    "COPX", "UNG", "HYG", "SPCX",
+    # Mega-cap tech (MAG7)
     "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "META", "TSLA",
     # Large-cap tech
     "AVGO", "ORCL", "NFLX", "AMD", "CSCO", "QCOM", "TXN", "CRM", "ASML",
     # Memory & chip design
-    "MU", "ARM", "MRVL",
+    "MU", "ARM", "MRVL", "WDC", "RMBS",
     # AI / data / cloud
-    "PLTR", "SNOW", "NET",
+    "PLTR", "SNOW", "NET", "RDDT", "TEM", "NBIS",
     # Software
     "ADBE", "NOW",
     # Cybersecurity
     "PANW",
+    # Platform / ride-share
+    "UBER", "GRAB",
+    # Fintech / crypto-adjacent
+    "CRCL",
+    # Clean energy / nuclear
+    "VST", "BE", "SMR",
+    # Space & quantum
+    "RKLB", "ASTS", "LUNR", "PL", "IONQ",
+    # Healthcare
+    "ISRG",
+    # Transport
+    "AAL",
+    # Consumer / other
+    "MCD", "GME",
+    # Speculative semis
+    "AAOI", "AEHR",
 ]
 REPORT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
 OPEN_BROWSER = "--no-browser" not in sys.argv
@@ -386,6 +404,24 @@ h1{{font-size:1.4rem;font-weight:700}}
 .note-gate{{color:var(--red);background:#f8717110;border:1px solid #f8717130}}
 .note-exit{{color:var(--orange);background:#fb923c10;border:1px solid #fb923c30}}
 canvas.spark{{width:100%;height:36px}}
+/* Filter bar */
+.filter-bar{{display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  padding:12px 0 4px;border-bottom:1px solid var(--border);margin-bottom:4px}}
+.flt{{background:var(--bg3);border:1px solid var(--border);border-radius:6px;
+  color:var(--text);font-size:12px;padding:5px 10px;cursor:pointer;
+  appearance:none;-webkit-appearance:none;min-width:120px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237b82a0'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 8px center;padding-right:24px}}
+.flt:focus{{outline:none;border-color:var(--accent)}}
+.flt.active{{border-color:var(--accent);color:var(--accent)}}
+.flt-pe{{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted)}}
+.flt-inp{{width:54px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);font-size:12px;padding:5px 7px}}
+.flt-inp:focus{{outline:none;border-color:var(--accent)}}
+.flt-reset{{background:none;border:1px solid var(--border);border-radius:6px;
+  color:var(--muted);font-size:12px;padding:5px 10px;cursor:pointer}}
+.flt-reset:hover{{color:var(--red);border-color:var(--red)}}
+.flt-count{{font-size:12px;color:var(--muted);margin-left:auto}}
 .chg-pos{{color:var(--green)}}.chg-neg{{color:var(--red)}}
 .sector-tag{{font-size:10px;color:var(--muted);background:var(--bg3);
   border-radius:3px;padding:1px 6px;white-space:nowrap;overflow:hidden;
@@ -523,6 +559,42 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
   </div>
 
   <div id="p-today" class="tab-panel active">
+    <div class="filter-bar">
+      <select class="flt" id="f-mktcap" title="Market Cap">
+        <option value="">Mkt Cap: All</option>
+        <option value="mega">Mega ($200B+)</option>
+        <option value="large">Large ($10B–$200B)</option>
+        <option value="mid">Mid ($2B–$10B)</option>
+        <option value="small">Small ($300M–$2B)</option>
+        <option value="micro">Micro (&lt;$300M)</option>
+      </select>
+      <select class="flt" id="f-analyst" title="Analyst Rating">
+        <option value="">Analyst: All</option>
+        <option value="strong_buy">⬆ Strong Buy</option>
+        <option value="buy">↑ Buy</option>
+        <option value="hold">— Hold</option>
+        <option value="sell">↓ Sell / Strong Sell</option>
+      </select>
+      <select class="flt" id="f-chg" title="Today's Change">
+        <option value="">Today: All</option>
+        <option value="up">↑ Up today</option>
+        <option value="down">↓ Down today</option>
+      </select>
+      <select class="flt" id="f-exit" title="Exit Signal">
+        <option value="">Exit: All</option>
+        <option value="yes">Has exit signal</option>
+        <option value="no">No exit signal</option>
+      </select>
+      <select class="flt" id="f-sector" title="Sector">
+        <option value="">Sector: All</option>
+      </select>
+      <div class="flt-pe">
+        P/E:&nbsp;<input class="flt-inp" id="f-pe-min" placeholder="min" type="number" min="0" step="1">
+        <span>–</span><input class="flt-inp" id="f-pe-max" placeholder="max" type="number" min="0" step="1">
+      </div>
+      <button class="flt-reset" id="f-reset">✕ Clear</button>
+      <span class="flt-count" id="f-count"></span>
+    </div>
     <div class="grid">{cards_html}</div>
   </div>
 
@@ -599,30 +671,122 @@ function drawSpark(canvas) {{
 
 window.addEventListener('load', () => document.querySelectorAll('canvas.spark').forEach(drawSpark));
 
-// KPI box filter
-let activeFilter = 'ALL';
+// ── Combined filter engine ─────────────────────────────────────────────────────
+const TOTAL_CARDS = document.querySelectorAll('.card[data-sig]').length;
+const fState = {{ signal:'ALL', mktcap:'', analyst:'', chg:'', exit:'', peMin:'', peMax:'', sector:'' }};
+
+// Populate sector dropdown from card data
+(function() {{
+  const sectors = new Set();
+  document.querySelectorAll('.card[data-sector]').forEach(c => {{
+    if (c.dataset.sector) sectors.add(c.dataset.sector);
+  }});
+  const sel = document.getElementById('f-sector');
+  [...sectors].sort().forEach(s => {{
+    const o = document.createElement('option');
+    o.value = s; o.textContent = s; sel.appendChild(o);
+  }});
+}})();
+
+function applyFilters() {{
+  let shown = 0;
+  document.querySelectorAll('.card[data-sig]').forEach(card => {{
+    const sig    = card.dataset.sig;
+    const hasExit= card.dataset.exit === 'true';
+    const mcap   = parseFloat(card.dataset.mktcap) || 0;
+    const analyst= card.dataset.analyst || '';
+    const daychg = parseFloat(card.dataset.daychg) || 0;
+    const pe     = parseFloat(card.dataset.pe) || 0;
+    const sector = card.dataset.sector || '';
+    let show = true;
+
+    // Signal (KPI buttons)
+    if (fState.signal !== 'ALL') {{
+      if (fState.signal === 'BUY'   && sig !== 'BUY')   show = false;
+      if (fState.signal === 'WATCH' && sig !== 'WATCH') show = false;
+      if (fState.signal === 'HOLD'  && sig !== 'HOLD')  show = false;
+      if (fState.signal === 'EXIT'  && !hasExit)        show = false;
+    }}
+    // Market cap (in $B stored in data-mktcap)
+    if (fState.mktcap) {{
+      if (fState.mktcap === 'mega'  && mcap < 200)                     show = false;
+      if (fState.mktcap === 'large' && (mcap < 10  || mcap >= 200))    show = false;
+      if (fState.mktcap === 'mid'   && (mcap < 2   || mcap >= 10))     show = false;
+      if (fState.mktcap === 'small' && (mcap < 0.3 || mcap >= 2))      show = false;
+      if (fState.mktcap === 'micro' && mcap >= 0.3)                    show = false;
+    }}
+    // Analyst rating
+    if (fState.analyst) {{
+      if (fState.analyst === 'sell') {{
+        if (analyst !== 'sell' && analyst !== 'strong_sell') show = false;
+      }} else if (analyst !== fState.analyst) show = false;
+    }}
+    // Daily change direction
+    if (fState.chg === 'up'   && daychg <= 0) show = false;
+    if (fState.chg === 'down' && daychg >= 0) show = false;
+    // Exit signal
+    if (fState.exit === 'yes' && !hasExit) show = false;
+    if (fState.exit === 'no'  && hasExit)  show = false;
+    // P/E range
+    if (fState.peMin !== '' && pe > 0 && pe < parseFloat(fState.peMin)) show = false;
+    if (fState.peMax !== '' && pe > 0 && pe > parseFloat(fState.peMax)) show = false;
+    // Sector
+    if (fState.sector && sector !== fState.sector) show = false;
+
+    card.classList.toggle('hidden', !show);
+    if (show) shown++;
+  }});
+
+  document.getElementById('f-count').textContent = `${{shown}} of ${{TOTAL_CARDS}} symbols`;
+
+  // Mark active filter dropdowns
+  ['f-mktcap','f-analyst','f-chg','f-exit','f-sector'].forEach(id => {{
+    const el = document.getElementById(id);
+    el.classList.toggle('active', !!el.value);
+  }});
+}}
+
+// Wire up filter controls
+['f-mktcap','f-analyst','f-chg','f-exit','f-sector'].forEach(id => {{
+  document.getElementById(id).addEventListener('change', e => {{
+    fState[id.replace('f-','').replace('-','').replace('mktcap','mktcap')
+               .replace('analyst','analyst').replace('chg','chg')
+               .replace('exit','exit').replace('sector','sector')] = e.target.value;
+    // map id to fState key
+    const keyMap = {{'f-mktcap':'mktcap','f-analyst':'analyst','f-chg':'chg','f-exit':'exit','f-sector':'sector'}};
+    fState[keyMap[id]] = e.target.value;
+    applyFilters();
+  }});
+}});
+document.getElementById('f-pe-min').addEventListener('input', e => {{ fState.peMin = e.target.value; applyFilters(); }});
+document.getElementById('f-pe-max').addEventListener('input', e => {{ fState.peMax = e.target.value; applyFilters(); }});
+document.getElementById('f-reset').addEventListener('click', () => {{
+  fState.signal = 'ALL';
+  fState.mktcap = fState.analyst = fState.chg = fState.exit = fState.sector = fState.peMin = fState.peMax = '';
+  ['f-mktcap','f-analyst','f-chg','f-exit','f-sector'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-pe-min').value = '';
+  document.getElementById('f-pe-max').value = '';
+  document.querySelectorAll('.kpi-btn').forEach(b => b.classList.remove('active-filter'));
+  document.querySelector('.kpi-btn[data-filter="ALL"]').classList.add('active-filter');
+  applyFilters();
+}});
+
+// KPI buttons → set signal filter
 document.querySelectorAll('.kpi-btn').forEach(btn => {{
   btn.addEventListener('click', () => {{
-    activeFilter = btn.dataset.filter;
+    fState.signal = btn.dataset.filter;
     document.querySelectorAll('.kpi-btn').forEach(b => b.classList.remove('active-filter'));
     btn.classList.add('active-filter');
-    // Switch to Today tab if on timeline
+    // Switch to Today tab
     document.querySelectorAll('.tab,.tab-panel').forEach(e => e.classList.remove('active'));
     document.querySelector('[data-panel="p-today"]').classList.add('active');
     document.getElementById('p-today').classList.add('active');
-    // Filter cards
-    document.querySelectorAll('.card').forEach(card => {{
-      const sig  = card.dataset.sig;
-      const exit = card.dataset.exit === 'true';
-      const show = activeFilter === 'ALL' ||
-                   (activeFilter === 'BUY'   && sig === 'BUY') ||
-                   (activeFilter === 'WATCH' && sig === 'WATCH') ||
-                   (activeFilter === 'HOLD'  && sig === 'HOLD') ||
-                   (activeFilter === 'EXIT'  && exit);
-      card.classList.toggle('hidden', !show);
-    }});
+    applyFilters();
   }});
 }});
+
+// Init count
+applyFilters();
 
 // Click ticker name → switch to timeline tab and scroll to that ticker
 document.querySelectorAll('.ticker-link').forEach(el => {{
@@ -1024,7 +1188,7 @@ def _card(r):
         exit_n = f'<div class="note note-exit">{fired_desc}</div>'
 
     sym = r["symbol"]
-    exit_attr = 'true' if r.get("exit_signal") else 'false'
+    exit_attr  = 'true' if r.get("exit_signal") else 'false'
 
     # Daily change
     day_chg = r.get("day_chg")
@@ -1056,6 +1220,13 @@ def _card(r):
 
     anlst_lbl, anlst_col = ANALYST_LABELS.get(anlst or "", ("n/a", "muted"))
 
+    # Data attributes for JS filtering
+    mktcap_b   = f"{mcap/1e9:.2f}" if mcap else "0"
+    pe_attr    = f"{pe:.1f}" if pe else "0"
+    chg_attr   = f"{day_chg:.2f}" if day_chg is not None else "0"
+    anlst_attr = anlst or ""
+    sec_attr   = (sector or "").replace('"', "")
+
     def fi(lbl, val, cls=""):
         return (f'<div class="fund-item"><div class="fund-label">{lbl}</div>'
                 f'<div class="fund-val {cls}">{val}</div></div>')
@@ -1073,7 +1244,7 @@ def _card(r):
     target_html  = (f'<span style="font-size:11px;color:var(--muted)">Target '
                     f'<b>${_f(tgt,0)}</b> ({tgt_upside})</span>') if tgt else ""
 
-    return f"""<div class="card" data-sig="{sig}" data-exit="{exit_attr}">
+    return f"""<div class="card" data-sig="{sig}" data-exit="{exit_attr}" data-mktcap="{mktcap_b}" data-pe="{pe_attr}" data-daychg="{chg_attr}" data-analyst="{anlst_attr}" data-sector="{sec_attr}">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="{sym}" title="Click to see {sym} timeline">{sym}</span>
     <span class="price">${_f(close,2)}</span>
