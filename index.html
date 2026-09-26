@@ -79,10 +79,28 @@ canvas.spark{width:100%;height:36px}
 .tl-header{display:flex;align-items:center;gap:10px;padding:10px 16px 6px}
 .tl-sym{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;min-width:56px}
 .tl-price{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;margin-right:auto}
-canvas.tl{width:100%;height:130px;display:block;padding:0 16px 10px}
+canvas.tl{width:100%;height:130px;display:block;padding:0 16px 10px;cursor:pointer}
+canvas.tl:hover{opacity:.85}
 .tl-tooltip{position:absolute;background:var(--bg3);border:1px solid var(--border);
   border-radius:6px;padding:5px 10px;font-size:12px;pointer-events:none;
   opacity:0;transition:opacity .1s;white-space:nowrap;z-index:10}
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);display:flex;
+  align-items:center;justify-content:center;z-index:200;
+  opacity:0;pointer-events:none;transition:opacity .18s}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;
+  width:min(96vw,980px);padding:20px;display:flex;flex-direction:column;gap:14px;
+  box-shadow:0 24px 80px #0008}
+.modal-header{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.modal-sym{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.3rem}
+.modal-price{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums;margin-right:auto}
+.modal-close{margin-left:auto;cursor:pointer;font-size:22px;line-height:1;
+  color:var(--muted);padding:2px 6px;border-radius:4px}
+.modal-close:hover{color:var(--text);background:var(--bg3)}
+canvas.tl-big{width:100%;height:280px;display:block}
+.modal-tip{font-size:12px;color:var(--muted);min-height:18px;font-variant-numeric:tabular-nums}
+.modal-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
 .tl-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);
   padding:0 16px 10px}
 .leg{display:flex;align-items:center;gap:5px}
@@ -112,7 +130,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
 <div class="page">
   <div>
     <h1>Pivot Scanner</h1>
-    <div class="subtitle">Generated Saturday, September 26 2026 — 11:56</div>
+    <div class="subtitle">Generated Saturday, September 26 2026 — 12:05</div>
   </div>
   <div class="kpi-row">
     <div class="kpi kpi-btn" data-filter="ALL"><div class="kpi-label">All Symbols</div><div class="kpi-val">18</div></div>
@@ -576,6 +594,29 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <footer>Entry: 6 rules × 20 pts — score ≥60 = BUY · Exit: ≥2 signals incl. ≥1 independent · Data from Yahoo Finance, updated daily after market close</footer>
 </div>
 
+<!-- Enlarged chart modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-header">
+      <span class="modal-sym" id="modal-sym"></span>
+      <span class="modal-price" id="modal-price"></span>
+      <span id="modal-badges"></span>
+      <span class="modal-close" id="modal-close">✕</span>
+    </div>
+    <div class="modal-legend">
+      <span class="leg"><span class="leg-sq" style="background:#34d39930;border:1px solid #34d39966"></span>BUY zone</span>
+      <span class="leg"><span class="leg-sq" style="background:#fbbf2430;border:1px solid #fbbf2466"></span>WATCH zone</span>
+      <span class="leg"><span class="leg-sq" style="background:#7b82a015;border:1px solid #7b82a040"></span>HOLD</span>
+      <span class="leg" style="color:var(--green)">▼ PROFIT TAKE</span>
+      <span class="leg" style="color:var(--red)">▼ STOP LOSS</span>
+      <span class="leg" style="color:var(--yellow)">▼ CAUTION</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--muted)">— MA50 &nbsp;&nbsp; ╌ MA200</span>
+    </div>
+    <canvas class="tl-big" id="modal-canvas"></canvas>
+    <div class="modal-tip" id="modal-tip">Hover over the chart to see daily details</div>
+  </div>
+</div>
+
 <script>
 // Tab switching
 document.querySelectorAll('.tab').forEach(tab => {
@@ -811,6 +852,156 @@ function drawOneTL(canvas) {
     tip.style.opacity = 1;
   });
   canvas.addEventListener('mouseleave', () => { tip.style.opacity=0; });
+}
+
+// ── Enlarged modal ─────────────────────────────────────────────────────────────
+function openModal(sym) {
+  const bars = HIST[sym] || [];
+  if (!bars.length) return;
+  const last = bars[bars.length-1];
+  document.getElementById('modal-sym').textContent = sym;
+  document.getElementById('modal-price').textContent = last && last.close ? '$'+last.close.toFixed(2) : '';
+  // copy badges from the small card header
+  const smallHeader = document.querySelector('.tl-card[id="tl-'+sym+'"] .tl-header');
+  const badgesEl = document.getElementById('modal-badges');
+  badgesEl.innerHTML = smallHeader ? Array.from(smallHeader.querySelectorAll('.badge')).map(b=>b.outerHTML).join(' ') : '';
+  document.getElementById('modal-overlay').classList.add('open');
+  requestAnimationFrame(() => drawBigTL(sym));
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+
+// Click small canvas → open modal
+document.querySelectorAll('canvas.tl').forEach(c => {
+  c.addEventListener('click', () => openModal(c.dataset.sym));
+});
+
+function drawBigTL(sym) {
+  const bars = HIST[sym] || [];
+  if (!bars.length) return;
+  const canvas = document.getElementById('modal-canvas');
+  const dpr = devicePixelRatio || 1;
+  const padL = 62, padR = 12, padB = 22;
+  const W = canvas.offsetWidth;
+  const H = 240;
+  canvas.width  = W * dpr;
+  canvas.height = (H + padB) * dpr;
+  canvas.style.height = (H + padB) + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const prices = bars.map(b=>b.close).filter(v=>v!=null);
+  const ma50s  = bars.map(b=>b.ma50).filter(v=>v!=null);
+  const ma200s = bars.map(b=>b.ma200).filter(v=>v!=null);
+  const allP   = [...prices,...ma50s,...ma200s];
+  const mn = Math.min(...allP)*0.997, mx = Math.max(...allP)*1.003;
+  const rng = mx-mn||1;
+  const n = bars.length;
+  const plotW = W - padL - padR;
+  const bw = plotW / n;
+
+  const xc = i => padL + (i+0.5)*bw;
+  const yp = v => 4 + (1-(v-mn)/rng)*(H-8);
+
+  // Y-axis grid + labels
+  const ticks = 5;
+  ctx.textAlign='right'; ctx.textBaseline='middle';
+  ctx.font='10px Inter,system-ui';
+  for (let t=0; t<=ticks; t++) {
+    const v = mn + (rng*t/ticks);
+    const y = yp(v);
+    ctx.fillStyle='rgba(123,130,160,0.5)';
+    ctx.fillText('$'+v.toFixed(v>=100?0:1), padL-6, y);
+    ctx.strokeStyle='rgba(123,130,160,0.12)';
+    ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(W-padR,y); ctx.stroke();
+  }
+
+  // Signal background bands
+  bars.forEach((b,i) => {
+    ctx.fillStyle = SIG_BG[b.signal]||SIG_BG.HOLD;
+    ctx.fillRect(xc(i)-bw/2, 0, bw+0.5, H);
+  });
+
+  // MA200 dashed grey
+  ctx.setLineDash([4,4]); ctx.strokeStyle='rgba(123,130,160,0.45)'; ctx.lineWidth=1.2;
+  ctx.beginPath(); let f200=true;
+  bars.forEach((b,i)=>{ if(b.ma200==null)return; if(f200){ctx.moveTo(xc(i),yp(b.ma200));f200=false;}else ctx.lineTo(xc(i),yp(b.ma200)); });
+  ctx.stroke();
+
+  // MA50 dashed blue
+  ctx.strokeStyle='rgba(91,142,240,0.5)';
+  ctx.beginPath(); let f50=true;
+  bars.forEach((b,i)=>{ if(b.ma50==null)return; if(f50){ctx.moveTo(xc(i),yp(b.ma50));f50=false;}else ctx.lineTo(xc(i),yp(b.ma50)); });
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Price line — colored by signal segment
+  ctx.lineWidth=2.2;
+  let prevSig=null,prevX=0,prevY=0;
+  bars.forEach((b,i) => {
+    if (b.close==null) return;
+    const px=xc(i), py=yp(b.close);
+    if (b.signal!==prevSig && i>0) {
+      ctx.stroke(); ctx.beginPath(); ctx.moveTo(prevX,prevY); ctx.lineTo(px,py);
+      ctx.strokeStyle=SIG_LINE[b.signal]||'#7b82a0'; ctx.stroke(); ctx.beginPath();
+    }
+    if (i===0||b.signal!==prevSig) {
+      ctx.strokeStyle=SIG_LINE[b.signal]||'#7b82a0'; ctx.beginPath(); ctx.moveTo(px,py);
+    } else { ctx.lineTo(px,py); }
+    prevSig=b.signal; prevX=px; prevY=py;
+    if (i===bars.length-1) ctx.stroke();
+  });
+
+  // Exit triangles (larger)
+  const EXIT_COL={profittake:'#34d399',stoploss:'#f87171',caution:'#fbbf24'};
+  bars.forEach((b,i) => {
+    if (!b.exit||b.close==null) return;
+    const px=xc(i), py=yp(b.close)-6;
+    ctx.fillStyle=EXIT_COL[b.ex_type]||'#fb923c';
+    ctx.beginPath(); ctx.moveTo(px,py+10); ctx.lineTo(px-6,py); ctx.lineTo(px+6,py);
+    ctx.closePath(); ctx.fill();
+  });
+
+  // X-axis date labels — every ~2 weeks
+  ctx.fillStyle='rgba(123,130,160,0.7)'; ctx.font='10px Inter,system-ui';
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  let lastLabel='';
+  bars.forEach((b,i) => {
+    const d=new Date(b.date+'T12:00');
+    const day=d.getDate(), mo=d.getMonth();
+    const key=mo+'-'+(day<15?'a':'b');
+    if (key!==lastLabel) {
+      lastLabel=key;
+      const lbl=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+      ctx.fillText(lbl, xc(i), H+4);
+    }
+  });
+
+  // Hover interaction
+  const tip = document.getElementById('modal-tip');
+  canvas.onmousemove = e => {
+    const rect=canvas.getBoundingClientRect();
+    const mx=e.clientX-rect.left;
+    const idx=Math.round((mx-padL)/bw-0.5);
+    if (idx<0||idx>=bars.length) { tip.textContent='Hover over the chart to see daily details'; return; }
+    const b=bars[idx];
+    if (!b.close) return;
+    const sigLabel={BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'— HOLD'}[b.signal]||b.signal;
+    const col=SIG_LINE[b.signal]||'#7b82a0';
+    const exitPart=b.exit?' · <span style="color:'+((EXIT_COL[b.ex_type])||'#fb923c')+'">'+
+      (b.ex_type==='stoploss'?'⬇ STOP LOSS':b.ex_type==='profittake'?'↑ PROFIT TAKE':'⚠ CAUTION')+'</span>':'';
+    tip.innerHTML=`<b>${b.date}</b>&nbsp; ${b.close.toFixed(2)} &nbsp;<span style="color:${col}">${sigLabel}</span>${exitPart}`;
+  };
+  canvas.onmouseleave = () => { tip.textContent='Hover over the chart to see daily details'; };
 }
 </script>
 </body>
