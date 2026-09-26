@@ -100,8 +100,6 @@ def _score_entry(d):
     vol, vol_ma = d.get("volume"), d.get("vol_ma20")
     obv, obv_p = d.get("obv"), d.get("obv_prev")
 
-    gate_ok = bool(c and ma200 and ma50 and c > ma200 and ma50 > ma200)
-
     r1 = bool(rsi is not None and rsi < RSI_LOWER)
     r2 = bool(hist is not None and hist < 0 and hist_prev is not None and hist > hist_prev)
     r3 = bool(sk and sd and sk_p is not None and sd_p is not None
@@ -112,16 +110,7 @@ def _score_entry(d):
 
     rules = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6}
     score = sum(20 for v in rules.values() if v)
-
-    gate_reason = ""
-    if not gate_ok:
-        if c and ma200 and c <= ma200:
-            gate_reason = f"price ${_f(c,2)} below MA200 ${_f(ma200,2)}"
-        elif ma50 and ma200 and ma50 <= ma200:
-            gate_reason = "MA50 below MA200 (death cross)"
-        sig = "GATE_FAIL"
-    else:
-        sig = "BUY" if score >= SIGNAL_MIN else "WATCH" if score >= 40 else "HOLD"
+    sig = "BUY" if score >= SIGNAL_MIN else "WATCH" if score >= 40 else "HOLD"
 
     macd_imp = hist is not None and hist_prev is not None and hist > hist_prev
     vol_ratio = (vol/vol_ma) if (vol and vol_ma and vol_ma>0) else None
@@ -138,8 +127,7 @@ def _score_entry(d):
         "R5": {"passed": r5, "ok": "Price ≤ MA50 × 1.01", "fail": f"Price {_f1(pct_ma50)}% above MA50"},
         "R6": {"passed": r6, "ok": "OBV rising", "fail": "OBV falling"},
     }
-    return {"gate_ok": gate_ok, "gate_reason": gate_reason,
-            "entry_score": score, "entry_signal": sig, "entry_rules": rule_details}
+    return {"entry_score": score, "entry_signal": sig, "entry_rules": rule_details}
 
 # ── Exit scoring ───────────────────────────────────────────────────────────────
 def _score_exit(d):
@@ -231,14 +219,19 @@ def analyze_symbol(ticker):
             d = _day(*args, idx=i)
             se = _score_entry(d)
             sx = _score_exit(d)
+            ind_f = sx["exit_ind_fired"]
+            ex_type = ("stoploss" if "E7" in ind_f else
+                       "profittake" if any(e in ind_f for e in ["E1","E2","E3"]) else
+                       "caution") if sx["exit_signal"] else None
             history.append({
-                "date":   df.index[i].strftime("%Y-%m-%d"),
-                "close":  round(float(close.iloc[i]),2) if not math.isnan(float(close.iloc[i])) else None,
-                "ma50":   round(float(ma50.iloc[i]),2)  if not math.isnan(float(ma50.iloc[i]))  else None,
-                "ma200":  round(float(ma200.iloc[i]),2) if not math.isnan(float(ma200.iloc[i])) else None,
-                "signal": se["entry_signal"],
-                "score":  se["entry_score"],
-                "exit":   sx["exit_signal"],
+                "date":    df.index[i].strftime("%Y-%m-%d"),
+                "close":   round(float(close.iloc[i]),2) if not math.isnan(float(close.iloc[i])) else None,
+                "ma50":    round(float(ma50.iloc[i]),2)  if not math.isnan(float(ma50.iloc[i]))  else None,
+                "ma200":   round(float(ma200.iloc[i]),2) if not math.isnan(float(ma200.iloc[i])) else None,
+                "signal":  se["entry_signal"],
+                "score":   se["entry_score"],
+                "exit":    sx["exit_signal"],
+                "ex_type": ex_type,
             })
         today["history"] = history
         return today
@@ -253,8 +246,8 @@ def build_html(results):
     watch_c = sum(1 for r in results if r.get("entry_signal")=="WATCH")
     exit_c  = sum(1 for r in results if r.get("exit_signal"))
 
-    order = {"BUY":0,"WATCH":1,"HOLD":2,"GATE_FAIL":3}
-    rs = sorted(results, key=lambda r:(4 if r.get("error") else order.get(r.get("entry_signal","HOLD"),3),
+    order = {"BUY":0,"WATCH":1,"HOLD":2}
+    rs = sorted(results, key=lambda r:(3 if r.get("error") else order.get(r.get("entry_signal","HOLD"),2),
                                         -r.get("entry_score",0)))
 
     cards_html = "\n".join(_card(r) for r in rs)
@@ -377,13 +370,14 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
       <span class="leg"><span class="leg-sq" style="background:#34d39930;border:1px solid #34d39966"></span>BUY zone</span>
       <span class="leg"><span class="leg-sq" style="background:#fbbf2430;border:1px solid #fbbf2466"></span>WATCH zone</span>
       <span class="leg"><span class="leg-sq" style="background:#7b82a015;border:1px solid #7b82a040"></span>HOLD</span>
-      <span class="leg"><span class="leg-sq" style="background:#f8717120;border:1px solid #f8717150"></span>GATE FAIL (downtrend)</span>
-      <span class="leg" style="color:var(--orange)">▼ EXIT warning day</span>
+      <span class="leg" style="color:var(--green)">▼ PROFIT TAKE day</span>
+      <span class="leg" style="color:var(--red)">▼ STOP LOSS day</span>
+      <span class="leg" style="color:var(--yellow)">▼ CAUTION day</span>
     </div>
     <div class="tl-list">{tl_html}</div>
   </div>
 
-  <footer>Entry: RSI/MACD/Stoch/Volume/MA50/OBV — mandatory gate: price &gt; MA200 &amp; MA50 &gt; MA200 — score ≥60 = BUY · Exit: ≥2 signals incl. ≥1 independent</footer>
+  <footer>Entry score: R1 RSI&lt;40 · R2 MACD hist &lt;0 rising · R3 Stoch bull cross · R4 Vol above avg · R5 Price≤MA50 · R6 OBV rising — 20pts each, score ≥60 = BUY · Exit: ≥2 signals incl. ≥1 independent</footer>
 </div>
 
 <script>
@@ -540,13 +534,14 @@ function drawOneTL(canvas) {{
     if (i===bars.length-1) ctx.stroke();
   }});
 
-  // EXIT warning — orange down-triangle above the bar
+  // EXIT markers — colored by type, drawn above the price point
+  const EXIT_COL = {{profittake:'#34d399', stoploss:'#f87171', caution:'#fbbf24'}};
   bars.forEach((b,i) => {{
     if (!b.exit||b.close==null) return;
-    const px=xc(i), py=yp(b.close)-3;
-    ctx.fillStyle='#fb923c';
+    const px=xc(i), py=yp(b.close)-4;
+    ctx.fillStyle = EXIT_COL[b.ex_type] || '#fb923c';
     ctx.beginPath();
-    ctx.moveTo(px,     py+6);
+    ctx.moveTo(px,     py+7);
     ctx.lineTo(px-4.5, py);
     ctx.lineTo(px+4.5, py);
     ctx.closePath(); ctx.fill();
@@ -585,7 +580,7 @@ function drawOneTL(canvas) {{
     if (idx < 0 || idx >= bars.length) {{ tip.style.opacity=0; return; }}
     const b = bars[idx];
     if (!b.close) {{ tip.style.opacity=0; return; }}
-    const sigLabel = {{BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'— HOLD',GATE_FAIL:'✕ DOWNTREND'}}[b.signal]||b.signal;
+    const sigLabel = {{BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'— HOLD'}}[b.signal]||b.signal;
     tip.innerHTML = `<b>${{b.date}}</b>&nbsp; ${{b.close.toFixed(2)}} &nbsp;<span style="color:${{SIG_LINE[b.signal]||'#7b82a0'}}">${{sigLabel}}</span>${{b.exit?' &nbsp;<span style="color:#fb923c">EXIT</span>':''}}`;
     const tx = Math.min(e.clientX - rect.left + 10, rect.width - tip.offsetWidth - 4);
     tip.style.left = tx + 'px';
@@ -599,8 +594,8 @@ function drawOneTL(canvas) {{
 </html>"""
 
 def _badge(sig, score):
-    cls = {"BUY":"badge-buy","WATCH":"badge-watch","HOLD":"badge-hold","GATE_FAIL":"badge-gate"}.get(sig,"badge-hold")
-    label = {"BUY":"↑ BUY","WATCH":"◉ WATCH","HOLD":"— HOLD","GATE_FAIL":"✕ DOWNTREND"}.get(sig, sig)
+    cls = {"BUY":"badge-buy","WATCH":"badge-watch","HOLD":"badge-hold"}.get(sig,"badge-hold")
+    label = {"BUY":"↑ BUY","WATCH":"◉ WATCH","HOLD":"— HOLD"}.get(sig, sig)
     return f'<span class="badge {cls}">{label} {score}/120</span>'
 
 def _exit_badge(r):
@@ -658,7 +653,6 @@ def _card(r):
                 "green" if (vol_ratio and vol_ratio>1) else ""))
 
     exit_b = _exit_badge(r)
-    gate_n = f'<div class="note note-gate"><b>Downtrend block:</b> {r["gate_reason"]} — entry rules not evaluated</div>' if r.get("gate_reason") else ""
     exit_n = ""
     if r.get("exit_signal"):
         ind = r.get("exit_ind_fired",[])
@@ -679,7 +673,7 @@ def _card(r):
   <div class="score-bar"><div class="score-fill" style="width:{min(score/120*100,100):.0f}%;background:{sc}"></div></div>
   <div class="rules">{rules_html}</div>
   <div class="inds">{inds}</div>
-  {gate_n}{exit_n}
+  {exit_n}
 </div>"""
 
 def _tl_row(r):
