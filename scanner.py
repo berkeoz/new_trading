@@ -455,7 +455,7 @@ h1{{font-size:1.4rem;font-weight:700}}
   font-weight:700;letter-spacing:.05em;text-transform:uppercase}}
 .badge-buy{{background:#34d39922;color:var(--green);border:1px solid #34d39944}}
 .badge-watch{{background:#fbbf2422;color:var(--yellow);border:1px solid #fbbf2444}}
-.badge-hold{{background:#7b82a022;color:var(--muted);border:1px solid #7b82a033}}
+.badge-hold{{background:#94a3b822;color:#94a3b8;border:1px solid #94a3b844}}
 .badge-gate{{background:#f8717122;color:var(--red);border:1px solid #f8717133}}
 .badge-profittake{{background:#34d39922;color:var(--green);border:1px solid #34d39966}}
 .badge-stoploss{{background:#f8717133;color:var(--red);border:1px solid #f87171}}
@@ -589,7 +589,7 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
     <div class="kpi kpi-btn" data-filter="ALL"><div class="kpi-label">All Symbols</div><div class="kpi-val">{len(results)}</div></div>
     <div class="kpi kpi-btn active-filter" data-filter="BUY"><div class="kpi-label">↑ BUY</div><div class="kpi-val green">{buy_c}</div></div>
     <div class="kpi kpi-btn" data-filter="WATCH"><div class="kpi-label">◉ WATCH</div><div class="kpi-val yellow">{watch_c}</div></div>
-    <div class="kpi kpi-btn" data-filter="HOLD"><div class="kpi-label">— HOLD</div><div class="kpi-val" style="color:var(--muted)">{len(results)-buy_c-watch_c-exit_c}</div></div>
+    <div class="kpi kpi-btn" data-filter="HOLD"><div class="kpi-label">○ HOLD</div><div class="kpi-val" style="color:#94a3b8">{len(results)-buy_c-watch_c-exit_c}</div></div>
     <div class="kpi kpi-btn" data-filter="EXIT"><div class="kpi-label">Exit signals</div><div class="kpi-val" style="color:var(--orange)">{exit_c}</div></div>
   </div>
 
@@ -603,7 +603,7 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
           <div class="leg-desc">At least 3 of 6 entry conditions are met. This is the trigger to consider opening or adding to a position.</div>
           <div class="leg-item badge-watch-bg"><b>◉ WATCH</b> 40–59 pts</div>
           <div class="leg-desc">2 of 6 conditions met — setup is forming but not ready. Monitor daily; may become a BUY.</div>
-          <div class="leg-item badge-hold-bg"><b>— HOLD</b> 0–39 pts</div>
+          <div class="leg-item badge-hold-bg"><b>○ HOLD</b> 0–39 pts</div>
           <div class="leg-desc">Fewer than 2 conditions met. No action — stock is not in an oversold dip. If you own it, keep holding.</div>
         </div>
         <div class="leg-rules">
@@ -636,7 +636,7 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
           <div class="leg-item" style="background:#fbbf2430;border-color:#fbbf2466">Yellow zone</div>
           <div class="leg-desc">WATCH — setup was forming but not complete.</div>
           <div class="leg-item" style="background:#7b82a015;border-color:#7b82a040">Grey zone</div>
-          <div class="leg-desc">HOLD — no significant entry conditions active.</div>
+          <div class="leg-desc">HOLD — conditions not yet aligned, no action needed.</div>
           <div class="leg-item" style="color:var(--green)">▼ Green triangle</div>
           <div class="leg-desc">PROFIT TAKE exit signal fired on that day.</div>
           <div class="leg-item" style="color:var(--red)">▼ Red triangle</div>
@@ -1266,7 +1266,7 @@ function drawOneTL(canvas) {{
     if (idx < 0 || idx >= bars.length) {{ tip.style.opacity=0; return; }}
     const b = bars[idx];
     if (!b.close) {{ tip.style.opacity=0; return; }}
-    const sigLabel = {{BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'— HOLD'}}[b.signal]||b.signal;
+    const sigLabel = {{BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'○ HOLD'}}[b.signal]||b.signal;
     tip.innerHTML = `<b>${{b.date}}</b>&nbsp; ${{b.close.toFixed(2)}} &nbsp;<span style="color:${{SIG_LINE[b.signal]||'#7b82a0'}}">${{sigLabel}}</span>${{b.exit?' &nbsp;<span style="color:#fb923c">EXIT</span>':''}}`;
     const tx = Math.min(e.clientX - rect.left + 10, rect.width - tip.offsetWidth - 4);
     tip.style.left = tx + 'px';
@@ -1417,7 +1417,7 @@ function drawBigTL(sym) {{
     if (idx<0||idx>=bars.length) {{ tip.textContent='Hover over the chart to see daily details'; return; }}
     const b=bars[idx];
     if (!b.close) return;
-    const sigLabel={{BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'— HOLD'}}[b.signal]||b.signal;
+    const sigLabel={{BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'○ HOLD'}}[b.signal]||b.signal;
     const col=SIG_LINE[b.signal]||'#7b82a0';
     const exitPart=b.exit?' · <span style="color:'+((EXIT_COL[b.ex_type])||'#fb923c')+'">'+
       (b.ex_type==='stoploss'?'⬇ STOP LOSS':b.ex_type==='profittake'?'↑ PROFIT TAKE':'⚠ CAUTION')+'</span>':'';
@@ -1431,7 +1431,7 @@ function drawBigTL(sym) {{
 
 def _badge(sig, score):
     cls = {"BUY":"badge-buy","WATCH":"badge-watch","HOLD":"badge-hold"}.get(sig,"badge-hold")
-    label = {"BUY":"↑ BUY","WATCH":"◉ WATCH","HOLD":"— HOLD"}.get(sig, sig)
+    label = {"BUY":"↑ BUY","WATCH":"◉ WATCH","HOLD":"○ HOLD"}.get(sig, sig)
     return f'<span class="badge {cls}">{label} {score}/120</span>'
 
 def _exit_badge(r):

@@ -52,7 +52,7 @@ h1{font-size:1.4rem;font-weight:700}
   font-weight:700;letter-spacing:.05em;text-transform:uppercase}
 .badge-buy{background:#34d39922;color:var(--green);border:1px solid #34d39944}
 .badge-watch{background:#fbbf2422;color:var(--yellow);border:1px solid #fbbf2444}
-.badge-hold{background:#7b82a022;color:var(--muted);border:1px solid #7b82a033}
+.badge-hold{background:#94a3b822;color:#94a3b8;border:1px solid #94a3b844}
 .badge-gate{background:#f8717122;color:var(--red);border:1px solid #f8717133}
 .badge-profittake{background:#34d39922;color:var(--green);border:1px solid #34d39966}
 .badge-stoploss{background:#f8717133;color:var(--red);border:1px solid #f87171}
@@ -180,13 +180,13 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
 <div class="page">
   <div>
     <h1>Pivot Scanner</h1>
-    <div class="subtitle">Generated Saturday, September 26 2026 — 16:09</div>
+    <div class="subtitle">Generated Saturday, September 26 2026 — 16:28</div>
   </div>
   <div class="kpi-row">
     <div class="kpi kpi-btn" data-filter="ALL"><div class="kpi-label">All Symbols</div><div class="kpi-val">143</div></div>
     <div class="kpi kpi-btn active-filter" data-filter="BUY"><div class="kpi-label">↑ BUY</div><div class="kpi-val green">48</div></div>
     <div class="kpi kpi-btn" data-filter="WATCH"><div class="kpi-label">◉ WATCH</div><div class="kpi-val yellow">44</div></div>
-    <div class="kpi kpi-btn" data-filter="HOLD"><div class="kpi-label">— HOLD</div><div class="kpi-val" style="color:var(--muted)">-19</div></div>
+    <div class="kpi kpi-btn" data-filter="HOLD"><div class="kpi-label">○ HOLD</div><div class="kpi-val" style="color:#94a3b8">-19</div></div>
     <div class="kpi kpi-btn" data-filter="EXIT"><div class="kpi-label">Exit signals</div><div class="kpi-val" style="color:var(--orange)">70</div></div>
   </div>
 
@@ -200,7 +200,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
           <div class="leg-desc">At least 3 of 6 entry conditions are met. This is the trigger to consider opening or adding to a position.</div>
           <div class="leg-item badge-watch-bg"><b>◉ WATCH</b> 40–59 pts</div>
           <div class="leg-desc">2 of 6 conditions met — setup is forming but not ready. Monitor daily; may become a BUY.</div>
-          <div class="leg-item badge-hold-bg"><b>— HOLD</b> 0–39 pts</div>
+          <div class="leg-item badge-hold-bg"><b>○ HOLD</b> 0–39 pts</div>
           <div class="leg-desc">Fewer than 2 conditions met. No action — stock is not in an oversold dip. If you own it, keep holding.</div>
         </div>
         <div class="leg-rules">
@@ -233,7 +233,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
           <div class="leg-item" style="background:#fbbf2430;border-color:#fbbf2466">Yellow zone</div>
           <div class="leg-desc">WATCH — setup was forming but not complete.</div>
           <div class="leg-item" style="background:#7b82a015;border-color:#7b82a040">Grey zone</div>
-          <div class="leg-desc">HOLD — no significant entry conditions active.</div>
+          <div class="leg-desc">HOLD — conditions not yet aligned, no action needed.</div>
           <div class="leg-item" style="color:var(--green)">▼ Green triangle</div>
           <div class="leg-desc">PROFIT TAKE exit signal fired on that day.</div>
           <div class="leg-item" style="color:var(--red)">▼ Red triangle</div>
@@ -1885,7 +1885,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="DRAM" title="Click to see DRAM timeline">DRAM</span>
     <span class="price">$61.91</span>
     <span class="chg-pos" style="font-size:12px;font-weight:600">+1.96%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> 
@@ -1902,7 +1902,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="CHAT" title="Click to see CHAT timeline">CHAT</span>
     <span class="price">$92.98</span>
     <span class="chg-pos" style="font-size:12px;font-weight:600">+0.78%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> 
@@ -1919,7 +1919,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="ARKG" title="Click to see ARKG timeline">ARKG</span>
     <span class="price">$53.36</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.32%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Health</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> 
@@ -1936,7 +1936,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="NVDL" title="Click to see NVDL timeline">NVDL</span>
     <span class="price">$35.72</span>
     <span class="chg-pos" style="font-size:12px;font-weight:600">+0.45%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Trading--Leveraged Equity</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> 
@@ -1953,7 +1953,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="SPCX" title="Click to see SPCX timeline">SPCX</span>
     <span class="price">$148.68</span>
     <span class="chg-pos" style="font-size:12px;font-weight:600">+0.44%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Industrials</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$222</b> (+50%)</span>
@@ -1970,7 +1970,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="NVDA" title="Click to see NVDA timeline">NVDA</span>
     <span class="price">$225.07</span>
     <span class="chg-pos" style="font-size:12px;font-weight:600">+0.22%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">⬆ Strong Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$328</b> (+46%)</span>
@@ -1987,7 +1987,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="TSLA" title="Click to see TSLA timeline">TSLA</span>
     <span class="price">$372.11</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-1.54%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Consumer Cyclical</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$397</b> (+7%)</span>
@@ -2004,7 +2004,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="ORCL" title="Click to see ORCL timeline">ORCL</span>
     <span class="price">$137.10</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-1.75%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$238</b> (+74%)</span>
@@ -2021,7 +2021,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="PLTR" title="Click to see PLTR timeline">PLTR</span>
     <span class="price">$189.67</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-1.52%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$196</b> (+3%)</span>
@@ -2038,7 +2038,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="RDDT" title="Click to see RDDT timeline">RDDT</span>
     <span class="price">$149.84</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-1.89%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Communication Services</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$214</b> (+43%)</span>
@@ -2055,7 +2055,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="NBIS" title="Click to see NBIS timeline">NBIS</span>
     <span class="price">$237.33</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-2.53%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Communication Services</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$284</b> (+19%)</span>
@@ -2072,7 +2072,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="GME" title="Click to see GME timeline">GME</span>
     <span class="price">$23.39</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-6.51%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Consumer Cyclical</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> 
@@ -2089,7 +2089,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="TSM" title="Click to see TSM timeline">TSM</span>
     <span class="price">$450.61</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.12%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">⬆ Strong Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$552</b> (+23%)</span>
@@ -2106,7 +2106,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="BABA" title="Click to see BABA timeline">BABA</span>
     <span class="price">$109.74</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.80%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Consumer Cyclical</span> <span class="analyst-badge" style="color:var(--green)">⬆ Strong Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$185</b> (+69%)</span>
@@ -2123,7 +2123,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="IREN" title="Click to see IREN timeline">IREN</span>
     <span class="price">$44.12</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-4.39%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Financial Services</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$78</b> (+77%)</span>
@@ -2140,7 +2140,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="IBM" title="Click to see IBM timeline">IBM</span>
     <span class="price">$225.51</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.68%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$241</b> (+7%)</span>
@@ -2157,7 +2157,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="DT" title="Click to see DT timeline">DT</span>
     <span class="price">$57.95</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-1.24%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$60</b> (+3%)</span>
@@ -2174,7 +2174,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="XBI" title="Click to see XBI timeline">XBI</span>
     <span class="price">$155.03</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.65%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Health</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> 
@@ -2191,7 +2191,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="SLV" title="Click to see SLV timeline">SLV</span>
     <span class="price">$58.14</span>
     <span class="chg-pos" style="font-size:12px;font-weight:600">+0.90%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Commodities Focused</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> 
@@ -2208,7 +2208,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="OKLO" title="Click to see OKLO timeline">OKLO</span>
     <span class="price">$38.04</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.65%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Utilities</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$76</b> (+101%)</span>
@@ -2225,7 +2225,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="EWY" title="Click to see EWY timeline">EWY</span>
     <span class="price">$187.18</span>
     <span class="chg-pos" style="font-size:12px;font-weight:600">+2.55%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Focused Region</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> 
@@ -2242,7 +2242,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="LULU" title="Click to see LULU timeline">LULU</span>
     <span class="price">$101.30</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.33%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Consumer Cyclical</span> <span class="analyst-badge" style="color:var(--muted)">— Hold</span> <span style="font-size:11px;color:var(--muted)">Target <b>$105</b> (+4%)</span>
@@ -2259,7 +2259,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="CRWV" title="Click to see CRWV timeline">CRWV</span>
     <span class="price">$87.59</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-2.82%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$141</b> (+61%)</span>
@@ -2276,7 +2276,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="CORZ" title="Click to see CORZ timeline">CORZ</span>
     <span class="price">$17.34</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-4.30%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">⬆ Strong Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$34</b> (+96%)</span>
@@ -2293,7 +2293,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="MNDY" title="Click to see MNDY timeline">MNDY</span>
     <span class="price">$83.66</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-2.72%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> <span style="font-size:11px;color:var(--muted)">Target <b>$109</b> (+30%)</span>
@@ -2310,7 +2310,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="GLW" title="Click to see GLW timeline">GLW</span>
     <span class="price">$156.74</span>
     <span class="chg-pos" style="font-size:12px;font-weight:600">+1.68%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">⬆ Strong Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$190</b> (+21%)</span>
@@ -2327,7 +2327,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="SNDK" title="Click to see SNDK timeline">SNDK</span>
     <span class="price">$1777.80</span>
     <span class="chg-pos" style="font-size:12px;font-weight:600">+1.38%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$2137</b> (+20%)</span>
@@ -2344,7 +2344,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="WULF" title="Click to see WULF timeline">WULF</span>
     <span class="price">$15.74</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-3.38%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Financial Services</span> <span class="analyst-badge" style="color:var(--green)">⬆ Strong Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$34</b> (+114%)</span>
@@ -2361,7 +2361,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="CIFR" title="Click to see CIFR timeline">CIFR</span>
     <span class="price">$17.73</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-2.04%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">⬆ Strong Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$31</b> (+74%)</span>
@@ -2378,7 +2378,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="PRTS" title="Click to see PRTS timeline">PRTS</span>
     <span class="price">$8.56</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.70%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Consumer Cyclical</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> <span style="font-size:11px;color:var(--muted)">Target <b>$11</b> (+27%)</span>
@@ -2395,7 +2395,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="WYFI" title="Click to see WYFI timeline">WYFI</span>
     <span class="price">$19.62</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-3.16%</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">⬆ Strong Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$40</b> (+106%)</span>
@@ -2412,7 +2412,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="IGV" title="Click to see IGV timeline">IGV</span>
     <span class="price">$106.01</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-1.06%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E3 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> 
@@ -2429,7 +2429,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="CRM" title="Click to see CRM timeline">CRM</span>
     <span class="price">$234.02</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-1.76%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$281</b> (+20%)</span>
@@ -2446,7 +2446,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="NET" title="Click to see NET timeline">NET</span>
     <span class="price">$349.02</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-2.73%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$337</b> (-3%)</span>
@@ -2463,7 +2463,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="NOW" title="Click to see NOW timeline">NOW</span>
     <span class="price">$135.62</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-1.57%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">⬆ Strong Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$145</b> (+7%)</span>
@@ -2480,7 +2480,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="PANW" title="Click to see PANW timeline">PANW</span>
     <span class="price">$374.74</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-3.89%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$396</b> (+6%)</span>
@@ -2497,7 +2497,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="CRCL" title="Click to see CRCL timeline">CRCL</span>
     <span class="price">$89.00</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-4.30%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Financial Services</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$105</b> (+18%)</span>
@@ -2514,7 +2514,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="LUNR" title="Click to see LUNR timeline">LUNR</span>
     <span class="price">$15.61</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.57%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Industrials</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> <span style="font-size:11px;color:var(--muted)">Target <b>$30</b> (+89%)</span>
@@ -2531,7 +2531,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="CRWD" title="Click to see CRWD timeline">CRWD</span>
     <span class="price">$252.13</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-2.90%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$236</b> (-7%)</span>
@@ -2548,7 +2548,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="SHOP" title="Click to see SHOP timeline">SHOP</span>
     <span class="price">$142.25</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-2.00%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> 
+    <span class="badge badge-hold">○ HOLD 0/120</span> 
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$173</b> (+21%)</span>
@@ -2565,7 +2565,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="INTC" title="Click to see INTC timeline">INTC</span>
     <span class="price">$123.00</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-3.45%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$116</b> (-5%)</span>
@@ -2582,7 +2582,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="XLC" title="Click to see XLC timeline">XLC</span>
     <span class="price">$112.96</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.90%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Communications</span> <span class="analyst-badge" style="color:var(--muted)">n/a</span> 
@@ -2599,7 +2599,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="COIN" title="Click to see COIN timeline">COIN</span>
     <span class="price">$195.11</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-2.06%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Financial Services</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$204</b> (+4%)</span>
@@ -2616,7 +2616,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="HOOD" title="Click to see HOOD timeline">HOOD</span>
     <span class="price">$119.40</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-1.18%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Financial Services</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$130</b> (+9%)</span>
@@ -2633,7 +2633,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="ABBV" title="Click to see ABBV timeline">ABBV</span>
     <span class="price">$264.34</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.29%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Healthcare</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$279</b> (+5%)</span>
@@ -2650,7 +2650,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="MSTR" title="Click to see MSTR timeline">MSTR</span>
     <span class="price">$158.61</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-1.86%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">⬆ Strong Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$230</b> (+45%)</span>
@@ -2667,7 +2667,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="MARA" title="Click to see MARA timeline">MARA</span>
     <span class="price">$12.55</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-2.86%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Financial Services</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$19</b> (+49%)</span>
@@ -2684,7 +2684,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="TEAM" title="Click to see TEAM timeline">TEAM</span>
     <span class="price">$187.74</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-2.53%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">↑ Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$204</b> (+9%)</span>
@@ -2701,7 +2701,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="SNAP" title="Click to see SNAP timeline">SNAP</span>
     <span class="price">$5.42</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-0.18%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Communication Services</span> <span class="analyst-badge" style="color:var(--muted)">— Hold</span> <span style="font-size:11px;color:var(--muted)">Target <b>$7</b> (+36%)</span>
@@ -2718,7 +2718,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span class="ticker ticker-link" data-sym="KEEL" title="Click to see KEEL timeline">KEEL</span>
     <span class="price">$3.80</span>
     <span class="chg-neg" style="font-size:12px;font-weight:600">-2.56%</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     <span class="sector-tag">Technology</span> <span class="analyst-badge" style="color:var(--green)">⬆ Strong Buy</span> <span style="font-size:11px;color:var(--muted)">Target <b>$6</b> (+70%)</span>
@@ -3946,7 +3946,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap n/a</span>
     <span style="font-size:11px;color:var(--muted)">P/E 13.2</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <canvas class="tl" data-sym="DRAM"></canvas>
   <div class="tl-tooltip" id="tt-DRAM"></div>
@@ -3959,7 +3959,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap n/a</span>
     <span style="font-size:11px;color:var(--muted)">P/E 25.5</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <canvas class="tl" data-sym="CHAT"></canvas>
   <div class="tl-tooltip" id="tt-CHAT"></div>
@@ -3972,7 +3972,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap n/a</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Health</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <canvas class="tl" data-sym="ARKG"></canvas>
   <div class="tl-tooltip" id="tt-ARKG"></div>
@@ -3985,7 +3985,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap n/a</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Trading--Leveraged Equity</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <canvas class="tl" data-sym="NVDL"></canvas>
   <div class="tl-tooltip" id="tt-NVDL"></div>
@@ -3998,7 +3998,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $1.96T</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Industrials</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <canvas class="tl" data-sym="SPCX"></canvas>
   <div class="tl-tooltip" id="tt-SPCX"></div>
@@ -4011,7 +4011,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $5.43T</span>
     <span style="font-size:11px;color:var(--muted)">P/E 28.5</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <canvas class="tl" data-sym="NVDA"></canvas>
   <div class="tl-tooltip" id="tt-NVDA"></div>
@@ -4024,7 +4024,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $1.47T</span>
     <span style="font-size:11px;color:var(--muted)">P/E 344.5</span>
     <span class="sector-tag">Consumer Cyclical</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="TSLA"></canvas>
   <div class="tl-tooltip" id="tt-TSLA"></div>
@@ -4037,7 +4037,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $415B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 21.5</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="ORCL"></canvas>
   <div class="tl-tooltip" id="tt-ORCL"></div>
@@ -4050,7 +4050,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $456B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 162.1</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="PLTR"></canvas>
   <div class="tl-tooltip" id="tt-PLTR"></div>
@@ -4063,7 +4063,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $29B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 34.8</span>
     <span class="sector-tag">Communication Services</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="RDDT"></canvas>
   <div class="tl-tooltip" id="tt-RDDT"></div>
@@ -4076,7 +4076,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $65B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Communication Services</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <canvas class="tl" data-sym="NBIS"></canvas>
   <div class="tl-tooltip" id="tt-NBIS"></div>
@@ -4089,7 +4089,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $12B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 15.4</span>
     <span class="sector-tag">Consumer Cyclical</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="GME"></canvas>
   <div class="tl-tooltip" id="tt-GME"></div>
@@ -4102,7 +4102,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $2.34T</span>
     <span style="font-size:11px;color:var(--muted)">P/E 33.6</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="TSM"></canvas>
   <div class="tl-tooltip" id="tt-TSM"></div>
@@ -4115,7 +4115,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $273B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 24.8</span>
     <span class="sector-tag">Consumer Cyclical</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="BABA"></canvas>
   <div class="tl-tooltip" id="tt-BABA"></div>
@@ -4128,7 +4128,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $17B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Financial Services</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="IREN"></canvas>
   <div class="tl-tooltip" id="tt-IREN"></div>
@@ -4141,7 +4141,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $212B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 20.0</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="IBM"></canvas>
   <div class="tl-tooltip" id="tt-IBM"></div>
@@ -4154,7 +4154,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $17B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 115.9</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="DT"></canvas>
   <div class="tl-tooltip" id="tt-DT"></div>
@@ -4167,7 +4167,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap n/a</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Health</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
   </div>
   <canvas class="tl" data-sym="XBI"></canvas>
   <div class="tl-tooltip" id="tt-XBI"></div>
@@ -4180,7 +4180,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap n/a</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Commodities Focused</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="SLV"></canvas>
   <div class="tl-tooltip" id="tt-SLV"></div>
@@ -4193,7 +4193,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $7B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Utilities</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="OKLO"></canvas>
   <div class="tl-tooltip" id="tt-OKLO"></div>
@@ -4206,7 +4206,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap n/a</span>
     <span style="font-size:11px;color:var(--muted)">P/E 10.8</span>
     <span class="sector-tag">Focused Region</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <canvas class="tl" data-sym="EWY"></canvas>
   <div class="tl-tooltip" id="tt-EWY"></div>
@@ -4219,7 +4219,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $11B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 8.3</span>
     <span class="sector-tag">Consumer Cyclical</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="LULU"></canvas>
   <div class="tl-tooltip" id="tt-LULU"></div>
@@ -4232,7 +4232,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $48B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="CRWV"></canvas>
   <div class="tl-tooltip" id="tt-CRWV"></div>
@@ -4245,7 +4245,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $6B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="CORZ"></canvas>
   <div class="tl-tooltip" id="tt-CORZ"></div>
@@ -4258,7 +4258,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $4B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 35.4</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="MNDY"></canvas>
   <div class="tl-tooltip" id="tt-MNDY"></div>
@@ -4271,7 +4271,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $135B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 72.6</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <canvas class="tl" data-sym="GLW"></canvas>
   <div class="tl-tooltip" id="tt-GLW"></div>
@@ -4284,7 +4284,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $260B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 24.1</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <canvas class="tl" data-sym="SNDK"></canvas>
   <div class="tl-tooltip" id="tt-SNDK"></div>
@@ -4297,7 +4297,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $8B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Financial Services</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="WULF"></canvas>
   <div class="tl-tooltip" id="tt-WULF"></div>
@@ -4310,7 +4310,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $7B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="CIFR"></canvas>
   <div class="tl-tooltip" id="tt-CIFR"></div>
@@ -4323,7 +4323,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $69M</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Consumer Cyclical</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> 
+    <span class="badge badge-hold">○ HOLD 20/120</span> 
   </div>
   <canvas class="tl" data-sym="PRTS"></canvas>
   <div class="tl-tooltip" id="tt-PRTS"></div>
@@ -4336,7 +4336,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $762M</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 20/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="WYFI"></canvas>
   <div class="tl-tooltip" id="tt-WYFI"></div>
@@ -4349,7 +4349,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap n/a</span>
     <span style="font-size:11px;color:var(--muted)">P/E 33.0</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E3 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="IGV"></canvas>
   <div class="tl-tooltip" id="tt-IGV"></div>
@@ -4362,7 +4362,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $193B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 21.4</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
   </div>
   <canvas class="tl" data-sym="CRM"></canvas>
   <div class="tl-tooltip" id="tt-CRM"></div>
@@ -4375,7 +4375,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $124B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="NET"></canvas>
   <div class="tl-tooltip" id="tt-NET"></div>
@@ -4388,7 +4388,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $140B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 84.8</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
   </div>
   <canvas class="tl" data-sym="NOW"></canvas>
   <div class="tl-tooltip" id="tt-NOW"></div>
@@ -4401,7 +4401,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $307B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 914.0</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="PANW"></canvas>
   <div class="tl-tooltip" id="tt-PANW"></div>
@@ -4414,7 +4414,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $24B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 17.8</span>
     <span class="sector-tag">Financial Services</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
   </div>
   <canvas class="tl" data-sym="CRCL"></canvas>
   <div class="tl-tooltip" id="tt-CRCL"></div>
@@ -4427,7 +4427,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $3B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Industrials</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="LUNR"></canvas>
   <div class="tl-tooltip" id="tt-LUNR"></div>
@@ -4440,7 +4440,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $258B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 8404.3</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="CRWD"></canvas>
   <div class="tl-tooltip" id="tt-CRWD"></div>
@@ -4453,7 +4453,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $185B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 96.1</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> 
+    <span class="badge badge-hold">○ HOLD 0/120</span> 
   </div>
   <canvas class="tl" data-sym="SHOP"></canvas>
   <div class="tl-tooltip" id="tt-SHOP"></div>
@@ -4466,7 +4466,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $650B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 + E3 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="INTC"></canvas>
   <div class="tl-tooltip" id="tt-INTC"></div>
@@ -4479,7 +4479,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap n/a</span>
     <span style="font-size:11px;color:var(--muted)">P/E 15.6</span>
     <span class="sector-tag">Communications</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="XLC"></canvas>
   <div class="tl-tooltip" id="tt-XLC"></div>
@@ -4492,7 +4492,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $51B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Financial Services</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="COIN"></canvas>
   <div class="tl-tooltip" id="tt-COIN"></div>
@@ -4505,7 +4505,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $107B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 52.8</span>
     <span class="sector-tag">Financial Services</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="HOOD"></canvas>
   <div class="tl-tooltip" id="tt-HOOD"></div>
@@ -4518,7 +4518,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $467B</span>
     <span style="font-size:11px;color:var(--muted)">P/E 74.5</span>
     <span class="sector-tag">Healthcare</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="ABBV"></canvas>
   <div class="tl-tooltip" id="tt-ABBV"></div>
@@ -4531,7 +4531,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $63B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="MSTR"></canvas>
   <div class="tl-tooltip" id="tt-MSTR"></div>
@@ -4544,7 +4544,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $5B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Financial Services</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="MARA"></canvas>
   <div class="tl-tooltip" id="tt-MARA"></div>
@@ -4557,7 +4557,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $48B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-caution" title="Momentum weakening — E6 + E4">⚠ CAUTION</span>
   </div>
   <canvas class="tl" data-sym="TEAM"></canvas>
   <div class="tl-tooltip" id="tt-TEAM"></div>
@@ -4570,7 +4570,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $9B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Communication Services</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-stoploss" title="Price broke below MA200 — trend reversal">⬇ STOP LOSS</span>
   </div>
   <canvas class="tl" data-sym="SNAP"></canvas>
   <div class="tl-tooltip" id="tt-SNAP"></div>
@@ -4583,7 +4583,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
     <span style="font-size:11px;color:var(--muted)">Cap $2B</span>
     <span style="font-size:11px;color:var(--muted)">P/E —</span>
     <span class="sector-tag">Technology</span>
-    <span class="badge badge-hold">— HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
+    <span class="badge badge-hold">○ HOLD 0/120</span> <span class="badge badge-profittake" title="Overbought — E2 fired">↑ PROFIT TAKE</span>
   </div>
   <canvas class="tl" data-sym="KEEL"></canvas>
   <div class="tl-tooltip" id="tt-KEEL"></div>
@@ -5122,7 +5122,7 @@ function drawOneTL(canvas) {
     if (idx < 0 || idx >= bars.length) { tip.style.opacity=0; return; }
     const b = bars[idx];
     if (!b.close) { tip.style.opacity=0; return; }
-    const sigLabel = {BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'— HOLD'}[b.signal]||b.signal;
+    const sigLabel = {BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'○ HOLD'}[b.signal]||b.signal;
     tip.innerHTML = `<b>${b.date}</b>&nbsp; ${b.close.toFixed(2)} &nbsp;<span style="color:${SIG_LINE[b.signal]||'#7b82a0'}">${sigLabel}</span>${b.exit?' &nbsp;<span style="color:#fb923c">EXIT</span>':''}`;
     const tx = Math.min(e.clientX - rect.left + 10, rect.width - tip.offsetWidth - 4);
     tip.style.left = tx + 'px';
@@ -5273,7 +5273,7 @@ function drawBigTL(sym) {
     if (idx<0||idx>=bars.length) { tip.textContent='Hover over the chart to see daily details'; return; }
     const b=bars[idx];
     if (!b.close) return;
-    const sigLabel={BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'— HOLD'}[b.signal]||b.signal;
+    const sigLabel={BUY:'↑ BUY',WATCH:'◉ WATCH',HOLD:'○ HOLD'}[b.signal]||b.signal;
     const col=SIG_LINE[b.signal]||'#7b82a0';
     const exitPart=b.exit?' · <span style="color:'+((EXIT_COL[b.ex_type])||'#fb923c')+'">'+
       (b.ex_type==='stoploss'?'⬇ STOP LOSS':b.ex_type==='profittake'?'↑ PROFIT TAKE':'⚠ CAUTION')+'</span>':'';
