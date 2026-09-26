@@ -53,6 +53,18 @@ SYMBOLS = [
     "MCD", "GME",
     # Speculative semis
     "AAOI", "AEHR",
+    # Cybersecurity
+    "CRWD",
+    # Observability / DevOps
+    "DDOG",
+    # AI networking
+    "ANET",
+    # AI servers
+    "SMCI",
+    # Broad market risk signal
+    "IWM",
+    # E-commerce
+    "SHOP",
 ]
 REPORT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
 OPEN_BROWSER = "--no-browser" not in sys.argv
