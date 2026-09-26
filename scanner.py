@@ -282,7 +282,11 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-
 h1{{font-size:1.4rem;font-weight:700}}
 .subtitle{{color:var(--muted);font-size:12px;margin-top:4px}}
 .kpi-row{{display:flex;gap:12px;flex-wrap:wrap}}
-.kpi{{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;min-width:120px}}
+.kpi{{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;min-width:110px}}
+.kpi-btn{{cursor:pointer;transition:border-color .15s,box-shadow .15s}}
+.kpi-btn:hover{{border-color:var(--accent)}}
+.kpi-btn.active-filter{{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)44}}
+.card.hidden{{display:none}}
 .kpi-label{{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}}
 .kpi-val{{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums}}
 /* Tabs */
@@ -368,10 +372,11 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
     <div class="subtitle">Generated {ts}</div>
   </div>
   <div class="kpi-row">
-    <div class="kpi"><div class="kpi-label">Symbols</div><div class="kpi-val">{len(results)}</div></div>
-    <div class="kpi"><div class="kpi-label">BUY</div><div class="kpi-val green">{buy_c}</div></div>
-    <div class="kpi"><div class="kpi-label">WATCH</div><div class="kpi-val yellow">{watch_c}</div></div>
-    <div class="kpi"><div class="kpi-label">Exit ⚠</div><div class="kpi-val" style="color:var(--orange)">{exit_c}</div></div>
+    <div class="kpi kpi-btn" data-filter="ALL"><div class="kpi-label">All Symbols</div><div class="kpi-val">{len(results)}</div></div>
+    <div class="kpi kpi-btn active-filter" data-filter="BUY"><div class="kpi-label">↑ BUY</div><div class="kpi-val green">{buy_c}</div></div>
+    <div class="kpi kpi-btn" data-filter="WATCH"><div class="kpi-label">◉ WATCH</div><div class="kpi-val yellow">{watch_c}</div></div>
+    <div class="kpi kpi-btn" data-filter="HOLD"><div class="kpi-label">— HOLD</div><div class="kpi-val" style="color:var(--muted)">{len(results)-buy_c-watch_c-exit_c}</div></div>
+    <div class="kpi kpi-btn" data-filter="EXIT"><div class="kpi-label">Exit signals</div><div class="kpi-val" style="color:var(--orange)">{exit_c}</div></div>
   </div>
 
   <div class="tabs">
@@ -485,6 +490,31 @@ function drawSpark(canvas) {{
 }}
 
 window.addEventListener('load', () => document.querySelectorAll('canvas.spark').forEach(drawSpark));
+
+// KPI box filter
+let activeFilter = 'ALL';
+document.querySelectorAll('.kpi-btn').forEach(btn => {{
+  btn.addEventListener('click', () => {{
+    activeFilter = btn.dataset.filter;
+    document.querySelectorAll('.kpi-btn').forEach(b => b.classList.remove('active-filter'));
+    btn.classList.add('active-filter');
+    // Switch to Today tab if on timeline
+    document.querySelectorAll('.tab,.tab-panel').forEach(e => e.classList.remove('active'));
+    document.querySelector('[data-panel="p-today"]').classList.add('active');
+    document.getElementById('p-today').classList.add('active');
+    // Filter cards
+    document.querySelectorAll('.card').forEach(card => {{
+      const sig  = card.dataset.sig;
+      const exit = card.dataset.exit === 'true';
+      const show = activeFilter === 'ALL' ||
+                   (activeFilter === 'BUY'   && sig === 'BUY') ||
+                   (activeFilter === 'WATCH' && sig === 'WATCH') ||
+                   (activeFilter === 'HOLD'  && sig === 'HOLD') ||
+                   (activeFilter === 'EXIT'  && exit);
+      card.classList.toggle('hidden', !show);
+    }});
+  }});
+}});
 
 // Click ticker name → switch to timeline tab and scroll to that ticker
 document.querySelectorAll('.ticker-link').forEach(el => {{
@@ -739,7 +769,8 @@ def _card(r):
         exit_n = f'<div class="note note-exit">{fired_desc}</div>'
 
     sym = r["symbol"]
-    return f"""<div class="card">
+    exit_attr = 'true' if r.get("exit_signal") else 'false'
+    return f"""<div class="card" data-sig="{sig}" data-exit="{exit_attr}">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="{sym}" title="Click to see {sym} timeline">{sym}</span>
     <span class="price">${_f(close,2)}</span>

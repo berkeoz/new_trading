@@ -25,7 +25,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 h1{font-size:1.4rem;font-weight:700}
 .subtitle{color:var(--muted);font-size:12px;margin-top:4px}
 .kpi-row{display:flex;gap:12px;flex-wrap:wrap}
-.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;min-width:120px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;min-width:110px}
+.kpi-btn{cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.kpi-btn:hover{border-color:var(--accent)}
+.kpi-btn.active-filter{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)44}
+.card.hidden{display:none}
 .kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 .kpi-val{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums}
 /* Tabs */
@@ -108,13 +112,14 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
 <div class="page">
   <div>
     <h1>Pivot Scanner</h1>
-    <div class="subtitle">Generated Saturday, September 26 2026 — 11:44</div>
+    <div class="subtitle">Generated Saturday, September 26 2026 — 11:45</div>
   </div>
   <div class="kpi-row">
-    <div class="kpi"><div class="kpi-label">Symbols</div><div class="kpi-val">18</div></div>
-    <div class="kpi"><div class="kpi-label">BUY</div><div class="kpi-val green">2</div></div>
-    <div class="kpi"><div class="kpi-label">WATCH</div><div class="kpi-val yellow">5</div></div>
-    <div class="kpi"><div class="kpi-label">Exit ⚠</div><div class="kpi-val" style="color:var(--orange)">7</div></div>
+    <div class="kpi kpi-btn" data-filter="ALL"><div class="kpi-label">All Symbols</div><div class="kpi-val">18</div></div>
+    <div class="kpi kpi-btn active-filter" data-filter="BUY"><div class="kpi-label">↑ BUY</div><div class="kpi-val green">2</div></div>
+    <div class="kpi kpi-btn" data-filter="WATCH"><div class="kpi-label">◉ WATCH</div><div class="kpi-val yellow">5</div></div>
+    <div class="kpi kpi-btn" data-filter="HOLD"><div class="kpi-label">— HOLD</div><div class="kpi-val" style="color:var(--muted)">4</div></div>
+    <div class="kpi kpi-btn" data-filter="EXIT"><div class="kpi-label">Exit signals</div><div class="kpi-val" style="color:var(--orange)">7</div></div>
   </div>
 
   <div class="tabs">
@@ -123,7 +128,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   </div>
 
   <div id="p-today" class="tab-panel active">
-    <div class="grid"><div class="card">
+    <div class="grid"><div class="card" data-sig="BUY" data-exit="false">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="MSFT" title="Click to see MSFT timeline">MSFT</span>
     <span class="price">$516.17</span>
@@ -135,7 +140,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">63.3</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val red">-0.80</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">62.4/51.9</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+8.6%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+19.9%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val green">1.7×</div></div></div>
   
 </div>
-<div class="card">
+<div class="card" data-sig="BUY" data-exit="true">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="NFLX" title="Click to see NFLX timeline">NFLX</span>
     <span class="price">$71.15</span>
@@ -147,7 +152,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val green">37.1</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val red">-0.86</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">10.5/13.0</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val green">-5.8%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val red">-16.0%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.7×</div></div></div>
   <div class="note note-exit">OBV falling · Price<MA200</div>
 </div>
-<div class="card">
+<div class="card" data-sig="WATCH" data-exit="false">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="GOOGL" title="Click to see GOOGL timeline">GOOGL</span>
     <span class="price">$343.92</span>
@@ -159,7 +164,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">49.8</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">0.45</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">37.4/46.9</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val green">-0.1%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+1.8%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.8×</div></div></div>
   
 </div>
-<div class="card">
+<div class="card" data-sig="WATCH" data-exit="false">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="AMZN" title="Click to see AMZN timeline">AMZN</span>
     <span class="price">$249.67</span>
@@ -171,7 +176,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">44.5</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val red">-0.42</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">31.7/43.9</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val green">-2.5%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+3.7%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">1.0×</div></div></div>
   
 </div>
-<div class="card">
+<div class="card" data-sig="WATCH" data-exit="true">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="AVGO" title="Click to see AVGO timeline">AVGO</span>
     <span class="price">$352.81</span>
@@ -183,7 +188,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">44.0</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">1.22</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">47.6/58.4</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val green">-6.2%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val red">-3.9%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.6×</div></div></div>
   <div class="note note-exit">MACD hist rolling over · Price<MA200</div>
 </div>
-<div class="card">
+<div class="card" data-sig="WATCH" data-exit="true">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="CSCO" title="Click to see CSCO timeline">CSCO</span>
     <span class="price">$106.70</span>
@@ -195,7 +200,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">41.7</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val red">-0.12</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">28.4/33.5</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val green">-5.1%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+10.5%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val green">1.1×</div></div></div>
   <div class="note note-exit">OBV falling · MACD bearish · Price<MA20 on vol</div>
 </div>
-<div class="card">
+<div class="card" data-sig="WATCH" data-exit="false">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="QCOM" title="Click to see QCOM timeline">QCOM</span>
     <span class="price">$201.97</span>
@@ -207,7 +212,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">68.0</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">2.13</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">88.6/91.9</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+19.1%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+20.5%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val green">1.2×</div></div></div>
   
 </div>
-<div class="card">
+<div class="card" data-sig="HOLD" data-exit="false">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="QQQ" title="Click to see QQQ timeline">QQQ</span>
     <span class="price">$744.50</span>
@@ -219,7 +224,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">64.9</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">3.54</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">87.6/90.2</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+4.6%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+12.1%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.9×</div></div></div>
   
 </div>
-<div class="card">
+<div class="card" data-sig="HOLD" data-exit="false">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="SPY" title="Click to see SPY timeline">SPY</span>
     <span class="price">$771.35</span>
@@ -231,7 +236,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">57.0</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">0.79</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">76.8/81.1</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+1.5%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+7.9%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.8×</div></div></div>
   
 </div>
-<div class="card">
+<div class="card" data-sig="HOLD" data-exit="false">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="AAPL" title="Click to see AAPL timeline">AAPL</span>
     <span class="price">$341.07</span>
@@ -243,7 +248,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">65.7</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">0.80</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">79.3/81.2</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+6.0%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+18.7%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.7×</div></div></div>
   
 </div>
-<div class="card">
+<div class="card" data-sig="HOLD" data-exit="false">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="NVDA" title="Click to see NVDA timeline">NVDA</span>
     <span class="price">$225.07</span>
@@ -255,7 +260,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">55.3</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">0.37</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">64.0/67.9</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+4.3%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+13.0%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.8×</div></div></div>
   
 </div>
-<div class="card">
+<div class="card" data-sig="HOLD" data-exit="true">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="META" title="Click to see META timeline">META</span>
     <span class="price">$751.66</span>
@@ -267,7 +272,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val red">71.4</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">11.73</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">89.9/90.6</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+22.2%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+20.2%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val green">1.1×</div></div></div>
   <div class="note note-exit">RSI>70 falling · MACD hist rolling over · Stoch bear cross · OBV falling</div>
 </div>
-<div class="card">
+<div class="card" data-sig="HOLD" data-exit="true">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="TSLA" title="Click to see TSLA timeline">TSLA</span>
     <span class="price">$372.11</span>
@@ -279,7 +284,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">55.3</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">1.08</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">70.6/77.1</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+6.9%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val red">-5.9%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val green">1.2×</div></div></div>
   <div class="note note-exit">MACD hist rolling over · Stoch bear cross · OBV falling · Price<MA200</div>
 </div>
-<div class="card">
+<div class="card" data-sig="HOLD" data-exit="true">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="ORCL" title="Click to see ORCL timeline">ORCL</span>
     <span class="price">$137.10</span>
@@ -291,7 +296,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">40.6</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val red">-1.56</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">14.5/21.0</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val green">-3.6%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val red">-16.3%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.7×</div></div></div>
   <div class="note note-exit">OBV falling · Price<MA200 · MACD bearish</div>
 </div>
-<div class="card">
+<div class="card" data-sig="HOLD" data-exit="false">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="AMD" title="Click to see AMD timeline">AMD</span>
     <span class="price">$630.63</span>
@@ -303,7 +308,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val red">73.0</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">14.20</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">96.1/97.2</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+24.9%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+72.9%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.8×</div></div></div>
   
 </div>
-<div class="card">
+<div class="card" data-sig="HOLD" data-exit="false">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="TXN" title="Click to see TXN timeline">TXN</span>
     <span class="price">$278.07</span>
@@ -315,7 +320,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">60.2</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">2.44</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">93.1/92.6</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+2.7%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+13.7%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.7×</div></div></div>
   
 </div>
-<div class="card">
+<div class="card" data-sig="HOLD" data-exit="false">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="ASML" title="Click to see ASML timeline">ASML</span>
     <span class="price">$1743.94</span>
@@ -327,7 +332,7 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}
   <div class="inds"><div class="ind"><div class="ind-label">RSI(14)</div><div class="ind-val ">54.6</div></div><div class="ind"><div class="ind-label">MACD Hist</div><div class="ind-val green">11.89</div></div><div class="ind"><div class="ind-label">Stoch K/D</div><div class="ind-val ">75.6/75.4</div></div><div class="ind"><div class="ind-label">vs MA50</div><div class="ind-val ">+1.6%</div></div><div class="ind"><div class="ind-label">vs MA200</div><div class="ind-val green">+14.6%</div></div><div class="ind"><div class="ind-label">Vol ratio</div><div class="ind-val ">0.6×</div></div></div>
   
 </div>
-<div class="card">
+<div class="card" data-sig="HOLD" data-exit="true">
   <div class="card-header">
     <span class="ticker ticker-link" data-sym="CRM" title="Click to see CRM timeline">CRM</span>
     <span class="price">$234.02</span>
@@ -604,6 +609,31 @@ function drawSpark(canvas) {
 }
 
 window.addEventListener('load', () => document.querySelectorAll('canvas.spark').forEach(drawSpark));
+
+// KPI box filter
+let activeFilter = 'ALL';
+document.querySelectorAll('.kpi-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeFilter = btn.dataset.filter;
+    document.querySelectorAll('.kpi-btn').forEach(b => b.classList.remove('active-filter'));
+    btn.classList.add('active-filter');
+    // Switch to Today tab if on timeline
+    document.querySelectorAll('.tab,.tab-panel').forEach(e => e.classList.remove('active'));
+    document.querySelector('[data-panel="p-today"]').classList.add('active');
+    document.getElementById('p-today').classList.add('active');
+    // Filter cards
+    document.querySelectorAll('.card').forEach(card => {
+      const sig  = card.dataset.sig;
+      const exit = card.dataset.exit === 'true';
+      const show = activeFilter === 'ALL' ||
+                   (activeFilter === 'BUY'   && sig === 'BUY') ||
+                   (activeFilter === 'WATCH' && sig === 'WATCH') ||
+                   (activeFilter === 'HOLD'  && sig === 'HOLD') ||
+                   (activeFilter === 'EXIT'  && exit);
+      card.classList.toggle('hidden', !show);
+    });
+  });
+});
 
 // Click ticker name → switch to timeline tab and scroll to that ticker
 document.querySelectorAll('.ticker-link').forEach(el => {
