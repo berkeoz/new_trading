@@ -27,6 +27,14 @@ SYMBOLS = [
     "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "META", "TSLA",
     # Large-cap tech
     "AVGO", "ORCL", "NFLX", "AMD", "CSCO", "QCOM", "TXN", "CRM", "ASML",
+    # Memory & chip design
+    "MU", "ARM", "MRVL",
+    # AI / data / cloud
+    "PLTR", "SNOW", "NET",
+    # Software
+    "ADBE", "NOW",
+    # Cybersecurity
+    "PANW",
 ]
 REPORT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
 OPEN_BROWSER = "--no-browser" not in sys.argv
