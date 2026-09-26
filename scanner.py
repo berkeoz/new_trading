@@ -117,6 +117,23 @@ SYMBOLS = [
     "SNAP", "OSCR",
     # Speculative / small-cap
     "KEEL", "PRTS", "WYFI", "TE",
+    # SPMO (Invesco S&P 500 Momentum ETF) — new additions
+    "STX", "MRK", "CAT", "KO", "KLAC", "RTX",
+    # SPMO — financials
+    "MS", "GS", "C", "PNC", "USB", "BNY", "STT", "CFG", "NTRS", "AFL", "CB", "TRV", "AIG",
+    # SPMO — energy
+    "XOM", "VLO", "MPC", "PSX", "APA", "EIX", "EVRG", "TRGP",
+    # SPMO — industrials / defense
+    "PWR", "FDX", "CSX", "JCI", "CMI", "WAB", "EXPD", "JBHT", "NDSN", "IEX", "DD",
+    # SPMO — consumer
+    "GM", "TGT", "ROST", "MAR", "CASY", "HST", "DAL",
+    # SPMO — healthcare
+    "JNJ", "BMY", "CVS", "CAH", "BIIB", "DGX", "INCY", "DVA", "AIZ",
+    # SPMO — tech / semis
+    "LRCX", "ADI", "MPWR", "KEYS", "STLD", "NTAP", "CIEN", "TER", "HPE",
+    # SPMO — real estate / utilities / other
+    "PLD", "SPG", "WELL", "VTR", "FRT", "PFG", "PH", "NUE", "FLEX", "CNC",
+    "ADM", "VTRS", "MNST", "FIX", "L", "IVZ", "BEN", "ECHO",
 ]
 REPORT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
 OPEN_BROWSER = "--no-browser" not in sys.argv
@@ -493,6 +510,17 @@ canvas.spark{{width:100%;height:36px}}
 .monitor-rm{{background:none;border:none;color:var(--muted);font-size:14px;
   cursor:pointer;margin-left:auto;padding:0 4px;line-height:1}}
 .monitor-rm:hover{{color:var(--red)}}
+.card-hide-btn{{background:none;border:none;color:var(--muted);font-size:11px;
+  cursor:pointer;padding:2px 5px;border-radius:4px;opacity:0;transition:opacity .15s}}
+.card:hover .card-hide-btn{{opacity:1}}
+.card-hide-btn:hover{{background:var(--bg3);color:var(--red)}}
+.card-fav-btn{{background:none;border:none;font-size:13px;cursor:pointer;
+  padding:2px 4px;border-radius:4px;opacity:0;transition:opacity .15s;color:var(--muted)}}
+.card:hover .card-fav-btn{{opacity:1}}
+.card-fav-btn.active{{opacity:1;color:#f59e0b}}
+.card-fav-btn.active:hover{{color:#d97706}}
+#show-hidden-bar{{display:none;padding:6px 0;font-size:12px;color:var(--muted);gap:8px;align-items:center}}
+#show-hidden-bar.visible{{display:flex}}
 .monitor-add-btn{{display:block;width:100%;margin-top:10px;padding:7px;
   background:var(--accent);color:#fff;border:none;border-radius:8px;
   font-size:13px;font-weight:600;cursor:pointer}}
@@ -591,6 +619,7 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
     <div class="kpi kpi-btn" data-filter="WATCH"><div class="kpi-label">◉ WATCH</div><div class="kpi-val yellow">{watch_c}</div></div>
     <div class="kpi kpi-btn" data-filter="HOLD"><div class="kpi-label">○ HOLD</div><div class="kpi-val" style="color:#94a3b8">{len(results)-buy_c-watch_c-exit_c}</div></div>
     <div class="kpi kpi-btn" data-filter="EXIT"><div class="kpi-label">Exit signals</div><div class="kpi-val" style="color:var(--orange)">{exit_c}</div></div>
+    <div class="kpi kpi-btn" data-filter="FAV" id="kpi-fav"><div class="kpi-label">★ Favorites</div><div class="kpi-val" id="kpi-fav-count" style="color:#f59e0b">0</div></div>
   </div>
 
   <details class="legend">
@@ -719,6 +748,11 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
       <button class="flt-reset" id="f-reset">✕ Clear</button>
       <span class="flt-count" id="f-count"></span>
     </div>
+    <div id="show-hidden-bar">
+      <span id="hidden-count"></span>
+      <button id="show-hidden-btn" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:12px;padding:3px 10px;cursor:pointer">Show hidden</button>
+      <button id="clear-hidden-btn" style="background:none;border:none;color:var(--red);font-size:12px;cursor:pointer">Remove all ×</button>
+    </div>
     <div class="grid">{cards_html}</div>
   </div>
 
@@ -839,6 +873,7 @@ function applyFilters() {{
       if (fState.signal === 'WATCH' && sig !== 'WATCH') show = false;
       if (fState.signal === 'HOLD'  && sig !== 'HOLD')  show = false;
       if (fState.signal === 'EXIT'  && !hasExit)        show = false;
+      if (fState.signal === 'FAV'   && !getFavs().has(card.dataset.sym || '')) show = false;
     }}
     // Market cap range ($B)
     if (fState.mcapMin !== '' && mcap < parseFloat(fState.mcapMin)) show = false;
@@ -893,8 +928,9 @@ function applyFilters() {{
     // Sector
     if (fState.sector && sector !== fState.sector) show = false;
 
-    card.classList.toggle('hidden', !show);
-    if (show) shown++;
+    const isHidden = getHidden().has(card.dataset.sym || '');
+    card.classList.toggle('hidden', !show || isHidden);
+    if (show && !isHidden) shown++;
   }});
 
   document.getElementById('f-count').textContent = `${{shown}} of ${{TOTAL_CARDS}} symbols`;
@@ -1098,6 +1134,91 @@ function injectToGrid(data, sym) {{
   inp.addEventListener('keydown', e => {{ if (e.key === 'Enter') runLookup(); }});
   btn.addEventListener('click', runLookup);
 }})();
+
+// ── Hide / Show cards ─────────────────────────────────────────────────────────
+const HIDDEN_KEY = 'pivot_hidden_v1';
+function getHidden() {{ try {{ return new Set(JSON.parse(localStorage.getItem(HIDDEN_KEY)||'[]')); }} catch {{ return new Set(); }} }}
+function saveHidden(s) {{ try {{ localStorage.setItem(HIDDEN_KEY, JSON.stringify([...s])); }} catch {{}} }}
+
+function applyHidden() {{
+  const hidden = getHidden();
+  let count = 0;
+  document.querySelectorAll('.card[data-sym]').forEach(card => {{
+    const sym = card.dataset.sym;
+    if (hidden.has(sym)) {{ card.classList.add('hidden'); count++; }}
+  }});
+  const bar = document.getElementById('show-hidden-bar');
+  const cnt = document.getElementById('hidden-count');
+  if (count > 0) {{
+    bar.classList.add('visible');
+    cnt.textContent = `${{count}} ticker${{count>1?'s':''}} hidden`;
+  }} else {{
+    bar.classList.remove('visible');
+  }}
+}}
+
+document.addEventListener('click', e => {{
+  const btn = e.target.closest('.card-hide-btn');
+  if (!btn) return;
+  const sym = btn.dataset.hideSym;
+  if (!sym) return;
+  const hidden = getHidden();
+  hidden.add(sym);
+  saveHidden(hidden);
+  const card = btn.closest('.card');
+  if (card) card.classList.add('hidden');
+  applyFilters();
+  applyHidden();
+}});
+
+document.getElementById('show-hidden-btn').addEventListener('click', () => {{
+  const hidden = getHidden();
+  document.querySelectorAll('.card[data-sym]').forEach(card => {{
+    if (hidden.has(card.dataset.sym)) card.classList.remove('hidden');
+  }});
+  saveHidden(new Set());
+  document.getElementById('show-hidden-bar').classList.remove('visible');
+  applyFilters();
+}});
+
+document.getElementById('clear-hidden-btn').addEventListener('click', () => {{
+  saveHidden(new Set());
+  document.getElementById('show-hidden-bar').classList.remove('visible');
+  applyFilters();
+}});
+
+applyHidden();
+
+// ── Favorites ─────────────────────────────────────────────────────────────────
+const FAV_KEY = 'pivot_fav_v1';
+function getFavs() {{ try {{ return new Set(JSON.parse(localStorage.getItem(FAV_KEY)||'[]')); }} catch {{ return new Set(); }} }}
+function saveFavs(s) {{ try {{ localStorage.setItem(FAV_KEY, JSON.stringify([...s])); }} catch {{}} }}
+
+function applyFavButtons() {{
+  const favs = getFavs();
+  document.querySelectorAll('.card-fav-btn').forEach(btn => {{
+    const sym = btn.dataset.favSym;
+    if (favs.has(sym)) {{ btn.textContent = '★'; btn.classList.add('active'); }}
+    else               {{ btn.textContent = '☆'; btn.classList.remove('active'); }}
+  }});
+  const count = favs.size;
+  const el = document.getElementById('kpi-fav-count');
+  if (el) el.textContent = count;
+}}
+
+document.addEventListener('click', e => {{
+  const btn = e.target.closest('.card-fav-btn');
+  if (!btn) return;
+  const sym = btn.dataset.favSym;
+  if (!sym) return;
+  const favs = getFavs();
+  if (favs.has(sym)) favs.delete(sym); else favs.add(sym);
+  saveFavs(favs);
+  applyFavButtons();
+  if (fState.signal === 'FAV') applyFilters();
+}});
+
+applyFavButtons();
 
 // Click ticker name → switch to timeline tab and scroll to that ticker
 document.querySelectorAll('.ticker-link').forEach(el => {{
@@ -1527,6 +1648,13 @@ def _card(r):
 
     tgt_upside  = f"{((tgt/close-1)*100):+.0f}%" if (tgt and close and close > 0) else "n/a"
     upside_attr = f"{(tgt/close-1)*100:.1f}" if (tgt and close and close > 0) else ""
+
+    # PEG ratio = Fwd P/E / (EPS growth %)
+    peg = None
+    if fpe and epsg and epsg > 0:
+        peg = fpe / (epsg * 100)
+    peg_label = ("Cheap" if peg < 1 else "Fair" if peg < 2 else "Pricey") if peg else None
+    peg_color = ("var(--green)" if peg < 1 else "var(--yellow)" if peg < 2 else "var(--red)") if peg else "var(--muted)"
     wk52_html  = f"{wk52*100:+.0f}%" if wk52 is not None else "n/a"
     wk52_cls   = "chg-pos" if (wk52 and wk52 > 0) else "chg-neg" if wk52 else ""
 
@@ -1549,9 +1677,11 @@ def _card(r):
         return (f'<div class="fund-item"><div class="fund-label">{lbl}</div>'
                 f'<div class="fund-val {cls}">{val}</div></div>')
 
+    peg_html = f'<span style="color:{peg_color};font-weight:600">{peg_label}</span> <span style="color:var(--muted);font-size:10px">PEG {_f(peg,2)}</span>' if peg else "n/a"
     funds = (fi("Mkt Cap",   _fmt_mcap(mcap)) +
              fi("P/E",       _f(pe,1) if pe else "n/a") +
              fi("Fwd P/E",   _f(fpe,1) if fpe else "n/a") +
+             fi("Valuation", peg_html) +
              fi("Beta",      _f(beta,2) if beta else "n/a") +
              fi("EPS Grw",   _fmt_pct(epsg), "chg-pos" if (epsg and epsg>0) else "chg-neg" if epsg else "") +
              fi("Rev Grw",   _fmt_pct(revg), "chg-pos" if (revg and revg>0) else "chg-neg" if revg else "") +
@@ -1568,6 +1698,8 @@ def _card(r):
     <span class="price">${_f(close,2)}</span>
     {chg_html}
     {_badge(sig,score)} {exit_b}
+    <button class="card-fav-btn" data-fav-sym="{sym}" title="Favorite {sym}">☆</button>
+    <button class="card-hide-btn" data-hide-sym="{sym}" title="Hide {sym}">✕</button>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
     {sector_html} {analyst_html} {target_html}
