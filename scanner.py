@@ -206,7 +206,7 @@ def _score_entry(d):
     r4 = bool(vol and vol_ma and vol > vol_ma)
     r5 = bool(c and ma50 and c <= ma50 * 1.01)
     r6 = bool(obv is not None and obv_p is not None and obv > obv_p)
-    r7 = bool(ma5 is not None and ma10 is not None and ma5 > ma10)
+    r7 = bool(c is not None and ma5 is not None and ma10 is not None and c > ma5 > ma10)
 
     rules = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7}
     score = sum(20 for v in rules.values() if v)
@@ -226,7 +226,7 @@ def _score_entry(d):
                "fail": f"Volume {_fv(vol)} < avg {_fv(vol_ma)}"},
         "R5": {"passed": r5, "ok": "Price ≤ MA50 × 1.01", "fail": f"Price {_f1(pct_ma50)}% above MA50"},
         "R6": {"passed": r6, "ok": "OBV rising", "fail": "OBV falling"},
-        "R7": {"passed": r7, "ok": f"MA5 {_f(ma5,2)} &gt; MA10 {_f(ma10,2)}", "fail": f"MA5 {_f(ma5,2)} ≤ MA10 {_f(ma10,2)}"},
+        "R7": {"passed": r7, "ok": f"Price {_f(c,2)} &gt; MA5 {_f(ma5,2)} &gt; MA10 {_f(ma10,2)}", "fail": f"Price/MA5/MA10 not aligned ({_f(c,2)}/{_f(ma5,2)}/{_f(ma10,2)})"},
     }
     return {"entry_score": score, "entry_signal": sig, "entry_rules": rule_details}
 
@@ -614,7 +614,7 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
           <b>R4</b> Volume above 20-day average — buyers stepping in with conviction<br>
           <b>R5</b> Price ≤ MA50 × 1.01 — stock is near or below its 50-day average (value zone)<br>
           <b>R6</b> OBV (On-Balance Volume) rising — money flowing into the stock<br>
-          <b>R7</b> MA5 &gt; MA10 — short-term momentum trending up (bullish crossover)
+          <b>R7</b> Price &gt; MA5 &gt; MA10 — price above the 5-day MA which is above the 10-day MA (stacked momentum)
         </div>
       </div>
       <div class="leg-section">
