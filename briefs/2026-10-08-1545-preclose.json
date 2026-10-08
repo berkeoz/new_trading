@@ -1,0 +1,1054 @@
+{
+ "session": "preclose",
+ "title": "Pre-close brief \u2014 Thu Oct 08, 2026 15:45 ET",
+ "generated_et": "2026-10-08 15:45",
+ "context": [
+  {
+   "symbol": "ES=F",
+   "label": "S&P 500 futures",
+   "group": "Futures",
+   "kind": "price",
+   "last": 7810.5,
+   "date": "2026-10-08",
+   "chg_1d": -0.54,
+   "chg_5d": 1.12,
+   "chg_1m": 2.18,
+   "unit": "%",
+   "range_3m": [
+    7351.25,
+    7874.0
+   ]
+  },
+  {
+   "symbol": "NQ=F",
+   "label": "Nasdaq 100 futures",
+   "group": "Futures",
+   "kind": "price",
+   "last": 30929.5,
+   "date": "2026-10-08",
+   "chg_1d": -1.51,
+   "chg_5d": 0.55,
+   "chg_1m": 5.03,
+   "unit": "%",
+   "range_3m": [
+    27342.0,
+    31483.25
+   ]
+  },
+  {
+   "symbol": "^VIX",
+   "label": "VIX",
+   "group": "Volatility",
+   "kind": "level",
+   "last": 15.54,
+   "date": "2026-10-08",
+   "chg_1d": 3.05,
+   "chg_5d": -5.19,
+   "chg_1m": -5.59,
+   "unit": "%",
+   "range_3m": [
+    14.21,
+    20.66
+   ]
+  },
+  {
+   "symbol": "^VIX9D",
+   "label": "VIX 9-day",
+   "group": "Volatility",
+   "kind": "level",
+   "last": 12.35,
+   "date": "2026-10-08",
+   "chg_1d": 4.84,
+   "chg_5d": -11.79,
+   "chg_1m": -20.78,
+   "unit": "%",
+   "range_3m": [
+    10.61,
+    20.38
+   ]
+  },
+  {
+   "symbol": "^IRX",
+   "label": "US 13-week T-bill",
+   "group": "Rates",
+   "kind": "yield",
+   "last": 4.043,
+   "date": "2026-10-08",
+   "chg_1d": 0.6,
+   "chg_5d": 6.1,
+   "chg_1m": 23.8,
+   "unit": "bp",
+   "range_3m": [
+    3.66,
+    4.07
+   ]
+  },
+  {
+   "symbol": "^FVX",
+   "label": "US 5Y yield",
+   "group": "Rates",
+   "kind": "yield",
+   "last": 4.991,
+   "date": "2026-10-08",
+   "chg_1d": -3.0,
+   "chg_5d": -1.4,
+   "chg_1m": 37.7,
+   "unit": "bp",
+   "range_3m": [
+    4.26,
+    5.09
+   ]
+  },
+  {
+   "symbol": "^TNX",
+   "label": "US 10Y yield",
+   "group": "Rates",
+   "kind": "yield",
+   "last": 5.231,
+   "date": "2026-10-08",
+   "chg_1d": -4.6,
+   "chg_5d": -0.6,
+   "chg_1m": 39.4,
+   "unit": "bp",
+   "range_3m": [
+    4.54,
+    5.31
+   ]
+  },
+  {
+   "symbol": "^TYX",
+   "label": "US 30Y yield",
+   "group": "Rates",
+   "kind": "yield",
+   "last": 5.606,
+   "date": "2026-10-08",
+   "chg_1d": -5.5,
+   "chg_5d": 0.3,
+   "chg_1m": 32.0,
+   "unit": "bp",
+   "range_3m": [
+    5.05,
+    5.66
+   ]
+  },
+  {
+   "symbol": "TLT",
+   "label": "20+Y Treasury ETF",
+   "group": "Rates",
+   "kind": "price",
+   "last": 77.86,
+   "date": "2026-10-08",
+   "chg_1d": 0.93,
+   "chg_5d": 0.2,
+   "chg_1m": -4.35,
+   "unit": "%",
+   "range_3m": [
+    77.11,
+    83.52
+   ]
+  },
+  {
+   "symbol": "HYG",
+   "label": "High-yield bond ETF",
+   "group": "Credit",
+   "kind": "price",
+   "last": 77.15,
+   "date": "2026-10-08",
+   "chg_1d": -0.04,
+   "chg_5d": 0.33,
+   "chg_1m": -1.88,
+   "unit": "%",
+   "range_3m": [
+    76.87,
+    79.13
+   ]
+  },
+  {
+   "symbol": "DX-Y.NYB",
+   "label": "US dollar index",
+   "group": "FX",
+   "kind": "price",
+   "last": 102.13,
+   "date": "2026-10-08",
+   "chg_1d": -0.1,
+   "chg_5d": 0.03,
+   "chg_1m": 3.4,
+   "unit": "%",
+   "range_3m": [
+    98.77,
+    102.24
+   ]
+  },
+  {
+   "symbol": "CL=F",
+   "label": "WTI crude oil",
+   "group": "Commodities",
+   "kind": "price",
+   "last": 91.3,
+   "date": "2026-10-08",
+   "chg_1d": 3.42,
+   "chg_5d": -1.69,
+   "chg_1m": -4.95,
+   "unit": "%",
+   "range_3m": [
+    71.41,
+    105.83
+   ]
+  },
+  {
+   "symbol": "BZ=F",
+   "label": "Brent crude oil",
+   "group": "Commodities",
+   "kind": "price",
+   "last": 104.1,
+   "date": "2026-10-08",
+   "chg_1d": 3.89,
+   "chg_5d": 1.75,
+   "chg_1m": 2.86,
+   "unit": "%",
+   "range_3m": [
+    76.01,
+    108.75
+   ]
+  },
+  {
+   "symbol": "GC=F",
+   "label": "Gold",
+   "group": "Commodities",
+   "kind": "price",
+   "last": 4155.0,
+   "date": "2026-10-08",
+   "chg_1d": 0.35,
+   "chg_5d": -1.13,
+   "chg_1m": -6.85,
+   "unit": "%",
+   "range_3m": [
+    3992.1,
+    4697.8
+   ]
+  },
+  {
+   "symbol": "BTC-USD",
+   "label": "Bitcoin",
+   "group": "Crypto",
+   "kind": "price",
+   "last": 81648.95,
+   "date": "2026-10-08",
+   "chg_1d": -1.95,
+   "chg_5d": -3.67,
+   "chg_1m": 6.87,
+   "unit": "%",
+   "range_3m": [
+    62239.12,
+    86602.91
+   ]
+  },
+  {
+   "symbol": "ETH-USD",
+   "label": "Ether",
+   "group": "Crypto",
+   "kind": "price",
+   "last": 2458.63,
+   "date": "2026-10-08",
+   "chg_1d": -4.46,
+   "chg_5d": -8.51,
+   "chg_1m": 0.47,
+   "unit": "%",
+   "range_3m": [
+    1742.68,
+    2776.47
+   ]
+  }
+ ],
+ "tickers": [
+  {
+   "symbol": "QQQ",
+   "last_close": 746.3,
+   "last_close_date": "2026-10-08",
+   "prev_close": 757.73,
+   "change_1d_pct": -1.51,
+   "change_5d_pct": 0.58,
+   "change_1m_pct": 4.3,
+   "high_52w": 762.86,
+   "low_52w": 554.41,
+   "live": {
+    "price": 746.54,
+    "time_et": "2026-10-08 15:45"
+   },
+   "daily": {
+    "score": 0.82,
+    "score_5_bars_ago": 1.0,
+    "verdict": "Bullish",
+    "mas": {
+     "EMA9": {
+      "value": 748.06,
+      "price_vs_pct": -0.24,
+      "slope_5_bars_pct": 1.51
+     },
+     "EMA21": {
+      "value": 738.38,
+      "price_vs_pct": 1.07,
+      "slope_5_bars_pct": 1.29
+     },
+     "SMA50": {
+      "value": 722.61,
+      "price_vs_pct": 3.28,
+      "slope_5_bars_pct": 1.06
+     },
+     "SMA200": {
+      "value": 670.2,
+      "price_vs_pct": 11.35,
+      "slope_5_bars_pct": 0.55
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 743.66,
+      "price_vs_pct": 0.35,
+      "slope_5_bars_pct": 1.59
+     },
+     "HMA55": {
+      "value": 743.03,
+      "price_vs_pct": 0.44,
+      "slope_5_bars_pct": 1.66,
+      "last_turn": {
+       "direction": "up",
+       "when": "2026-09-21",
+       "bars_ago": 13
+      }
+     }
+    },
+    "rsi14": 58.0,
+    "rsi14_5_bars_ago": 61.7,
+    "macd": {
+     "line": 9.944,
+     "signal": 8.683,
+     "hist": 1.261,
+     "hist_prev": 2.275,
+     "last_cross": {
+      "when": "2026-09-18",
+      "type": "bullish",
+      "bars_ago": 14
+     }
+    }
+   },
+   "levels": {
+    "supports": [
+     {
+      "price": 740.6,
+      "what": "horizontal level (4 touches)",
+      "distance_pct": -0.76
+     },
+     {
+      "price": 738.38,
+      "what": "EMA21",
+      "distance_pct": -1.06
+     },
+     {
+      "price": 738.15,
+      "what": "anchored VWAP from last swing low (2026-09-16)",
+      "distance_pct": -1.09
+     },
+     {
+      "price": 725.1,
+      "what": "anchored VWAP from last swing high (2026-08-17)",
+      "distance_pct": -2.84
+     },
+     {
+      "price": 724.33,
+      "what": "rising support trendline",
+      "distance_pct": -2.94
+     },
+     {
+      "price": 722.61,
+      "what": "SMA50",
+      "distance_pct": -3.17
+     }
+    ],
+    "resistances": [
+     {
+      "price": 802.94,
+      "what": "parallel channel (rising) upper line",
+      "distance_pct": 7.59
+     }
+    ]
+   },
+   "open_patterns": [
+    {
+     "type": "Rising support trendline",
+     "bias": "bullish",
+     "start": "2026-03-30",
+     "end": "2026-09-16",
+     "status": "active",
+     "target": null,
+     "note": "3 touches over 117 bars, +0.23%/bar, now at 724.33"
+    },
+    {
+     "type": "Parallel channel (rising)",
+     "bias": "bullish",
+     "start": "2025-01-06",
+     "end": "2026-06-03",
+     "status": "active",
+     "target": null,
+     "note": "3+2 touches, width 20.4%, +0.12%/bar, now 638.89-802.94"
+    },
+    {
+     "type": "Rising resistance trendline",
+     "bias": "neutral",
+     "start": "2025-03-25",
+     "end": "2025-10-29",
+     "status": "active",
+     "target": null,
+     "note": "4 touches over 151 bars, +0.19%/bar, now at 846.80"
+    }
+   ],
+   "recent_signals": [],
+   "recent_breaks": [],
+   "vs_spy_pct": {
+    "1d": -0.93,
+    "5d": -0.56,
+    "1m": 2.7
+   },
+   "next_earnings": null,
+   "valuation": {
+    "etf": {
+     "pe": 28.59,
+     "earnings_yield": 0.035,
+     "equity_risk_premium": -0.0173
+    },
+    "scenarios": null,
+    "implied_growth": null,
+    "flags": [],
+    "text": "QQQ Invesco QQQ Trust, Series 1 \u2014 price 746.54 USD, 10Y 5.23%\n  ETF P/E 28.59, earnings yield 3.50% vs 10Y 5.23% \u2192 equity risk premium -1.73pp"
+   },
+   "volume_vs_20d_avg": 1.06,
+   "today": {
+    "date": "2026-10-08",
+    "open": 753.94,
+    "gap_pct": -0.5,
+    "opening_range_15m": [
+     753.11,
+     754.95
+    ],
+    "high": 757.18,
+    "low": 743.23,
+    "last": 746.53,
+    "last_bar_et": "2026-10-08 15:45"
+   },
+   "h4": {
+    "score": 0.82,
+    "score_5_bars_ago": 1.0,
+    "verdict": "Bullish",
+    "mas": {
+     "EMA9": {
+      "value": 751.0,
+      "price_vs_pct": -0.59,
+      "slope_5_bars_pct": 0.09
+     },
+     "EMA21": {
+      "value": 746.49,
+      "price_vs_pct": 0.01,
+      "slope_5_bars_pct": 0.48
+     },
+     "SMA50": {
+      "value": 731.7,
+      "price_vs_pct": 2.03,
+      "slope_5_bars_pct": 0.59
+     },
+     "SMA200": {
+      "value": 719.67,
+      "price_vs_pct": 3.73,
+      "slope_5_bars_pct": 0.13
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 749.93,
+      "price_vs_pct": -0.45,
+      "slope_5_bars_pct": 0.48
+     },
+     "HMA55": {
+      "value": 757.43,
+      "price_vs_pct": -1.44,
+      "slope_5_bars_pct": 0.85,
+      "last_turn": {
+       "direction": "up",
+       "when": "2026-09-18 09:30",
+       "bars_ago": 29
+      }
+     }
+    },
+    "rsi14": 52.9,
+    "rsi14_5_bars_ago": 74.6,
+    "macd": {
+     "line": 5.866,
+     "signal": 6.867,
+     "hist": -1.001,
+     "hist_prev": -0.411,
+     "last_cross": {
+      "when": "2026-10-08 09:30",
+      "type": "bearish",
+      "bars_ago": 1
+     }
+    },
+    "asof": "2026-10-08 13:30"
+   },
+   "session": {
+    "date": "2026-10-08",
+    "open": 753.94,
+    "high": 757.18,
+    "low": 743.23,
+    "last": 746.55,
+    "vwap": 752.56
+   }
+  },
+  {
+   "symbol": "SPY",
+   "last_close": 772.69,
+   "last_close_date": "2026-10-08",
+   "prev_close": 777.22,
+   "change_1d_pct": -0.58,
+   "change_5d_pct": 1.14,
+   "change_1m_pct": 1.6,
+   "high_52w": 781.62,
+   "low_52w": 626.11,
+   "live": {
+    "price": 773.38,
+    "time_et": "2026-10-08 15:45"
+   },
+   "daily": {
+    "score": 1.0,
+    "score_5_bars_ago": 0.45,
+    "verdict": "Bullish",
+    "mas": {
+     "EMA9": {
+      "value": 771.73,
+      "price_vs_pct": 0.12,
+      "slope_5_bars_pct": 0.86
+     },
+     "EMA21": {
+      "value": 768.39,
+      "price_vs_pct": 0.56,
+      "slope_5_bars_pct": 0.51
+     },
+     "SMA50": {
+      "value": 765.48,
+      "price_vs_pct": 0.94,
+      "slope_5_bars_pct": 0.51
+     },
+     "SMA200": {
+      "value": 719.16,
+      "price_vs_pct": 7.44,
+      "slope_5_bars_pct": 0.36
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 769.46,
+      "price_vs_pct": 0.42,
+      "slope_5_bars_pct": 0.62
+     },
+     "HMA55": {
+      "value": 767.71,
+      "price_vs_pct": 0.65,
+      "slope_5_bars_pct": 0.3,
+      "last_turn": {
+       "direction": "up",
+       "when": "2026-10-02",
+       "bars_ago": 4
+      }
+     }
+    },
+    "rsi14": 55.4,
+    "rsi14_5_bars_ago": 50.1,
+    "macd": {
+     "line": 3.19,
+     "signal": 2.266,
+     "hist": 0.923,
+     "hist_prev": 1.199,
+     "last_cross": {
+      "when": "2026-10-02",
+      "type": "bullish",
+      "bars_ago": 4
+     }
+    }
+   },
+   "levels": {
+    "supports": [
+     {
+      "price": 768.39,
+      "what": "EMA21",
+      "distance_pct": -0.56
+     },
+     {
+      "price": 766.96,
+      "what": "anchored VWAP from last swing low (2026-09-16)",
+      "distance_pct": -0.74
+     },
+     {
+      "price": 765.77,
+      "what": "anchored VWAP from last swing high (2026-08-13)",
+      "distance_pct": -0.9
+     },
+     {
+      "price": 765.48,
+      "what": "SMA50",
+      "distance_pct": -0.93
+     },
+     {
+      "price": 757.06,
+      "what": "broadening (rising) upper line",
+      "distance_pct": -2.02
+     },
+     {
+      "price": 755.68,
+      "what": "rising support trendline",
+      "distance_pct": -2.2
+     }
+    ],
+    "resistances": [
+     {
+      "price": 779.09,
+      "what": "consolidation range top",
+      "distance_pct": 0.83
+     },
+     {
+      "price": 792.57,
+      "what": "rising resistance trendline",
+      "distance_pct": 2.57
+     },
+     {
+      "price": 821.51,
+      "what": "broadening (rising) lower line",
+      "distance_pct": 6.32
+     },
+     {
+      "price": 849.63,
+      "what": "rising resistance trendline",
+      "distance_pct": 9.96
+     }
+    ]
+   },
+   "open_patterns": [
+    {
+     "type": "Consolidation range",
+     "bias": "neutral",
+     "start": "2026-08-03",
+     "end": "2026-10-08",
+     "status": "active (inside range)",
+     "target": null,
+     "note": "48 bars, closing range 752.18-779.09 (3.6%, 3.0x ATR), top tested 2x, bottom 2x, volume 0.87x the prior 20 bars"
+    },
+    {
+     "type": "Wyckoff distribution (candidate)",
+     "bias": "bearish",
+     "start": "2026-08-03",
+     "end": "2026-10-08",
+     "status": "Phase C, still in range",
+     "target": null,
+     "note": "Phase C \u00b7 prior trend +5% \u00b7 UTAD 2026-10-06 on light volume (0.9x range avg)"
+    },
+    {
+     "type": "Double top",
+     "bias": "bearish",
+     "start": "2026-08-13",
+     "end": "2026-10-06",
+     "status": "possible (2nd peak still forming)",
+     "target": 715.96,
+     "note": "peaks 0.5% apart, 37 bars, neckline 747.74"
+    },
+    {
+     "type": "Broadening (rising)",
+     "bias": "neutral",
+     "start": "2026-06-26",
+     "end": "2026-09-16",
+     "status": "active (price inside lines)",
+     "target": null,
+     "note": "56 bars, upper +0.15%/bar, lower +0.08%/bar"
+    },
+    {
+     "type": "Rising support trendline",
+     "bias": "bullish",
+     "start": "2026-06-26",
+     "end": "2026-09-16",
+     "status": "active",
+     "target": null,
+     "note": "3 touches over 56 bars, +0.08%/bar, now at 755.68"
+    },
+    {
+     "type": "Rising resistance trendline",
+     "bias": "neutral",
+     "start": "2024-12-26",
+     "end": "2026-08-13",
+     "status": "active",
+     "target": null,
+     "note": "6 touches over 407 bars, +0.08%/bar, now at 792.57"
+    },
+    {
+     "type": "Rising resistance trendline",
+     "bias": "neutral",
+     "start": "2025-03-25",
+     "end": "2025-10-29",
+     "status": "active",
+     "target": null,
+     "note": "4 touches over 151 bars, +0.13%/bar, now at 849.63"
+    }
+   ],
+   "recent_signals": [],
+   "recent_breaks": [],
+   "next_earnings": null,
+   "valuation": {
+    "etf": {
+     "pe": 24.55,
+     "earnings_yield": 0.0407,
+     "equity_risk_premium": -0.0116
+    },
+    "scenarios": null,
+    "implied_growth": null,
+    "flags": [],
+    "text": "SPY State Street SPDR S&P 500 ETF T \u2014 price 773.39 USD, 10Y 5.23%\n  ETF P/E 24.55, earnings yield 4.07% vs 10Y 5.23% \u2192 equity risk premium -1.16pp"
+   },
+   "volume_vs_20d_avg": 0.56,
+   "today": {
+    "date": "2026-10-08",
+    "open": 774.86,
+    "gap_pct": -0.3,
+    "opening_range_15m": [
+     774.45,
+     775.33
+    ],
+    "high": 777.09,
+    "low": 770.43,
+    "last": 773.38,
+    "last_bar_et": "2026-10-08 15:45"
+   },
+   "h4": {
+    "score": 0.82,
+    "score_5_bars_ago": 1.0,
+    "verdict": "Bullish",
+    "mas": {
+     "EMA9": {
+      "value": 773.76,
+      "price_vs_pct": -0.05,
+      "slope_5_bars_pct": 0.29
+     },
+     "EMA21": {
+      "value": 771.26,
+      "price_vs_pct": 0.28,
+      "slope_5_bars_pct": 0.32
+     },
+     "SMA50": {
+      "value": 767.13,
+      "price_vs_pct": 0.82,
+      "slope_5_bars_pct": 0.15
+     },
+     "SMA200": {
+      "value": 755.93,
+      "price_vs_pct": 2.31,
+      "slope_5_bars_pct": 0.11
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 772.14,
+      "price_vs_pct": 0.16,
+      "slope_5_bars_pct": 0.39
+     },
+     "HMA55": {
+      "value": 772.98,
+      "price_vs_pct": 0.05,
+      "slope_5_bars_pct": 0.54,
+      "last_turn": {
+       "direction": "up",
+       "when": "2026-10-02 09:30",
+       "bars_ago": 9
+      }
+     }
+    },
+    "rsi14": 54.6,
+    "rsi14_5_bars_ago": 67.2,
+    "macd": {
+     "line": 2.522,
+     "signal": 2.163,
+     "hist": 0.359,
+     "hist_prev": 0.615,
+     "last_cross": {
+      "when": "2026-10-02 13:30",
+      "type": "bullish",
+      "bars_ago": 8
+     }
+    },
+    "asof": "2026-10-08 13:30"
+   },
+   "session": {
+    "date": "2026-10-08",
+    "open": 774.86,
+    "high": 777.09,
+    "low": 770.43,
+    "last": 773.4,
+    "vwap": 774.27
+   }
+  },
+  {
+   "symbol": "SOXX",
+   "last_close": 560.62,
+   "last_close_date": "2026-10-08",
+   "prev_close": 582.82,
+   "change_1d_pct": -3.81,
+   "change_5d_pct": -2.73,
+   "change_1m_pct": 5.45,
+   "high_52w": 655.52,
+   "low_52w": 259.61,
+   "live": {
+    "price": 559.9,
+    "time_et": "2026-10-08 15:45"
+   },
+   "daily": {
+    "score": 0.82,
+    "score_5_bars_ago": 1.0,
+    "verdict": "Bullish",
+    "mas": {
+     "EMA9": {
+      "value": 573.6,
+      "price_vs_pct": -2.26,
+      "slope_5_bars_pct": 2.06
+     },
+     "EMA21": {
+      "value": 559.79,
+      "price_vs_pct": 0.15,
+      "slope_5_bars_pct": 2.37
+     },
+     "SMA50": {
+      "value": 536.0,
+      "price_vs_pct": 4.59,
+      "slope_5_bars_pct": 1.37
+     },
+     "SMA200": {
+      "value": 460.46,
+      "price_vs_pct": 21.75,
+      "slope_5_bars_pct": 1.59
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 568.67,
+      "price_vs_pct": -1.42,
+      "slope_5_bars_pct": 3.08
+     },
+     "HMA55": {
+      "value": 567.27,
+      "price_vs_pct": -1.17,
+      "slope_5_bars_pct": 4.47,
+      "last_turn": {
+       "direction": "up",
+       "when": "2026-09-21",
+       "bars_ago": 13
+      }
+     }
+    },
+    "rsi14": 52.3,
+    "rsi14_5_bars_ago": 63.3,
+    "macd": {
+     "line": 14.353,
+     "signal": 13.314,
+     "hist": 1.039,
+     "hist_prev": 3.407,
+     "last_cross": {
+      "when": "2026-09-17",
+      "type": "bullish",
+      "bars_ago": 15
+     }
+    }
+   },
+   "levels": {
+    "supports": [
+     {
+      "price": 559.79,
+      "what": "EMA21",
+      "distance_pct": -0.15
+     },
+     {
+      "price": 550.96,
+      "what": "anchored VWAP from last swing low (2026-09-14)",
+      "distance_pct": -1.72
+     },
+     {
+      "price": 547.49,
+      "what": "anchored VWAP from last swing high (2026-09-09)",
+      "distance_pct": -2.34
+     },
+     {
+      "price": 544.35,
+      "what": "anchored VWAP from 6-month high (2026-06-22)",
+      "distance_pct": -2.9
+     },
+     {
+      "price": 536.0,
+      "what": "SMA50",
+      "distance_pct": -4.39
+     },
+     {
+      "price": 535.96,
+      "what": "anchored VWAP from 6-month low (2026-04-10)",
+      "distance_pct": -4.4
+     }
+    ],
+    "resistances": [
+     {
+      "price": 563.06,
+      "what": "horizontal level (4 touches)",
+      "distance_pct": 0.44
+     },
+     {
+      "price": 592.57,
+      "what": "horizontal level (5 touches)",
+      "distance_pct": 5.7
+     },
+     {
+      "price": 594.03,
+      "what": "falling resistance trendline",
+      "distance_pct": 5.96
+     },
+     {
+      "price": 596.37,
+      "what": "horizontal resistance trendline",
+      "distance_pct": 6.38
+     },
+     {
+      "price": 601.39,
+      "what": "parallel channel (rising) upper line",
+      "distance_pct": 7.27
+     }
+    ]
+   },
+   "open_patterns": [
+    {
+     "type": "Parallel channel (rising)",
+     "bias": "bullish",
+     "start": "2026-07-29",
+     "end": "2026-10-02",
+     "status": "active",
+     "target": null,
+     "note": "3+2 touches, width 17.4%, +0.21%/bar, now 512.07-601.39"
+    },
+    {
+     "type": "Falling resistance trendline",
+     "bias": "bearish",
+     "start": "2026-06-25",
+     "end": "2026-10-02",
+     "status": "active",
+     "target": null,
+     "note": "3 touches over 69 bars, -0.09%/bar, now at 594.03"
+    },
+    {
+     "type": "Horizontal resistance trendline",
+     "bias": "neutral",
+     "start": "2026-07-06",
+     "end": "2026-10-02",
+     "status": "active",
+     "target": null,
+     "note": "3 touches over 63 bars, -0.00%/bar, now at 596.37"
+    }
+   ],
+   "recent_signals": [],
+   "recent_breaks": [],
+   "vs_spy_pct": {
+    "1d": -3.23,
+    "5d": -3.87,
+    "1m": 3.85
+   },
+   "next_earnings": null,
+   "valuation": {
+    "etf": {
+     "pe": 32.92,
+     "earnings_yield": 0.0304,
+     "equity_risk_premium": -0.0219
+    },
+    "scenarios": null,
+    "implied_growth": null,
+    "flags": [],
+    "text": "SOXX iShares PHLX SOX Semiconductor  \u2014 price 559.9 USD, 10Y 5.23%\n  ETF P/E 32.92, earnings yield 3.04% vs 10Y 5.23% \u2192 equity risk premium -2.19pp"
+   },
+   "volume_vs_20d_avg": 1.16,
+   "today": {
+    "date": "2026-10-08",
+    "open": 573.0,
+    "gap_pct": -1.68,
+    "opening_range_15m": [
+     570.8,
+     574.31
+    ],
+    "high": 579.25,
+    "low": 555.82,
+    "last": 559.9,
+    "last_bar_et": "2026-10-08 15:45"
+   },
+   "h4": {
+    "score": 0.27,
+    "score_5_bars_ago": 0.82,
+    "verdict": "Turning bearish",
+    "mas": {
+     "EMA9": {
+      "value": 574.71,
+      "price_vs_pct": -2.56,
+      "slope_5_bars_pct": -1.43
+     },
+     "EMA21": {
+      "value": 571.33,
+      "price_vs_pct": -1.99,
+      "slope_5_bars_pct": 0.15
+     },
+     "SMA50": {
+      "value": 547.55,
+      "price_vs_pct": 2.27,
+      "slope_5_bars_pct": 1.33
+     },
+     "SMA200": {
+      "value": 551.94,
+      "price_vs_pct": 1.46,
+      "slope_5_bars_pct": 0.24
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 577.47,
+      "price_vs_pct": -3.03,
+      "slope_5_bars_pct": -0.05
+     },
+     "HMA55": {
+      "value": 594.17,
+      "price_vs_pct": -5.75,
+      "slope_5_bars_pct": 1.11,
+      "last_turn": {
+       "direction": "down",
+       "when": "2026-10-08 13:30",
+       "bars_ago": 0
+      }
+     }
+    },
+    "rsi14": 45.0,
+    "rsi14_5_bars_ago": 71.9,
+    "macd": {
+     "line": 6.855,
+     "signal": 10.928,
+     "hist": -4.073,
+     "hist_prev": -3.004,
+     "last_cross": {
+      "when": "2026-10-07 09:30",
+      "type": "bearish",
+      "bars_ago": 3
+     }
+    },
+    "asof": "2026-10-08 13:30"
+   },
+   "session": {
+    "date": "2026-10-08",
+    "open": 573.0,
+    "high": 579.25,
+    "low": 555.82,
+    "last": 559.98,
+    "vwap": 565.46
+   }
+  }
+ ]
+}
