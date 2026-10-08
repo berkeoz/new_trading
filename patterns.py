@@ -502,6 +502,167 @@ def find_parallel_channels(df, piv, tol, flat, cands, limit=4):
     return out
 
 
+# ── Consolidation ranges (boxes) and Wyckoff candidates ───────────────────────
+BOX_ATR = 4.0       # a range: closes stay within 4 x ATR ...
+BOX_MIN_BARS = 15   # ... for at least 15 bars
+WYCKOFF_MIN_BARS = 20
+
+
+def _atr_series(df, n=14):
+    h, l, c = df["High"], df["Low"], df["Close"]
+    tr = pd.concat([h - l, (h - c.shift()).abs(), (l - c.shift()).abs()], axis=1).max(axis=1)
+    return tr.rolling(n, min_periods=1).mean().values
+
+
+def _find_boxes(c, atr):
+    """Greedy scan: from each start, extend while the closing range stays within
+    BOX_ATR x ATR(start); keep runs of at least BOX_MIN_BARS bars, non-overlapping."""
+    n, out, i = len(c), [], 0
+    while i < n - BOX_MIN_BARS:
+        lim, hi, lo, j = BOX_ATR * atr[i], c[i], c[i], i
+        while j + 1 < n and max(hi, c[j + 1]) - min(lo, c[j + 1]) <= lim:
+            j += 1
+            hi, lo = max(hi, c[j]), min(lo, c[j])
+        if j - i + 1 >= BOX_MIN_BARS and hi > lo:
+            out.append((i, j, float(hi), float(lo)))
+            i = j + 1
+        else:
+            i += 1
+    return out
+
+
+def _touches(x, i, j, level, above, gap=3):
+    """Separate tests of a level (bars at/through it, at least `gap` bars apart)."""
+    n, last = 0, -gap - 1
+    for k in range(i, j + 1):
+        if (x[k] >= level) if above else (x[k] <= level):
+            if k - last > gap:
+                n += 1
+            last = k
+    return n
+
+
+def _box_dict(kind, cat, bias, df, i, j, end, hi, lo, status, is_open, target, note, events=None):
+    d = df.index
+    return {
+        "type": kind, "cat": cat, "bias": bias, "status": status, "open": is_open,
+        "start": ts(d[i]), "end": ts(d[j]), "i0": int(i), "i1": int(j), "pivots": [],
+        "lines": [_seg(df, i, hi, end, hi), _seg(df, i, lo, end, lo)],
+        "box": [ts(d[i]), ts(d[j]), round(lo, 2), round(hi, 2)],
+        "events": events or [],
+        "target": None if target is None else round(float(target), 2), "note": note,
+    }
+
+
+def find_ranges(df):
+    """Consolidation boxes plus Wyckoff accumulation / distribution candidates."""
+    c, h, l = df["Close"].values, df["High"].values, df["Low"].values
+    v = df["Volume"].values.astype(float)
+    has_vol = v.sum() > 0
+    atr = _atr_series(df)
+    n, last, idx = len(c), len(c) - 1, df.index
+    vavg = lambda a, b: float(v[max(a, 0):b].mean()) if b > max(a, 0) else float("nan")
+    out = []
+    for i, j, hi, lo in _find_boxes(c, atr):
+        a = atr[i]
+        brk = j + 1 if j + 1 < n else None
+        d = None if brk is None else ("up" if c[brk] > hi else "down")
+        back = None                       # false break: a close back inside within 3 bars
+        if brk is not None:
+            back = next((k for k in range(brk + 1, min(n, brk + 4)) if lo <= c[k] <= hi), None)
+        if brk is None:
+            status, end = "active (inside range)", last
+        elif back is not None:
+            status, end = f"false break {d} {ts(idx[brk])}, back inside {ts(idx[back])}", back
+        else:
+            status, end = f"broke {d} {ts(idx[brk])}", brk
+        width = hi - lo
+        t_top, t_bot = _touches(h, i, j, hi - 0.25 * a, True), _touches(l, i, j, lo + 0.25 * a, False)
+        drift = abs(np.polyfit(np.arange(j - i + 1), c[i:j + 1], 1)[0]) * (j - i)
+        if t_top < 2 or t_bot < 2 or drift > 0.5 * width:
+            continue                      # a slow trend or a one-sided drift, not a range
+        box_vol = vavg(i, j + 1)
+        vr = box_vol / vavg(i - 20, i) if has_vol and i >= 5 else float("nan")
+        note = (f"{j - i + 1} bars, closing range {lo:.2f}-{hi:.2f} ({width / lo * 100:.1f}%, {width / a:.1f}x ATR), "
+                f"top tested {t_top}x, bottom {t_bot}x"
+                + (f", volume {vr:.2f}x the prior 20 bars" if vr == vr else ""))
+        target = None if brk is None or back is not None else (hi + width if d == "up" else lo - width)
+        out.append(_box_dict("Consolidation range", "range", "neutral", df, i, j, end, hi, lo,
+                             status, brk is None, target, note))
+
+        # ── Wyckoff: a range that follows a clear trend ──
+        if j - i + 1 < WYCKOFF_MIN_BARS or i < 10:
+            continue
+        look = max(0, i - 60)             # trend into the range: move from the recent high / low
+        down, up = c[i] / c[look:i].max() - 1, c[i] / c[look:i].min() - 1
+        prior = up if up >= -down else down
+        if abs(prior) < 0.75 * width / lo:
+            continue                      # no clear trend into the range
+        acc = prior < 0
+        ev, why = [], []
+        # climax: wide, high-volume bar at the extreme around the start of the range
+        clim = None
+        for k in range(max(1, i - 10), min(j, i + 10) + 1):
+            v20 = vavg(k - 20, k)
+            wide = h[k] - l[k] >= 1.8 * atr[k]
+            loud = (not has_vol) or (v20 > 0 and v[k] >= 1.8 * v20)
+            near = (l[k] <= lo + 0.5 * a) if acc else (h[k] >= hi - 0.5 * a)
+            if wide and loud and near and (clim is None or (l[k] < l[clim] if acc else h[k] > h[clim])):
+                clim = k
+        if clim is not None:
+            vx = v[clim] / vavg(clim - 20, clim) if has_vol else None
+            ev.append({"date": ts(idx[clim]), "price": round(float(l[clim] if acc else h[clim]), 2),
+                       "label": "SC" if acc else "BC"})
+            why.append(f"{'selling' if acc else 'buying'} climax {ts(idx[clim])}" + (f" (volume {vx:.1f}x)" if vx else ""))
+            seg = range(clim + 1, min(j, clim + 10) + 1)
+            if len(seg):
+                ar = max(seg, key=lambda k: h[k]) if acc else min(seg, key=lambda k: l[k])
+                ev.append({"date": ts(idx[ar]), "price": round(float(h[ar] if acc else l[ar]), 2), "label": "AR"})
+        # spring (accumulation) / upthrust (distribution): poke through the edge, close back inside
+        trap = None
+        for k in range(i + (j - i + 1) // 3, min(n, j + 4)):
+            poke = (l[k] < lo - 0.25 * a) if acc else (h[k] > hi + 0.25 * a)
+            if poke and any((c[m] >= lo) if acc else (c[m] <= hi) for m in range(k, min(n, k + 4))):
+                if trap is None or (l[k] < l[trap] if acc else h[k] > h[trap]):
+                    trap = k
+        if trap is not None:
+            vt = v[trap] / box_vol if has_vol and box_vol else None
+            lbl = "Spring" if acc else ("UTAD" if trap > i + (j - i) // 2 else "UT")
+            ev.append({"date": ts(idx[trap]), "price": round(float(l[trap] if acc else h[trap]), 2), "label": lbl})
+            why.append(f"{lbl.lower() if lbl == 'Spring' else lbl} {ts(idx[trap])}"
+                       + (f" on {'light' if vt < 1 else 'heavy'} volume ({vt:.1f}x range avg)" if vt else ""))
+        # breakout in the Wyckoff direction (sign of strength / weakness) and its retest
+        phase, status, is_open = ("C" if trap is not None else "B"), None, brk is None
+        if brk is not None and back is None:
+            if (d == "up") == acc:
+                vb = v[brk] / box_vol if has_vol and box_vol else None
+                strong = vb is None or vb >= 1.3
+                ev.append({"date": ts(idx[brk]), "price": round(float(c[brk]), 2), "label": "SOS" if acc else "SOW"})
+                why.append(f"{'SOS breakout' if acc else 'SOW breakdown'} {ts(idx[brk])}"
+                           + (f" on {'expanding' if strong else 'weak'} volume ({vb:.1f}x)" if vb else ""))
+                seg = list(range(brk + 1, min(n, brk + 16)))
+                if seg:
+                    rt = min(seg, key=lambda k: l[k]) if acc else max(seg, key=lambda k: h[k])
+                    held = (l[rt] >= hi - 0.5 * a) if acc else (h[rt] <= lo + 0.5 * a)
+                    if held and rt < last:
+                        ev.append({"date": ts(idx[rt]), "price": round(float(l[rt] if acc else h[rt]), 2),
+                                   "label": "LPS" if acc else "LPSY"})
+                        why.append(f"{'LPS' if acc else 'LPSY'} retest held {ts(idx[rt])}")
+                after = c[brk:].max() if acc else c[brk:].min()
+                phase = "E" if ((after >= hi + width) if acc else (after <= lo - width)) else "D"
+                status = f"confirmed {ts(idx[brk])} ({'SOS breakout' if acc else 'SOW breakdown'}, Phase {phase})"
+            else:
+                status = f"failed: broke {d} {ts(idx[brk])}"
+                why.append("range broke the other way" + (" (more likely re-accumulation)" if not acc else " (more likely re-distribution)"))
+        if status is None:
+            status = f"Phase {phase}, {'still in range' if brk is None else 'back in range after a false break'}"
+        name = "Wyckoff accumulation (candidate)" if acc else "Wyckoff distribution (candidate)"
+        note = f"Phase {phase} · prior trend {prior * 100:+.0f}% · " + (" · ".join(why) if why else "no climax / spring / upthrust found yet")
+        out.append(_box_dict(name, "wyckoff", "bullish" if acc else "bearish", df, i, j,
+                             end, hi, lo, status, is_open, None, note, ev))
+    return out
+
+
 # ── Support / resistance ───────────────────────────────────────────────────────
 def find_levels(piv, price, tol, min_touches=3):
     """Cluster pivot prices; keep clusters touched >= min_touches times."""
@@ -543,7 +704,8 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval=
     pats = (find_double(df, piv, tol) + find_head_shoulders(df, piv, tol)
             + find_line_patterns(df, piv, tol, flat)
             + find_parallel_channels(df, piv, tol, flat, tl_cands)
-            + find_trendlines(df, piv, tol, flat, tl_cands))
+            + find_trendlines(df, piv, tol, flat, tl_cands)
+            + find_ranges(df))
     if not show_all:   # hide patterns that never resolved or were invalidated
         pats = [p for p in pats if p["status"] not in ("failed", "expired")]
     pats.sort(key=lambda p: p["i1"], reverse=True)
@@ -630,7 +792,7 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 <script>
 const DATA = __DATA__;
 const COL = {bullish:'#26a69a', bearish:'#ef5350', neutral:'#f5b041'};
-const CATS = [['reversal','Reversals'],['triangle','Triangles & wedges'],['channel','Channels'],['trendline','Trendlines']];
+const CATS = [['reversal','Reversals'],['triangle','Triangles & wedges'],['channel','Channels'],['trendline','Trendlines'],['range','Ranges'],['wyckoff','Wyckoff']];
 const root = document.getElementById('root');
 let seq = 0;
 
@@ -966,6 +1128,21 @@ function render(r, prepend) {
       hoverinfo:'text+x', showlegend:false});
     const shapes = [], ann = [];
     pats.forEach(p => {
+      if (p.box) {   // consolidation range / Wyckoff candidate
+        const c = p.cat == 'wyckoff' ? COL[p.bias] : '#8fa3c7';
+        const [x0, x1, lo, hi] = p.box, wy = p.cat == 'wyckoff';
+        shapes.push({type:'rect', x0, x1, y0:lo, y1:hi, line:{color:c, width:1, dash: wy ? 'dot' : 'solid'},
+                     fillcolor: wy ? 'rgba(0,0,0,0)' : 'rgba(143,163,199,0.12)', layer:'below'});
+        const xe = p.lines[0][2];   // extend the edges to the breakout / last bar
+        if (xe > x1) [lo, hi].forEach(y => shapes.push({type:'line', x0:x1, x1:xe, y0:y, y1:y, line:{color:c, width:1, dash:'dot'}}));
+        if (wy && p.events.length) traces.push({type:'scatter', mode:'markers+text', x:p.events.map(e => e.date), y:p.events.map(e => e.price),
+          text:p.events.map(e => e.label), textposition: p.bias == 'bullish' ? 'bottom center' : 'top center',
+          textfont:{color:c, size:10}, marker:{color:c, size:6, symbol:'diamond'}, showlegend:false,
+          hovertemplate:p.type + ': %{text}<br>%{x}: %{y}<extra></extra>'});
+        ann.push({x:x0, y: wy ? lo : hi, text: wy ? p.type.replace(' (candidate)', '?') : 'Range', showarrow:false,
+                  xanchor:'left', yanchor: wy ? 'top' : 'bottom', font:{color:c, size:10}});
+        return;
+      }
       const c = COL[p.bias], dash = p.cat == 'trendline' ? 'dash' : 'solid';
       p.lines.forEach(L => shapes.push({type:'line', x0:L[0], y0:L[1], x1:L[2], y1:L[3], line:{color:c, width:p.cat=='trendline'?1.5:2, dash}}));
       traces.push({type:'scatter', mode:'markers', x:p.pivots.map(q=>q.date), y:p.pivots.map(q=>q.price),

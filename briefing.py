@@ -187,6 +187,9 @@ def key_levels(r, df, state, price):
             continue
         if p["cat"] == "trendline" and p["status"] == "active":
             lv.append((p["lines"][0][3], p["type"].lower()))
+        elif p["cat"] == "range" and p["lines"]:
+            lv.append((p["lines"][0][3], "consolidation range top"))
+            lv.append((p["lines"][1][3], "consolidation range bottom"))
         elif p["cat"] in ("channel", "triangle") and p["lines"]:
             for L, side in zip(p["lines"], ("lower", "upper") if len(p["lines"]) == 2 else ("line",)):
                 lv.append((L[3], f"{p['type'].lower()} {side} line"))
