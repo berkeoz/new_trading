@@ -369,10 +369,39 @@ def analyze_symbol(ticker):
             today["analyst"]     = info.get("recommendationKey")
             today["target_px"]   = info.get("targetMeanPrice")
             today["wk52_chg"]    = info.get("52WeekChange")
+            # inputs for the value lists in Market Breakdown
+            today["quote_type"]  = info.get("quoteType")
+            today["name"]        = info.get("shortName")
+            today["roe"]         = info.get("returnOnEquity")
+            today["gross_m"]     = info.get("grossMargins")
+            today["op_m"]        = info.get("operatingMargins")
+            today["fcf"]         = info.get("freeCashflow")
+            today["de"]          = info.get("debtToEquity")
+            today["rec_mean"]    = info.get("recommendationMean")
+            today["n_analysts"]  = info.get("numberOfAnalystOpinions")
         except Exception:
             for k in ("mkt_cap","pe_trailing","pe_forward","eps_growth","rev_growth",
                       "beta","div_yield","sector","analyst","target_px","wk52_chg"):
                 today.setdefault(k, None)
+
+        # Value-list extras: distance from the 52-week high, RSI trend, capitulation
+        hi52 = float(high.iloc[-252:].max())
+        today["hi52"] = hi52
+        today["drawdown"] = float(close.iloc[-1]) / hi52 - 1 if hi52 else None
+        try:
+            today["rsi_5ago"] = float(rsi_s.iloc[-6])
+        except Exception:
+            today["rsi_5ago"] = None
+        today["capitulation"] = None
+        try:
+            import patterns as P
+            pdf = df.rename(columns=str.title)[["Open", "High", "Low", "Close", "Volume"]]
+            caps = [e for e in P.find_volume_events(pdf) if e["type"] == "Selling capitulation"
+                    and e["status"].startswith("confirmed") and e["i0"] >= len(pdf) - 30]
+            if caps:
+                today["capitulation"] = max(caps, key=lambda e: e["i0"])["start"]
+        except Exception:
+            pass
 
         # 90-day signal history
         n = len(df)
@@ -460,6 +489,121 @@ def _breakdown_card(r, horizon=""):
 </div>"""
 
 
+
+# ── Value lists: high-beta rebounds and quality growth below value ─────────────
+def _value_inputs(r):
+    """Reverse-DCF check for a candidate: growth implied by the price vs expected growth."""
+    try:
+        import valuation as V
+        v = V.valuation(r["symbol"])
+        ig, gb = v.get("implied_growth"), (v.get("inputs") or {}).get("growth_base")
+        return {"implied": ig, "expected": gb, "flags": v.get("flags", [])}
+    except Exception:
+        return {}
+
+
+def _pct(x, d=0):
+    return "—" if x is None else f"{x * 100:+.{d}f}%"
+
+
+def _rebound_score(r, val):
+    """High-beta rebound conviction (0-100) with the reasons behind it."""
+    pts, why = 0.0, []
+    up = r["_upside"]
+    pts += min(up, 0.6) / 0.6 * 30
+    why.append(f"analyst target {r['target_px']:.2f} is {_pct(up)} above the price")
+    rm, na = r.get("rec_mean"), r.get("n_analysts") or 0
+    if rm:
+        a = 20 if rm <= 1.5 else 15 if rm <= 2.0 else 8 if rm <= 2.5 else 0
+        pts += a * (1 if na >= 10 else 0.6)
+        if a: why.append(f"consensus {rm:.1f}/5 (1 = strong buy) from {na} analysts")
+    if (r.get("fcf") or 0) > 0:
+        pts += 10; why.append("positive free cash flow")
+    if r.get("de") is not None and r["de"] < 100:
+        pts += 5; why.append(f"debt/equity {r['de']:.0f}%")
+    if (r.get("op_m") or 0) > 0.10:
+        pts += 5
+    if val.get("implied") is not None and val.get("expected") is not None and val["implied"] < val["expected"]:
+        pts += 10; why.append(f"price implies {_pct(val['implied'])}/yr growth vs ~{_pct(val['expected'])} expected (reverse DCF)")
+    c, ma20 = r.get("close"), r.get("ma20")
+    if c and ma20 and c > ma20:
+        pts += 8; why.append("back above its 20-day average")
+    if r.get("rsi") and r.get("rsi_5ago") and r["rsi"] > r["rsi_5ago"] + 3 and r["rsi_5ago"] < 45:
+        pts += 7; why.append(f"RSI turning up ({r['rsi_5ago']:.0f} → {r['rsi']:.0f})")
+    if r.get("capitulation"):
+        pts += 10; why.append(f"confirmed selling capitulation {r['capitulation']}")
+    return min(round(pts), 100), why
+
+
+def _quality_score(r, val):
+    """Quality-growth-at-a-discount conviction (0-100) with reasons."""
+    pts, why = 0.0, []
+    roe, gm, om = r.get("roe") or 0, r.get("gross_m") or 0, r.get("op_m") or 0
+    pts += min(roe, 0.40) / 0.40 * 12 + min(gm, 0.80) / 0.80 * 11 + min(om, 0.45) / 0.45 * 12
+    why.append(f"ROE {roe * 100:.0f}%, gross margin {gm * 100:.0f}%, operating margin {om * 100:.0f}%")
+    rg, eg = r.get("rev_growth") or 0, r.get("eps_growth") or 0
+    pts += min(max(rg, 0), 0.50) / 0.50 * 13 + min(max(eg, 0), 0.60) / 0.60 * 12
+    why.append(f"revenue {_pct(rg)}, earnings {_pct(eg)} year on year")
+    dd, up = r.get("drawdown") or 0, r["_upside"]
+    pts += min(-dd, 0.40) / 0.40 * 12 + min(max(up, 0), 0.40) / 0.40 * 13
+    why.append(f"{_pct(dd)} from the 52-week high {r['hi52']:.2f}; analyst target {_pct(up)} away")
+    if val.get("implied") is not None and val.get("expected") is not None and val["implied"] < val["expected"]:
+        pts += 10; why.append(f"price implies {_pct(val['implied'])}/yr growth vs ~{_pct(val['expected'])} expected (reverse DCF)")
+    c, ma20 = r.get("close"), r.get("ma20")
+    if c and ma20 and c > ma20:
+        pts += 5; why.append("back above its 20-day average")
+    if r.get("capitulation"):
+        why.append(f"confirmed selling capitulation {r['capitulation']}")
+    return min(round(pts), 100), why
+
+
+def _value_card(r, score, why, val):
+    col = "var(--green)" if score >= 70 else "var(--amber)" if score >= 50 else "var(--red)"
+    tgt = r.get("target_px")
+    items = "".join(f"<li>{w}</li>" for w in why)
+    # show only data-quality warnings, not the routine "growth was capped" note
+    flag = "".join(f'<div class="bd-flag">⚠ {f}</div>' for f in (val.get("flags") or []) if "capped" not in f)
+    return f"""<div class="bd-card">
+  <div class="bd-top"><span class="bd-ticker">{r['symbol']}</span><span style="font-size:11px;color:var(--muted);margin-left:6px">{(r.get('name') or '')[:22]}</span></div>
+  <div class="bd-bar-row"><div class="bd-bar-out"><div class="bd-bar-in" style="width:{score}%;background:{col}"></div></div><span class="bd-score">{score}/100</span></div>
+  <div class="bd-metrics">
+    <div class="bd-m"><span class="bd-ml">Price</span><span class="bd-mv">{r['close']:.2f}</span></div>
+    <div class="bd-m"><span class="bd-ml">From high</span><span class="bd-mv" style="color:var(--red)">{_pct(r.get('drawdown'))}</span></div>
+    <div class="bd-m"><span class="bd-ml">Target</span><span class="bd-mv">{tgt:.2f}</span></div>
+    <div class="bd-m"><span class="bd-ml">Beta</span><span class="bd-mv">{(r.get('beta') or 0):.2f}</span></div>
+  </div>
+  <ul class="bd-why">{items}</ul>{flag}
+</div>"""
+
+
+def _build_value_lists(results, _section):
+    stocks = [dict(r) for r in results if not r.get("error") and r.get("quote_type") == "EQUITY"
+              and r.get("close") and r.get("target_px")]
+    for r in stocks:
+        r["_upside"] = r["target_px"] / r["close"] - 1
+    reb = [r for r in stocks if (r.get("beta") or 0) >= 1.5 and (r.get("drawdown") or 0) <= -0.15
+           and r["_upside"] >= 0.15 and ((r.get("fcf") or 0) > 0 or (r.get("op_m") or 0) > 0)]
+    qual = [r for r in stocks if (r.get("roe") or 0) >= 0.15 and (r.get("gross_m") or 0) >= 0.40
+            and (r.get("op_m") or 0) >= 0.15 and (r.get("fcf") or 0) > 0
+            and max(r.get("rev_growth") or 0, r.get("eps_growth") or 0) >= 0.15
+            and ((r.get("drawdown") or 0) <= -0.10 or r["_upside"] >= 0.15)]
+    vals = {r["symbol"]: _value_inputs(r) for r in {x["symbol"]: x for x in reb + qual}.values()}
+    reb = sorted(((r, *_rebound_score(r, vals[r["symbol"]])) for r in reb), key=lambda t: -t[1])[:8]
+    qual = sorted(((r, *_quality_score(r, vals[r["symbol"]])) for r in qual), key=lambda t: -t[1])[:8]
+    none = "<p style='color:var(--muted);font-size:13px'>No stock in the scanner list passes these filters today.</p>"
+    r_html = "".join(_value_card(r, sc, why, vals[r["symbol"]]) for r, sc, why in reb) or none
+    q_html = "".join(_value_card(r, sc, why, vals[r["symbol"]]) for r, sc, why in qual) or none
+    note = ("<p class='bd-note'>Screens over the scanner's stock list (ETFs excluded), rebuilt daily. "
+            "\"Value\" here means the analyst mean target and the reverse DCF (growth priced in vs expected); "
+            "the score ranks how many of the reasons line up. These are candidates for a recovery, not a promise of one, "
+            "and not investment advice.</p>")
+    s5 = _section("🎯", "High-Beta Rebound Candidates", "Beta ≥1.5 · ≥15% below 52w high · target ≥15% above · profitable",
+                  r_html, "#38bdf8", [("Weeks", "#a78bfa"), ("Months", "#f59e0b")])
+    s6 = _section("💎", "Quality Growth Below Value", "ROE ≥15% · margins · FCF+ · growth ≥15% · trading at a discount",
+                  q_html, "#22c55e", [("Months", "#f59e0b"), ("Year", "#10b981")])
+    return note + s5 + s6
+
+
 def _build_breakdown(results):
     ok = [r for r in results if not r.get("error") and r.get("entry_signal") in ("BUY","WATCH")]
 
@@ -530,7 +674,7 @@ def _build_breakdown(results):
     s3 = _section("🚀", "High Momentum / Max Return",   "Beta &gt;1.5 or Rev growth &gt;40%",            m_html, "#f43f5e", [("Days","#60a5fa"),("Weeks","#a78bfa")])
     s4 = _section("👁", "Watchlist — One Signal Away",  "WATCH · analyst buy · &gt;20% upside",          w_html, "#a78bfa", [("Weeks","#a78bfa"),("Months","#f59e0b")])
 
-    return s1 + s2 + s3 + s4
+    return s1 + s2 + s3 + s4 + _build_value_lists(results, _section)
 
 
 # ── HTML ───────────────────────────────────────────────────────────────────────
@@ -663,6 +807,9 @@ canvas.spark{{width:100%;height:36px}}
 .card-ph{{opacity:.6}}
 /* Breakdown tab */
 #p-breakdown{{padding:16px 0}}
+.bd-why{{margin:6px 0 0;padding-left:16px;font-size:11.5px;color:var(--muted);line-height:1.45}}
+.bd-flag{{font-size:11px;color:var(--amber);margin-top:4px}}
+.bd-note{{font-size:12px;color:var(--muted);margin:22px 0 4px}}
 .bd-section{{margin-bottom:36px}}
 .bd-sec-hdr{{display:flex;align-items:center;gap:10px;padding-bottom:10px;
   border-bottom:2px solid var(--border);margin-bottom:12px}}
