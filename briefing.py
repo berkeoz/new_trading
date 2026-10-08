@@ -19,7 +19,7 @@ Usage:
     python briefing.py --index               # rebuild briefs/index.json
 """
 
-import os, sys, json, glob, argparse
+import os, re, sys, json, glob, argparse
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
@@ -234,6 +234,13 @@ def _live_price(sym):
         return None
 
 
+def _days_since_status(p, asof):
+    """Days between the date in a pattern's status (e.g. "broke up 2026-09-21",
+    "confirmed 2026-09-21 (...)") and asof; a large number if it has no date."""
+    m = re.search(r"\d{4}-\d{2}-\d{2}", p["status"])
+    return (pd.Timestamp(asof[:10]) - pd.Timestamp(m.group(0))).days if m else 10 ** 6
+
+
 def _today_5m(sym):
     try:
         h = yf.Ticker(sym).history(period="1d", interval="5m")
@@ -277,9 +284,8 @@ def ticker_snapshot(sym, spy=None):
                            for p in d["patterns"] if p["cat"] in ("volume", "candle") and not p["open"]
                            and (pd.Timestamp(d["asof"]) - pd.Timestamp(p["start"][:10])).days <= 10][:6],
         "recent_breaks": [{k: p[k] for k in ("type", "bias", "status", "target")}
-                          for p in d["patterns"] if not p["open"] and
-                          (pd.Timestamp(d["asof"]) - pd.Timestamp(p["status"].split()[-1][:10])).days <= 15
-                          if p["status"].split()[-1][:4].isdigit()][:6],
+                          for p in d["patterns"] if not p["open"] and p["cat"] not in ("volume", "candle")
+                          and _days_since_status(p, d["asof"]) <= 15][:6],
     }
     if spy is not None and sym != "SPY":   # relative strength vs the S&P 500
         out["vs_spy_pct"] = {k: round(out[f"change_{k}_pct"] - spy[f"change_{k}_pct"], 2) for k in ("1d", "5d", "1m")}
