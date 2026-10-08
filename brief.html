@@ -1,0 +1,95 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Market Brief</title>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--fg:#e6e6e6;--mute:#8a93a5;--bull:#26a69a;--bear:#ef5350;--neu:#f5b041;--line:#2a2f3a;--acc:#5c8dff}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 system-ui,Segoe UI,sans-serif}
+main{max-width:1100px;margin:auto;padding:16px}
+a{color:var(--acc)}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+h1{font-size:21px;margin:4px 0}
+.sub{color:var(--mute);font-size:12px}
+select{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font:inherit}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:16px 0}
+#brief h1{font-size:20px} #brief h2{font-size:17px;margin:22px 0 6px;border-bottom:1px solid var(--line);padding-bottom:4px} #brief h3{font-size:15px;margin:16px 0 4px}
+#brief table,.snap table{border-collapse:collapse;font-size:13px;width:100%;margin:6px 0}
+#brief th,#brief td,.snap th,.snap td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}
+#brief th,.snap th{color:var(--mute);font-weight:500}
+#brief code{background:#232836;padding:1px 4px;border-radius:4px}
+.wrap{overflow-x:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px}
+.tk{border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.tk h3{margin:0 0 4px;font-size:16px}
+.pos{color:var(--bull)} .negv{color:var(--bear)}
+.Bullish,.Turning.bullish{color:var(--bull)} .Bearish,.Turning.bearish{color:var(--bear)}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;background:#232836;font-size:12px;margin-right:4px}
+.lvl{font-size:13px;margin:2px 0}
+.empty{color:var(--mute);padding:30px;text-align:center}
+</style></head><body><main>
+<div class="top">
+  <div><h1>Market Brief</h1>
+  <div class="sub">Written twice a day (9:15 and 15:45 ET) from market data, chart levels and news. Not investment advice.</div></div>
+  <div><a href="/patterns">Chart formations</a> · <a href="/">Daily signals</a></div>
+</div>
+<p><select id="pick" aria-label="Choose a brief"></select></p>
+<section id="brief"><div class="empty">Loading…</div></section>
+<section class="snap" id="snap" hidden></section>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sign = (v, u = '%') => v == null ? '–' : `<span class="${v > 0 ? 'pos' : v < 0 ? 'negv' : ''}">${v > 0 ? '+' : ''}${v}${u}</span>`;
+const vcls = v => esc(v || '').split(',')[0];
+
+async function load(id) {
+  $('#brief').innerHTML = '<div class="empty">Loading…</div>';
+  const [md, js] = await Promise.all([
+    fetch(`briefs/${id}.md`).then(r => r.ok ? r.text() : ''),
+    fetch(`briefs/${id}.json`).then(r => r.ok ? r.json() : null)]);
+  $('#brief').innerHTML = md ? DOMPurify.sanitize(marked.parse(md)) : '<div class="empty">Brief text not found.</div>';
+  $('#brief').querySelectorAll('table').forEach(t => { const w = document.createElement('div'); w.className = 'wrap'; t.replaceWith(w); w.appendChild(t); });
+  $('#brief').querySelectorAll('a').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
+  renderSnap(js);
+  try { history.replaceState(null, '', '#' + id); } catch (e) {}
+}
+
+function renderSnap(d) {
+  const el = $('#snap');
+  if (!d) { el.hidden = true; return; }
+  el.hidden = false;
+  const ctx = d.context.map(c => c.error ? `<tr><td>${esc(c.label)}</td><td colspan="5" class="sub">n/a</td></tr>` :
+    `<tr><td>${esc(c.label)}</td><td class="sub">${esc(c.group)}</td><td>${c.last}${c.kind == 'yield' ? '%' : ''}</td>
+     <td>${sign(c.chg_1d, c.unit)}</td><td>${sign(c.chg_5d, c.unit)}</td><td>${sign(c.chg_1m, c.unit)}</td></tr>`).join('');
+  const tk = d.tickers.map(t => {
+    if (t.error) return `<div class="tk"><h3>${esc(t.symbol)}</h3><div class="sub">${esc(t.error)}</div></div>`;
+    const dd = t.daily, h4 = t.h4 || {};
+    const lv = (arr, cls) => arr.map(x => `<div class="lvl"><b class="${cls}">${x.price}</b> <span class="sub">${sign(x.distance_pct)}</span> ${esc(x.what)}</div>`).join('') || '<div class="sub">none within 12%</div>';
+    return `<div class="tk"><h3>${esc(t.symbol)} <span class="sub">${t.last_close} (${esc(t.last_close_date)}) ${sign(t.change_1d_pct)} · 5d ${sign(t.change_5d_pct)} · 1m ${sign(t.change_1m_pct)}</span></h3>
+      ${t.live ? `<div class="sub">latest ${t.live.price} at ${esc(t.live.time_et)} ET</div>` : ''}
+      <div><span class="pill">Daily <b class="${vcls(dd.verdict)}">${esc(dd.verdict)}</b> ${dd.score}</span>
+           <span class="pill">4H <b class="${vcls(h4.verdict)}">${esc(h4.verdict || '–')}</b> ${h4.score ?? ''}</span></div>
+      <div class="sub" style="margin:4px 0">RSI ${dd.rsi14} (5 bars ago ${dd.rsi14_5_bars_ago}) · MACD hist ${dd.macd.hist} (prev ${dd.macd.hist_prev})${t.session && t.session.vwap ? ` · session VWAP ${t.session.vwap}` : ''}</div>
+      <div class="sub" style="margin-top:6px">Resistance</div>${lv(t.levels.resistances.slice().reverse(), 'negv')}
+      <div class="sub" style="margin-top:6px">Support</div>${lv(t.levels.supports, 'pos')}
+      ${t.open_patterns.length ? `<div class="sub" style="margin-top:6px">Open patterns</div>` + t.open_patterns.map(p => `<div class="lvl">${esc(p.type)} <span class="sub">${esc(p.status)}${p.target ? ', target ' + p.target : ''}</span></div>`).join('') : ''}
+    </div>`;
+  }).join('');
+  el.innerHTML = `<h2 style="margin-top:0;font-size:17px">Data snapshot <span class="sub">${esc(d.generated_et)} ET</span></h2>
+    <div class="grid">${tk}</div>
+    <h3 style="font-size:15px">Cross-asset</h3>
+    <div class="wrap"><table><tr><th>Market</th><th></th><th>Last</th><th>1 day</th><th>5 days</th><th>1 month</th></tr>${ctx}</table></div>`;
+}
+
+fetch('briefs/index.json').then(r => r.ok ? r.json() : {briefs: []}).catch(() => ({briefs: []})).then(ix => {
+  const list = ix.briefs || [];
+  if (!list.length) { $('#brief').innerHTML = '<div class="empty">No briefs yet. The first one appears after the next 9:15 or 15:45 ET run.</div>'; return; }
+  $('#pick').innerHTML = list.map(b => `<option value="${esc(b.id)}">${esc(b.title || b.id)}</option>`).join('');
+  const want = location.hash.slice(1);
+  const id = list.some(b => b.id == want) ? want : list[0].id;
+  $('#pick').value = id;
+  $('#pick').onchange = () => load($('#pick').value);
+  load(id);
+});
+</script></body></html>

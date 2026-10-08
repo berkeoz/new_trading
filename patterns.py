@@ -50,7 +50,7 @@ def ts(t):
 
 
 # ── Data ───────────────────────────────────────────────────────────────────────
-def load_prices(sym, period="2y", refresh=False, interval="1d"):
+def load_prices(sym, period="2y", refresh=False, interval="1d", fill_today=False):
     """OHLCV in exchange-local time, cached per symbol+interval+period.
     Daily cache is reused for the same calendar day, intraday cache for 15 minutes.
     2h / 4h bars are built from hourly bars, starting at each session's open."""
@@ -61,7 +61,8 @@ def load_prices(sym, period="2y", refresh=False, interval="1d"):
     df = None
     if not refresh and os.path.exists(path):
         mt = os.path.getmtime(path)
-        fresh = date.fromtimestamp(mt) == date.today() if daily else datetime.now().timestamp() - mt < 900
+        age = datetime.now().timestamp() - mt
+        fresh = (date.fromtimestamp(mt) == date.today() and age < 3600) if daily else age < 900
         if fresh:
             df = pd.read_csv(path, index_col=0, parse_dates=True)
     if df is None:
@@ -71,11 +72,31 @@ def load_prices(sym, period="2y", refresh=False, interval="1d"):
         df = df[["Open", "High", "Low", "Close", "Volume"]].dropna()
         df.index = df.index.tz_localize(None)
         df.to_csv(path)
+    if daily and fill_today:
+        df = _append_today(df, sym)
     if interval in ("2h", "4h"):
         df = _session_bars(df, int(interval[0]))
     if len(df) < 60:
         raise ValueError(f"only {len(df)} bars of data for {sym}")
     return df
+
+
+def _append_today(df, sym):
+    """Yahoo's daily bar for the current session is often missing or empty until
+    well after the close; build it from today's regular-hours 5-minute bars."""
+    try:
+        h = yf.Ticker(sym).history(period="1d", interval="5m")
+    except Exception:
+        return df
+    if h.empty:
+        return df
+    h.index = h.index.tz_localize(None)
+    day = h.index[-1].normalize()
+    if len(df) and df.index[-1] >= day:
+        return df
+    row = pd.DataFrame({"Open": [h["Open"].iloc[0]], "High": [h["High"].max()], "Low": [h["Low"].min()],
+                        "Close": [h["Close"].iloc[-1]], "Volume": [h["Volume"].sum()]}, index=[day])
+    return pd.concat([df, row])
 
 
 def _session_bars(df, hours):
@@ -489,7 +510,7 @@ def find_levels(piv, price, tol, min_touches=3):
 
 
 # ── Analysis per symbol ────────────────────────────────────────────────────────
-def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval="1d"):
+def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval="1d", fill_today=False):
     daily = interval == "1d"
     note = ""
     if not daily and MONTHS[period] > MONTHS[INTRADAY_MAX[interval]]:
@@ -497,7 +518,7 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval=
         period = INTRADAY_MAX[interval]
     # download a longer period so moving averages (up to 200+ bars) are already
     # warmed up at the start of the chart; patterns use only the requested period
-    full = load_prices(sym, WARMUP_PERIOD[period] if daily else None, refresh, interval)
+    full = load_prices(sym, WARMUP_PERIOD[period] if daily else None, refresh, interval, fill_today)
     start = full.index[-1] - pd.DateOffset(months=MONTHS[period])
     df = full[full.index > start]
     warm = full[full.index <= start].tail(300)
@@ -585,7 +606,7 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 <div class="top">
   <div><h1>Chart Formations</h1>
   <div class="sub">Generated __GEN__ · swing-pivot pattern detection · mechanical candidates, not trade advice. Click a table row to zoom.</div></div>
-  <a href="/">&larr; Daily signals</a>
+  <div><a href="/brief">Market brief</a> · <a href="/">Daily signals</a></div>
 </div>
 <form class="lookup" id="lookup">
   <input id="sym" placeholder="Ticker, e.g. NVDA" autocomplete="off" spellcheck="false" required>
