@@ -12,6 +12,7 @@ Detects (from zigzag swing pivots):
 Usage:
     python patterns.py                      # QQQ, SPY, SOXX, 2 years -> patterns.html
     python patterns.py NVDA SMH --period 5y
+    python patterns.py QQQ --interval 4h --period 1y
     python patterns.py QQQ --pct 4          # fixed 4% zigzag swing instead of auto
     python patterns.py QQQ --refresh        # ignore cached prices
     python patterns.py QQQ --all            # include failed / expired patterns
@@ -34,27 +35,59 @@ ROOT     = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = "/tmp/data" if os.environ.get("VERCEL") else os.path.join(ROOT, "data")
 REPORT   = os.path.join(ROOT, "patterns.html")
 DEFAULT_SYMBOLS = ["QQQ", "SPY", "SOXX"]
-PERIODS  = ("6mo", "1y", "2y", "5y", "10y")
-WARMUP_PERIOD = {"6mo": "2y", "1y": "2y", "2y": "5y", "5y": "10y", "10y": "max"}
+PERIODS  = ("1mo", "3mo", "6mo", "1y", "2y", "5y", "10y")
+MONTHS   = {"1mo": 1, "3mo": 3, "6mo": 6, "1y": 12, "2y": 24, "5y": 60, "10y": 120}
+WARMUP_PERIOD = {"1mo": "2y", "3mo": "2y", "6mo": "2y", "1y": "2y", "2y": "5y", "5y": "10y", "10y": "max"}
+INTERVALS = ("1d", "4h", "2h", "1h")
+# Yahoo keeps ~730 days of hourly bars; cap the window so charts stay responsive
+INTRADAY_MAX = {"1h": "6mo", "2h": "1y", "4h": "2y"}
+BARS_PER_DAY = {"1d": 1, "4h": 2, "2h": 4, "1h": 7}
+
+
+def ts(t):
+    """Timestamp label: date for daily bars, date + time for intraday bars."""
+    return t.strftime("%Y-%m-%d") if (t.hour, t.minute) == (0, 0) else t.strftime("%Y-%m-%d %H:%M")
 
 
 # ── Data ───────────────────────────────────────────────────────────────────────
-def load_prices(sym, period="2y", refresh=False):
-    """Daily OHLCV, cached per symbol+period; re-downloaded if cache is from an earlier day."""
+def load_prices(sym, period="2y", refresh=False, interval="1d"):
+    """OHLCV in exchange-local time, cached per symbol+interval+period.
+    Daily cache is reused for the same calendar day, intraday cache for 15 minutes.
+    2h / 4h bars are built from hourly bars, starting at each session's open."""
     os.makedirs(DATA_DIR, exist_ok=True)
-    path = os.path.join(DATA_DIR, f"{sym}_{period}.csv")
+    daily = interval == "1d"
+    fetch_int, fetch_per = ("1d", period) if daily else ("60m", "730d")
+    path = os.path.join(DATA_DIR, f"{sym}_{fetch_int}_{fetch_per}.csv")
+    df = None
     if not refresh and os.path.exists(path):
-        if date.fromtimestamp(os.path.getmtime(path)) == date.today():
-            return pd.read_csv(path, index_col=0, parse_dates=True)
-    df = yf.Ticker(sym).history(period=period, interval="1d", auto_adjust=True)
-    if df.empty:
-        raise ValueError(f"no price data for {sym}")
-    df = df[["Open", "High", "Low", "Close", "Volume"]].dropna()
-    df.index = df.index.tz_localize(None)
+        mt = os.path.getmtime(path)
+        fresh = date.fromtimestamp(mt) == date.today() if daily else datetime.now().timestamp() - mt < 900
+        if fresh:
+            df = pd.read_csv(path, index_col=0, parse_dates=True)
+    if df is None:
+        df = yf.Ticker(sym).history(period=fetch_per, interval=fetch_int, auto_adjust=True)
+        if df.empty:
+            raise ValueError(f"no price data for {sym}")
+        df = df[["Open", "High", "Low", "Close", "Volume"]].dropna()
+        df.index = df.index.tz_localize(None)
+        df.to_csv(path)
+    if interval in ("2h", "4h"):
+        df = _session_bars(df, int(interval[0]))
     if len(df) < 60:
-        raise ValueError(f"only {len(df)} days of data for {sym}")
-    df.to_csv(path)
+        raise ValueError(f"only {len(df)} bars of data for {sym}")
     return df
+
+
+def _session_bars(df, hours):
+    """Combine hourly bars into `hours`-hour bars, counted from each day's first bar
+    (US stocks: 4h = 9:30-13:30 and 13:30-16:00, like most charting platforms)."""
+    t = df.index.to_series()
+    day = t.dt.normalize()
+    block = ((t - t.groupby(day).transform("min")).dt.total_seconds() // (hours * 3600)).astype(int)
+    g = df.assign(_t=t).groupby([day, block])
+    out = g.agg(Open=("Open", "first"), High=("High", "max"), Low=("Low", "min"),
+                Close=("Close", "last"), Volume=("Volume", "sum"), _t=("_t", "first"))
+    return out.set_index("_t").rename_axis(None)
 
 
 def atr_pct(df, period=14):
@@ -109,9 +142,9 @@ def _pattern(kind, cat, bias, pivots, df, status, lines, target=None, note=""):
         "type": kind, "cat": cat, "bias": bias, "status": status,
         "open": not (status.startswith("confirmed") or status.startswith("broke")
                      or status in ("failed", "expired")),
-        "start": str(d[pivots[0]["i"]].date()), "end": str(d[pivots[-1]["i"]].date()),
+        "start": ts(d[pivots[0]["i"]]), "end": ts(d[pivots[-1]["i"]]),
         "i0": int(pivots[0]["i"]), "i1": int(pivots[-1]["i"]),
-        "pivots": [{"date": str(d[p["i"]].date()), "price": round(p["price"], 2)} for p in pivots],
+        "pivots": [{"date": ts(d[p["i"]]), "price": round(p["price"], 2)} for p in pivots],
         "lines": lines,       # [[date0, price0, date1, price1], ...]
         "target": None if target is None else round(float(target), 2),
         "note": note,
@@ -119,7 +152,7 @@ def _pattern(kind, cat, bias, pivots, df, status, lines, target=None, note=""):
 
 
 def _seg(df, i0, p0, i1, p1):
-    return [str(df.index[i0].date()), round(float(p0), 2), str(df.index[i1].date()), round(float(p1), 2)]
+    return [ts(df.index[i0]), round(float(p0), 2), ts(df.index[i1]), round(float(p1), 2)]
 
 
 def _slope_word(m, price, flat):
@@ -145,7 +178,7 @@ def _resolve(df, i, neck, top, invalid, max_wait):
 
 def _status(df, outcome, k, running, what):
     if outcome == "confirmed":
-        return f"confirmed {df.index[k].date()}"
+        return f"confirmed {ts(df.index[k])}"
     if outcome == "open":
         return f"possible ({what} still forming)" if running else "forming (neckline not broken)"
     return outcome
@@ -212,7 +245,7 @@ def find_head_shoulders(df, piv, tol, min_bars=15):
             "Head & shoulders" if top else "Inverse head & shoulders", "reversal",
             "bearish" if top else "bullish", [ls, n1, hd, n2, rs], df, status,
             [_seg(df, ls["i"], neck(ls["i"]), end_i, neck(end_i))], target,
-            f"{rs['i']-ls['i']} bars, neckline slope {slope / neck(end_i) * 100:+.2f}%/day"))
+            f"{rs['i']-ls['i']} bars, neckline slope {slope / neck(end_i) * 100:+.2f}%/bar"))
     return out
 
 
@@ -271,7 +304,7 @@ def find_line_patterns(df, piv, tol, flat, window=5, min_bars=20):
                         if c[x] > upper(x) * (1 + tol / 3): k, d = x, "up"; break
                         if c[x] < lower(x) * (1 - tol / 3): k, d = x, "down"; break
                     if k is not None:
-                        status, end_i = f"broke {d} {df.index[k].date()}", k
+                        status, end_i = f"broke {d} {ts(df.index[k])}", k
                     elif last - i1 > max_wait:
                         status, end_i = "expired", i1 + max_wait
                     else:
@@ -292,7 +325,7 @@ def find_line_patterns(df, piv, tol, flat, window=5, min_bars=20):
                     out.append(_pattern(name, cat, bias, w, df, status,
                         [_seg(df, i0, upper(i0), end_i, upper(end_i)),
                          _seg(df, i0, lower(i0), end_i, lower(end_i))], target,
-                        f"{i1-i0} bars, upper {mu/price*100:+.2f}%/day, lower {ml/price*100:+.2f}%/day"))
+                        f"{i1-i0} bars, upper {mu/price*100:+.2f}%/bar, lower {ml/price*100:+.2f}%/bar"))
                     ok = True
         j = j - (window - 1) if ok else j - 1
     return out
@@ -360,7 +393,7 @@ def find_trendlines(df, piv, tol, flat, cands=None, limit=8):
         bias = ("bullish" if word == "rising" else "neutral") if t["support"] \
             else ("bearish" if word == "falling" else "neutral")
         if t["brk"] is not None:
-            status = f"broke {'down' if t['support'] else 'up'} {df.index[t['brk']].date()}"
+            status = f"broke {'down' if t['support'] else 'up'} {ts(df.index[t['brk']])}"
         elif abs(df["Close"].iloc[-1] - line(t["end"])) / df["Close"].iloc[-1] > 0.15:
             status = "expired"                   # never broken, but price has moved far away
         else:
@@ -368,7 +401,7 @@ def find_trendlines(df, piv, tol, flat, cands=None, limit=8):
         out.append(_pattern(
             f"{word.capitalize()} {role} trendline", "trendline", bias, tch, df, status,
             [_seg(df, tch[0]["i"], line(tch[0]["i"]), t["end"], line(t["end"]))], None,
-            f"{len(tch)} touches over {tch[-1]['i']-tch[0]['i']} bars, {m/p['price']*100:+.2f}%/day"
+            f"{len(tch)} touches over {tch[-1]['i']-tch[0]['i']} bars, {m/p['price']*100:+.2f}%/bar"
             + (f", now at {line(t['end']):.2f}" if t["brk"] is None else "")))
     return out
 
@@ -422,7 +455,7 @@ def find_parallel_channels(df, piv, tol, flat, cands, limit=4):
         end = f["brk"] if f["brk"] is not None else n - 1
         word = _slope_word(m, p["price"], flat)
         bias = {"rising": "bullish", "falling": "bearish"}.get(word, "neutral")
-        status = f"broke {f['dir']} {df.index[f['brk']].date()}" if f["brk"] is not None else "active"
+        status = f"broke {f['dir']} {ts(df.index[f['brk']])}" if f["brk"] is not None else "active"
         lo_off, hi_off = (0, off) if t["support"] else (off, 0)
         width = abs(off) / line(end) * 100
         out.append(_pattern(
@@ -430,7 +463,7 @@ def find_parallel_channels(df, piv, tol, flat, cands, limit=4):
             [_seg(df, i0, line(i0) + lo_off, end, line(end) + lo_off),
              _seg(df, i0, line(i0) + hi_off, end, line(end) + hi_off)], None,
             f"{len(t['touches'])}+{len(f['ptch'])} touches, width {width:.1f}%, "
-            f"{m/p['price']*100:+.2f}%/day"
+            f"{m/p['price']*100:+.2f}%/bar"
             + (f", now {line(end)+lo_off:.2f}-{line(end)+hi_off:.2f}" if f["brk"] is None else "")))
         if len(out) >= limit:
             break
@@ -456,18 +489,23 @@ def find_levels(piv, price, tol, min_touches=3):
 
 
 # ── Analysis per symbol ────────────────────────────────────────────────────────
-def analyze(sym, period="2y", pct=None, refresh=False, show_all=False):
-    # download a longer period so moving averages (up to 200+ days) are already
+def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval="1d"):
+    daily = interval == "1d"
+    note = ""
+    if not daily and MONTHS[period] > MONTHS[INTRADAY_MAX[interval]]:
+        note = f"{interval} charts are limited to {INTRADAY_MAX[interval]} (Yahoo keeps ~2 years of hourly data)"
+        period = INTRADAY_MAX[interval]
+    # download a longer period so moving averages (up to 200+ bars) are already
     # warmed up at the start of the chart; patterns use only the requested period
-    full = load_prices(sym, WARMUP_PERIOD[period], refresh)
-    months = 6 if period == "6mo" else 12 * int(period[:-1])
-    start = full.index[-1] - pd.DateOffset(months=months)
+    full = load_prices(sym, WARMUP_PERIOD[period] if daily else None, refresh, interval)
+    start = full.index[-1] - pd.DateOffset(months=MONTHS[period])
     df = full[full.index > start]
-    warm = full["Close"][full.index <= start].tail(300).round(2).tolist()
+    warm = full[full.index <= start].tail(300)
     a = atr_pct(df)
-    swing = pct / 100 if pct else max(0.03, round(2.5 * a, 3))
-    tol = max(0.015, swing * 0.4)        # "equal" price tolerance
-    flat = 0.0004                        # |slope| < 0.04%/day counts as flat
+    bpd = BARS_PER_DAY[interval]
+    swing = pct / 100 if pct else max(0.03 if daily else 0.01, round(2.5 * a, 3))
+    tol = max(0.015 if daily else 0.006, swing * 0.4)   # "equal" price tolerance
+    flat = 0.0004 / bpd                  # |slope| < 0.04%/bar counts as flat
     piv = zigzag(df, swing)
     tl_cands = _trendline_candidates(df, piv, tol)
     pats = (find_double(df, piv, tol) + find_head_shoulders(df, piv, tol)
@@ -479,15 +517,17 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False):
     pats.sort(key=lambda p: p["i1"], reverse=True)
     price = float(df["Close"].iloc[-1])
     return {
-        "symbol": sym, "period": period, "price": round(price, 2), "asof": str(df.index[-1].date()),
+        "symbol": sym, "period": period, "interval": interval, "note": note,
+        "price": round(price, 2), "asof": ts(df.index[-1]),
         "atr_pct": round(a * 100, 2), "swing_pct": round(swing * 100, 1),
-        "pivots": [{"date": str(df.index[p["i"]].date()), "price": round(p["price"], 2),
+        "pivots": [{"date": ts(df.index[p["i"]]), "price": round(p["price"], 2),
                     "kind": p["kind"], "confirmed": p["confirmed"]} for p in piv],
         "patterns": pats,
         "levels": find_levels(piv, price, tol)[:6],
-        "warm": warm,   # closes before the chart window, for moving-average warm-up
+        "warm": warm["Close"].round(2).tolist(),   # closes before the window, for MA warm-up
         "ohlc": {
-            "x": [str(d.date()) for d in df.index],
+            "x": [ts(d) for d in df.index],
+            "volume": df["Volume"].astype(float).round(0).tolist(),
             "open": df["Open"].round(2).tolist(), "high": df["High"].round(2).tolist(),
             "low": df["Low"].round(2).tolist(), "close": df["Close"].round(2).tolist(),
         },
@@ -537,6 +577,10 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 .meter{height:6px;border-radius:3px;background:linear-gradient(90deg,#ef5350,#8a93a5,#26a69a);position:relative;margin:8px 0 4px}
 .meter i{position:absolute;top:-4px;width:3px;height:14px;background:#fff;border-radius:2px}
 .crosses{margin-top:6px;line-height:1.6}
+.ivs{display:inline-flex;gap:4px;margin-left:10px;vertical-align:2px}
+.ivs button{background:#232836;color:var(--mute);border:1px solid var(--line);border-radius:4px;padding:1px 7px;font:12px system-ui,Segoe UI,sans-serif;cursor:pointer}
+.ivs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.note{color:var(--neu);font-size:12px}
 </style></head><body><main>
 <div class="top">
   <div><h1>Chart Formations</h1>
@@ -546,6 +590,7 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 <form class="lookup" id="lookup">
   <input id="sym" placeholder="Ticker, e.g. NVDA" autocomplete="off" spellcheck="false" required>
   <select id="per">__PERIODS__</select>
+  <select id="iv"><option value="1d">1D</option><option value="4h">4H</option><option value="2h">2H</option><option value="1h">1H</option></select>
   <button id="go">Analyze</button>
   <span id="msg" class="sub"></span>
 </form>
@@ -602,16 +647,52 @@ function ema(c, n) {
   for (let i = n; i < c.length; i++) { v = c[i] * k + v * (1 - k); out[i] = v; }
   return out;
 }
-function parseMA(txt) {   // "EMA9, SMA 50, MA200" -> [{kind, n, name}], sorted fast -> slow
+function wma(c, n) {   // linearly weighted: newest bar weight n, oldest weight 1
+  const out = Array(c.length).fill(null), den = n * (n + 1) / 2;
+  for (let i = n - 1; i < c.length; i++) {
+    let s = 0; for (let k = 0; k < n; k++) s += c[i - k] * (n - k);
+    out[i] = s / den;
+  }
+  return out;
+}
+function hma(c, n) {   // Hull: WMA(2*WMA(n/2) - WMA(n), sqrt(n))
+  const a = wma(c, Math.max(1, Math.round(n / 2))), b = wma(c, n);
+  const first = b.findIndex(v => v != null), out = Array(c.length).fill(null);
+  if (first < 0) return out;
+  const d = [];
+  for (let i = first; i < c.length; i++) d.push(2 * a[i] - b[i]);
+  wma(d, Math.max(1, Math.round(Math.sqrt(n)))).forEach((v, k) => out[first + k] = v);
+  return out;
+}
+const MA_FN = {EMA: ema, SMA: sma, WMA: wma, HMA: hma};
+function vwapFrom(o, i0, session) {   // cumulative typical-price x volume / volume
+  const out = Array(o.close.length).fill(null);
+  let pv = 0, vv = 0, day = null;
+  for (let i = Math.max(i0, 0); i < o.close.length; i++) {
+    if (session && o.x[i].slice(0, 10) != day) { day = o.x[i].slice(0, 10); pv = 0; vv = 0; }
+    const v = o.volume ? o.volume[i] : 0;
+    pv += (o.high[i] + o.low[i] + o.close[i]) / 3 * v; vv += v;
+    out[i] = vv > 0 ? pv / vv : null;
+  }
+  return out;
+}
+function parseVwap(txt) {
+  return {session: /(^|[^A-Z])VWAP(?!\s*\d)/i.test(txt),
+          anchors: [...txt.matchAll(/AVWAP\s*(\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2})?)/gi)].map(m => m[1].replace('T', ' ')).slice(0, 4)};
+}
+const parseTs = x => Date.parse(x.length > 10 ? x.replace(' ', 'T') + ':00Z' : x + 'T00:00:00Z');
+const tsStr = ms => new Date(ms).toISOString().replace('T', ' ').slice(0, 16);
+const EXTRA_COLORS = ['#f48fb1','#aed581','#80deea','#ffcc80','#ce93d8'];
+function parseMA(txt) {   // "EMA9, SMA 50, WMA20, HMA55" -> [{kind, n, name}], sorted fast -> slow
   const seen = new Set(), out = [];
-  for (const m of txt.matchAll(/(EMA|SMA|MA)\s*(\d+)/gi)) {
-    const kind = m[1].toUpperCase() == 'EMA' ? 'EMA' : 'SMA', n = +m[2];
+  for (const m of txt.matchAll(/(EMA|SMA|WMA|HMA|MA)\s*(\d+)/gi)) {
+    const k = m[1].toUpperCase(), kind = k == 'MA' ? 'SMA' : k, n = +m[2];
     if (n < 2 || n > 400 || seen.has(kind + n)) continue;
     seen.add(kind + n); out.push({kind, n, name: kind + n});
   }
-  return out.sort((a, b) => a.n - b.n || (a.kind == 'EMA' ? -1 : 1)).slice(0, 6);
+  return out.sort((a, b) => a.n - b.n || a.kind.localeCompare(b.kind)).slice(0, 6);
 }
-const SLOPE_BARS = 5;     // slope = change of the MA over the last 5 trading days
+const SLOPE_BARS = 5;     // slope = change of the MA over the last 5 bars
 function verdict(sc, prev) {
   if (sc == null) return ['No data', 'neutral'];
   const d = prev == null ? 0 : sc - prev;
@@ -632,36 +713,57 @@ function render(r, prepend) {
   const n = seq++;
   const s = document.createElement('section');
   const open = r.patterns.filter(p => p.open).length;
-  s.innerHTML = `<div class="head"><h2>${r.symbol} <span class="sub">${r.price} · ${r.asof} · ${r.period} · ATR ${r.atr_pct}% · swing ${r.swing_pct}% · ${r.patterns.length} patterns (${open} open)</span></h2>
+  const IV = r.interval || '1d', daily = IV == '1d';
+  const unit = daily ? 'trading days' : 'bars', bu = daily ? 'd' : ' bars';
+  s.innerHTML = `<div class="head"><h2>${r.symbol} <span class="sub">${r.price} · ${r.asof} · ${IV.toUpperCase()} · ${r.period} · ATR ${r.atr_pct}%/bar · swing ${r.swing_pct}% · ${r.patterns.length} patterns (${open} open)</span>
+      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span></h2>
       ${prepend ? '<button class="x" title="Remove">&times;</button>' : ''}</div>
+    ${r.note ? `<div class="note">${r.note}</div>` : ''}
     <div>${r.levels.map(l => `<span class="lv ${l.role=='support'?'bullish':'bearish'}">${l.role} ${l.price} ×${l.touches}</span>`).join('')}</div>
     <div class="filters">${CATS.map(([k,t]) => `<label><input type="checkbox" data-cat="${k}" checked> ${t} </label>`).join('')}
       <label><input type="checkbox" data-opt="levels" checked> S/R levels</label>
-      <label>Show <select data-opt="show"><option value="recent">open + last 6 months</option><option value="open">open / active only</option><option value="all">all 2 years</option></select></label></div>
-    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated: up to 6 of EMA9, SMA50 …, plus RSI14 and MACD12/26/9">
+      <label>Show <select data-opt="show"><option value="recent">open + last 6 months</option><option value="open">open / active only</option><option value="all">all</option></select></label></div>
+    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated. Up to 6 of EMA9 / SMA50 / WMA20 / HMA55 (scored), plus VWAP (session, intraday), AVWAP 2025-04-07 (anchored; or Shift+click the chart), RSI14, MACD12/26/9">
       <label><input type="checkbox" class="ma-show" checked> lines</label>
       <label><input type="checkbox" class="ma-strip" checked> trend strip</label>
-      <span>· hover the chart to see the state on any day, click to pin it</span></div>
+      <span>· hover the chart to see the state on any bar, click to pin it, Shift+click to anchor a VWAP there</span></div>
     <div class="state"></div>
     <div class="chart"></div>
     <div class="wrap"><table><thead><tr><th>Pattern</th><th>Bias</th><th>From</th><th>To</th><th>Status</th><th>Target</th><th>Detail</th></tr></thead><tbody></tbody></table></div>`;
   prepend ? root.prepend(s) : root.appendChild(s);
   const div = s.querySelector('.chart'), tbody = s.querySelector('tbody');
   const boxes = [...s.querySelectorAll('.filters input, .filters select')];
-  const cutoff = new Date(new Date(r.asof) - 183*864e5);
-  const lastDate = p => new Date(Math.max(+new Date(p.end), ...p.lines.map(L => +new Date(L[2]))));
+  const T0 = parseTs(r.ohlc.x[0]), T1 = parseTs(r.ohlc.x[r.ohlc.x.length - 1]);
+  const cutoff = T1 - (daily ? 183 * 864e5 : (T1 - T0) / 3);   // "recent" window
+  const lastDate = p => Math.max(parseTs(p.end), ...p.lines.map(L => parseTs(L[2])));
+  s.querySelectorAll('.ivs button').forEach(b => b.onclick = () => {
+    const v = b.dataset.iv;
+    lookup(r.symbol, v == '1d' ? '2y' : {'4h': '1y', '2h': '6mo', '1h': '3mo'}[v], v);
+  });
   if (prepend) s.querySelector('.x').onclick = () => { Plotly.purge(div); s.remove(); };
 
   const C = r.ohlc.close, D = r.ohlc.x, last = C.length - 1;
-  const idx = Object.fromEntries(D.map((d, i) => [d, i]));
+  const TS = D.map(parseTs);
   const cfgIn = s.querySelector('.ma-cfg'), stateDiv = s.querySelector('.state');
   cfgIn.value = maCfg;
-  let mas = [], score = [], pairs = [], osc = {}, pinned = last;
+  let mas = [], extras = [], score = [], pairs = [], osc = {}, pinned = last;
 
   function computeMA() {
     const W = r.warm || [], CW = W.concat(C);   // warm-up closes so long MAs exist from day 1
     mas = parseMA(cfgIn.value).map((m, k) => ({...m, color: MA_COLORS[k],
-      v: (m.kind == 'EMA' ? ema(CW, m.n) : sma(CW, m.n)).slice(W.length)}));
+      v: MA_FN[m.kind](CW, m.n).slice(W.length)}));
+    // VWAP lines are shown in the table but not used in the MA score
+    const vw = parseVwap(cfgIn.value), hasVol = (r.ohlc.volume || []).some(v => v > 0);
+    extras = [];
+    if (vw.session) extras.push(daily ? {name: 'VWAP', why: 'session VWAP needs 4H/2H/1H bars'}
+      : hasVol ? {name: 'VWAP', v: vwapFrom(r.ohlc, 0, true)} : {name: 'VWAP', why: 'no volume data'});
+    vw.anchors.forEach(a => {
+      const name = 'AVWAP ' + a, i0 = D.findIndex(d => d >= a);
+      if (!hasVol) extras.push({name, why: 'no volume data'});
+      else if (i0 < 0 || (i0 == 0 && a < D[0])) extras.push({name, why: 'anchor is outside the chart range'});
+      else extras.push({name, v: vwapFrom(r.ohlc, i0, false), i0});
+    });
+    extras.forEach((e, k) => e.color = EXTRA_COLORS[k % EXTRA_COLORS.length]);
     // daily score in [-1, 1]: price above/below each MA, each MA rising/falling,
     // and whether each faster MA is above the next slower one
     score = C.map((c, i) => {
@@ -718,14 +820,14 @@ function render(r, prepend) {
         const zone = v >= 70 ? b('bearish', 'overbought') : v <= 30 ? b('bullish', 'oversold')
                    : v >= 50 ? b('bullish', 'above 50') : b('bearish', 'below 50');
         const d = pv == null ? null : v - pv;
-        const dir = d == null ? '' : Math.abs(d) < 2 ? ' · flat over 5d' :
-          ` · ${d > 0 ? b('bullish', 'rising') : b('bearish', 'falling')} ${d > 0 ? '+' : ''}${d.toFixed(1)} over 5d`;
+        const dir = d == null ? '' : Math.abs(d) < 2 ? ` · flat over 5${bu}` :
+          ` · ${d > 0 ? b('bullish', 'rising') : b('bearish', 'falling')} ${d > 0 ? '+' : ''}${d.toFixed(1)} over 5${bu}`;
         // simple divergence: price at a 20-day high/low but RSI is not
         let div = '';
         if (i >= 20) {
           const win = C.slice(i - 20, i + 1), rw = osc.rsi.slice(i - 20, i + 1).filter(x => x != null);
-          if (C[i] >= Math.max(...win) && v < Math.max(...rw) - 3) div = ' · ' + b('bearish', 'bearish divergence (new 20d high, weaker RSI)');
-          if (C[i] <= Math.min(...win) && v > Math.min(...rw) + 3) div = ' · ' + b('bullish', 'bullish divergence (new 20d low, firmer RSI)');
+          if (C[i] >= Math.max(...win) && v < Math.max(...rw) - 3) div = ' · ' + b('bearish', `bearish divergence (new 20${bu} high, weaker RSI)`);
+          if (C[i] <= Math.min(...win) && v > Math.min(...rw) + 3) div = ' · ' + b('bullish', `bullish divergence (new 20${bu} low, firmer RSI)`);
         }
         out.push(`RSI${osc.cfg.rsi} <b>${v.toFixed(1)}</b> · ${zone}${dir}${div}`);
       }
@@ -740,7 +842,7 @@ function render(r, prepend) {
         out.push(`MACD ${f}/${sl}/${sg} <b>${line[i].toFixed(2)}</b> vs signal ${sig[i].toFixed(2)} · ` +
           `${line[i] > sig[i] ? b('bullish', 'above signal') : b('bearish', 'below signal')} · ` +
           `${line[i] > 0 ? b('bullish', 'above zero') : b('bearish', 'below zero')} · ${mom}` +
-          (e ? `<br>&nbsp;&nbsp;last MACD ${e.up ? b('bullish', 'bullish cross') : b('bearish', 'bearish cross')} ${D[e.i]} (${i - e.i} trading days before)` : ''));
+          (e ? `<br>&nbsp;&nbsp;last MACD ${e.up ? b('bullish', 'bullish cross') : b('bearish', 'bearish cross')} ${D[e.i]} (${i - e.i} ${unit} before)` : ''));
       }
     }
     return out.join('<br>');
@@ -751,9 +853,10 @@ function render(r, prepend) {
     const sc = score[i], prev = i >= SLOPE_BARS ? score[i - SLOPE_BARS] : null;
     const [txt, cls] = verdict(sc, prev);
     const pct = x => (x >= 0 ? '+' : '') + (x * 100).toFixed(1) + '%';
-    const rows = mas.map(m => {
+    const rows = mas.concat(extras).map(m => {
+      if (m.why) return `<tr><td style="color:${m.color}">${m.name}</td><td colspan="3" class="sub">${m.why}</td></tr>`;
       const v = m.v[i];
-      if (v == null) return `<tr><td style="color:${m.color}">${m.name}</td><td colspan="3" class="sub">not enough history</td></tr>`;
+      if (v == null) return `<tr><td style="color:${m.color}">${m.name}</td><td colspan="3" class="sub">${m.i0 != null && i < m.i0 ? 'before the anchor' : 'not enough history'}</td></tr>`;
       const pv = m.v[i - SLOPE_BARS], sl = pv != null ? v / pv - 1 : null;
       const dir = sl == null ? '' : Math.abs(sl) < 0.001 ? '→ flat' : sl > 0 ? '↗ rising' : '↘ falling';
       return `<tr><td style="color:${m.color}">${m.name}</td><td>${v.toFixed(2)}</td>
@@ -765,14 +868,14 @@ function render(r, prepend) {
       const e = p.ev.filter(x => x.i <= i).pop();
       const now = p.a.v[i] > p.b.v[i] ? 'above' : 'below';
       return `${p.a.name} is <b class="${now == 'above' ? 'bullish' : 'bearish'}">${now}</b> ${p.b.name}` +
-        (e ? ` · last ${p.label(e.up)} ${D[e.i]} (${i - e.i} trading days before)` : ' · no cross in range');
+        (e ? ` · last ${p.label(e.up)} ${D[e.i]} (${i - e.i} ${unit} before)` : ' · no cross in range');
     }).filter(Boolean).join('<br>');
     stateDiv.innerHTML = `<div>
         <div class="sub">${i == pinned && i != last ? 'pinned · ' : ''}${D[i]} · close ${C[i].toFixed(2)}</div>
         <div class="verdict ${cls}">${txt}</div>
         <div class="meter">${sc == null ? '' : `<i style="left:calc(${(sc + 1) * 50}% - 1px)"></i>`}</div>
-        <div class="sub">MA score ${sc == null ? '–' : sc.toFixed(2)} (5 days earlier ${prev == null ? '–' : prev.toFixed(2)}) · −1 bearish … +1 bullish</div></div>
-      <div><table><tr><th>MA</th><th>Value</th><th>Price vs MA</th><th>Slope (5d)</th></tr>${rows ||
+        <div class="sub">MA score ${sc == null ? '–' : sc.toFixed(2)} (5 bars earlier ${prev == null ? '–' : prev.toFixed(2)}) · −1 bearish … +1 bullish</div></div>
+      <div><table><tr><th>MA</th><th>Value</th><th>Price vs MA</th><th>Slope (5 bars)</th></tr>${rows ||
         '<tr><td colspan="4" class="sub">Enter moving averages, e.g. EMA9, EMA21, SMA50, SMA200, RSI14, MACD12/26/9</td></tr>'}</table>
         <div class="crosses">${cr}</div>
         <div class="crosses">${oscHtml(i)}</div></div>`;
@@ -794,6 +897,8 @@ function render(r, prepend) {
     ];
     if (s.querySelector('.ma-show').checked) mas.forEach(m => traces.push({type:'scatter', mode:'lines',
       x:D, y:m.v, name:m.name, line:{color:m.color, width:1.3}, hovertemplate:m.name + ' %{y:.2f}<extra></extra>'}));
+    if (s.querySelector('.ma-show').checked) extras.filter(e => e.v).forEach(e => traces.push({type:'scatter', mode:'lines',
+      x:D, y:e.v, name:e.name, line:{color:e.color, width:1.5, dash:'dot'}, hovertemplate:e.name + ' %{y:.2f}<extra></extra>'}));
     pairs.forEach(p => p.ev.forEach(e => traces.push({type:'scatter', mode:'markers', x:[D[e.i]], y:[p.b.v[e.i]],
       marker:{symbol: e.up ? 'triangle-up' : 'triangle-down', size:11, color: e.up ? '#26a69a' : '#ef5350', line:{color:'#fff', width:1}},
       hovertemplate:`${p.a.name}/${p.b.name} ${p.label(e.up)}<br>%{x}<extra></extra>`})));
@@ -820,11 +925,14 @@ function render(r, prepend) {
     Plotly.react(div, traces, {
       paper_bgcolor:'#171a21', plot_bgcolor:'#171a21', font:{color:'#e6e6e6'},
       margin:{l:50,r:20,t:30,b:30}, showlegend:false, shapes, annotations:ann,
-      xaxis:{range:keep, rangeslider:{visible:false}, gridcolor:'#2a2f3a', rangebreaks:[{bounds:['sat','mon']}],
-        rangeselector:{bgcolor:'#232836', activecolor:'#5c8dff', font:{color:'#e6e6e6'}, buttons:[
+      xaxis:{range:keep, rangeslider:{visible:false}, gridcolor:'#2a2f3a',
+        // skip weekends; on intraday charts also skip the hours the US market is closed
+        rangebreaks: daily ? [{bounds:['sat','mon']}] : [{bounds:['sat','mon']}, {pattern:'hour', bounds:[16, 9.5]}],
+        rangeselector:{bgcolor:'#232836', activecolor:'#5c8dff', font:{color:'#e6e6e6'}, buttons:(daily ? [] :
+          [{count:5,label:'5D',step:'day',stepmode:'backward'},{count:1,label:'1M',step:'month',stepmode:'backward'}]).concat([
           {count:3,label:'3M',step:'month',stepmode:'backward'},{count:6,label:'6M',step:'month',stepmode:'backward'},
           {count:1,label:'1Y',step:'year',stepmode:'backward'},{count:2,label:'2Y',step:'year',stepmode:'backward'},
-          {step:'all',label:'All'}]}},
+          {step:'all',label:'All'}])}},
       yaxis:{gridcolor:'#2a2f3a', autorange:true, domain: strip ? [0.09, 1] : [0, 1]},
       yaxis2:{domain:[0, 0.05], visible:false, fixedrange:true, range:[0, 1]}, bargap:0
     }, {responsive:true, displaylogo:false});
@@ -834,10 +942,10 @@ function render(r, prepend) {
       const dayAt = ev => {
         const xa = div._fullLayout.xaxis, px = ev.clientX - div.getBoundingClientRect().left - xa._offset;
         if (px < 0 || px > xa._length) return null;
-        const d = new Date(xa.p2c(px)).toISOString().slice(0, 10);
-        let lo = 0, hi = last;                       // first trading day >= d
-        while (lo < hi) { const m = (lo + hi) >> 1; D[m] < d ? lo = m + 1 : hi = m; }
-        return lo;
+        const t = xa.p2c(px);
+        let lo = 0, hi = last;                       // first bar at or after t, then pick the nearer one
+        while (lo < hi) { const m = (lo + hi) >> 1; TS[m] < t ? lo = m + 1 : hi = m; }
+        return lo > 0 && t - TS[lo - 1] < TS[lo] - t ? lo - 1 : lo;
       };
       let raf = 0, down = null;
       div.addEventListener('mousemove', ev => {
@@ -848,7 +956,11 @@ function render(r, prepend) {
       div.addEventListener('mousedown', ev => down = [ev.clientX, ev.clientY]);
       div.addEventListener('mouseup', ev => {          // a click (not a drag-zoom) pins the day
         if (down && Math.abs(ev.clientX - down[0]) + Math.abs(ev.clientY - down[1]) < 4) {
-          const i = dayAt(ev); if (i != null) { pinned = i; showState(i); }
+          const i = dayAt(ev);
+          if (i != null && ev.shiftKey) {               // Shift+click: anchored VWAP from this bar
+            cfgIn.value = cfgIn.value.replace(/\s*,?\s*$/, '') + ', AVWAP ' + D[i];
+            cfgIn.onchange();
+          } else if (i != null) { pinned = i; showState(i); }
         }
         down = null;
       });
@@ -856,10 +968,8 @@ function render(r, prepend) {
     tbody.innerHTML = pats.map((p, k) => `<tr class="pat" data-k="${k}"><td>${p.type} <span class="tag">${p.cat}</span></td><td class="${p.bias}">${p.bias}</td><td>${p.start}</td><td>${p.end}</td><td>${p.status}</td><td>${p.target ?? ''}</td><td class="sub">${p.note}</td></tr>`).join('')
       || '<tr><td colspan="7" class="sub">No patterns for the selected filters.</td></tr>';
     tbody.querySelectorAll('tr.pat').forEach(tr => tr.onclick = () => {
-      const p = pats[+tr.dataset.k], pad = 20*864e5;
-      const ends = p.lines.map(L => +new Date(L[2])).concat([+new Date(p.end)]);
-      const a = new Date(+new Date(p.start) - pad), b = new Date(Math.max(...ends) + pad);
-      Plotly.relayout(div, {'xaxis.range':[a.toISOString().slice(0,10), b.toISOString().slice(0,10)], 'yaxis.autorange':true});
+      const p = pats[+tr.dataset.k], pad = 20 * (TS[last] - TS[0]) / last;   // ~20 bars
+      Plotly.relayout(div, {'xaxis.range':[tsStr(parseTs(p.start) - pad), tsStr(lastDate(p) + pad)], 'yaxis.autorange':true});
       div.scrollIntoView({behavior:'smooth', block:'center'});
     });
   }
@@ -877,16 +987,18 @@ function render(r, prepend) {
 
 DATA.forEach(r => render(r, false));
 
-document.getElementById('lookup').onsubmit = async e => {
+document.getElementById('lookup').onsubmit = e => {
   e.preventDefault();
-  const sym = document.getElementById('sym').value.trim().toUpperCase();
-  const per = document.getElementById('per').value;
+  lookup(document.getElementById('sym').value.trim().toUpperCase(),
+         document.getElementById('per').value, document.getElementById('iv').value);
+};
+async function lookup(sym, per, iv) {
   const msg = document.getElementById('msg'), btn = document.getElementById('go');
   if (!sym) return;
-  if (location.protocol == 'file:') { msg.textContent = 'Lookup works on the website. Locally, run: python patterns.py ' + sym; return; }
-  btn.disabled = true; msg.textContent = `Analyzing ${sym} (${per})…`;
+  if (location.protocol == 'file:') { msg.textContent = `Lookup works on the website. Locally, run: python patterns.py ${sym} --interval ${iv} --period ${per}`; return; }
+  btn.disabled = true; msg.textContent = `Analyzing ${sym} (${iv.toUpperCase()}, ${per})…`;
   try {
-    const res = await fetch(`/api/patterns?symbol=${encodeURIComponent(sym)}&period=${per}`);
+    const res = await fetch(`/api/patterns?symbol=${encodeURIComponent(sym)}&period=${per}&interval=${iv}`);
     const j = await res.json();
     if (!res.ok || j.error) throw new Error(j.error || res.statusText);
     render(j, true);
@@ -894,7 +1006,7 @@ document.getElementById('lookup').onsubmit = async e => {
     window.scrollTo({top: root.offsetTop - 10, behavior:'smooth'});
   } catch (err) { msg.textContent = `${sym}: ${err.message}`; }
   btn.disabled = false;
-};
+}
 </script></body></html>"""
 
 
@@ -922,6 +1034,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("symbols", nargs="*", default=DEFAULT_SYMBOLS)
     ap.add_argument("--period", default="2y", choices=PERIODS)
+    ap.add_argument("--interval", default="1d", choices=INTERVALS, help="bar size: 1d, 4h, 2h, 1h")
     ap.add_argument("--pct", type=float, help="zigzag swing size in %% (default: 2.5 x median ATR%%)")
     ap.add_argument("--refresh", action="store_true", help="re-download prices")
     ap.add_argument("--all", action="store_true", help="also list failed / expired patterns")
@@ -932,7 +1045,7 @@ def main():
     results = []
     for sym in [s.upper() for s in args.symbols]:
         try:
-            r = analyze(sym, args.period, args.pct, args.refresh, args.all)
+            r = analyze(sym, args.period, args.pct, args.refresh, args.all, args.interval)
         except Exception as e:
             print(f"{sym}: ERROR {e}")
             continue
