@@ -635,11 +635,12 @@ const root = document.getElementById('root');
 let seq = 0;
 
 // ── Moving averages (computed in the browser so they are configurable) ──
-const MA_DEFAULT = 'EMA9, EMA21, SMA50, SMA200, RSI14, MACD12/26/9';
+const MA_DEFAULT = 'EMA9, EMA21, SMA50, SMA200, WMA20, HMA55, AVWAP swing, RSI14, MACD12/26/9';
 const MA_COLORS = ['#ffd54f','#4fc3f7','#ba68c8','#ff8a65','#e0e0e0','#81c784'];
 let maCfg = MA_DEFAULT;
 try { maCfg = localStorage.getItem('maCfg') || MA_DEFAULT; } catch (e) {}
-if (maCfg.replace(/\s/g, '') == 'EMA9,EMA21,SMA50,SMA200') maCfg = MA_DEFAULT;   // upgrade old saved default
+if (['EMA9,EMA21,SMA50,SMA200', 'EMA9,EMA21,SMA50,SMA200,RSI14,MACD12/26/9'].includes(maCfg.replace(/\s/g, '')))
+  maCfg = MA_DEFAULT;   // upgrade old saved defaults
 function rsi(c, n) {   // Wilder's RSI
   const out = Array(c.length).fill(null);
   if (c.length <= n) return out;
@@ -709,7 +710,7 @@ function vwapFrom(o, i0, session) {   // cumulative typical-price x volume / vol
   return out;
 }
 function parseVwap(txt) {
-  return {session: /(^|[^A-Z])VWAP(?!\s*\d)/i.test(txt),
+  return {session: /(^|[^A-Z])VWAP(?!\s*\d)/i.test(txt), swing: /AVWAP\s*SWING/i.test(txt),
           anchors: [...txt.matchAll(/AVWAP\s*(\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2})?)/gi)].map(m => m[1].replace('T', ' ')).slice(0, 4)};
 }
 const parseTs = x => Date.parse(x.length > 10 ? x.replace(' ', 'T') + ':00Z' : x + 'T00:00:00Z');
@@ -755,7 +756,7 @@ function render(r, prepend) {
     <div class="filters">${CATS.map(([k,t]) => `<label><input type="checkbox" data-cat="${k}" checked> ${t} </label>`).join('')}
       <label><input type="checkbox" data-opt="levels" checked> S/R levels</label>
       <label>Show <select data-opt="show"><option value="recent">open + last 6 months</option><option value="open">open / active only</option><option value="all">all</option></select></label></div>
-    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated. Up to 6 of EMA9 / SMA50 / WMA20 / HMA55 (scored), plus VWAP (session, intraday), AVWAP 2025-04-07 (anchored; or Shift+click the chart), RSI14, MACD12/26/9">
+    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated. Up to 6 of EMA9 / SMA50 (scored) / WMA20 / HMA55 (shown, not scored), plus VWAP (session, intraday), AVWAP swing (from the last swing low and high), AVWAP 2025-04-07 (anchored; or Shift+click the chart), RSI14, MACD12/26/9">
       <label><input type="checkbox" class="ma-show" checked> lines</label>
       <label><input type="checkbox" class="ma-strip" checked> trend strip</label>
       <span>· hover the chart to see the state on any bar, click to pin it, Shift+click to anchor a VWAP there</span></div>
@@ -783,12 +784,34 @@ function render(r, prepend) {
   function computeMA() {
     const W = r.warm || [], CW = W.concat(C);   // warm-up closes so long MAs exist from day 1
     mas = parseMA(cfgIn.value).map((m, k) => ({...m, color: MA_COLORS[k],
-      v: MA_FN[m.kind](CW, m.n).slice(W.length)}));
+      scored: m.kind == 'EMA' || m.kind == 'SMA', v: MA_FN[m.kind](CW, m.n).slice(W.length)}));
+    // WMA / HMA are drawn and listed but not scored: they lag much less than EMA/SMA,
+    // so the "faster MA above slower MA" check would misread them. HMA is read by its turns.
+    const sm = mas.filter(m => m.scored);
+    mas.filter(m => m.kind == 'HMA').forEach(m => {
+      m.turns = [];
+      for (let i = 2; i < C.length; i++) {
+        if (m.v[i-2] == null) continue;
+        const d0 = m.v[i-1] - m.v[i-2], d1 = m.v[i] - m.v[i-1];
+        if (d0 <= 0 && d1 > 0) m.turns.push({i, up: true});
+        if (d0 >= 0 && d1 < 0) m.turns.push({i, up: false});
+      }
+    });
     // VWAP lines are shown in the table but not used in the MA score
     const vw = parseVwap(cfgIn.value), hasVol = (r.ohlc.volume || []).some(v => v > 0);
     extras = [];
     if (vw.session) extras.push(daily ? {name: 'VWAP', why: 'session VWAP needs 4H/2H/1H bars'}
       : hasVol ? {name: 'VWAP', v: vwapFrom(r.ohlc, 0, true)} : {name: 'VWAP', why: 'no volume data'});
+    if (vw.swing) {   // anchored at the last confirmed swing low and swing high
+      ['L', 'H'].forEach(kind => {
+        const pv = r.pivots.filter(q => q.kind == kind && q.confirmed).pop();
+        const name = `AVWAP swing ${kind == 'L' ? 'low' : 'high'}${pv ? ' ' + pv.date : ''}`;
+        const i0 = pv ? D.indexOf(pv.date) : -1;
+        if (!hasVol) extras.push({name, why: 'no volume data'});
+        else if (i0 < 0) extras.push({name, why: 'no confirmed swing in range'});
+        else extras.push({name, v: vwapFrom(r.ohlc, i0, false), i0});
+      });
+    }
     vw.anchors.forEach(a => {
       const name = 'AVWAP ' + a, i0 = D.findIndex(d => d >= a);
       if (!hasVol) extras.push({name, why: 'no volume data'});
@@ -800,12 +823,12 @@ function render(r, prepend) {
     // and whether each faster MA is above the next slower one
     score = C.map((c, i) => {
       let pts = 0, tot = 0;
-      mas.forEach((m, k) => {
+      sm.forEach((m, k) => {
         const v = m.v[i]; if (v == null) return;
         pts += c > v ? 1 : -1; tot++;
         const pv = m.v[i - SLOPE_BARS];
         if (pv != null) { pts += v > pv ? 1 : -1; tot++; }
-        const nx = mas[k + 1];
+        const nx = sm[k + 1];
         if (nx && nx.v[i] != null) { pts += v > nx.v[i] ? 1 : -1; tot++; }
       });
       return tot ? pts / tot : null;
@@ -824,8 +847,8 @@ function render(r, prepend) {
       const gd = a.n == 50 && b.n == 200;
       pairs.push({a, b, ev, label: up => gd ? (up ? 'Golden cross' : 'Death cross') : (up ? 'bullish cross' : 'bearish cross')});
     };
-    if (mas.length >= 2) add(mas[0], mas[1]);
-    if (mas.length >= 3) add(mas[mas.length - 2], mas[mas.length - 1]);
+    if (sm.length >= 2) add(sm[0], sm[1]);
+    if (sm.length >= 3) add(sm[sm.length - 2], sm[sm.length - 1]);
     // RSI / MACD from the same warm-up series
     const cfg = parseOsc(cfgIn.value);
     osc = {cfg};
@@ -891,7 +914,7 @@ function render(r, prepend) {
       if (v == null) return `<tr><td style="color:${m.color}">${m.name}</td><td colspan="3" class="sub">${m.i0 != null && i < m.i0 ? 'before the anchor' : 'not enough history'}</td></tr>`;
       const pv = m.v[i - SLOPE_BARS], sl = pv != null ? v / pv - 1 : null;
       const dir = sl == null ? '' : Math.abs(sl) < 0.001 ? '→ flat' : sl > 0 ? '↗ rising' : '↘ falling';
-      return `<tr><td style="color:${m.color}">${m.name}</td><td>${v.toFixed(2)}</td>
+      return `<tr><td style="color:${m.color}">${m.name}${m.scored === false || !m.kind ? ' <span class="sub">· not scored</span>' : ''}</td><td>${v.toFixed(2)}</td>
         <td class="${C[i] > v ? 'bullish' : 'bearish'}">price ${C[i] > v ? 'above' : 'below'} ${pct(C[i] / v - 1)}</td>
         <td class="${sl == null ? 'sub' : sl > 0.001 ? 'bullish' : sl < -0.001 ? 'bearish' : 'neutral'}">${dir}${sl == null ? '' : ' ' + pct(sl)}</td></tr>`;
     }).join('');
@@ -901,7 +924,10 @@ function render(r, prepend) {
       const now = p.a.v[i] > p.b.v[i] ? 'above' : 'below';
       return `${p.a.name} is <b class="${now == 'above' ? 'bullish' : 'bearish'}">${now}</b> ${p.b.name}` +
         (e ? ` · last ${p.label(e.up)} ${D[e.i]} (${i - e.i} ${unit} before)` : ' · no cross in range');
-    }).filter(Boolean).join('<br>');
+    }).filter(Boolean).concat(mas.filter(m => m.turns).map(m => {
+      const e = m.turns.filter(x => x.i <= i).pop();
+      return e ? `${m.name} ${e.up ? '<b class="bullish">turned up</b>' : '<b class="bearish">turned down</b>'} ${D[e.i]} (${i - e.i} ${unit} before)` : '';
+    }).filter(Boolean)).join('<br>');
     stateDiv.innerHTML = `<div>
         <div class="sub">${i == pinned && i != last ? 'pinned · ' : ''}${D[i]} · close ${C[i].toFixed(2)}</div>
         <div class="verdict ${cls}">${txt}</div>
@@ -1077,7 +1103,8 @@ def main():
     results = []
     for sym in [s.upper() for s in args.symbols]:
         try:
-            r = analyze(sym, args.period, args.pct, args.refresh, args.all, args.interval)
+            r = analyze(sym, args.period, args.pct, args.refresh, args.all, args.interval,
+                        fill_today=args.interval == "1d")
         except Exception as e:
             print(f"{sym}: ERROR {e}")
             continue

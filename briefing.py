@@ -79,6 +79,15 @@ def _rsi(c, n=14):
     return 100 - 100 / (1 + g / l)
 
 
+def _wma(c, n):
+    w = np.arange(1, n + 1)
+    return c.rolling(n).apply(lambda x: np.dot(x, w) / w.sum(), raw=True)
+
+
+def _hma(c, n):
+    return _wma(2 * _wma(c, int(round(n / 2 + 1e-9))) - _wma(c, n), int(round(n ** 0.5)))
+
+
 def _verdict(sc, prev):
     d = 0 if prev is None else sc - prev
     if sc >= 0.5:  return "Bullish, weakening" if d <= -0.4 else "Bullish"
@@ -108,6 +117,21 @@ def trend_state(close, label=str):
         return pts / tot if tot else None
 
     sc, prev = score(-1), score(-6)
+    # WMA20 / HMA55: shown, not scored (HMA is read by its turns)
+    extra = {}
+    for name, ser in (("WMA20", _wma(close, 20)), ("HMA55", _hma(close, 55))):
+        if pd.isna(ser.iloc[-1]) or pd.isna(ser.iloc[-6]):
+            continue
+        extra[name] = {"value": round(float(ser.iloc[-1]), 2),
+                       "price_vs_pct": round((float(close.iloc[-1]) / float(ser.iloc[-1]) - 1) * 100, 2),
+                       "slope_5_bars_pct": round((float(ser.iloc[-1]) / float(ser.iloc[-6]) - 1) * 100, 2)}
+        if name == "HMA55":
+            d = np.sign(ser.diff()).dropna()
+            ch = d[d.diff().fillna(0) != 0]
+            if not ch.empty:
+                extra[name]["last_turn"] = {"direction": "up" if ch.iloc[-1] > 0 else "down",
+                                            "when": label(int(ch.index[-1])),
+                                            "bars_ago": int(len(close) - 1 - int(ch.index[-1]))}
     c = float(close.iloc[-1])
     rsi = _rsi(close)
     m = close.ewm(span=12, adjust=False).mean() - close.ewm(span=26, adjust=False).mean()
@@ -123,6 +147,7 @@ def trend_state(close, label=str):
                     "price_vs_pct": round((c / float(mas[n].iloc[-1]) - 1) * 100, 2),
                     "slope_5_bars_pct": round((float(mas[n].iloc[-1]) / float(mas[n].iloc[-6]) - 1) * 100, 2)}
                 for n in names if not pd.isna(mas[n].iloc[-1])},
+        "not_scored": extra,
         "rsi14": round(float(rsi.iloc[-1]), 1),
         "rsi14_5_bars_ago": round(float(rsi.iloc[-6]), 1),
         "macd": {"line": round(float(m.iloc[-1]), 3), "signal": round(float(sig.iloc[-1]), 3),
@@ -170,6 +195,13 @@ def key_levels(r, df, state, price):
     for n, m in state["mas"].items():
         if n in ("EMA21", "SMA50", "SMA200"):
             lv.append((m["value"], n))
+    xs = r["ohlc"]["x"]
+    for kind, what in (("L", "last swing low"), ("H", "last swing high")):
+        pv = [q for q in r["pivots"] if q["kind"] == kind and q["confirmed"]]
+        if pv and pv[-1]["date"] in xs:
+            i0 = xs.index(pv[-1]["date"])
+            v = _avwap(df, i0) if len(df) - i0 >= 3 else None
+            if v: lv.append((v, f"anchored VWAP from {what} ({pv[-1]['date']})"))
     look = df.tail(126)   # ~6 months of daily bars
     for i0, what in ((df.index.get_loc(look["Low"].idxmin()), "anchored VWAP from 6-month low"),
                      (df.index.get_loc(look["High"].idxmax()), "anchored VWAP from 6-month high")):
@@ -334,6 +366,11 @@ def summary_text(snap):
                  f"last MACD cross {d['macd']['last_cross']}")
         L.append("  daily MAs: " + ", ".join(f"{n} {m['value']} (price {m['price_vs_pct']:+}%, slope {m['slope_5_bars_pct']:+}%)"
                                              for n, m in d["mas"].items()))
+        if d.get("not_scored"):
+            L.append("  not scored: " + ", ".join(
+                f"{n} {m['value']} (price {m['price_vs_pct']:+}%, slope {m['slope_5_bars_pct']:+}%"
+                + (f", turned {m['last_turn']['direction']} {m['last_turn']['when']}, {m['last_turn']['bars_ago']} bars ago" if m.get("last_turn") else "") + ")"
+                for n, m in d["not_scored"].items()))
         if h4:
             L.append(f"  4H: {h4.get('verdict')} (score {h4.get('score')}), RSI {h4.get('rsi14')}, "
                      f"MACD hist {h4.get('macd', {}).get('hist')} (prev {h4.get('macd', {}).get('hist_prev')})")

@@ -23,7 +23,7 @@ class handler(BaseHTTPRequestHandler):
             body, code = {"error": f"interval must be one of {', '.join(INTERVALS)}"}, 400
         else:
             try:
-                body, code = analyze(sym, period, interval=interval), 200
+                body, code = analyze(sym, period, interval=interval, fill_today=interval == "1d"), 200
             except Exception as e:
                 body, code = {"error": str(e)}, 400
 
