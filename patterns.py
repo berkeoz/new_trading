@@ -35,6 +35,7 @@ DATA_DIR = "/tmp/data" if os.environ.get("VERCEL") else os.path.join(ROOT, "data
 REPORT   = os.path.join(ROOT, "patterns.html")
 DEFAULT_SYMBOLS = ["QQQ", "SPY", "SOXX"]
 PERIODS  = ("6mo", "1y", "2y", "5y", "10y")
+WARMUP_PERIOD = {"6mo": "2y", "1y": "2y", "2y": "5y", "5y": "10y", "10y": "max"}
 
 
 # ── Data ───────────────────────────────────────────────────────────────────────
@@ -456,7 +457,13 @@ def find_levels(piv, price, tol, min_touches=3):
 
 # ── Analysis per symbol ────────────────────────────────────────────────────────
 def analyze(sym, period="2y", pct=None, refresh=False, show_all=False):
-    df = load_prices(sym, period, refresh)
+    # download a longer period so moving averages (up to 200+ days) are already
+    # warmed up at the start of the chart; patterns use only the requested period
+    full = load_prices(sym, WARMUP_PERIOD[period], refresh)
+    months = 6 if period == "6mo" else 12 * int(period[:-1])
+    start = full.index[-1] - pd.DateOffset(months=months)
+    df = full[full.index > start]
+    warm = full["Close"][full.index <= start].tail(300).round(2).tolist()
     a = atr_pct(df)
     swing = pct / 100 if pct else max(0.03, round(2.5 * a, 3))
     tol = max(0.015, swing * 0.4)        # "equal" price tolerance
@@ -478,6 +485,7 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False):
                     "kind": p["kind"], "confirmed": p["confirmed"]} for p in piv],
         "patterns": pats,
         "levels": find_levels(piv, price, tol)[:6],
+        "warm": warm,   # closes before the chart window, for moving-average warm-up
         "ohlc": {
             "x": [str(d.date()) for d in df.index],
             "open": df["Open"].round(2).tolist(), "high": df["High"].round(2).tolist(),
@@ -519,6 +527,16 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 .lv{display:inline-block;margin:6px 8px 0 0;padding:2px 8px;border-radius:12px;border:1px solid var(--line);font-size:12px}
 .tag{font-size:11px;padding:1px 6px;border-radius:8px;background:#232836;color:var(--mute)}
 .wrap{overflow-x:auto}
+.ma-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0 4px;font-size:13px;color:var(--mute)}
+.ma-bar input[type=text]{background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:4px 8px;font:inherit;width:240px}
+.ma-bar label{cursor:pointer;user-select:none}
+.state{display:grid;grid-template-columns:minmax(200px,260px) 1fr;gap:16px;margin:6px 0;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px}
+@media(max-width:700px){.state{grid-template-columns:1fr}}
+.state table{margin:0} .state td,.state th{padding:3px 8px}
+.verdict{font-size:19px;font-weight:600;margin:2px 0}
+.meter{height:6px;border-radius:3px;background:linear-gradient(90deg,#ef5350,#8a93a5,#26a69a);position:relative;margin:8px 0 4px}
+.meter i{position:absolute;top:-4px;width:3px;height:14px;background:#fff;border-radius:2px}
+.crosses{margin-top:6px;line-height:1.6}
 </style></head><body><main>
 <div class="top">
   <div><h1>Chart Formations</h1>
@@ -539,6 +557,49 @@ const CATS = [['reversal','Reversals'],['triangle','Triangles & wedges'],['chann
 const root = document.getElementById('root');
 let seq = 0;
 
+// ── Moving averages (computed in the browser so they are configurable) ──
+const MA_DEFAULT = 'EMA9, EMA21, SMA50, SMA200';
+const MA_COLORS = ['#ffd54f','#4fc3f7','#ba68c8','#ff8a65','#e0e0e0','#81c784'];
+let maCfg = MA_DEFAULT;
+try { maCfg = localStorage.getItem('maCfg') || MA_DEFAULT; } catch (e) {}
+function sma(c, n) {
+  const out = Array(c.length).fill(null); let sum = 0;
+  for (let i = 0; i < c.length; i++) { sum += c[i]; if (i >= n) sum -= c[i-n]; if (i >= n-1) out[i] = sum / n; }
+  return out;
+}
+function ema(c, n) {
+  const out = Array(c.length).fill(null), k = 2 / (n + 1);
+  if (c.length < n) return out;
+  let v = c.slice(0, n).reduce((a, b) => a + b, 0) / n; out[n-1] = v;
+  for (let i = n; i < c.length; i++) { v = c[i] * k + v * (1 - k); out[i] = v; }
+  return out;
+}
+function parseMA(txt) {   // "EMA9, SMA 50, MA200" -> [{kind, n, name}], sorted fast -> slow
+  const seen = new Set(), out = [];
+  for (const m of txt.matchAll(/(EMA|SMA|MA)\s*(\d+)/gi)) {
+    const kind = m[1].toUpperCase() == 'EMA' ? 'EMA' : 'SMA', n = +m[2];
+    if (n < 2 || n > 400 || seen.has(kind + n)) continue;
+    seen.add(kind + n); out.push({kind, n, name: kind + n});
+  }
+  return out.sort((a, b) => a.n - b.n || (a.kind == 'EMA' ? -1 : 1)).slice(0, 6);
+}
+const SLOPE_BARS = 5;     // slope = change of the MA over the last 5 trading days
+function verdict(sc, prev) {
+  if (sc == null) return ['No data', 'neutral'];
+  const d = prev == null ? 0 : sc - prev;
+  if (sc >= 0.5)  return d <= -0.4 ? ['Bullish, weakening', 'neutral'] : ['Bullish', 'bullish'];
+  if (sc <= -0.5) return d >= 0.4 ? ['Bearish, improving', 'neutral'] : ['Bearish', 'bearish'];
+  if (d >= 0.3)  return ['Turning bullish', 'bullish'];
+  if (d <= -0.3) return ['Turning bearish', 'bearish'];
+  return ['Neutral', 'neutral'];
+}
+function stripColor(sc) {
+  if (sc == null) return 'rgba(0,0,0,0)';
+  if (sc >= 0.5) return '#26a69a'; if (sc >= 0.2) return '#1b6b63';
+  if (sc <= -0.5) return '#ef5350'; if (sc <= -0.2) return '#8e3634';
+  return '#4a5060';
+}
+
 function render(r, prepend) {
   const n = seq++;
   const s = document.createElement('section');
@@ -549,6 +610,11 @@ function render(r, prepend) {
     <div class="filters">${CATS.map(([k,t]) => `<label><input type="checkbox" data-cat="${k}" checked> ${t} </label>`).join('')}
       <label><input type="checkbox" data-opt="levels" checked> S/R levels</label>
       <label>Show <select data-opt="show"><option value="recent">open + last 6 months</option><option value="open">open / active only</option><option value="all">all 2 years</option></select></label></div>
+    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated, e.g. EMA9, EMA21, SMA50, SMA200 (max 6)">
+      <label><input type="checkbox" class="ma-show" checked> lines</label>
+      <label><input type="checkbox" class="ma-strip" checked> trend strip</label>
+      <span>· hover the chart to see the state on any day, click to pin it</span></div>
+    <div class="state"></div>
     <div class="chart"></div>
     <div class="wrap"><table><thead><tr><th>Pattern</th><th>Bias</th><th>From</th><th>To</th><th>Status</th><th>Target</th><th>Detail</th></tr></thead><tbody></tbody></table></div>`;
   prepend ? root.prepend(s) : root.appendChild(s);
@@ -557,6 +623,79 @@ function render(r, prepend) {
   const cutoff = new Date(new Date(r.asof) - 183*864e5);
   const lastDate = p => new Date(Math.max(+new Date(p.end), ...p.lines.map(L => +new Date(L[2]))));
   if (prepend) s.querySelector('.x').onclick = () => { Plotly.purge(div); s.remove(); };
+
+  const C = r.ohlc.close, D = r.ohlc.x, last = C.length - 1;
+  const idx = Object.fromEntries(D.map((d, i) => [d, i]));
+  const cfgIn = s.querySelector('.ma-cfg'), stateDiv = s.querySelector('.state');
+  cfgIn.value = maCfg;
+  let mas = [], score = [], pairs = [], pinned = last;
+
+  function computeMA() {
+    const W = r.warm || [], CW = W.concat(C);   // warm-up closes so long MAs exist from day 1
+    mas = parseMA(cfgIn.value).map((m, k) => ({...m, color: MA_COLORS[k],
+      v: (m.kind == 'EMA' ? ema(CW, m.n) : sma(CW, m.n)).slice(W.length)}));
+    // daily score in [-1, 1]: price above/below each MA, each MA rising/falling,
+    // and whether each faster MA is above the next slower one
+    score = C.map((c, i) => {
+      let pts = 0, tot = 0;
+      mas.forEach((m, k) => {
+        const v = m.v[i]; if (v == null) return;
+        pts += c > v ? 1 : -1; tot++;
+        const pv = m.v[i - SLOPE_BARS];
+        if (pv != null) { pts += v > pv ? 1 : -1; tot++; }
+        const nx = mas[k + 1];
+        if (nx && nx.v[i] != null) { pts += v > nx.v[i] ? 1 : -1; tot++; }
+      });
+      return tot ? pts / tot : null;
+    });
+    // crosses of the two fastest and the two slowest MAs
+    pairs = [];
+    const add = (a, b) => {
+      if (!a || !b || pairs.some(p => p.a == a && p.b == b)) return;
+      const ev = [];
+      for (let i = 1; i < C.length; i++) {
+        if (a.v[i-1] == null || b.v[i-1] == null) continue;
+        const x0 = a.v[i-1] - b.v[i-1], x1 = a.v[i] - b.v[i];
+        if (x0 <= 0 && x1 > 0) ev.push({i, up: true});
+        if (x0 >= 0 && x1 < 0) ev.push({i, up: false});
+      }
+      const gd = a.n == 50 && b.n == 200;
+      pairs.push({a, b, ev, label: up => gd ? (up ? 'Golden cross' : 'Death cross') : (up ? 'bullish cross' : 'bearish cross')});
+    };
+    if (mas.length >= 2) add(mas[0], mas[1]);
+    if (mas.length >= 3) add(mas[mas.length - 2], mas[mas.length - 1]);
+  }
+
+  function showState(i) {
+    if (i == null || i < 0) i = last;
+    const sc = score[i], prev = i >= SLOPE_BARS ? score[i - SLOPE_BARS] : null;
+    const [txt, cls] = verdict(sc, prev);
+    const pct = x => (x >= 0 ? '+' : '') + (x * 100).toFixed(1) + '%';
+    const rows = mas.map(m => {
+      const v = m.v[i];
+      if (v == null) return `<tr><td style="color:${m.color}">${m.name}</td><td colspan="3" class="sub">not enough history</td></tr>`;
+      const pv = m.v[i - SLOPE_BARS], sl = pv != null ? v / pv - 1 : null;
+      const dir = sl == null ? '' : Math.abs(sl) < 0.001 ? '→ flat' : sl > 0 ? '↗ rising' : '↘ falling';
+      return `<tr><td style="color:${m.color}">${m.name}</td><td>${v.toFixed(2)}</td>
+        <td class="${C[i] > v ? 'bullish' : 'bearish'}">price ${C[i] > v ? 'above' : 'below'} ${pct(C[i] / v - 1)}</td>
+        <td class="${sl == null ? 'sub' : sl > 0.001 ? 'bullish' : sl < -0.001 ? 'bearish' : 'neutral'}">${dir}${sl == null ? '' : ' ' + pct(sl)}</td></tr>`;
+    }).join('');
+    const cr = pairs.map(p => {
+      if (p.a.v[i] == null || p.b.v[i] == null) return '';
+      const e = p.ev.filter(x => x.i <= i).pop();
+      const now = p.a.v[i] > p.b.v[i] ? 'above' : 'below';
+      return `${p.a.name} is <b class="${now == 'above' ? 'bullish' : 'bearish'}">${now}</b> ${p.b.name}` +
+        (e ? ` · last ${p.label(e.up)} ${D[e.i]} (${i - e.i} trading days before)` : ' · no cross in range');
+    }).filter(Boolean).join('<br>');
+    stateDiv.innerHTML = `<div>
+        <div class="sub">${i == pinned && i != last ? 'pinned · ' : ''}${D[i]} · close ${C[i].toFixed(2)}</div>
+        <div class="verdict ${cls}">${txt}</div>
+        <div class="meter">${sc == null ? '' : `<i style="left:calc(${(sc + 1) * 50}% - 1px)"></i>`}</div>
+        <div class="sub">MA score ${sc == null ? '–' : sc.toFixed(2)} (5 days earlier ${prev == null ? '–' : prev.toFixed(2)}) · −1 bearish … +1 bullish</div></div>
+      <div><table><tr><th>MA</th><th>Value</th><th>Price vs MA</th><th>Slope (5d)</th></tr>${rows ||
+        '<tr><td colspan="4" class="sub">Enter moving averages, e.g. EMA9, EMA21, SMA50, SMA200</td></tr>'}</table>
+        <div class="crosses">${cr}</div></div>`;
+  }
 
   function visible() {
     const on = new Set(boxes.filter(b => b.dataset.cat && b.checked).map(b => b.dataset.cat));
@@ -572,6 +711,15 @@ function render(r, prepend) {
       {type:'scatter', mode:'lines', x:r.pivots.map(p=>p.date), y:r.pivots.map(p=>p.price),
        line:{color:'#5c6bc0', width:1, dash:'dot'}, name:'swings', hoverinfo:'skip'}
     ];
+    if (s.querySelector('.ma-show').checked) mas.forEach(m => traces.push({type:'scatter', mode:'lines',
+      x:D, y:m.v, name:m.name, line:{color:m.color, width:1.3}, hovertemplate:m.name + ' %{y:.2f}<extra></extra>'}));
+    pairs.forEach(p => p.ev.forEach(e => traces.push({type:'scatter', mode:'markers', x:[D[e.i]], y:[p.b.v[e.i]],
+      marker:{symbol: e.up ? 'triangle-up' : 'triangle-down', size:11, color: e.up ? '#26a69a' : '#ef5350', line:{color:'#fff', width:1}},
+      hovertemplate:`${p.a.name}/${p.b.name} ${p.label(e.up)}<br>%{x}<extra></extra>`})));
+    const strip = s.querySelector('.ma-strip').checked;
+    if (strip) traces.push({type:'bar', x:D, y:D.map((_, i) => score[i] == null ? 0 : 1), yaxis:'y2',
+      marker:{color:score.map(stripColor)}, hovertext:score.map((sc, i) => verdict(sc, score[i - SLOPE_BARS])[0]),
+      hoverinfo:'text+x', showlegend:false});
     const shapes = [], ann = [];
     pats.forEach(p => {
       const c = COL[p.bias], dash = p.cat == 'trendline' ? 'dash' : 'solid';
@@ -596,8 +744,34 @@ function render(r, prepend) {
           {count:3,label:'3M',step:'month',stepmode:'backward'},{count:6,label:'6M',step:'month',stepmode:'backward'},
           {count:1,label:'1Y',step:'year',stepmode:'backward'},{count:2,label:'2Y',step:'year',stepmode:'backward'},
           {step:'all',label:'All'}]}},
-      yaxis:{gridcolor:'#2a2f3a', autorange:true}
+      yaxis:{gridcolor:'#2a2f3a', autorange:true, domain: strip ? [0.09, 1] : [0, 1]},
+      yaxis2:{domain:[0, 0.05], visible:false, fixedrange:true, range:[0, 1]}, bargap:0
     }, {responsive:true, displaylogo:false});
+    if (!div._maEvents) {
+      // map the mouse x-position to the nearest trading day (works anywhere on the chart)
+      div._maEvents = true;
+      const dayAt = ev => {
+        const xa = div._fullLayout.xaxis, px = ev.clientX - div.getBoundingClientRect().left - xa._offset;
+        if (px < 0 || px > xa._length) return null;
+        const d = new Date(xa.p2c(px)).toISOString().slice(0, 10);
+        let lo = 0, hi = last;                       // first trading day >= d
+        while (lo < hi) { const m = (lo + hi) >> 1; D[m] < d ? lo = m + 1 : hi = m; }
+        return lo;
+      };
+      let raf = 0, down = null;
+      div.addEventListener('mousemove', ev => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => { const i = dayAt(ev); showState(i == null ? pinned : i); });
+      });
+      div.addEventListener('mouseleave', () => { cancelAnimationFrame(raf); showState(pinned); });
+      div.addEventListener('mousedown', ev => down = [ev.clientX, ev.clientY]);
+      div.addEventListener('mouseup', ev => {          // a click (not a drag-zoom) pins the day
+        if (down && Math.abs(ev.clientX - down[0]) + Math.abs(ev.clientY - down[1]) < 4) {
+          const i = dayAt(ev); if (i != null) { pinned = i; showState(i); }
+        }
+        down = null;
+      });
+    }
     tbody.innerHTML = pats.map((p, k) => `<tr class="pat" data-k="${k}"><td>${p.type} <span class="tag">${p.cat}</span></td><td class="${p.bias}">${p.bias}</td><td>${p.start}</td><td>${p.end}</td><td>${p.status}</td><td>${p.target ?? ''}</td><td class="sub">${p.note}</td></tr>`).join('')
       || '<tr><td colspan="7" class="sub">No patterns for the selected filters.</td></tr>';
     tbody.querySelectorAll('tr.pat').forEach(tr => tr.onclick = () => {
@@ -609,7 +783,15 @@ function render(r, prepend) {
     });
   }
   boxes.forEach(b => b.onchange = draw);
+  s.querySelectorAll('.ma-show, .ma-strip').forEach(b => b.onchange = draw);
+  cfgIn.onchange = () => {
+    maCfg = cfgIn.value;
+    try { localStorage.setItem('maCfg', maCfg); } catch (e) {}
+    computeMA(); draw(); showState(pinned);
+  };
+  computeMA();
   draw();
+  showState(last);
 }
 
 DATA.forEach(r => render(r, false));
