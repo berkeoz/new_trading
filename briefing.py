@@ -306,7 +306,7 @@ def rebuild_index():
         items.append({"id": name, "session": meta.get("session"), "title": meta.get("title"),
                       "tickers": [t.get("symbol") for t in meta.get("tickers", [])],
                       "generated_et": meta.get("generated_et")})
-    items.sort(key=lambda x: x["id"], reverse=True)
+    items.sort(key=lambda x: (x.get("generated_et") or "", x["id"]), reverse=True)
     with open(os.path.join(BRIEF_DIR, "index.json"), "w", encoding="utf-8") as fh:
         json.dump({"briefs": items}, fh, indent=1)
     print(f"index: {len(items)} briefs")
