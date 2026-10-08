@@ -43,7 +43,7 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 </style></head><body><main>
 <div class="top">
   <div><h1>Chart Formations</h1>
-  <div class="sub">Generated 2026-10-07 21:18 · swing-pivot pattern detection · mechanical candidates, not trade advice. Click a table row to zoom.</div></div>
+  <div class="sub">Generated 2026-10-07 21:22 · swing-pivot pattern detection · mechanical candidates, not trade advice. Click a table row to zoom.</div></div>
   <a href="/">&larr; Daily signals</a>
 </div>
 <form class="lookup" id="lookup">
@@ -61,10 +61,38 @@ const root = document.getElementById('root');
 let seq = 0;
 
 // ── Moving averages (computed in the browser so they are configurable) ──
-const MA_DEFAULT = 'EMA9, EMA21, SMA50, SMA200';
+const MA_DEFAULT = 'EMA9, EMA21, SMA50, SMA200, RSI14, MACD12/26/9';
 const MA_COLORS = ['#ffd54f','#4fc3f7','#ba68c8','#ff8a65','#e0e0e0','#81c784'];
 let maCfg = MA_DEFAULT;
 try { maCfg = localStorage.getItem('maCfg') || MA_DEFAULT; } catch (e) {}
+if (maCfg.replace(/\s/g, '') == 'EMA9,EMA21,SMA50,SMA200') maCfg = MA_DEFAULT;   // upgrade old saved default
+function rsi(c, n) {   // Wilder's RSI
+  const out = Array(c.length).fill(null);
+  if (c.length <= n) return out;
+  let g = 0, l = 0;
+  for (let i = 1; i <= n; i++) { const d = c[i] - c[i-1]; d > 0 ? g += d : l -= d; }
+  g /= n; l /= n;
+  out[n] = l == 0 ? 100 : 100 - 100 / (1 + g / l);
+  for (let i = n + 1; i < c.length; i++) {
+    const d = c[i] - c[i-1];
+    g = (g * (n - 1) + Math.max(d, 0)) / n; l = (l * (n - 1) + Math.max(-d, 0)) / n;
+    out[i] = l == 0 ? 100 : 100 - 100 / (1 + g / l);
+  }
+  return out;
+}
+function macd(c, f, sl, sg) {
+  const a = ema(c, f), b = ema(c, sl);
+  const line = c.map((_, i) => a[i] != null && b[i] != null ? a[i] - b[i] : null);
+  const first = line.findIndex(v => v != null);
+  const sig = Array(c.length).fill(null);
+  if (first >= 0) ema(line.slice(first), sg).forEach((v, k) => sig[first + k] = v);
+  return {line, sig, hist: line.map((v, i) => v != null && sig[i] != null ? v - sig[i] : null)};
+}
+function parseOsc(txt) {
+  const r = txt.match(/RSI\s*(\d+)/i), m = txt.match(/MACD\s*(\d+)\s*\/\s*(\d+)\s*\/\s*(\d+)/i);
+  return {rsi: r ? Math.min(Math.max(+r[1], 2), 100) : null,
+          macd: m && +m[1] < +m[2] ? [+m[1], +m[2], +m[3]] : null};
+}
 function sma(c, n) {
   const out = Array(c.length).fill(null); let sum = 0;
   for (let i = 0; i < c.length; i++) { sum += c[i]; if (i >= n) sum -= c[i-n]; if (i >= n-1) out[i] = sum / n; }
@@ -113,7 +141,7 @@ function render(r, prepend) {
     <div class="filters">${CATS.map(([k,t]) => `<label><input type="checkbox" data-cat="${k}" checked> ${t} </label>`).join('')}
       <label><input type="checkbox" data-opt="levels" checked> S/R levels</label>
       <label>Show <select data-opt="show"><option value="recent">open + last 6 months</option><option value="open">open / active only</option><option value="all">all 2 years</option></select></label></div>
-    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated, e.g. EMA9, EMA21, SMA50, SMA200 (max 6)">
+    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated: up to 6 of EMA9, SMA50 …, plus RSI14 and MACD12/26/9">
       <label><input type="checkbox" class="ma-show" checked> lines</label>
       <label><input type="checkbox" class="ma-strip" checked> trend strip</label>
       <span>· hover the chart to see the state on any day, click to pin it</span></div>
@@ -131,7 +159,7 @@ function render(r, prepend) {
   const idx = Object.fromEntries(D.map((d, i) => [d, i]));
   const cfgIn = s.querySelector('.ma-cfg'), stateDiv = s.querySelector('.state');
   cfgIn.value = maCfg;
-  let mas = [], score = [], pairs = [], pinned = last;
+  let mas = [], score = [], pairs = [], osc = {}, pinned = last;
 
   function computeMA() {
     const W = r.warm || [], CW = W.concat(C);   // warm-up closes so long MAs exist from day 1
@@ -167,6 +195,58 @@ function render(r, prepend) {
     };
     if (mas.length >= 2) add(mas[0], mas[1]);
     if (mas.length >= 3) add(mas[mas.length - 2], mas[mas.length - 1]);
+    // RSI / MACD from the same warm-up series
+    const cfg = parseOsc(cfgIn.value);
+    osc = {cfg};
+    if (cfg.rsi) osc.rsi = rsi(CW, cfg.rsi).slice(W.length);
+    if (cfg.macd) {
+      const m = macd(CW, ...cfg.macd);
+      osc.macd = {line: m.line.slice(W.length), sig: m.sig.slice(W.length), hist: m.hist.slice(W.length), ev: []};
+      const {line, sig} = osc.macd;
+      for (let i = 1; i < C.length; i++) {
+        if ([line[i-1], sig[i-1], line[i], sig[i]].includes(null)) continue;
+        const x0 = line[i-1] - sig[i-1], x1 = line[i] - sig[i];
+        if (x0 <= 0 && x1 > 0) osc.macd.ev.push({i, up: true});
+        if (x0 >= 0 && x1 < 0) osc.macd.ev.push({i, up: false});
+      }
+    }
+  }
+
+  function oscHtml(i) {
+    const out = [], b = (cls, t) => `<b class="${cls}">${t}</b>`;
+    if (osc.rsi) {
+      const v = osc.rsi[i], pv = osc.rsi[i - SLOPE_BARS];
+      if (v == null) out.push(`RSI${osc.cfg.rsi}: not enough history`);
+      else {
+        const zone = v >= 70 ? b('bearish', 'overbought') : v <= 30 ? b('bullish', 'oversold')
+                   : v >= 50 ? b('bullish', 'above 50') : b('bearish', 'below 50');
+        const d = pv == null ? null : v - pv;
+        const dir = d == null ? '' : Math.abs(d) < 2 ? ' · flat over 5d' :
+          ` · ${d > 0 ? b('bullish', 'rising') : b('bearish', 'falling')} ${d > 0 ? '+' : ''}${d.toFixed(1)} over 5d`;
+        // simple divergence: price at a 20-day high/low but RSI is not
+        let div = '';
+        if (i >= 20) {
+          const win = C.slice(i - 20, i + 1), rw = osc.rsi.slice(i - 20, i + 1).filter(x => x != null);
+          if (C[i] >= Math.max(...win) && v < Math.max(...rw) - 3) div = ' · ' + b('bearish', 'bearish divergence (new 20d high, weaker RSI)');
+          if (C[i] <= Math.min(...win) && v > Math.min(...rw) + 3) div = ' · ' + b('bullish', 'bullish divergence (new 20d low, firmer RSI)');
+        }
+        out.push(`RSI${osc.cfg.rsi} <b>${v.toFixed(1)}</b> · ${zone}${dir}${div}`);
+      }
+    }
+    if (osc.macd) {
+      const {line, sig, hist, ev} = osc.macd, [f, sl, sg] = osc.cfg.macd;
+      if (line[i] == null || sig[i] == null) out.push(`MACD ${f}/${sl}/${sg}: not enough history`);
+      else {
+        const h = hist[i], ph = hist[i - 1], e = ev.filter(x => x.i <= i).pop();
+        const mom = ph == null ? '' : h > 0 ? (h > ph ? b('bullish', 'histogram growing') : b('neutral', 'histogram shrinking (momentum fading)'))
+                                            : (h < ph ? b('bearish', 'histogram growing negative') : b('neutral', 'histogram shrinking (selling easing)'));
+        out.push(`MACD ${f}/${sl}/${sg} <b>${line[i].toFixed(2)}</b> vs signal ${sig[i].toFixed(2)} · ` +
+          `${line[i] > sig[i] ? b('bullish', 'above signal') : b('bearish', 'below signal')} · ` +
+          `${line[i] > 0 ? b('bullish', 'above zero') : b('bearish', 'below zero')} · ${mom}` +
+          (e ? `<br>&nbsp;&nbsp;last MACD ${e.up ? b('bullish', 'bullish cross') : b('bearish', 'bearish cross')} ${D[e.i]} (${i - e.i} trading days before)` : ''));
+      }
+    }
+    return out.join('<br>');
   }
 
   function showState(i) {
@@ -196,8 +276,9 @@ function render(r, prepend) {
         <div class="meter">${sc == null ? '' : `<i style="left:calc(${(sc + 1) * 50}% - 1px)"></i>`}</div>
         <div class="sub">MA score ${sc == null ? '–' : sc.toFixed(2)} (5 days earlier ${prev == null ? '–' : prev.toFixed(2)}) · −1 bearish … +1 bullish</div></div>
       <div><table><tr><th>MA</th><th>Value</th><th>Price vs MA</th><th>Slope (5d)</th></tr>${rows ||
-        '<tr><td colspan="4" class="sub">Enter moving averages, e.g. EMA9, EMA21, SMA50, SMA200</td></tr>'}</table>
-        <div class="crosses">${cr}</div></div>`;
+        '<tr><td colspan="4" class="sub">Enter moving averages, e.g. EMA9, EMA21, SMA50, SMA200, RSI14, MACD12/26/9</td></tr>'}</table>
+        <div class="crosses">${cr}</div>
+        <div class="crosses">${oscHtml(i)}</div></div>`;
   }
 
   function visible() {
