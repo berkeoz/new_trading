@@ -663,6 +663,136 @@ def find_ranges(df):
     return out
 
 
+# ── Volume climaxes (capitulation) ─────────────────────────────────────────────
+VOL_SPIKE = 2.0     # volume at least 2x the average of the previous 20 bars
+
+
+def _event_dict(kind, cat, bias, df, k, k_end, status, is_open, note, events):
+    d = df.index
+    return {"type": kind, "cat": cat, "bias": bias, "status": status, "open": is_open,
+            "start": ts(d[k]), "end": ts(d[k_end]), "i0": int(k), "i1": int(k_end), "pivots": [],
+            "lines": [], "events": events, "target": None, "note": note}
+
+
+def find_volume_events(df):
+    """Volume spikes; a spike on a wide bar at the end of a slide (rally) is a selling
+    capitulation (buying climax). It is a confirmed turning point when, within 5 bars,
+    volume is back to normal and price reverses without breaking the spike's extreme."""
+    o, h, l, c = (df[k].values for k in ("Open", "High", "Low", "Close"))
+    v = df["Volume"].values.astype(float)
+    if v.sum() == 0:
+        return []
+    atr = _atr_series(df)
+    avg = pd.Series(v).rolling(20).mean().shift(1).values      # previous 20 bars
+    n, last, idx, out = len(c), len(c) - 1, df.index, []
+    for k in range(20, n):
+        if not avg[k] or v[k] < VOL_SPIKE * avg[k]:
+            continue
+        ratio, wide = v[k] / avg[k], (h[k] - l[k]) / atr[k]
+        lo15, hi15 = l[max(0, k - 15):k + 1].min(), h[max(0, k - 15):k + 1].max()
+        slide = c[k] / c[max(0, k - 15):k].max() - 1 if k else 0
+        rally = c[k] / c[max(0, k - 15):k].min() - 1 if k else 0
+        atrp = atr[k] / c[k]
+        sell = wide >= 1.3 and l[k] <= lo15 * 1.002 and slide <= -3 * atrp
+        buy = wide >= 1.3 and h[k] >= hi15 * 0.998 and rally >= 3 * atrp
+        seg = range(k + 1, min(n, k + 6))
+        calm = next((m for m in seg if avg[m] and v[m] < 1.2 * avg[m]), None)
+        if sell or buy:
+            ext = l[k] if sell else h[k]
+            broke = next((m for m in seg if ((c[m] < ext) if sell else (c[m] > ext))), None)
+            turn = next((m for m in seg if ((c[m] > h[k]) if sell else (c[m] < l[k]))), None)
+            if broke is not None and (turn is None or broke < turn):
+                status, is_open = f"failed: {'low' if sell else 'high'} broken {ts(idx[broke])}", False
+            elif turn is not None and calm is not None:
+                status, is_open = f"confirmed {ts(idx[max(turn, calm)])} (turning point)", False
+            elif k > last - 5:
+                status, is_open = "pending (watch the next sessions)", True
+            else:
+                status, is_open = "unconfirmed (no clear reversal)", False
+            kind = "Selling capitulation" if sell else "Buying climax (blow-off)"
+            note = (f"volume {ratio:.1f}x the 20-bar average, range {wide:.1f}x ATR, after a "
+                    f"{(slide if sell else rally) * 100:+.1f}% move"
+                    + (f"; volume back to normal {ts(idx[calm])}" if calm is not None else "")
+                    + (f"; close beyond the spike bar {ts(idx[turn])}" if turn is not None else ""))
+            out.append(_event_dict(kind, "volume", "bullish" if sell else "bearish", df, k,
+                                   turn if turn is not None else k, status, is_open, note,
+                                   [{"date": ts(idx[k]), "price": round(float(ext), 2),
+                                     "label": f"{'Capitulation' if sell else 'Climax'} {ratio:.1f}x"}]))
+        else:
+            up = c[k] >= o[k]
+            out.append(_event_dict("Volume spike", "volume", "neutral", df, k, k,
+                                   f"{'up' if up else 'down'} day on {ratio:.1f}x volume", False,
+                                   f"volume {ratio:.1f}x the 20-bar average, {'up' if up else 'down'} "
+                                   f"{(c[k] / c[k - 1] - 1) * 100:+.1f}%, range {wide:.1f}x ATR"
+                                   + (f"; back to normal {ts(idx[calm])}" if calm is not None else ""),
+                                   [{"date": ts(idx[k]), "price": round(float(h[k] if up else l[k]), 2),
+                                     "label": f"Vol {ratio:.1f}x"}]))
+    return out
+
+
+# ── Candlestick patterns (in context, confirmed) ──────────────────────────────
+def find_candles(df):
+    """Classic reversal candles that appear after a matching move (5-bar change of at
+    least 1 ATR) and are confirmed by a close beyond the pattern's high (bullish) or
+    low (bearish) within the next 2 bars. Unconfirmed ones are dropped, except on the
+    last 2 bars where they are shown as awaiting confirmation."""
+    o, h, l, c = (df[k].values for k in ("Open", "High", "Low", "Close"))
+    atr = _atr_series(df)
+    n, last, idx, out = len(c), len(c) - 1, df.index, []
+    body = abs(c - o)
+    up_w = h - np.maximum(o, c)
+    lo_w = np.minimum(o, c) - l
+    for k in range(8, n):
+        a = atr[k]
+        down = c[k - 1] - c[k - 6] <= -a      # prior move into the candle(s)
+        upm = c[k - 1] - c[k - 6] >= a
+        found = []                             # (name, bullish, first bar of pattern)
+        rng = h[k] - l[k]
+        if rng >= 0.8 * a:
+            small_top, small_bot = up_w[k] <= 0.35 * max(body[k], 0.1 * rng), lo_w[k] <= 0.35 * max(body[k], 0.1 * rng)
+            if lo_w[k] >= 2 * body[k] and small_top and lo_w[k] >= 0.55 * rng:
+                if down: found.append(("Hammer", True, k))
+                if upm: found.append(("Hanging man", False, k))
+            if up_w[k] >= 2 * body[k] and small_bot and up_w[k] >= 0.55 * rng:
+                if down: found.append(("Inverted hammer", True, k))
+                if upm: found.append(("Shooting star", False, k))
+        b0, b1 = c[k - 1] - o[k - 1], c[k] - o[k]
+        if down and b0 < 0 and b1 > 0 and o[k] <= c[k - 1] and c[k] >= o[k - 1] and body[k] > body[k - 1]:
+            found.append(("Bullish engulfing", True, k - 1))
+        if upm and b0 > 0 and b1 < 0 and o[k] >= c[k - 1] and c[k] <= o[k - 1] and body[k] > body[k - 1]:
+            found.append(("Bearish engulfing", False, k - 1))
+        if down and b0 < 0 and body[k - 1] >= 0.6 * a and b1 > 0 and o[k] < c[k - 1] and (o[k - 1] + c[k - 1]) / 2 < c[k] < o[k - 1]:
+            found.append(("Piercing line", True, k - 1))
+        if upm and b0 > 0 and body[k - 1] >= 0.6 * a and b1 < 0 and o[k] > c[k - 1] and o[k - 1] < c[k] < (o[k - 1] + c[k - 1]) / 2:
+            found.append(("Dark cloud cover", False, k - 1))
+        b2 = c[k - 2] - o[k - 2]
+        down2, up2 = c[k - 2] - c[k - 7] <= -a, c[k - 2] - c[k - 7] >= a
+        if down2 and b2 < 0 and body[k - 2] >= 0.6 * a and body[k - 1] <= 0.35 * body[k - 2] and b1 > 0 and c[k] > (o[k - 2] + c[k - 2]) / 2:
+            found.append(("Morning star", True, k - 2))
+        if up2 and b2 > 0 and body[k - 2] >= 0.6 * a and body[k - 1] <= 0.35 * body[k - 2] and b1 < 0 and c[k] < (o[k - 2] + c[k - 2]) / 2:
+            found.append(("Evening star", False, k - 2))
+        three = range(k - 2, k + 1)
+        if all(c[m] > o[m] and body[m] >= 0.5 * a and h[m] - c[m] <= 0.3 * (h[m] - l[m]) for m in three) and c[k - 2] < c[k - 1] < c[k] and down2:
+            found.append(("Three white soldiers", True, k - 2))
+        if all(c[m] < o[m] and body[m] >= 0.5 * a and c[m] - l[m] <= 0.3 * (h[m] - l[m]) for m in three) and c[k - 2] > c[k - 1] > c[k] and up2:
+            found.append(("Three black crows", False, k - 2))
+        for name, bull, k0 in found:
+            ph, pl = h[k0:k + 1].max(), l[k0:k + 1].min()
+            conf = next((m for m in range(k + 1, min(n, k + 3)) if ((c[m] > ph) if bull else (c[m] < pl))), None)
+            if conf is None and k <= last - 2:
+                continue                       # never confirmed: dropped
+            swing = (l[k0:k + 1].min() <= l[max(0, k - 10):min(n, k + 6)].min()) if bull else \
+                    (h[k0:k + 1].max() >= h[max(0, k - 10):min(n, k + 6)].max())
+            status = f"confirmed {ts(idx[conf])}" if conf is not None else "awaiting confirmation"
+            note = (f"after a {(c[k - 1] / c[k - 6] - 1) * 100:+.1f}% 5-bar move; confirms on a close "
+                    f"{'above' if bull else 'below'} {ph if bull else pl:.2f}" + ("; at a swing " + ("low" if bull else "high") if swing else ""))
+            out.append(_event_dict(name, "candle", "bullish" if bull else "bearish", df, k0,
+                                   conf if conf is not None else k, status, conf is None, note,
+                                   [{"date": ts(idx[k]), "price": round(float(pl if bull else ph), 2),
+                                     "label": "".join(w[0] for w in name.split()).upper()}]))
+    return out
+
+
 # ── Support / resistance ───────────────────────────────────────────────────────
 def find_levels(piv, price, tol, min_touches=3):
     """Cluster pivot prices; keep clusters touched >= min_touches times."""
@@ -705,7 +835,7 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval=
             + find_line_patterns(df, piv, tol, flat)
             + find_parallel_channels(df, piv, tol, flat, tl_cands)
             + find_trendlines(df, piv, tol, flat, tl_cands)
-            + find_ranges(df))
+            + find_ranges(df) + find_volume_events(df) + find_candles(df))
     if not show_all:   # hide patterns that never resolved or were invalidated
         pats = [p for p in pats if p["status"] not in ("failed", "expired")]
     pats.sort(key=lambda p: p["i1"], reverse=True)
@@ -792,7 +922,7 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 <script>
 const DATA = __DATA__;
 const COL = {bullish:'#26a69a', bearish:'#ef5350', neutral:'#f5b041'};
-const CATS = [['reversal','Reversals'],['triangle','Triangles & wedges'],['channel','Channels'],['trendline','Trendlines'],['range','Ranges'],['wyckoff','Wyckoff']];
+const CATS = [['reversal','Reversals'],['triangle','Triangles & wedges'],['channel','Channels'],['trendline','Trendlines'],['range','Ranges'],['wyckoff','Wyckoff'],['volume','Volume'],['candle','Candles']];
 const root = document.getElementById('root');
 let seq = 0;
 
@@ -921,6 +1051,7 @@ function render(r, prepend) {
     <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated. Up to 6 of EMA9 / SMA50 (scored) / WMA20 / HMA55 (shown, not scored), plus VWAP (session, intraday), AVWAP swing (from the last swing low and high), AVWAP 2025-04-07 (anchored; or Shift+click the chart), RSI14, MACD12/26/9">
       <label><input type="checkbox" class="ma-show" checked> lines</label>
       <label><input type="checkbox" class="ma-strip" checked> trend strip</label>
+      <label><input type="checkbox" class="ma-vol" checked> volume</label>
       <span>· hover the chart to see the state on any bar, click to pin it, Shift+click to anchor a VWAP there</span></div>
     <div class="state"></div>
     <div class="chart"></div>
@@ -942,6 +1073,10 @@ function render(r, prepend) {
   const cfgIn = s.querySelector('.ma-cfg'), stateDiv = s.querySelector('.state');
   cfgIn.value = maCfg;
   let mas = [], extras = [], score = [], pairs = [], osc = {}, pinned = last;
+  const VOL = r.ohlc.volume || [], hasVolume = VOL.some(v => v > 0);
+  const volAvg = sma(VOL.length ? VOL : C.map(() => 0), 20);
+  const volRatio = VOL.map((v, i) => i >= 20 && volAvg[i - 1] ? v / volAvg[i - 1] : null);   // vs previous 20 bars
+  const fmtVol = v => v >= 1e9 ? (v / 1e9).toFixed(2) + 'B' : v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(0) + 'K' : String(v);
 
   function computeMA() {
     const W = r.warm || [], CW = W.concat(C);   // warm-up closes so long MAs exist from day 1
@@ -1094,7 +1229,11 @@ function render(r, prepend) {
         <div class="sub">${i == pinned && i != last ? 'pinned · ' : ''}${D[i]} · close ${C[i].toFixed(2)}</div>
         <div class="verdict ${cls}">${txt}</div>
         <div class="meter">${sc == null ? '' : `<i style="left:calc(${(sc + 1) * 50}% - 1px)"></i>`}</div>
-        <div class="sub">MA score ${sc == null ? '–' : sc.toFixed(2)} (5 bars earlier ${prev == null ? '–' : prev.toFixed(2)}) · −1 bearish … +1 bullish</div></div>
+        <div class="sub">MA score ${sc == null ? '–' : sc.toFixed(2)} (5 bars earlier ${prev == null ? '–' : prev.toFixed(2)}) · −1 bearish … +1 bullish</div>
+        ${hasVolume ? `<div style="margin-top:8px">Volume <b>${fmtVol(VOL[i])}</b>${volRatio[i] == null ? '' :
+          ` · <b class="${volRatio[i] >= 2 ? 'neutral' : ''}">${volRatio[i].toFixed(1)}×</b> the 20-${daily ? 'day' : 'bar'} average${volRatio[i] >= 2 ? ' (spike)' : ''}`}</div>` : ''}
+        ${r.patterns.filter(p => (p.cat == 'volume' || p.cat == 'candle') && p.events.some(e => e.date == D[i]))
+           .map(p => `<div class="sub"><b class="${p.bias}">${p.type}</b> · ${p.status}</div>`).join('')}</div>
       <div><table><tr><th>MA</th><th>Value</th><th>Price vs MA</th><th>Slope (5 bars)</th></tr>${rows ||
         '<tr><td colspan="4" class="sub">Enter moving averages, e.g. EMA9, EMA21, SMA50, SMA200, RSI14, MACD12/26/9</td></tr>'}</table>
         <div class="crosses">${cr}</div>
@@ -1122,12 +1261,30 @@ function render(r, prepend) {
     pairs.forEach(p => p.ev.forEach(e => traces.push({type:'scatter', mode:'markers', x:[D[e.i]], y:[p.b.v[e.i]],
       marker:{symbol: e.up ? 'triangle-up' : 'triangle-down', size:11, color: e.up ? '#26a69a' : '#ef5350', line:{color:'#fff', width:1}},
       hovertemplate:`${p.a.name}/${p.b.name} ${p.label(e.up)}<br>%{x}<extra></extra>`})));
-    const strip = s.querySelector('.ma-strip').checked;
+    const strip = s.querySelector('.ma-strip').checked, volOn = s.querySelector('.ma-vol').checked && hasVolume;
+    if (volOn) {
+      const o = r.ohlc;
+      traces.push({type:'bar', x:D, y:VOL, yaxis:'y3', name:'volume',
+        marker:{color:VOL.map((v, i) => volRatio[i] >= 2 ? (o.close[i] >= o.open[i] ? '#26a69a' : '#ef5350')
+                                              : (o.close[i] >= o.open[i] ? 'rgba(38,166,154,0.35)' : 'rgba(239,83,80,0.35)'))},
+        customdata:volRatio.map(x => x == null ? '' : x.toFixed(1) + 'x avg'),
+        hovertemplate:'Volume %{y:.3s} · %{customdata}<extra></extra>', showlegend:false});
+      traces.push({type:'scatter', mode:'lines', x:D, y:volAvg, yaxis:'y3', line:{color:'#e0e0e0', width:1},
+        hovertemplate:'20-bar avg %{y:.3s}<extra></extra>', showlegend:false});
+    }
     if (strip) traces.push({type:'bar', x:D, y:D.map((_, i) => score[i] == null ? 0 : 1), yaxis:'y2',
       marker:{color:score.map(stripColor)}, hovertext:score.map((sc, i) => verdict(sc, score[i - SLOPE_BARS])[0]),
       hoverinfo:'text+x', showlegend:false});
     const shapes = [], ann = [];
     pats.forEach(p => {
+      if (!p.box && p.events && p.events.length) {   // volume climaxes / candle patterns: labelled markers
+        const c = COL[p.bias], bull = p.bias == 'bullish';
+        traces.push({type:'scatter', mode:'markers+text', x:p.events.map(e => e.date), y:p.events.map(e => e.price),
+          text:p.events.map(e => e.label), textposition: bull ? 'bottom center' : 'top center', textfont:{color:c, size: p.cat == 'candle' ? 9 : 10},
+          marker:{color:c, size: p.cat == 'candle' ? 5 : 8, symbol: p.cat == 'candle' ? 'circle' : (bull ? 'star-triangle-up' : 'star-triangle-down')},
+          hovertemplate:p.type + ' (' + p.status + ')<br>%{x}<extra></extra>', showlegend:false});
+        return;
+      }
       if (p.box) {   // consolidation range / Wyckoff candidate
         const c = p.cat == 'wyckoff' ? COL[p.bias] : '#8fa3c7';
         const [x0, x1, lo, hi] = p.box, wy = p.cat == 'wyckoff';
@@ -1168,8 +1325,9 @@ function render(r, prepend) {
           {count:3,label:'3M',step:'month',stepmode:'backward'},{count:6,label:'6M',step:'month',stepmode:'backward'},
           {count:1,label:'1Y',step:'year',stepmode:'backward'},{count:2,label:'2Y',step:'year',stepmode:'backward'},
           {step:'all',label:'All'}])}},
-      yaxis:{gridcolor:'#2a2f3a', autorange:true, domain: strip ? [0.09, 1] : [0, 1]},
-      yaxis2:{domain:[0, 0.05], visible:false, fixedrange:true, range:[0, 1]}, bargap:0
+      yaxis:{gridcolor:'#2a2f3a', autorange:true, domain: [(strip ? 0.07 : 0) + (volOn ? 0.17 : 0) + (strip || volOn ? 0.02 : 0), 1]},
+      yaxis2:{domain:[0, 0.05], visible:false, fixedrange:true, range:[0, 1]},
+      yaxis3:{domain: strip ? [0.07, 0.24] : [0, 0.17], gridcolor:'#2a2f3a', showticklabels:false, fixedrange:true, rangemode:'tozero'}, bargap:0
     }, {responsive:true, displaylogo:false});
     if (!div._maEvents) {
       // map the mouse x-position to the nearest trading day (works anywhere on the chart)
@@ -1182,6 +1340,18 @@ function render(r, prepend) {
         while (lo < hi) { const m = (lo + hi) >> 1; TS[m] < t ? lo = m + 1 : hi = m; }
         return lo > 0 && t - TS[lo - 1] < TS[lo] - t ? lo - 1 : lo;
       };
+      // when the visible dates change, fit the price axis to the visible candles
+      // (otherwise far-away level lines stretch it)
+      div.on('plotly_relayout', ev => {
+        let a = ev['xaxis.range[0]'], b = ev['xaxis.range[1]'];
+        if (ev['xaxis.range']) [a, b] = ev['xaxis.range'];
+        if (ev['xaxis.autorange']) [a, b] = [D[0], D[last]];
+        if (a == null || b == null) return;
+        const t0 = parseTs(String(a).slice(0, 16)), t1 = parseTs(String(b).slice(0, 16));
+        let lo = Infinity, hi = -Infinity;
+        TS.forEach((t, i) => { if (t >= t0 && t <= t1) { lo = Math.min(lo, r.ohlc.low[i]); hi = Math.max(hi, r.ohlc.high[i]); } });
+        if (lo < hi) { const pad = (hi - lo) * 0.06; Plotly.relayout(div, {'yaxis.range': [lo - pad, hi + pad]}); }
+      });
       let raf = 0, down = null;
       div.addEventListener('mousemove', ev => {
         cancelAnimationFrame(raf);
@@ -1209,7 +1379,7 @@ function render(r, prepend) {
     });
   }
   boxes.forEach(b => b.onchange = draw);
-  s.querySelectorAll('.ma-show, .ma-strip').forEach(b => b.onchange = draw);
+  s.querySelectorAll('.ma-show, .ma-strip, .ma-vol').forEach(b => b.onchange = draw);
   cfgIn.onchange = () => {
     maCfg = cfgIn.value;
     try { localStorage.setItem('maCfg', maCfg); } catch (e) {}

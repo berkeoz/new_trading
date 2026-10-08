@@ -272,7 +272,10 @@ def ticker_snapshot(sym, spy=None):
         "daily": st,
         "levels": key_levels(d, df, st, price),
         "open_patterns": [{k: p[k] for k in ("type", "bias", "start", "end", "status", "target", "note")}
-                          for p in d["patterns"] if p["open"]][:8],
+                          for p in d["patterns"] if p["open"]][:10],
+        "recent_signals": [{k: p[k] for k in ("type", "bias", "start", "status", "note")}
+                           for p in d["patterns"] if p["cat"] in ("volume", "candle") and not p["open"]
+                           and (pd.Timestamp(d["asof"]) - pd.Timestamp(p["start"][:10])).days <= 10][:6],
         "recent_breaks": [{k: p[k] for k in ("type", "bias", "status", "target")}
                           for p in d["patterns"] if not p["open"] and
                           (pd.Timestamp(d["asof"]) - pd.Timestamp(p["status"].split()[-1][:10])).days <= 15
@@ -281,6 +284,9 @@ def ticker_snapshot(sym, spy=None):
     if spy is not None and sym != "SPY":   # relative strength vs the S&P 500
         out["vs_spy_pct"] = {k: round(out[f"change_{k}_pct"] - spy[f"change_{k}_pct"], 2) for k in ("1d", "5d", "1m")}
     out["next_earnings"] = _earnings(sym)
+    vol = df["Volume"].astype(float)
+    if vol.sum() > 0 and len(vol) > 21:
+        out["volume_vs_20d_avg"] = round(float(vol.iloc[-1] / vol.iloc[-21:-1].mean()), 2)
     t5 = _today_5m(sym)
     if not t5.empty:
         day_open = float(t5["Open"].iloc[0])
@@ -380,6 +386,8 @@ def summary_text(snap):
         if t.get("vs_spy_pct"):
             v = t["vs_spy_pct"]
             L.append(f"  vs SPY (relative strength): 1d {v['1d']:+}pp  5d {v['5d']:+}pp  1m {v['1m']:+}pp")
+        if t.get("volume_vs_20d_avg") is not None:
+            L.append(f"  volume on the last bar: {t['volume_vs_20d_avg']}x the 20-day average")
         if t.get("next_earnings"):
             L.append(f"  next earnings: {t['next_earnings']}")
         if t.get("today"):
@@ -395,6 +403,8 @@ def summary_text(snap):
         for p in t["open_patterns"]:
             L.append(f"  open pattern: {p['type']} ({p['bias']}) {p['start']}→{p['end']}, {p['status']}"
                      + (f", target {p['target']}" if p["target"] else "") + f" — {p['note']}")
+        for p in t.get("recent_signals", []):
+            L.append(f"  recent signal: {p['type']} ({p['bias']}) {p['start']}, {p['status']} — {p['note']}")
         for p in t["recent_breaks"]:
             L.append(f"  recent: {p['type']} ({p['bias']}) {p['status']}" + (f", target {p['target']}" if p["target"] else ""))
     return "\n".join(L)
