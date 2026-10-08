@@ -1,5 +1,10 @@
 {
   "buildCommand": null,
   "framework": null,
-  "cleanUrls": true
+  "cleanUrls": true,
+  "functions": {
+    "api/*.py": {
+      "maxDuration": 30
+    }
+  }
 }

@@ -28,6 +28,7 @@ import pandas as pd
 import yfinance as yf
 
 import patterns as P
+import valuation as V
 
 ET = ZoneInfo("America/New_York")
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -290,6 +291,12 @@ def ticker_snapshot(sym, spy=None):
     if spy is not None and sym != "SPY":   # relative strength vs the S&P 500
         out["vs_spy_pct"] = {k: round(out[f"change_{k}_pct"] - spy[f"change_{k}_pct"], 2) for k in ("1d", "5d", "1m")}
     out["next_earnings"] = _earnings(sym)
+    try:   # intrinsic value estimate (stocks) or earnings yield vs bonds (ETFs)
+        v = V.valuation(sym)
+        out["valuation"] = {k: v.get(k) for k in ("etf", "scenarios", "implied_growth", "flags")}
+        out["valuation"]["text"] = V.summary(v)
+    except Exception as e:
+        out["valuation"] = {"error": str(e)}
     vol = df["Volume"].astype(float)
     if vol.sum() > 0 and len(vol) > 21:
         out["volume_vs_20d_avg"] = round(float(vol.iloc[-1] / vol.iloc[-21:-1].mean()), 2)
@@ -394,6 +401,9 @@ def summary_text(snap):
             L.append(f"  vs SPY (relative strength): 1d {v['1d']:+}pp  5d {v['5d']:+}pp  1m {v['1m']:+}pp")
         if t.get("volume_vs_20d_avg") is not None:
             L.append(f"  volume on the last bar: {t['volume_vs_20d_avg']}x the 20-day average")
+        if t.get("valuation", {}).get("text"):
+            for line in t["valuation"]["text"].splitlines()[1:]:
+                L.append("  valuation: " + line.strip())
         if t.get("next_earnings"):
             L.append(f"  next earnings: {t['next_earnings']}")
         if t.get("today"):

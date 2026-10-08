@@ -904,6 +904,17 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 .ivs{display:inline-flex;gap:4px;margin-left:10px;vertical-align:2px}
 .ivs button{background:#232836;color:var(--mute);border:1px solid var(--line);border-radius:4px;padding:1px 7px;font:12px system-ui,Segoe UI,sans-serif;cursor:pointer}
 .ivs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.vbtn{margin-left:10px;background:#232836;color:var(--fg);border:1px solid var(--acc);border-radius:4px;padding:1px 9px;font:12px system-ui,Segoe UI,sans-serif;cursor:pointer;vertical-align:2px}
+.val{border:1px solid var(--line);border-radius:8px;padding:12px;margin:10px 0;font-size:13px}
+.val h3{margin:0 0 6px;font-size:15px}
+.vsum{display:flex;gap:18px;flex-wrap:wrap;margin:6px 0 10px}
+.vsum div{min-width:120px} .vsum b{font-size:17px;display:block}
+.vin{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin:8px 0}
+.vin label{display:flex;flex-direction:column;color:var(--mute);font-size:12px}
+.vin input{width:84px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:4px 6px;font:inherit}
+.vin button{background:#232836;color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:4px 10px;cursor:pointer}
+.sens td,.sens th{text-align:right;padding:3px 7px} .sens .now{outline:1px solid var(--acc)}
+.flag{color:var(--neu);margin:3px 0}
 .note{color:var(--neu);font-size:12px}
 </style></head><body><main>
 <div class="top">
@@ -1027,6 +1038,101 @@ function verdict(sc, prev) {
   if (d <= -0.3) return ['Turning bearish', 'bearish'];
   return ['Neutral', 'neutral'];
 }
+
+// ── Valuation (intrinsic value estimate) ──
+function dcfVal(f0, g1, g2, r, tg, cash, debt, sh) {
+  if (r <= tg || sh <= 0) return null;
+  let pv = 0, f = f0;
+  for (let y = 1; y <= 10; y++) { f *= 1 + (y <= 5 ? g1 : g2); pv += f / Math.pow(1 + r, y); }
+  return (pv + f * (1 + tg) / (r - tg) / Math.pow(1 + r, 10) + cash - debt) / sh;
+}
+function impliedG(price, f0, r, tg, cash, debt, sh) {
+  const f = g => dcfVal(f0, g, (g + tg) / 2, r, tg, cash, debt, sh) - price;
+  let lo = -0.5, hi = 1.5;
+  if (f0 <= 0 || f(lo) > 0 || f(hi) < 0) return null;
+  for (let k = 0; k < 80; k++) { const m = (lo + hi) / 2; f(m) < 0 ? lo = m : hi = m; }
+  return (lo + hi) / 2;
+}
+const pctS = (x, d = 1) => x == null ? '–' : (x >= 0 ? '+' : '') + (x * 100).toFixed(d) + '%';
+const big = x => x == null ? '–' : Math.abs(x) >= 1e12 ? (x / 1e12).toFixed(2) + 'T' : Math.abs(x) >= 1e9 ? (x / 1e9).toFixed(1) + 'B' : (x / 1e6).toFixed(0) + 'M';
+async function toggleValuation(sym, el) {
+  if (!el.hidden) { el.hidden = true; return; }
+  el.hidden = false;
+  if (el.dataset.loaded) return;
+  if (location.protocol == 'file:') { el.innerHTML = `<div class="sub">Valuation runs on the website. Locally: python valuation.py ${sym}</div>`; return; }
+  el.innerHTML = `<div class="sub">Loading financials for ${sym}… (5–10 s)</div>`;
+  try {
+    const res = await fetch(`/api/valuation?symbol=${encodeURIComponent(sym)}`);
+    const v = await res.json();
+    if (!res.ok || v.error) throw new Error(v.error || res.statusText);
+    el.dataset.loaded = 1;
+    renderValuation(v, el);
+  } catch (err) { el.innerHTML = `<div class="flag">${sym}: ${err.message}</div>`; }
+}
+function renderValuation(v, el) {
+  const flags = v.flags.map(f => `<div class="flag">⚠ ${f}</div>`).join('');
+  const foot = `<div class="sub" style="margin-top:8px">Estimates from Yahoo Finance data and the assumptions shown; small changes in growth or discount rate move the result a lot. Not investment advice.</div>`;
+  if (v.etf) {
+    const e = v.etf, erp = e.equity_risk_premium;
+    el.innerHTML = `<h3>${v.name} — valuation vs bonds</h3>
+      <div class="vsum"><div>P/E<b>${e.pe ?? '–'}</b></div><div>Earnings yield<b>${e.earnings_yield == null ? '–' : (e.earnings_yield * 100).toFixed(2) + '%'}</b></div>
+        <div>10Y Treasury<b>${(v.ten_year * 100).toFixed(2)}%</b></div>
+        <div>Equity risk premium<b class="${erp == null ? '' : erp < 0 ? 'bearish' : erp < 0.02 ? 'neutral' : 'bullish'}">${erp == null ? '–' : (erp >= 0 ? '+' : '') + (erp * 100).toFixed(2) + 'pp'}</b></div></div>
+      <div class="sub">An ETF holds many companies, so it has no single intrinsic value. The earnings yield (1 ÷ P/E) is what the index earns per dollar invested; comparing it with the 10-year Treasury yield shows how richly stocks are priced against risk-free bonds. Historically the gap has usually been positive; near zero or negative means investors are paying up for expected growth.</div>${flags}${foot}`;
+    return;
+  }
+  const i = v.inputs || {}, m = v.multiples || {}, sc = v.scenarios;
+  const hist = (m.history || []).map(h => `<tr><td>${h.fiscal_year_end}</td><td>${h.price}</td><td>${h.pe ?? '–'}</td><td>${h.p_fcf ?? '–'}</td></tr>`).join('');
+  const multHtml = `<h3 style="margin-top:12px">Multiples</h3><div class="wrap"><table><tr><th>Fiscal year end</th><th>Price</th><th>P/E</th><th>P/FCF</th></tr>${hist}
+      <tr><td><b>Now</b></td><td>${v.price}</td><td>${m.pe_now == null ? '–' : m.pe_now.toFixed(1)} <span class="sub">(forward ${m.forward_pe == null ? '–' : m.forward_pe.toFixed(1)})</span></td><td>${m.p_fcf_now ?? '–'}</td></tr></table></div>`;
+  if (!sc) { el.innerHTML = `<h3>${v.name} — valuation</h3>${flags}${multHtml}${foot}`; return; }
+  const fcfHist = Object.entries(i.fcf_history || {}).map(([d, x]) => `${d.slice(0, 4)}: ${big(x)}`).join(' · ');
+  el.innerHTML = `<h3>${v.name} — intrinsic value estimate (DCF)</h3>
+    <div class="vsum">
+      <div>Price<b>${v.price}</b></div>
+      <div>Base value<b class="vbase"></b><span class="sub vbase2"></span></div>
+      <div>Bear – bull<b>${sc.bear.value} – ${sc.bull.value}</b><span class="sub">${pctS(sc.bear.g1, 0)} … ${pctS(sc.bull.g1, 0)} growth</span></div>
+      <div>Market implies<b class="vimp"></b><span class="sub">FCF growth/yr for 5 years, then about half</span></div>
+    </div>
+    <div class="vin">
+      <label>FCF, ${v.currency || ''} bn<input type="number" step="0.1" data-k="fcf" value="${(i.fcf / 1e9).toFixed(1)}"></label>
+      <label>Growth yrs 1–5 %<input type="number" step="0.5" data-k="g1" value="${(i.growth_base * 100).toFixed(1)}"></label>
+      <label>Growth yrs 6–10 %<input type="number" step="0.5" data-k="g2" value="${((i.growth_base + i.terminal_growth) / 2 * 100).toFixed(1)}"></label>
+      <label>Discount rate %<input type="number" step="0.25" data-k="r" value="${(i.discount_rate * 100).toFixed(2)}"></label>
+      <label>Terminal growth %<input type="number" step="0.25" data-k="tg" value="${(i.terminal_growth * 100).toFixed(2)}"></label>
+      <button class="vreset">Reset</button>
+    </div>
+    <div class="sub">FCF base: ${i.fcf_source}; history ${fcfHist}. Growth default: ${i.growth_source}${i.fcf_cagr != null ? `; FCF grew ${pctS(i.fcf_cagr, 0)}/yr historically` : ''}.
+      Discount rate = 10Y ${(i.risk_free * 100).toFixed(2)}% + beta ${i.beta} × ${(i.erp * 100).toFixed(0)}% risk premium (kept within 8–14%). Cash ${big(i.cash)}, debt ${big(i.debt)}, shares ${big(i.shares)}.</div>
+    <h3 style="margin-top:12px">Sensitivity <span class="sub">value per share by discount rate (rows) and growth in years 1–5 (columns); green = above today's price</span></h3>
+    <div class="wrap"><table class="sens"></table></div>
+    ${multHtml}${flags}${foot}`;
+  const inp = k => el.querySelector(`[data-k=${k}]`);
+  const read = () => ({fcf: +inp('fcf').value * 1e9, g1: +inp('g1').value / 100, g2: +inp('g2').value / 100, r: +inp('r').value / 100, tg: +inp('tg').value / 100});
+  let g2Touched = false;
+  function update() {
+    const a = read(), val = dcfVal(a.fcf, a.g1, a.g2, a.r, a.tg, i.cash, i.debt, i.shares);
+    const vs = val == null ? null : val / v.price - 1;
+    el.querySelector('.vbase').innerHTML = val == null ? '–' : `<span class="${vs >= 0 ? 'bullish' : 'bearish'}">${val.toFixed(2)}</span>`;
+    el.querySelector('.vbase2').textContent = vs == null ? '' : `${pctS(vs)} vs price` + (vs > 0 ? ` · margin of safety ${(vs / (1 + vs) * 100).toFixed(0)}%` : '');
+    const ig = impliedG(v.price, a.fcf, a.r, a.tg, i.cash, i.debt, i.shares);
+    el.querySelector('.vimp').textContent = ig == null ? 'n/a' : pctS(ig);
+    const rs = [-0.02, -0.01, 0, 0.01, 0.02].map(d => a.r + d), gs = [-0.10, -0.05, 0, 0.05, 0.10].map(d => a.g1 + d);
+    el.querySelector('.sens').innerHTML = `<tr><th></th>${gs.map(g => `<th>${pctS(g, 0)}</th>`).join('')}</tr>` +
+      rs.map((r, ri) => `<tr><th>${(r * 100).toFixed(2)}%</th>${gs.map((g, gi) => {
+        const x = dcfVal(a.fcf, g, (g + a.tg) / 2, r, a.tg, i.cash, i.debt, i.shares);
+        return `<td class="${x == null ? '' : x >= v.price ? 'bullish' : 'bearish'}${ri == 2 && gi == 2 ? ' now' : ''}">${x == null ? '–' : x.toFixed(0)}</td>`;
+      }).join('')}</tr>`).join('');
+  }
+  el.querySelectorAll('.vin input').forEach(x => x.oninput = () => {
+    if (x.dataset.k == 'g2') g2Touched = true;
+    if ((x.dataset.k == 'g1' || x.dataset.k == 'tg') && !g2Touched) inp('g2').value = ((+inp('g1').value + +inp('tg').value) / 2).toFixed(1);
+    update();
+  });
+  el.querySelector('.vreset').onclick = () => { delete el.dataset.loaded; el.hidden = true; toggleValuation(v.symbol, el); };
+  update();
+}
+
 function stripColor(sc) {
   if (sc == null) return 'rgba(0,0,0,0)';
   if (sc >= 0.5) return '#26a69a'; if (sc >= 0.2) return '#1b6b63';
@@ -1041,9 +1147,10 @@ function render(r, prepend) {
   const IV = r.interval || '1d', daily = IV == '1d';
   const unit = daily ? 'trading days' : 'bars', bu = daily ? 'd' : ' bars';
   s.innerHTML = `<div class="head"><h2>${r.symbol} <span class="sub">${r.price} · ${r.asof} · ${IV.toUpperCase()} · ${r.period} · ATR ${r.atr_pct}%/bar · swing ${r.swing_pct}% · ${r.patterns.length} patterns (${open} open)</span>
-      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span></h2>
+      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button></h2>
       ${prepend ? '<button class="x" title="Remove">&times;</button>' : ''}</div>
     ${r.note ? `<div class="note">${r.note}</div>` : ''}
+    <div class="val" hidden></div>
     <div>${r.levels.map(l => `<span class="lv ${l.role=='support'?'bullish':'bearish'}">${l.role} ${l.price} ×${l.touches}</span>`).join('')}</div>
     <div class="filters">${CATS.map(([k,t]) => `<label><input type="checkbox" data-cat="${k}" checked> ${t} </label>`).join('')}
       <label><input type="checkbox" data-opt="levels" checked> S/R levels</label>
@@ -1067,6 +1174,7 @@ function render(r, prepend) {
     lookup(r.symbol, v == '1d' ? '2y' : {'4h': '1y', '2h': '6mo', '1h': '3mo'}[v], v);
   });
   if (prepend) s.querySelector('.x').onclick = () => { Plotly.purge(div); s.remove(); };
+  s.querySelector('.vbtn').onclick = () => toggleValuation(r.symbol, s.querySelector('.val'));
 
   const C = r.ohlc.close, D = r.ohlc.x, last = C.length - 1;
   const TS = D.map(parseTs);
