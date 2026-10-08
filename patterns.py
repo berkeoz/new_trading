@@ -34,7 +34,18 @@ ROOT     = os.path.dirname(os.path.abspath(__file__))
 # Vercel functions can only write to /tmp
 DATA_DIR = "/tmp/data" if os.environ.get("VERCEL") else os.path.join(ROOT, "data")
 REPORT   = os.path.join(ROOT, "patterns.html")
-DEFAULT_SYMBOLS = ["QQQ", "SPY", "SOXX"]
+def _watchlist():
+    """Tickers shown on the formations page and covered by the market briefs.
+    Edit watchlist.txt (one ticker per line, # for comments) to change both."""
+    try:
+        with open(os.path.join(ROOT, "watchlist.txt"), encoding="utf-8") as f:
+            syms = [l.split("#")[0].strip().upper() for l in f]
+        return [x for x in syms if x] or ["QQQ", "SPY", "SOXX"]
+    except OSError:
+        return ["QQQ", "SPY", "SOXX"]
+
+
+DEFAULT_SYMBOLS = _watchlist()
 PERIODS  = ("1mo", "3mo", "6mo", "1y", "2y", "5y", "10y")
 MONTHS   = {"1mo": 1, "3mo": 3, "6mo": 6, "1y": 12, "2y": 24, "5y": 60, "10y": 120}
 WARMUP_PERIOD = {"1mo": "2y", "3mo": "2y", "6mo": "2y", "1y": "2y", "2y": "5y", "5y": "10y", "10y": "max"}

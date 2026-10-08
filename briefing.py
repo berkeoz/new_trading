@@ -1,7 +1,7 @@
 """
 Market brief data collector — the numbers behind the 9:15 / 15:45 ET briefs.
 
-For each ticker on the formations page (QQQ, SPY, SOXX) it computes the daily
+For each ticker in watchlist.txt (also shown on the formations page) it computes the daily
 and 4H trend state (EMA9/EMA21/SMA50/SMA200 score, RSI14, MACD 12/26/9), the
 nearest supports / resistances (pivot levels, active trendlines and channels,
 key moving averages, anchored VWAPs) and open chart patterns. It also snapshots
@@ -12,9 +12,10 @@ The scheduled routine runs this, adds news / calendar research, and writes the
 narrative brief next to the JSON snapshot in briefs/.
 
 Usage:
-    python briefing.py --session am          # exits with "SKIP" unless it is ~9:15 ET
-    python briefing.py --session pm          # ~15:45 ET
-    python briefing.py --session am --force  # ignore the clock (manual runs)
+    python briefing.py                       # picks the slot from the clock: 9:15 pre,
+                                             # 9:45 open, 15:45 preclose, 16:15 close,
+                                             # anything else = on-demand ("now")
+    python briefing.py --session close       # force a specific kind of brief
     python briefing.py --index               # rebuild briefs/index.json
 """
 
@@ -32,10 +33,18 @@ ET = ZoneInfo("America/New_York")
 ROOT = os.path.dirname(os.path.abspath(__file__))
 BRIEF_DIR = os.path.join(ROOT, "briefs")
 TICKERS = P.DEFAULT_SYMBOLS
-SESSIONS = {"am": (9, 15, "Pre-market brief"), "pm": (15, 45, "Pre-close brief")}
-# window around the target time in which a scheduled fire counts (the routine is
-# scheduled at both possible UTC times so it is right in summer and winter time)
-WINDOW_BEFORE, WINDOW_AFTER = timedelta(minutes=25), timedelta(minutes=40)
+# Scheduled slots (ET). One routine fires at 9:15, 9:45, 15:45 and 16:15; a single
+# cron line also fires at 15:15 and 16:45, which are skipped. Any other time is an
+# on-demand run ("now").
+SESSIONS = {
+    "pre":      ((9, 15),  "Pre-market brief"),
+    "open":     ((9, 45),  "Opening brief"),
+    "preclose": ((15, 45), "Pre-close brief"),
+    "close":    ((16, 15), "Closing brief"),
+    "now":      (None,     "Market brief"),
+}
+SKIP_SLOTS = [(15, 15), (16, 45)]
+WINDOW = timedelta(minutes=12)
 
 CONTEXT = [  # symbol, label, group, kind ("yield" values are in %, changes in basis points)
     ("ES=F",     "S&P 500 futures",        "Futures",    "price"),
@@ -190,7 +199,28 @@ def _live_price(sym):
         return None
 
 
-def ticker_snapshot(sym):
+def _today_5m(sym):
+    try:
+        h = yf.Ticker(sym).history(period="1d", interval="5m")
+        h.index = h.index.tz_convert(ET).tz_localize(None)
+        return h
+    except Exception:
+        return pd.DataFrame()
+
+
+def _earnings(sym):
+    """Next earnings date for stocks (ETFs have none)."""
+    try:
+        cal = yf.Ticker(sym).calendar
+        dates = cal.get("Earnings Date") if isinstance(cal, dict) else None
+        if dates:
+            return str(dates[0])
+    except Exception:
+        pass
+    return None
+
+
+def ticker_snapshot(sym, spy=None):
     d = P.analyze(sym, "2y", fill_today=True)
     df, close, label = _frame(d)
     st = trend_state(close, label)
@@ -213,6 +243,19 @@ def ticker_snapshot(sym):
                           (pd.Timestamp(d["asof"]) - pd.Timestamp(p["status"].split()[-1][:10])).days <= 15
                           if p["status"].split()[-1][:4].isdigit()][:6],
     }
+    if spy is not None and sym != "SPY":   # relative strength vs the S&P 500
+        out["vs_spy_pct"] = {k: round(out[f"change_{k}_pct"] - spy[f"change_{k}_pct"], 2) for k in ("1d", "5d", "1m")}
+    out["next_earnings"] = _earnings(sym)
+    t5 = _today_5m(sym)
+    if not t5.empty:
+        day_open = float(t5["Open"].iloc[0])
+        first = t5[t5.index < t5.index[0] + pd.Timedelta(minutes=15)]
+        ref_prev = float(df["Close"].iloc[-2]) if P.ts(df.index[-1])[:10] == P.ts(t5.index[0])[:10] else price
+        out["today"] = {"date": P.ts(t5.index[0])[:10], "open": round(day_open, 2),
+                        "gap_pct": round((day_open / ref_prev - 1) * 100, 2),
+                        "opening_range_15m": [round(float(first["Low"].min()), 2), round(float(first["High"].max()), 2)],
+                        "high": round(float(t5["High"].max()), 2), "low": round(float(t5["Low"].min()), 2),
+                        "last": round(float(t5["Close"].iloc[-1]), 2), "last_bar_et": P.ts(t5.index[-1])}
     try:   # 4H view and today's session VWAP
         h4 = P.analyze(sym, "6mo", interval="4h")
         _, c4, l4 = _frame(h4)
@@ -261,6 +304,7 @@ def rebuild_index():
         except Exception:
             continue
         items.append({"id": name, "session": meta.get("session"), "title": meta.get("title"),
+                      "tickers": [t.get("symbol") for t in meta.get("tickers", [])],
                       "generated_et": meta.get("generated_et")})
     items.sort(key=lambda x: x["id"], reverse=True)
     with open(os.path.join(BRIEF_DIR, "index.json"), "w", encoding="utf-8") as fh:
@@ -293,6 +337,16 @@ def summary_text(snap):
         if h4:
             L.append(f"  4H: {h4.get('verdict')} (score {h4.get('score')}), RSI {h4.get('rsi14')}, "
                      f"MACD hist {h4.get('macd', {}).get('hist')} (prev {h4.get('macd', {}).get('hist_prev')})")
+        if t.get("vs_spy_pct"):
+            v = t["vs_spy_pct"]
+            L.append(f"  vs SPY (relative strength): 1d {v['1d']:+}pp  5d {v['5d']:+}pp  1m {v['1m']:+}pp")
+        if t.get("next_earnings"):
+            L.append(f"  next earnings: {t['next_earnings']}")
+        if t.get("today"):
+            td = t["today"]
+            L.append(f"  today {td['date']}: open {td['open']} (gap {td['gap_pct']:+}%), first-15-min range "
+                     f"{td['opening_range_15m'][0]}–{td['opening_range_15m'][1]}, high {td['high']} low {td['low']} "
+                     f"last {td['last']} ({td['last_bar_et']} ET)")
         if t.get("session"):
             s = t["session"]
             L.append(f"  session {s['date']}: open {s['open']} high {s['high']} low {s['low']} last {s['last']} VWAP {s['vwap']}")
@@ -306,45 +360,63 @@ def summary_text(snap):
     return "\n".join(L)
 
 
+def pick_session(now, force=False):
+    """Slot for an ET time: a scheduled slot within ±12 min on weekdays, None for the
+    unused cron fires (15:15, 16:45) unless forced, otherwise an on-demand run."""
+    at = lambda hm: now.replace(hour=hm[0], minute=hm[1], second=0, microsecond=0)
+    if now.weekday() >= 5:
+        return "now"
+    if not force and any(abs(now - at(hm)) <= WINDOW for hm in SKIP_SLOTS):
+        return None
+    return next((k for k, (hm, _) in SESSIONS.items() if hm and abs(now - at(hm)) <= WINDOW), "now")
+
+
 def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--session", choices=SESSIONS)
-    ap.add_argument("--force", action="store_true", help="run even outside the scheduled time window")
+    ap.add_argument("--session", default="auto", choices=["auto"] + list(SESSIONS),
+                    help="auto (default): pick the slot from the clock; off-slot times are on-demand runs")
+    ap.add_argument("--force", action="store_true", help="never skip (manual runs at 15:15 / 16:45)")
     ap.add_argument("--index", action="store_true", help="rebuild briefs/index.json and exit")
     args = ap.parse_args()
     os.makedirs(BRIEF_DIR, exist_ok=True)
     if args.index:
         rebuild_index(); return
-    if not args.session:
-        ap.error("--session am|pm is required")
-
     now = datetime.now(ET)
-    hh, mm, title = SESSIONS[args.session]
-    target = now.replace(hour=hh, minute=mm, second=0, microsecond=0)
-    if not args.force:
-        if now.weekday() >= 5 or not (target - WINDOW_BEFORE <= now <= target + WINDOW_AFTER):
-            print(f"SKIP: it is {now:%a %H:%M} ET, outside the {hh}:{mm:02d} ET window. Nothing to do.")
-            return
+    session = args.session if args.session != "auto" else pick_session(now, args.force)
+    if session is None:
+        print(f"SKIP: {now:%H:%M} ET is an unused slot of the schedule. Nothing to do.")
+        return
+    title = SESSIONS[session][1]
 
-    snap = {"session": args.session, "title": f"{title} — {now:%a %b %d, %Y}",
+    snap = {"session": session, "title": f"{title} — {now:%a %b %d, %Y} {now:%H:%M} ET",
             "generated_et": now.strftime("%Y-%m-%d %H:%M"), "context": context_snapshot(), "tickers": []}
+    spy = None
+    if "SPY" in TICKERS:   # SPY first, so the others can be compared with it
+        try:
+            spy = ticker_snapshot("SPY")
+        except Exception:
+            spy = None
     for sym in TICKERS:
         try:
-            snap["tickers"].append(ticker_snapshot(sym))
+            snap["tickers"].append(spy if sym == "SPY" and spy else ticker_snapshot(sym, spy))
         except Exception as e:
             snap["tickers"].append({"symbol": sym, "error": str(e)})
-    bid = f"{now:%Y-%m-%d}-{args.session}"
+    bid = f"{now:%Y-%m-%d-%H%M}-{session}"
     path = os.path.join(BRIEF_DIR, bid + ".json")
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(snap, fh, indent=1, default=float)
+    print(f"SESSION={session}")
     print(f"BRIEF_ID={bid}")
     print(f"DATA={os.path.relpath(path, ROOT)}")
     print(f"WRITE_BRIEF_TO=briefs/{bid}.md")
     prev = sorted(glob.glob(os.path.join(BRIEF_DIR, "*.md")))
     if prev:
         print(f"PREVIOUS_BRIEF={os.path.relpath(prev[-1], ROOT)}")
+    today = [os.path.relpath(f, ROOT) for f in prev if os.path.basename(f).startswith(f"{now:%Y-%m-%d}")]
+    if today:
+        print("TODAYS_BRIEFS=" + ", ".join(today))
     print()
     print(summary_text(snap))
 
