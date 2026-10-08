@@ -590,6 +590,8 @@ h1{{font-size:1.4rem;font-weight:700}}
   border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s}}
 .tab.active,.tab:hover{{color:var(--text)}}
 .tab.active{{border-bottom-color:var(--accent);color:var(--accent)}}
+.tab-link{{padding:8px 20px;margin-left:auto;color:var(--accent);text-decoration:none;font-weight:500}}
+.tab-link:hover{{text-decoration:underline}}
 .tab-panel{{display:none}}.tab-panel.active{{display:block}}
 /* Cards */
 .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px;padding-top:16px}}
@@ -843,6 +845,7 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
     <div class="tab active" data-panel="p-today">Today's Signals</div>
     <div class="tab" data-panel="p-timeline">Signal Timeline (90 days)</div>
     <div class="tab" data-panel="p-breakdown">Market Breakdown</div>
+    <a class="tab-link" href="/patterns">Chart Formations &rarr;</a>
   </div>
 
   <div id="p-today" class="tab-panel active">
