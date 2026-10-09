@@ -288,6 +288,7 @@ def ticker_snapshot(sym, spy=None):
         "live": _live_price(sym),
         "daily": st,
         "levels": key_levels(d, df, st, price),
+        "read30": d.get("read"),
         "open_patterns": [{k: p[k] for k in ("type", "bias", "start", "end", "status", "target", "note")}
                           for p in d["patterns"] if p["open"]][:10],
         "recent_signals": [{k: p[k] for k in ("type", "bias", "start", "status", "note")}
@@ -459,6 +460,11 @@ def summary_text(snap):
             L.append(f"  vs SPY (relative strength): 1d {v['1d']:+}pp  5d {v['5d']:+}pp  1m {v['1m']:+}pp")
         if t.get("volume_vs_20d_avg") is not None:
             L.append(f"  volume on the last bar: {t['volume_vs_20d_avg']}x the 20-day average")
+        if t.get("read30"):
+            rd = t["read30"]
+            L.append(f"  last {rd['bars']} days read: {rd['verdict']} ({rd['positives']}+ / {rd['negatives']}-)")
+            for o_ in rd["observations"]:
+                L.append(f"    {'+' if o_['sign'] > 0 else '-' if o_['sign'] < 0 else '·'} {o_['text']}")
         if t.get("mtf_text"):
             for line in t["mtf_text"].splitlines()[1:]:
                 L.append("  timeframes: " + line.strip())

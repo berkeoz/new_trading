@@ -23,7 +23,7 @@ The report (patterns.html) is served by Vercel at /patterns; its lookup box call
 api/patterns.py to analyze any ticker on demand.
 """
 
-import sys, os, json, argparse, webbrowser
+import sys, os, re, json, argparse, webbrowser
 from datetime import datetime, date
 
 import numpy as np
@@ -793,6 +793,178 @@ def find_candles(df):
     return out
 
 
+# ── Plain-language read of the last N bars ─────────────────────────────────────
+READ_BARS = 30
+
+
+def read_recent(df, pats, piv, n=READ_BARS):
+    """Observations about the last n bars, each with a sign (+1 good / -1 bad / 0 neutral)
+    and the reason, plus an overall verdict. Rule-based, so every line traces to the data."""
+    o, h, l, c = (df[k].values for k in ("Open", "High", "Low", "Close"))
+    v = df["Volume"].values.astype(float)
+    has_vol = v.sum() > 0
+    N, idx = len(c), df.index
+    s0 = max(1, N - n)                       # first bar of the window
+    atr = _atr_series(df)
+    vavg = pd.Series(v).rolling(20).mean().shift(1).values
+    unit = "days" if (idx[-1].hour, idx[-1].minute) == (0, 0) else "bars"
+    obs = []
+    add = lambda sign, text, kind: obs.append({"sign": sign, "text": text, "kind": kind})
+
+    # 1) performance and where it closed in the window's range
+    chg = c[-1] / c[s0 - 1] - 1
+    hi, lo = h[s0:].max(), l[s0:].min()
+    pos = (c[-1] - lo) / (hi - lo) if hi > lo else 0.5
+    add(1 if chg > 0.02 else -1 if chg < -0.02 else 0,
+        f"{chg * 100:+.1f}% over the last {N - s0} {unit}; closed in the {'upper' if pos > 0.67 else 'lower' if pos < 0.33 else 'middle'} "
+        f"third of its {lo:.2f}-{hi:.2f} range", "performance")
+
+    # 2) structure: higher highs / higher lows from the swing points
+    H = [q for q in piv if q["kind"] == "H"]
+    L = [q for q in piv if q["kind"] == "L"]
+    if len(H) >= 2 and len(L) >= 2:
+        hh, hl = H[-1]["price"] > H[-2]["price"], L[-1]["price"] > L[-2]["price"]
+        dH, dL = ts(idx[H[-1]["i"]]), ts(idx[L[-1]["i"]])
+        if hh and hl:
+            add(1, f"higher highs and higher lows (low {L[-2]['price']:.2f} → {L[-1]['price']:.2f} on {dL}): uptrend structure intact", "structure")
+        elif not hh and not hl:
+            add(-1, f"lower highs and lower lows (high {H[-2]['price']:.2f} → {H[-1]['price']:.2f} on {dH}): downtrend structure", "structure")
+        elif hl and not hh:
+            add(0, f"higher low ({L[-1]['price']:.2f} on {dL}) but a lower high ({H[-1]['price']:.2f}): range-bound / coiling", "structure")
+        else:
+            add(0, f"higher high ({H[-1]['price']:.2f}) but a lower low ({L[-1]['price']:.2f} on {dL}): widening swings", "structure")
+    prior_low = l[max(0, s0 - n):s0].min() if s0 > 1 else None
+    if prior_low is not None:
+        if lo >= prior_low:
+            add(1, f"no lower low: the window's low {lo:.2f} held above the previous {n}-{unit[:-1]} low {prior_low:.2f}", "structure")
+        else:
+            add(-1, f"made a lower low ({lo:.2f}) below the previous {n}-{unit[:-1]} low {prior_low:.2f}", "structure")
+
+    # 1b) the latest bar and the last 5 bars (fresh moves the 30-bar view can hide)
+    atrp = atr[-1] / c[-1]
+    d1 = c[-1] / c[-2] - 1
+    if abs(d1) >= atrp:
+        vr = v[-1] / vavg[-1] if has_vol and vavg[-1] else None
+        add(1 if d1 > 0 else -1, f"latest {unit[:-1]} ({ts(idx[-1])}) {d1 * 100:+.1f}%"
+            + (f" on {vr:.1f}x average volume" if vr else "") + f", a move of {abs(d1) / atrp:.1f}x the usual range", "recent")
+    hi5, lo5 = h[-6:].max(), l[-6:].min()
+    if c[-1] / hi5 - 1 <= -2 * atrp:
+        k = N - 6 + int(np.argmax(h[-6:]))
+        add(-1, f"sharp pullback: {(c[-1] / hi5 - 1) * 100:.1f}% from the {ts(idx[k])} high {hi5:.2f} within 5 {unit}", "recent")
+    elif c[-1] / lo5 - 1 >= 2 * atrp:
+        k = N - 6 + int(np.argmin(l[-6:]))
+        add(1, f"sharp rebound: {(c[-1] / lo5 - 1) * 100:+.1f}% from the {ts(idx[k])} low {lo5:.2f} within 5 {unit}", "recent")
+
+    # 3) gaps (open beyond the prior close by >= 0.75 ATR), with volume and whether filled
+    quiet_filled = 0
+    for k in range(s0, N):
+        g = o[k] - c[k - 1]
+        if abs(g) < 0.75 * atr[k - 1]:
+            continue
+        up = g > 0
+        vr = v[k] / vavg[k] if has_vol and vavg[k] else None
+        filled = (l[k:].min() <= c[k - 1]) if up else (h[k:].max() >= c[k - 1])
+        loud = vr is not None and vr >= 1.5
+        if filled and not loud:
+            quiet_filled += 1
+            continue
+        txt = (f"gap {'up' if up else 'down'} on {ts(idx[k])} ({g / c[k - 1] * 100:+.1f}%"
+               + (f", volume {vr:.1f}x average" if vr else "") + "), "
+               + ("filled since" if filled else "still unfilled"))
+        if up:
+            sign = 0 if filled else 1
+            txt += " → buyers in control" if not filled and loud else (" → gap support below at " + f"{c[k - 1]:.2f}" if not filled else "")
+        else:
+            sign = 0 if filled else -1
+            txt += " → sellers in control" if not filled and loud else (" → gap resistance above at " + f"{c[k - 1]:.2f}" if not filled else "")
+        add(sign, txt, "gap")
+    if quiet_filled:
+        add(0, f"{quiet_filled} other gap{'s' if quiet_filled > 1 else ''} on normal volume already filled", "gap")
+
+    # 4) volume: up-day vs down-day volume, biggest volume day
+    if has_vol:
+        upv = v[s0:][c[s0:] >= o[s0:]].sum()
+        dnv = v[s0:][c[s0:] < o[s0:]].sum()
+        if upv + dnv > 0:
+            ratio = upv / dnv if dnv else float("inf")
+            if ratio >= 1.3:
+                add(1, f"more volume on up {unit} than down {unit} ({ratio:.1f}x): accumulation", "volume")
+            elif ratio <= 1 / 1.3:
+                add(-1, f"more volume on down {unit} than up {unit} ({1 / ratio:.1f}x): distribution", "volume")
+            else:
+                add(0, f"up- and down-{unit[:-1]} volume roughly balanced ({ratio:.1f}x)", "volume")
+        k = s0 + int(np.argmax(v[s0:]))
+        if vavg[k] and v[k] >= 1.8 * vavg[k]:
+            up = c[k] >= o[k]
+            add(1 if up else -1, f"heaviest volume on {ts(idx[k])} ({v[k] / vavg[k]:.1f}x average) was an "
+                f"{'up' if up else 'down'} {unit[:-1]} ({(c[k] / c[k - 1] - 1) * 100:+.1f}%)", "volume")
+
+    # 5) patterns, volume events and candles inside the window or still open
+    t0 = ts(idx[s0])
+    for pt in pats:
+        sign = {"bullish": 1, "bearish": -1}.get(pt["bias"], 0)
+        st = pt["status"]
+        recent_event = pt["start"] >= t0 or pt["end"] >= t0 or any(d >= t0 for d in re.findall(r"\d{4}-\d{2}-\d{2}(?: \d{2}:\d{2})?", st))
+        if pt["cat"] == "trendline":
+            continue                      # trendlines are covered by levels; too many to list
+        if pt["cat"] in ("volume", "candle"):
+            if pt["start"] < t0 or pt["type"] == "Volume spike":
+                continue
+            if st.startswith("confirmed"):
+                add(sign, f"{pt['type']} on {pt['start']}, {st}", pt["cat"])
+            elif st.startswith("failed"):
+                add(-sign, f"{pt['type']} on {pt['start']} {st}", pt["cat"])
+            elif pt["open"]:
+                add(0, f"{pt['type']} on {pt['start']}, {st}", pt["cat"])
+            continue
+        if pt["open"]:
+            add(sign if pt["cat"] != "range" else 0, f"{pt['type']} ({pt['start']} → {pt['end']}): {st}", "formation")
+        elif recent_event:
+            broke_dir = "up" if " up " in f" {st} " else "down" if " down " in f" {st} " else None
+            if st.startswith("confirmed"):
+                add(sign, f"{pt['type']} {st}", "formation")
+            elif st.startswith("failed"):
+                add(-sign if sign else 0, f"{pt['type']} {st}", "formation")
+            elif st.startswith("false break") and broke_dir:
+                # a breakout that slipped back inside is a failed move: a warning in that direction
+                add(-1 if broke_dir == "up" else 1, f"{pt['type']}: {st} (failed {'breakout' if broke_dir == 'up' else 'breakdown'})", "formation")
+            elif broke_dir and pt["cat"] in ("range", "triangle", "channel"):
+                add(1 if broke_dir == "up" else -1, f"{pt['type']} {st}", "formation")
+
+    # 6) trend and momentum
+    cs = pd.Series(c)
+    e9, e21 = cs.ewm(span=9, adjust=False).mean(), cs.ewm(span=21, adjust=False).mean()
+    s50 = cs.rolling(50).mean()
+    above21, above50 = c[-1] > e21.iloc[-1], (not np.isnan(s50.iloc[-1])) and c[-1] > s50.iloc[-1]
+    add(1 if above21 and above50 else -1 if not above21 and not above50 else 0,
+        f"price {'above' if above21 else 'below'} the 21-{unit[:-1]} EMA ({e21.iloc[-1]:.2f})"
+        + ("" if np.isnan(s50.iloc[-1]) else f" and {'above' if above50 else 'below'} the 50-{unit[:-1]} average ({s50.iloc[-1]:.2f})"), "trend")
+    x = np.sign(e9 - e21).diff().fillna(0).values
+    xk = [k for k in range(s0, N) if x[k] != 0]
+    if xk:
+        k = xk[-1]
+        add(1 if x[k] > 0 else -1, f"EMA9 crossed {'above' if x[k] > 0 else 'below'} EMA21 on {ts(idx[k])}", "trend")
+    d = cs.diff()
+    g = d.clip(lower=0).ewm(alpha=1 / 14, adjust=False).mean()
+    ls = (-d.clip(upper=0)).ewm(alpha=1 / 14, adjust=False).mean()
+    rsi = (100 - 100 / (1 + g / ls)).values
+    if rsi[-1] >= 70:
+        add(0, f"RSI {rsi[-1]:.0f}: overbought, stretched short term", "momentum")
+    elif rsi[-1] <= 30:
+        add(0, f"RSI {rsi[-1]:.0f}: oversold, a bounce is common but not guaranteed", "momentum")
+    if c[-1] >= h[s0:].max() * 0.995 and rsi[-1] < rsi[s0:].max() - 5:
+        add(-1, f"price near the window high but RSI {rsi[-1]:.0f} is below its peak {rsi[s0:].max():.0f}: bearish divergence", "momentum")
+    if c[-1] <= l[s0:].min() * 1.005 and rsi[-1] > rsi[s0:].min() + 5:
+        add(1, f"price near the window low but RSI {rsi[-1]:.0f} is above its low {rsi[s0:].min():.0f}: bullish divergence", "momentum")
+
+    score = sum(o_["sign"] for o_ in obs)
+    pos_n, neg_n = sum(o_["sign"] > 0 for o_ in obs), sum(o_["sign"] < 0 for o_ in obs)
+    verdict = ("Bullish" if score >= 3 else "Leaning bullish" if score >= 1 else
+               "Bearish" if score <= -3 else "Leaning bearish" if score <= -1 else "Mixed")
+    return {"bars": N - s0, "from": t0, "verdict": verdict, "score": score,
+            "positives": int(pos_n), "negatives": int(neg_n), "observations": obs}
+
+
 # ── Support / resistance ───────────────────────────────────────────────────────
 def find_levels(piv, price, tol, min_touches=3):
     """Cluster pivot prices; keep clusters touched >= min_touches times."""
@@ -848,6 +1020,7 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval=
                     "kind": p["kind"], "confirmed": p["confirmed"]} for p in piv],
         "patterns": pats,
         "levels": find_levels(piv, price, tol)[:6],
+        "read": read_recent(df, pats, piv),
         "warm": warm["Close"].round(2).tolist(),   # closes before the window, for MA warm-up
         "ohlc": {
             "x": [ts(d) for d in df.index],
@@ -915,6 +1088,11 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 .vin button{background:#232836;color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:4px 10px;cursor:pointer}
 .sens td,.sens th{text-align:right;padding:3px 7px} .sens .now{outline:1px solid var(--acc)}
 .flag{color:var(--neu);margin:3px 0}
+.read{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:13px}
+.read summary{cursor:pointer;font-weight:600}
+.read ul{margin:6px 0 0;padding-left:0;list-style:none}
+.read li{margin:3px 0;padding-left:20px;text-indent:-20px}
+.read .ic{display:inline-block;width:16px;text-indent:0;font-weight:700}
 .note{color:var(--neu);font-size:12px}
 </style></head><body><main>
 <div class="top">
@@ -1194,6 +1372,10 @@ function render(r, prepend) {
       <label><input type="checkbox" class="ma-strip" checked> trend strip</label>
       <label><input type="checkbox" class="ma-vol" checked> volume</label>
       <span>· hover the chart to see the state on any bar, click to pin it, Shift+click to anchor a VWAP there</span></div>
+    ${r.read ? `<details class="read" open><summary>Last ${r.read.bars} ${daily ? 'days' : 'bars'}: <span class="${r.read.score > 0 ? 'bullish' : r.read.score < 0 ? 'bearish' : 'neutral'}">${r.read.verdict}</span>
+      <span class="sub">(${r.read.positives} positive · ${r.read.negatives} negative · since ${r.read.from})</span></summary>
+      <ul>${r.read.observations.map(o => `<li><span class="ic ${o.sign > 0 ? 'bullish' : o.sign < 0 ? 'bearish' : 'sub'}">${o.sign > 0 ? '▲' : o.sign < 0 ? '▼' : '•'}</span>${o.text}</li>`).join('')}</ul>
+      <div class="sub" style="margin-top:6px">Rule-based read of the recent candles, formations, gaps and volume; the verdict counts positives minus negatives. Not investment advice.</div></details>` : ''}
     <div class="state"></div>
     <div class="chart"></div>
     <div class="wrap"><table><thead><tr><th>Pattern</th><th>Bias</th><th>From</th><th>To</th><th>Status</th><th>Target</th><th>Detail</th></tr></thead><tbody></tbody></table></div>`;
