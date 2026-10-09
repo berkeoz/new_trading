@@ -59,9 +59,16 @@ function renderSnap(d) {
   const el = $('#snap');
   if (!d) { el.hidden = true; return; }
   el.hidden = false;
-  const ctx = d.context.map(c => c.error ? `<tr><td>${esc(c.label)}</td><td colspan="5" class="sub">n/a</td></tr>` :
+  const P = [['1d', '1 day'], ['5d', '5 days'], ['1m', '1 month'], ['3m', '3 months'], ['6m', '6 months'], ['1y', '1 year']];
+  const ctx = d.context.map(c => c.error ? `<tr><td>${esc(c.label)}</td><td colspan="${P.length + 2}" class="sub">n/a</td></tr>` :
     `<tr><td>${esc(c.label)}</td><td class="sub">${esc(c.group)}</td><td>${c.last}${c.kind == 'yield' ? '%' : ''}</td>
-     <td>${sign(c.chg_1d, c.unit)}</td><td>${sign(c.chg_5d, c.unit)}</td><td>${sign(c.chg_1m, c.unit)}</td></tr>`).join('');
+     ${P.map(([k]) => `<td>${sign(c['chg_' + k] ?? null, c.unit)}</td>`).join('')}</tr>`).join('');
+  // sectors: sortable by any period; "vs SPY" shows over/under-performance in percentage points
+  const secs = d.sectors || [];
+  const secRows = key => secs.slice().sort((a, b) => (b[key] ?? -1e9) - (a[key] ?? -1e9)).map(c => c.error
+    ? `<tr><td>${esc(c.label)}</td><td colspan="${P.length + 1}" class="sub">n/a</td></tr>`
+    : `<tr><td>${esc(c.label)} <span class="sub">${esc(c.symbol)}</span></td><td>${c.last}</td>${P.map(([k]) =>
+        `<td>${sign(c['chg_' + k] ?? null)}<div class="sub">${c['vs_spy_' + k] == null ? '' : (c['vs_spy_' + k] > 0 ? '+' : '') + c['vs_spy_' + k]}</div></td>`).join('')}</tr>`).join('');
   const tk = d.tickers.map(t => {
     if (t.error) return `<div class="tk"><h3>${esc(t.symbol)}</h3><div class="sub">${esc(t.error)}</div></div>`;
     const dd = t.daily, h4 = t.h4 || {};
@@ -73,13 +80,19 @@ function renderSnap(d) {
       <div class="sub" style="margin:4px 0">RSI ${dd.rsi14} (5 bars ago ${dd.rsi14_5_bars_ago}) · MACD hist ${dd.macd.hist} (prev ${dd.macd.hist_prev})${t.session && t.session.vwap ? ` · session VWAP ${t.session.vwap}` : ''}</div>
       <div class="sub" style="margin-top:6px">Resistance</div>${lv(t.levels.resistances.slice().reverse(), 'negv')}
       <div class="sub" style="margin-top:6px">Support</div>${lv(t.levels.supports, 'pos')}
+      ${t.mtf && t.mtf.summary ? `<div class="sub" style="margin-top:6px">Timeframe ladder (turn ${esc(t.mtf.summary.dir)} from ${t.mtf.summary.from_swing.price})</div>` +
+        t.mtf.summary.steps.map(x => `<div class="lvl"><b>${esc(x.tf)}</b> <span class="${x.status == 'confirmed' ? 'pos' : x.status == 'pending' ? '' : 'sub'}">${esc(x.status)}${x.status == 'pending' && x.level != null ? ` · close ${t.mtf.summary.dir == 'up' ? 'above' : 'below'} ${x.level}` : x.when ? ' ' + esc(x.when) : ''}</span></div>`).join('') : ''}
       ${t.open_patterns.length ? `<div class="sub" style="margin-top:6px">Open patterns</div>` + t.open_patterns.map(p => `<div class="lvl">${esc(p.type)} <span class="sub">${esc(p.status)}${p.target ? ', target ' + p.target : ''}</span></div>`).join('') : ''}
     </div>`;
   }).join('');
   el.innerHTML = `<h2 style="margin-top:0;font-size:17px">Data snapshot <span class="sub">${esc(d.generated_et)} ET</span></h2>
     <div class="grid">${tk}</div>
     <h3 style="font-size:15px">Cross-asset</h3>
-    <div class="wrap"><table><tr><th>Market</th><th></th><th>Last</th><th>1 day</th><th>5 days</th><th>1 month</th></tr>${ctx}</table></div>`;
+    <div class="wrap"><table><tr><th>Market</th><th></th><th>Last</th>${P.map(([, l]) => `<th>${l}</th>`).join('')}</tr>${ctx}</table></div>
+    ${secs.length ? `<h3 style="font-size:15px">Sectors <span class="sub">sorted by <select id="secSort">${P.map(([k, l]) => `<option value="chg_${k}">${l}</option>`).join('')}</select> · grey = vs SPY in percentage points</span></h3>
+    <div class="wrap"><table id="secTable"><tr><th>Sector</th><th>Last</th>${P.map(([, l]) => `<th>${l}</th>`).join('')}</tr>${secRows('chg_1d')}</table></div>` : ''}`;
+  const ss = $('#secSort');
+  if (ss) ss.onchange = () => { $('#secTable').innerHTML = `<tr><th>Sector</th><th>Last</th>${P.map(([, l]) => `<th>${l}</th>`).join('')}</tr>` + secRows(ss.value); };
 }
 
 fetch('briefs/index.json').then(r => r.ok ? r.json() : {briefs: []}).catch(() => ({briefs: []})).then(ix => {

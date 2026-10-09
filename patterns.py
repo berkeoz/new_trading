@@ -1039,6 +1039,39 @@ function verdict(sc, prev) {
   return ['Neutral', 'neutral'];
 }
 
+// ── Multi-timeframe turn ladder ──
+async function toggleLadder(sym, el) {
+  if (!el.hidden) { el.hidden = true; return; }
+  el.hidden = false;
+  if (location.protocol == 'file:') { el.innerHTML = `<div class="sub">Runs on the website. Locally: python mtf.py ${sym}</div>`; return; }
+  el.innerHTML = `<div class="sub">Loading 5m / 15m / 1h / 4h / daily for ${sym}…</div>`;
+  try {
+    const res = await fetch(`/api/mtf?symbol=${encodeURIComponent(sym)}`);
+    const l = await res.json();
+    if (!res.ok || l.error) throw new Error(l.error || res.statusText);
+    renderLadder(l, el);
+  } catch (err) { el.innerHTML = `<div class="flag">${sym}: ${err.message}</div>`; }
+}
+function renderLadder(l, el) {
+  const s = l.summary, word = d => d == 'up' ? 'above' : 'below';
+  const casc = !s ? '' : `<div class="vsum">${s.steps.map(x => `<div>${x.tf}<b class="${x.status == 'confirmed' ? (s.dir == 'up' ? 'bullish' : 'bearish') : x.status == 'pending' ? 'neutral' : ''}">${
+      x.status == 'confirmed' ? '✓ confirmed' : x.status == 'pending' ? 'pending' : x.status}</b><span class="sub">${
+      x.status == 'confirmed' ? x.when : x.status == 'pending' && x.level != null ? `close ${word(s.dir)} ${x.level}${x.distance_pct != null ? ` (${x.distance_pct > 0 ? '+' : ''}${x.distance_pct}%)` : ''}` : x.when ? 'since ' + x.when : ''}</span></div>`).join('')}</div>`;
+  const rows = l.timeframes.map(r => {
+    const t = r.last_turn, p = r.pending;
+    return `<tr><td><b>${r.tf}</b></td><td class="${r.trend == 'up' ? 'bullish' : r.trend == 'down' ? 'bearish' : 'neutral'}">${r.trend}</td>
+      <td>${t ? `<b class="${t.dir == 'up' ? 'bullish' : 'bearish'}">${t.dir}</b> (${t.kind}) ${t.when}<div class="sub">closed ${word(t.dir)} ${t.level} after the ${t.dir == 'up' ? 'low' : 'high'} ${t.swing.price} (${t.swing.when})</div>` : '–'}</td>
+      <td>${p ? `${p.kind} ${p.dir}: close ${word(p.dir)} <b>${p.level}</b> <span class="sub">(${p.distance_pct > 0 ? '+' : ''}${p.distance_pct}%)</span>` : '–'}</td>
+      <td>${r.rsi}</td><td class="${r.macd_hist > 0 ? 'bullish' : 'bearish'}">${r.macd_hist > 0 ? '+' : '−'} ${r.macd_rising ? '↑' : '↓'}</td>
+      <td class="sub">${r.ema_cross ? `EMA9/21 ${r.ema_cross.dir} ${r.ema_cross.when}` : ''}</td></tr>`;
+  }).join('');
+  el.innerHTML = `<h3>${l.symbol} — turn ladder ${s ? `<span class="sub">latest 5m turn ${s.dir} from the ${s.from_swing.price} swing at ${s.from_swing.when}</span>` : ''}</h3>
+    ${casc}
+    <div class="wrap"><table><tr><th>TF</th><th>Trend</th><th>Last confirmed turn</th><th>Next confirmation</th><th>RSI</th><th>MACD</th><th></th></tr>${rows}</table></div>
+    ${Object.entries(l.errors || {}).map(([k, e]) => `<div class="flag">${k}: ${e}</div>`).join('')}
+    <div class="sub" style="margin-top:8px">A turn is confirmed on a timeframe when, after a swing low (high), a bar closes above the swing high (below the swing low) that came before it. A bottom usually confirms on 5m first, then 15m, 1h, 4h; "pending" shows the close each slower timeframe still needs. "Already trending" means that timeframe was already moving that way, so the drop (rise) was only a pullback there. Yahoo intraday data can be delayed ~15 min. Not investment advice.</div>`;
+}
+
 // ── Valuation (intrinsic value estimate) ──
 function dcfVal(f0, g1, g2, r, tg, cash, debt, sh) {
   if (r <= tg || sh <= 0) return null;
@@ -1147,10 +1180,11 @@ function render(r, prepend) {
   const IV = r.interval || '1d', daily = IV == '1d';
   const unit = daily ? 'trading days' : 'bars', bu = daily ? 'd' : ' bars';
   s.innerHTML = `<div class="head"><h2>${r.symbol} <span class="sub">${r.price} · ${r.asof} · ${IV.toUpperCase()} · ${r.period} · ATR ${r.atr_pct}%/bar · swing ${r.swing_pct}% · ${r.patterns.length} patterns (${open} open)</span>
-      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button></h2>
+      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button><button class="vbtn tbtn" title="Has a turn been confirmed on 5m, 15m, 1h, 4h and daily?">Timeframes</button></h2>
       ${prepend ? '<button class="x" title="Remove">&times;</button>' : ''}</div>
     ${r.note ? `<div class="note">${r.note}</div>` : ''}
     <div class="val" hidden></div>
+    <div class="val mtf" hidden></div>
     <div>${r.levels.map(l => `<span class="lv ${l.role=='support'?'bullish':'bearish'}">${l.role} ${l.price} ×${l.touches}</span>`).join('')}</div>
     <div class="filters">${CATS.map(([k,t]) => `<label><input type="checkbox" data-cat="${k}" checked> ${t} </label>`).join('')}
       <label><input type="checkbox" data-opt="levels" checked> S/R levels</label>
@@ -1175,6 +1209,7 @@ function render(r, prepend) {
   });
   if (prepend) s.querySelector('.x').onclick = () => { Plotly.purge(div); s.remove(); };
   s.querySelector('.vbtn').onclick = () => toggleValuation(r.symbol, s.querySelector('.val'));
+  s.querySelector('.tbtn').onclick = () => toggleLadder(r.symbol, s.querySelector('.mtf'));
 
   const C = r.ohlc.close, D = r.ohlc.x, last = C.length - 1;
   const TS = D.map(parseTs);

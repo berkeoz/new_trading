@@ -29,6 +29,7 @@ import yfinance as yf
 
 import patterns as P
 import valuation as V
+import mtf as M
 
 ET = ZoneInfo("America/New_York")
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -66,6 +67,14 @@ CONTEXT = [  # symbol, label, group, kind ("yield" values are in %, changes in b
     ("ETH-USD",  "Ether",                  "Crypto",     "price"),
 ]
 MAS = [("EMA", 9), ("EMA", 21), ("SMA", 50), ("SMA", 200)]
+SECTORS = [  # symbol, label (sector ETFs; returns compared with SPY)
+    ("XLK", "Technology"), ("SMH", "Semiconductors"), ("XLC", "Communication services (telecom, media)"),
+    ("XLY", "Consumer discretionary"), ("XLP", "Consumer staples"), ("XLF", "Financials"),
+    ("KRE", "Regional banks"), ("XLV", "Health care"), ("XLI", "Industrials"), ("IYT", "Transportation"),
+    ("XLE", "Energy"), ("XLB", "Materials"), ("XLRE", "Real estate"), ("XLU", "Utilities"),
+    ("ITB", "Homebuilders"), ("IWM", "Small caps (Russell 2000)"),
+]
+PERIODS_BARS = {"1d": 1, "5d": 5, "1m": 21, "3m": 63, "6m": 126, "1y": 252}
 
 
 # ── Indicators (same rules as the formations page) ─────────────────────────────
@@ -291,6 +300,13 @@ def ticker_snapshot(sym, spy=None):
     if spy is not None and sym != "SPY":   # relative strength vs the S&P 500
         out["vs_spy_pct"] = {k: round(out[f"change_{k}_pct"] - spy[f"change_{k}_pct"], 2) for k in ("1d", "5d", "1m")}
     out["next_earnings"] = _earnings(sym)
+    try:   # multi-timeframe turn ladder (5m, 15m, 1h, 4h, 1D)
+        lad = M.ladder(sym)
+        out["mtf"] = {"summary": lad["summary"],
+                      "timeframes": [{k: r.get(k) for k in ("tf", "trend", "rsi", "last_turn", "pending")} for r in lad["timeframes"]]}
+        out["mtf_text"] = M.text(lad)
+    except Exception as e:
+        out["mtf"] = {"error": str(e)}
     try:   # intrinsic value estimate (stocks) or earnings yield vs bonds (ETFs)
         v = V.valuation(sym)
         out["valuation"] = {k: v.get(k) for k in ("etf", "scenarios", "implied_growth", "flags")}
@@ -327,22 +343,55 @@ def ticker_snapshot(sym, spy=None):
     return out
 
 
+def _changes(h, kind="price"):
+    """Change over 1d / 5d / 1m / 3m / 6m / 1y (bp for yields, % otherwise); None if too short."""
+    last = float(h.iloc[-1])
+    out = {}
+    for k, n in PERIODS_BARS.items():
+        if len(h) <= n:
+            out[f"chg_{k}"] = None
+        elif kind == "yield":
+            out[f"chg_{k}"] = round((last - float(h.iloc[-1 - n])) * 100, 1)
+        else:
+            out[f"chg_{k}"] = round((last / float(h.iloc[-1 - n]) - 1) * 100, 2)
+    return out
+
+
 def context_snapshot():
     out = []
     for sym, label, group, kind in CONTEXT:
         try:
-            h = yf.Ticker(sym).history(period="3mo", interval="1d", auto_adjust=True)["Close"].dropna()
+            h = yf.Ticker(sym).history(period="2y", interval="1d", auto_adjust=True)["Close"].dropna()
             if len(h) < 23: raise ValueError("not enough data")
             last = float(h.iloc[-1])
-            chg = (lambda n: round((last - float(h.iloc[-1 - n])) * 100, 1)) if kind == "yield" else \
-                  (lambda n: round((last / float(h.iloc[-1 - n]) - 1) * 100, 2))
+            h3 = h.iloc[-63:]
             out.append({"symbol": sym, "label": label, "group": group, "kind": kind,
                         "last": round(last, 3 if kind == "yield" else 2), "date": str(h.index[-1].date()),
-                        "chg_1d": chg(1), "chg_5d": chg(5), "chg_1m": chg(21),
-                        "unit": "bp" if kind == "yield" else "%",
-                        "range_3m": [round(float(h.min()), 2), round(float(h.max()), 2)]})
+                        **_changes(h, kind), "unit": "bp" if kind == "yield" else "%",
+                        "range_3m": [round(float(h3.min()), 2), round(float(h3.max()), 2)]})
         except Exception as e:
             out.append({"symbol": sym, "label": label, "group": group, "error": str(e)})
+    return out
+
+
+def sector_snapshot():
+    """Sector ETFs: returns over 1d ... 1y and the same vs SPY (positive = outperforming)."""
+    try:
+        spy = _changes(yf.Ticker("SPY").history(period="2y", interval="1d", auto_adjust=True)["Close"].dropna())
+    except Exception:
+        spy = {}
+    out = []
+    for sym, label in SECTORS:
+        try:
+            h = yf.Ticker(sym).history(period="2y", interval="1d", auto_adjust=True)["Close"].dropna()
+            if len(h) < 23: raise ValueError("not enough data")
+            ch = _changes(h)
+            rel = {f"vs_spy_{k}": (None if ch[f"chg_{k}"] is None or spy.get(f"chg_{k}") is None
+                                   else round(ch[f"chg_{k}"] - spy[f"chg_{k}"], 2)) for k in PERIODS_BARS}
+            out.append({"symbol": sym, "label": label, "last": round(float(h.iloc[-1]), 2),
+                        "date": str(h.index[-1].date()), **ch, **rel})
+        except Exception as e:
+            out.append({"symbol": sym, "label": label, "error": str(e)})
     return out
 
 
@@ -373,8 +422,17 @@ def summary_text(snap):
     for c in snap["context"]:
         if "error" in c:
             L.append(f"  {c['label']}: n/a ({c['error']})"); continue
-        L.append(f"  {c['label']:<22} {c['last']:>10}  1d {c['chg_1d']:+}{c['unit']}  5d {c['chg_5d']:+}{c['unit']}"
-                 f"  1m {c['chg_1m']:+}{c['unit']}  (3m range {c['range_3m'][0]}–{c['range_3m'][1]}, {c['date']})")
+        L.append(f"  {c['label']:<22} {c['last']:>10}  " + "  ".join(
+                 f"{k} {c[f'chg_{k}']:+}{c['unit']}" for k in PERIODS_BARS if c.get(f"chg_{k}") is not None)
+                 + f"  (3m range {c['range_3m'][0]}–{c['range_3m'][1]}, {c['date']})")
+    if snap.get("sectors"):
+        L.append("\nSECTORS (change; in brackets vs SPY, positive = outperforming)")
+        for c in sorted(snap["sectors"], key=lambda x: -(x.get("chg_1d") or -99)):
+            if "error" in c:
+                L.append(f"  {c['label']}: n/a"); continue
+            L.append(f"  {c['symbol']:<5} {c['label']:<40} " + "  ".join(
+                f"{k} {c[f'chg_{k}']:+}% ({c[f'vs_spy_{k}']:+})" for k in PERIODS_BARS
+                if c.get(f"chg_{k}") is not None and c.get(f"vs_spy_{k}") is not None))
     for t in snap["tickers"]:
         if "error" in t:
             L.append(f"\n{t['symbol']}: ERROR {t['error']}"); continue
@@ -401,6 +459,9 @@ def summary_text(snap):
             L.append(f"  vs SPY (relative strength): 1d {v['1d']:+}pp  5d {v['5d']:+}pp  1m {v['1m']:+}pp")
         if t.get("volume_vs_20d_avg") is not None:
             L.append(f"  volume on the last bar: {t['volume_vs_20d_avg']}x the 20-day average")
+        if t.get("mtf_text"):
+            for line in t["mtf_text"].splitlines()[1:]:
+                L.append("  timeframes: " + line.strip())
         if t.get("valuation", {}).get("text"):
             for line in t["valuation"]["text"].splitlines()[1:]:
                 L.append("  valuation: " + line.strip())
@@ -457,7 +518,8 @@ def main():
     title = SESSIONS[session][1]
 
     snap = {"session": session, "title": f"{title} — {now:%a %b %d, %Y} {now:%H:%M} ET",
-            "generated_et": now.strftime("%Y-%m-%d %H:%M"), "context": context_snapshot(), "tickers": []}
+            "generated_et": now.strftime("%Y-%m-%d %H:%M"), "context": context_snapshot(),
+            "sectors": sector_snapshot(), "tickers": []}
     spy = None
     if "SPY" in TICKERS:   # SPY first, so the others can be compared with it
         try:
