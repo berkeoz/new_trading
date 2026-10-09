@@ -1107,9 +1107,11 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
   <button id="go">Analyze</button>
   <span id="msg" class="sub"></span>
 </form>
-<div id="root"></div></main>
+<div id="root"></div>
+<section id="seas" hidden></section></main>
 <script>
 const DATA = __DATA__;
+const SEAS = __SEAS__;
 const COL = {bullish:'#26a69a', bearish:'#ef5350', neutral:'#f5b041'};
 const CATS = [['reversal','Reversals'],['triangle','Triangles & wedges'],['channel','Channels'],['trendline','Trendlines'],['range','Ranges'],['wyckoff','Wyckoff'],['volume','Volume'],['candle','Candles']];
 const root = document.getElementById('root');
@@ -1717,6 +1719,59 @@ function render(r, prepend) {
 
 DATA.forEach(r => render(r, false));
 
+// ── Sector seasonality ──
+(function () {
+  if (!SEAS || !SEAS.sectors || !SEAS.sectors.length) return;
+  const el = document.getElementById('seas');
+  el.hidden = false;
+  const M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const mi = SEAS.month - 1, ni = mi % 12 + 1 > 11 ? 0 : mi + 1;
+  const PAL = ['#e0e0e0','#4fc3f7','#ba68c8','#ffb74d','#f06292','#aed581','#64b5f6','#4db6ac','#e57373','#9575cd','#fff176','#ff8a65','#a1887f','#90a4ae','#81c784','#f48fb1','#ce93d8'];
+  const DEFAULT_ON = new Set(['SPY','XLK','SMH','XLE','XLF','IYT','XLC','XLU']);
+  const secs = SEAS.sectors.map((x, k) => ({...x, color: PAL[k % PAL.length]}));
+  const fmt = v => v == null ? '–' : (v > 0 ? '+' : '') + v.toFixed(1) + '%';
+  const cls = v => v == null ? '' : v > 0 ? 'bullish' : v < 0 ? 'bearish' : '';
+  const heat = v => { if (v == null) return ''; const a = Math.min(Math.abs(v) / 4, 1) * 0.55; return v > 0 ? `background:rgba(38,166,154,${a})` : `background:rgba(239,83,80,${a})`; };
+  const rows = secs.slice().sort((a, b) => b.month_avg[mi] - a.month_avg[mi]).map(x => `<tr>
+      <td><span style="color:${x.color}">■</span> ${x.label} <span class="sub">${x.symbol} · ${x.years}y</span></td>
+      <td class="${cls(x.month_avg[mi])}">${fmt(x.month_avg[mi])}</td><td>${x.month_up[mi]}%</td>
+      <td class="${cls(x.month_so_far)}">${fmt(x.month_so_far)}</td>
+      <td class="${cls(x.month_avg[ni])}">${fmt(x.month_avg[ni])}</td><td>${x.month_up[ni]}%</td>
+      <td class="${cls(x.ytd)}">${fmt(x.ytd)}</td><td>${fmt(x.norm_today)}</td>
+      <td class="${cls(x.ytd - x.norm_today)}">${x.ytd == null ? '–' : fmt(x.ytd - x.norm_today)}</td></tr>`).join('');
+  const heatRows = secs.map(x => `<tr><td>${x.symbol}</td>${x.month_avg.map((v, k) =>
+      `<td style="${heat(v)}${k == mi ? ';outline:1px solid #5c8dff' : ''}" title="${x.label} ${M[k]}: avg ${fmt(v)}, up in ${x.month_up[k]}% of years">${v == null ? '' : v.toFixed(1)}</td>`).join('')}</tr>`).join('');
+  el.innerHTML = `<div class="head"><h2>Sector seasonality <span class="sub">average path through the year (last ${Math.max(...secs.map(x => x.years))} years) vs ${SEAS.year} so far</span></h2></div>
+    <div class="filters"><label>Show <select id="seasMode"><option value="both">average + this year</option><option value="avg">average only</option><option value="cur">this year only</option></select></label>
+      <span class="sub">click a name in the legend to show / hide it; double-click to show only that one</span></div>
+    <div id="seasChart" style="height:520px"></div>
+    <h3 style="font-size:15px;margin:14px 0 4px">Now: ${M[mi]} and ${M[ni]} <span class="sub">sorted by the usual ${M[mi]} return</span></h3>
+    <div class="wrap"><table><tr><th>Sector</th><th>${M[mi]} avg</th><th>yrs up</th><th>${M[mi]} so far</th><th>${M[ni]} avg</th><th>yrs up</th><th>YTD ${SEAS.year}</th><th>usual by now</th><th>vs usual</th></tr>${rows}</table></div>
+    <h3 style="font-size:15px;margin:14px 0 4px">Average return by month <span class="sub">green = usually up, red = usually down; hover for the share of positive years</span></h3>
+    <div class="wrap"><table class="sens"><tr><th></th>${M.map(m => `<th>${m}</th>`).join('')}</tr>${heatRows}</table></div>
+    <div class="sub" style="margin-top:8px">Seasonality is a historical average, not a forecast: individual years vary a lot (see "yrs up"). Sectors with shorter histories (e.g. XLC since 2018) use fewer years. Not investment advice.</div>`;
+  function draw() {
+    const mode = document.getElementById('seasMode').value, tr = [];
+    secs.forEach(x => {
+      const vis = DEFAULT_ON.has(x.symbol) ? true : 'legendonly';
+      if (mode != 'cur') tr.push({type:'scatter', mode:'lines', x:SEAS.x, y:x.avg, name:x.symbol, legendgroup:x.symbol, visible:vis,
+        line:{color:x.color, width: x.symbol == 'SPY' ? 2.5 : 1.6}, hovertemplate:`${x.label} average: %{y:.1f}%<extra>%{x|%b %d}</extra>`});
+      if (mode != 'avg') tr.push({type:'scatter', mode:'lines', x:SEAS.x.slice(0, x.cur.length), y:x.cur, name:x.symbol + (mode == 'cur' ? '' : ' ' + SEAS.year),
+        legendgroup:x.symbol, showlegend: mode == 'cur', visible:vis, line:{color:x.color, width:1.4, dash:'dot'},
+        hovertemplate:`${x.label} ${SEAS.year}: %{y:.1f}%<extra>%{x|%b %d}</extra>`});
+    });
+    Plotly.react('seasChart', tr, {paper_bgcolor:'#171a21', plot_bgcolor:'#171a21', font:{color:'#e6e6e6'},
+      margin:{l:50, r:20, t:10, b:40}, hovermode:'closest',
+      xaxis:{gridcolor:'#2a2f3a', tickformat:'%b', dtick:'M1'}, yaxis:{gridcolor:'#2a2f3a', ticksuffix:'%', zeroline:true, zerolinecolor:'#555'},
+      legend:{orientation:'h', y:-0.12},
+      shapes:[{type:'line', x0:SEAS.today.replace(/^\d{4}/, SEAS.year), x1:SEAS.today.replace(/^\d{4}/, SEAS.year), yref:'paper', y0:0, y1:1, line:{color:'#5c8dff', width:1, dash:'dash'}}],
+      annotations:[{x:SEAS.today.replace(/^\d{4}/, SEAS.year), yref:'paper', y:1, text:'today', showarrow:false, font:{color:'#5c8dff', size:11}, yanchor:'bottom'}]},
+      {responsive:true, displaylogo:false});
+  }
+  document.getElementById('seasMode').onchange = draw;
+  draw();
+})();
+
 document.getElementById('lookup').onsubmit = e => {
   e.preventDefault();
   lookup(document.getElementById('sym').value.trim().toUpperCase(),
@@ -1740,10 +1795,11 @@ async function lookup(sym, per, iv) {
 </script></body></html>"""
 
 
-def write_report(results, path):
+def write_report(results, path, seas=None):
     opts = "".join(f'<option{" selected" if p == "2y" else ""}>{p}</option>' for p in PERIODS)
     html = (HTML.replace("__GEN__", datetime.now().strftime("%Y-%m-%d %H:%M"))
                 .replace("__PERIODS__", opts)
+                .replace("__SEAS__", json.dumps(seas))
                 .replace("__DATA__", json.dumps(results)))
     with open(path, "w", encoding="utf-8") as f:
         f.write(html)
@@ -1770,6 +1826,7 @@ def main():
     ap.add_argument("--all", action="store_true", help="also list failed / expired patterns")
     ap.add_argument("--out", default=REPORT)
     ap.add_argument("--no-browser", action="store_true")
+    ap.add_argument("--no-seasonality", action="store_true", help="skip the sector seasonality section")
     args = ap.parse_args()
 
     results = []
@@ -1784,7 +1841,14 @@ def main():
         results.append(r)
     if not results:
         sys.exit(1)
-    write_report(results, args.out)
+    seas = None
+    if not args.no_seasonality:
+        try:
+            import seasonality
+            seas = seasonality.seasonality()
+        except Exception as e:
+            print(f"seasonality: ERROR {e}")
+    write_report(results, args.out, seas)
     print(f"\nReport saved: {args.out}")
     if not args.no_browser:
         webbrowser.open("file:///" + os.path.abspath(args.out).replace(os.sep, "/"))

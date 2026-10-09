@@ -1,0 +1,190 @@
+//@version=5
+// Turn Ladder + MA Score — companion to nt-berke.vercel.app/patterns
+//
+// What it shows
+//  * EMA9 / EMA21 / SMA50 / SMA200 and an MA score (-1 bearish ... +1 bullish) as a
+//    background tint: 11 checks = price above each MA (4), each MA rising vs 5 bars
+//    ago (4), and EMA9 > EMA21 > SMA50 > SMA200 (3).
+//  * Turn confirmations on the chart timeframe: after a swing low, a CLOSE above the
+//    swing high that came before it = turn up (T↑); mirror image = turn down (T↓).
+//    Swings use pivots with "Swing strength" bars on each side.
+//  * A ladder table for 5m / 15m / 1h / 4h / 1D: trend (EMA9 vs EMA21), the last
+//    confirmed turn and when, and the close each timeframe needs for the next turn.
+//  * Volume climaxes: >= 2x the 20-bar average volume on a wide bar (>= 1.3 ATR) at a
+//    15-bar low after a slide (CAP = selling capitulation) or at a 15-bar high after a
+//    rally (CLX = buying climax).
+//  * Alerts: turn up / down on the chart timeframe, and when the 5m, 15m and 1h turns
+//    all point the same way.
+//
+// Not investment advice.
+
+indicator("Turn Ladder + MA Score", shorttitle="TurnLadder", overlay=true, max_labels_count=300)
+
+// ── Inputs ────────────────────────────────────────────────────────────────────
+swingLen  = input.int(3, "Swing strength (bars each side)", minval=1, maxval=20)
+showMAs   = input.bool(true, "Show EMA9 / EMA21 / SMA50 / SMA200")
+showTint  = input.bool(true, "Tint background by MA score")
+showTurns = input.bool(true, "Mark turns on this chart")
+showCap   = input.bool(true, "Mark volume capitulation / climax")
+showTable = input.bool(true, "Show timeframe ladder table")
+tf1 = input.timeframe("5",   "Ladder timeframe 1")
+tf2 = input.timeframe("15",  "Ladder timeframe 2")
+tf3 = input.timeframe("60",  "Ladder timeframe 3")
+tf4 = input.timeframe("240", "Ladder timeframe 4")
+tf5 = input.timeframe("D",   "Ladder timeframe 5")
+
+// ── Moving averages and MA score ──────────────────────────────────────────────
+e9   = ta.ema(close, 9)
+e21  = ta.ema(close, 21)
+s50  = ta.sma(close, 50)
+s200 = ta.sma(close, 200)
+plot(showMAs ? e9   : na, "EMA9",   color=color.new(#ffd54f, 0), linewidth=1)
+plot(showMAs ? e21  : na, "EMA21",  color=color.new(#ba68c8, 0), linewidth=1)
+plot(showMAs ? s50  : na, "SMA50",  color=color.new(#ff8a65, 0), linewidth=2)
+plot(showMAs ? s200 : na, "SMA200", color=color.new(#81c784, 0), linewidth=2)
+
+chk(a, b) => na(a) or na(b) ? 0 : (a > b ? 1 : -1)
+cnt(a, b) => na(a) or na(b) ? 0 : 1
+
+pts = 0
+n = 0
+pts += chk(close, e9)
+n   += cnt(close, e9)
+pts += chk(close, e21)
+n   += cnt(close, e21)
+pts += chk(close, s50)
+n   += cnt(close, s50)
+pts += chk(close, s200)
+n   += cnt(close, s200)
+pts += chk(e9, e9[5])
+n   += cnt(e9, e9[5])
+pts += chk(e21, e21[5])
+n   += cnt(e21, e21[5])
+pts += chk(s50, s50[5])
+n   += cnt(s50, s50[5])
+pts += chk(s200, s200[5])
+n   += cnt(s200, s200[5])
+pts += chk(e9, e21)
+n   += cnt(e9, e21)
+pts += chk(e21, s50)
+n   += cnt(e21, s50)
+pts += chk(s50, s200)
+n   += cnt(s50, s200)
+score = n > 0 ? pts / (n * 1.0) : na
+tint = score >= 0.5 ? color.new(color.teal, 90) : score <= -0.5 ? color.new(color.red, 90) : na
+bgcolor(showTint ? tint : na, title="MA score tint")
+
+// ── Turn detection (break of structure), usable on any timeframe ──────────────
+// Returns [dir, turnTime, nextLevel, trend, turnedUp, turnedDown]
+//   dir: 1 = last confirmed turn was up, -1 = down, 0 = none yet
+//   nextLevel: close needed for the next turn the other way
+//   trend: 1 = EMA9 > EMA21 and close > EMA21, -1 = the opposite, 0 = mixed
+turnState(int len) =>
+    var float lastHigh = na
+    var float lastLow  = na
+    var float upLevel  = na    // swing high before the latest swing low
+    var float dnLevel  = na    // swing low before the latest swing high
+    var bool  upArmed  = false
+    var bool  dnArmed  = false
+    var int   dir      = 0
+    var int   turnTime = na
+    ph = ta.pivothigh(high, len, len)
+    pl = ta.pivotlow(low, len, len)
+    if not na(pl)
+        upLevel := lastHigh
+        upArmed := not na(lastHigh)
+        lastLow := pl
+    if not na(ph)
+        dnLevel := lastLow
+        dnArmed := not na(lastLow)
+        lastHigh := ph
+    turnedUp = false
+    turnedDown = false
+    if upArmed and close > upLevel
+        dir := 1
+        turnTime := time
+        upArmed := false
+        turnedUp := true
+    if dnArmed and close < dnLevel
+        dir := -1
+        turnTime := time
+        dnArmed := false
+        turnedDown := true
+    nextLevel = dir == 1 ? (dnArmed ? dnLevel : lastLow) : dir == -1 ? (upArmed ? upLevel : lastHigh) : na
+    fe9 = ta.ema(close, 9)
+    fe21 = ta.ema(close, 21)
+    trend = fe9 > fe21 and close > fe21 ? 1 : fe9 < fe21 and close < fe21 ? -1 : 0
+    [dir, turnTime, nextLevel, trend, turnedUp, turnedDown]
+
+// chart timeframe
+[cDir, cTime, cNext, cTrend, cUp, cDown] = turnState(swingLen)
+plotshape(showTurns and cUp,   "Turn up",   shape.labelup,   location.belowbar, color.new(color.teal, 0), text="T↑", textcolor=color.white, size=size.tiny)
+plotshape(showTurns and cDown, "Turn down", shape.labeldown, location.abovebar, color.new(color.red, 0),  text="T↓", textcolor=color.white, size=size.tiny)
+
+// ladder timeframes
+[d1, t1, l1, r1, u1, w1] = request.security(syminfo.tickerid, tf1, turnState(swingLen), lookahead=barmerge.lookahead_off)
+[d2, t2, l2, r2, u2, w2] = request.security(syminfo.tickerid, tf2, turnState(swingLen), lookahead=barmerge.lookahead_off)
+[d3, t3, l3, r3, u3, w3] = request.security(syminfo.tickerid, tf3, turnState(swingLen), lookahead=barmerge.lookahead_off)
+[d4, t4, l4, r4, u4, w4] = request.security(syminfo.tickerid, tf4, turnState(swingLen), lookahead=barmerge.lookahead_off)
+[d5, t5, l5, r5, u5, w5] = request.security(syminfo.tickerid, tf5, turnState(swingLen), lookahead=barmerge.lookahead_off)
+
+// ── Volume capitulation / climax ──────────────────────────────────────────────
+volAvg = ta.sma(volume, 20)[1]
+atr14  = ta.atr(14)
+wide   = (high - low) >= 1.3 * atr14
+loud   = volume >= 2.0 * volAvg
+slide  = close / ta.highest(close, 15)[1] - 1
+rally  = close / ta.lowest(close, 15)[1] - 1
+sellCap  = loud and wide and low  <= ta.lowest(low, 16)   and slide <= -3 * atr14 / close
+buyClimx = loud and wide and high >= ta.highest(high, 16) and rally >=  3 * atr14 / close
+plotshape(showCap and sellCap,  "Selling capitulation", shape.triangleup,   location.belowbar, color.new(color.lime, 0),   text="CAP", textcolor=color.lime,   size=size.small)
+plotshape(showCap and buyClimx, "Buying climax",        shape.triangledown, location.abovebar, color.new(color.orange, 0), text="CLX", textcolor=color.orange, size=size.small)
+
+// ── Ladder table ──────────────────────────────────────────────────────────────
+tfName(string tf) =>
+    string out = tf
+    if tf == "D" or tf == "1D"
+        out := "1D"
+    else if tf == "W" or tf == "1W"
+        out := "1W"
+    else if not na(str.tonumber(tf))
+        m = str.tonumber(tf)
+        out := m >= 60 and m % 60 == 0 ? str.tostring(m / 60) + "h" : str.tostring(m) + "m"
+    out
+
+dirTxt(int d) => d == 1 ? "up ▲" : d == -1 ? "down ▼" : "–"
+dirCol(int d) => d == 1 ? color.teal : d == -1 ? color.red : color.gray
+trendTxt(int t) => t == 1 ? "up" : t == -1 ? "down" : "mixed"
+nextTxt(int d, float lvl) => na(lvl) ? "–" : (d == 1 ? "turn down below " : d == -1 ? "turn up above " : "") + str.tostring(lvl, format.mintick)
+whenTxt(int t) => na(t) ? "–" : str.format_time(t, "MM-dd HH:mm", syminfo.timezone)
+
+var table tb = table.new(position.top_right, 4, 7, bgcolor=color.new(#171a21, 10), border_color=color.new(#2a2f3a, 0), border_width=1)
+fillRow(int row, string tf, int d, int t, float lvl, int tr) =>
+    table.cell(tb, 0, row, tfName(tf), text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, row, trendTxt(tr), text_color=tr == 1 ? color.teal : tr == -1 ? color.red : color.orange, text_size=size.small)
+    table.cell(tb, 2, row, dirTxt(d) + "  " + whenTxt(t), text_color=dirCol(d), text_size=size.small)
+    table.cell(tb, 3, row, nextTxt(d, lvl), text_color=color.silver, text_size=size.small)
+
+if showTable and barstate.islast
+    table.cell(tb, 0, 0, "TF",              text_color=color.gray, text_size=size.small)
+    table.cell(tb, 1, 0, "Trend",           text_color=color.gray, text_size=size.small)
+    table.cell(tb, 2, 0, "Last turn",       text_color=color.gray, text_size=size.small)
+    table.cell(tb, 3, 0, "Next confirmation", text_color=color.gray, text_size=size.small)
+    fillRow(1, tf1, d1, t1, l1, r1)
+    fillRow(2, tf2, d2, t2, l2, r2)
+    fillRow(3, tf3, d3, t3, l3, r3)
+    fillRow(4, tf4, d4, t4, l4, r4)
+    fillRow(5, tf5, d5, t5, l5, r5)
+    sTxt = na(score) ? "MA score –" : "MA score " + str.tostring(score, "#.##")
+    table.cell(tb, 0, 6, sTxt, text_color=score >= 0.5 ? color.teal : score <= -0.5 ? color.red : color.orange, text_size=size.small)
+    table.merge_cells(tb, 0, 6, 3, 6)
+
+// ── Alerts ────────────────────────────────────────────────────────────────────
+fastUp   = d1 == 1 and d2 == 1 and d3 == 1
+fastDown = d1 == -1 and d2 == -1 and d3 == -1
+alertcondition(cUp,   "Turn up (chart timeframe)",   "{{ticker}}: turn up confirmed on the chart timeframe, close {{close}}")
+alertcondition(cDown, "Turn down (chart timeframe)", "{{ticker}}: turn down confirmed on the chart timeframe, close {{close}}")
+alertcondition(fastUp and not fastUp[1],     "Turn up on 5m + 15m + 1h",   "{{ticker}}: turn up now confirmed on the first three ladder timeframes")
+alertcondition(fastDown and not fastDown[1], "Turn down on 5m + 15m + 1h", "{{ticker}}: turn down now confirmed on the first three ladder timeframes")
+alertcondition(sellCap,  "Selling capitulation", "{{ticker}}: possible selling capitulation (2x volume, wide bar at a 15-bar low)")
+alertcondition(buyClimx, "Buying climax",        "{{ticker}}: possible buying climax (2x volume, wide bar at a 15-bar high)")
