@@ -1226,7 +1226,7 @@ async function toggleLadder(sym, el) {
   if (location.protocol == 'file:') { el.innerHTML = `<div class="sub">Runs on the website. Locally: python mtf.py ${sym}</div>`; return; }
   el.innerHTML = `<div class="sub">Loading 5m / 15m / 1h / 4h / daily for ${sym}…</div>`;
   try {
-    const res = await fetch(`/api/mtf?symbol=${encodeURIComponent(sym)}`);
+    const res = await fetch(`/api/router?fn=mtf&symbol=${encodeURIComponent(sym)}`);
     const l = await res.json();
     if (!res.ok || l.error) throw new Error(l.error || res.statusText);
     renderLadder(l, el);
@@ -1275,7 +1275,7 @@ async function toggleValuation(sym, el) {
   if (location.protocol == 'file:') { el.innerHTML = `<div class="sub">Valuation runs on the website. Locally: python valuation.py ${sym}</div>`; return; }
   el.innerHTML = `<div class="sub">Loading financials for ${sym}… (5–10 s)</div>`;
   try {
-    const res = await fetch(`/api/valuation?symbol=${encodeURIComponent(sym)}`);
+    const res = await fetch(`/api/router?fn=valuation&symbol=${encodeURIComponent(sym)}`);
     const v = await res.json();
     if (!res.ok || v.error) throw new Error(v.error || res.statusText);
     el.dataset.loaded = 1;
@@ -1783,7 +1783,7 @@ async function lookup(sym, per, iv) {
   if (location.protocol == 'file:') { msg.textContent = `Lookup works on the website. Locally, run: python patterns.py ${sym} --interval ${iv} --period ${per}`; return; }
   btn.disabled = true; msg.textContent = `Analyzing ${sym} (${iv.toUpperCase()}, ${per})…`;
   try {
-    const res = await fetch(`/api/patterns?symbol=${encodeURIComponent(sym)}&period=${per}&interval=${iv}`);
+    const res = await fetch(`/api/router?fn=patterns&symbol=${encodeURIComponent(sym)}&period=${per}&interval=${iv}`);
     const j = await res.json();
     if (!res.ok || j.error) throw new Error(j.error || res.statusText);
     render(j, true);

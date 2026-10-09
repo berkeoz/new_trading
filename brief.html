@@ -43,11 +43,16 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;
 const sign = (v, u = '%') => v == null ? '–' : `<span class="${v > 0 ? 'pos' : v < 0 ? 'negv' : ''}">${v > 0 ? '+' : ''}${v}${u}</span>`;
 const vcls = v => esc(v || '').split(',')[0];
 
+// Briefs are read from GitHub, so publishing a brief does not need a new Vercel deployment.
+const RAW = 'https://raw.githubusercontent.com/berkeoz/new_trading/master/briefs/';
+const get = (f, kind) => fetch(RAW + f).then(r => r.ok ? r : Promise.reject())
+  .catch(() => fetch('briefs/' + f)).then(r => r.ok ? r[kind]() : (kind == 'json' ? null : ''));
+
 async function load(id) {
   $('#brief').innerHTML = '<div class="empty">Loading…</div>';
   const [md, js] = await Promise.all([
-    fetch(`briefs/${id}.md`).then(r => r.ok ? r.text() : ''),
-    fetch(`briefs/${id}.json`).then(r => r.ok ? r.json() : null)]);
+    get(`${id}.md`, 'text'),
+    get(`${id}.json`, 'json')]);
   $('#brief').innerHTML = md ? DOMPurify.sanitize(marked.parse(md)) : '<div class="empty">Brief text not found.</div>';
   $('#brief').querySelectorAll('table').forEach(t => { const w = document.createElement('div'); w.className = 'wrap'; t.replaceWith(w); w.appendChild(t); });
   $('#brief').querySelectorAll('a').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
@@ -95,7 +100,8 @@ function renderSnap(d) {
   if (ss) ss.onchange = () => { $('#secTable').innerHTML = `<tr><th>Sector</th><th>Last</th>${P.map(([, l]) => `<th>${l}</th>`).join('')}</tr>` + secRows(ss.value); };
 }
 
-fetch('briefs/index.json').then(r => r.ok ? r.json() : {briefs: []}).catch(() => ({briefs: []})).then(ix => {
+get('index.json', 'json').catch(() => null).then(ix => {
+  ix = ix || {briefs: []};
   const list = ix.briefs || [];
   if (!list.length) { $('#brief').innerHTML = '<div class="empty">No briefs yet. The first one appears after the next 9:15 or 15:45 ET run.</div>'; return; }
   $('#pick').innerHTML = list.map(b => `<option value="${esc(b.id)}">${esc(b.title || b.id)}</option>`).join('');

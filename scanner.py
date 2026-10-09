@@ -1345,7 +1345,7 @@ function wireCard(card, sym, removable) {{
 }}
 
 async function fetchCard(sym) {{
-  const r = await fetch(`/api/scan?symbol=${{encodeURIComponent(sym)}}`);
+  const r = await fetch(`/api/router?fn=scan&symbol=${{encodeURIComponent(sym)}}`);
   return r.json();
 }}
 

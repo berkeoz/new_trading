@@ -3,8 +3,16 @@
   "framework": null,
   "cleanUrls": true,
   "functions": {
-    "api/*.py": {
-      "maxDuration": 30
+    "api/router.py": {
+      "maxDuration": 30,
+      "excludeFiles": "{index.html,patterns.html,brief.html,briefs/**,tradingview/**,data/**,.github/**,README*}"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:fn(patterns|valuation|mtf|scan)",
+      "destination": "/api/router?fn=:fn"
+    }
+  ],
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)briefs'"
 }
