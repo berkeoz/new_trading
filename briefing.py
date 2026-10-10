@@ -30,6 +30,7 @@ import yfinance as yf
 import patterns as P
 import valuation as V
 import mtf as M
+import macro as MAC
 
 ET = ZoneInfo("America/New_York")
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -512,10 +513,14 @@ def main():
                     help="auto (default): pick the slot from the clock; off-slot times are on-demand runs")
     ap.add_argument("--force", action="store_true", help="never skip (manual runs at 15:15 / 16:45)")
     ap.add_argument("--index", action="store_true", help="rebuild briefs/index.json and exit")
+    ap.add_argument("--macro-updated", metavar="OUTLOOK_ID", help="mark the macro outlook as rewritten and exit")
     args = ap.parse_args()
     os.makedirs(BRIEF_DIR, exist_ok=True)
     if args.index:
         rebuild_index(); return
+    if args.macro_updated:
+        MAC.mark_updated(args.macro_updated)
+        print(f"macro outlook {args.macro_updated} marked as current"); return
     now = datetime.now(ET)
     session = args.session if args.session != "auto" else pick_session(now, args.force)
     if session is None:
@@ -553,6 +558,12 @@ def main():
         print("TODAYS_BRIEFS=" + ", ".join(today))
     print()
     print(summary_text(snap))
+    try:   # macro dashboard + outlook trigger
+        md, mst = MAC.refresh()
+        print()
+        print(MAC.summary(md, mst))
+    except Exception as e:
+        print(f"\nMACRO: ERROR {e}")
 
 
 if __name__ == "__main__":

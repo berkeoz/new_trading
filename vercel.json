@@ -5,7 +5,7 @@
   "functions": {
     "api/router.py": {
       "maxDuration": 30,
-      "excludeFiles": "{index.html,patterns.html,brief.html,briefs/**,tradingview/**,data/**,.github/**,README*}"
+      "excludeFiles": "{index.html,patterns.html,brief.html,briefs/**,macro/**,tradingview/**,data/**,.github/**,README*}"
     }
   },
   "rewrites": [
@@ -14,5 +14,5 @@
       "destination": "/api/router?fn=:fn"
     }
   ],
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)briefs'"
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)briefs' ':(exclude)macro'"
 }

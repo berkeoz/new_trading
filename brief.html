@@ -3,6 +3,7 @@
 <title>Market Brief</title>
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
 <style>
 :root{--bg:#0f1115;--card:#171a21;--fg:#e6e6e6;--mute:#8a93a5;--bull:#26a69a;--bear:#ef5350;--neu:#f5b041;--line:#2a2f3a;--acc:#5c8dff}
 body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 system-ui,Segoe UI,sans-serif}
@@ -27,6 +28,15 @@ section{background:var(--card);border:1px solid var(--line);border-radius:10px;p
 .pill{display:inline-block;padding:1px 8px;border-radius:10px;background:#232836;font-size:12px;margin-right:4px}
 .lvl{font-size:13px;margin:2px 0}
 .empty{color:var(--mute);padding:30px;text-align:center}
+#macro h2{font-size:18px;margin:0 0 4px} #macro h3{font-size:15px;margin:16px 0 6px}
+.regs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;margin:8px 0}
+.reg{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}
+.reg b{display:block;font-size:12px;color:var(--mute);font-weight:500}
+.pend{color:var(--neu);font-size:13px;margin:6px 0}
+#outlook{border:1px solid var(--line);border-radius:8px;padding:4px 14px;margin:8px 0}
+.mt td,.mt th{white-space:nowrap} .mt tr.ind{cursor:pointer} .mt tr.ind:hover{background:#1f2430}
+.mt .det td{white-space:normal;background:#13161c}
+.pill2{font-size:11px;padding:1px 6px;border-radius:8px;background:#232836;color:var(--mute)}
 </style></head><body><main>
 <div class="top">
   <div><h1>Market Brief</h1>
@@ -36,6 +46,7 @@ section{background:var(--card);border:1px solid var(--line);border-radius:10px;p
 <p><select id="pick" aria-label="Choose a brief"></select></p>
 <section id="brief"><div class="empty">Loading…</div></section>
 <section class="snap" id="snap" hidden></section>
+<section id="macro"><h2>Macro outlook</h2><div class="sub">Loading…</div></section>
 </main>
 <script>
 const $ = s => document.querySelector(s);
@@ -111,4 +122,65 @@ get('index.json', 'json').catch(() => null).then(ix => {
   $('#pick').onchange = () => load($('#pick').value);
   load(id);
 });
+
+// ── Macro outlook (data refreshed with each brief; outlook rewritten only after big releases / Fed events) ──
+const MRAW = 'https://raw.githubusercontent.com/berkeoz/new_trading/master/macro/';
+const mget = (f, kind) => fetch(MRAW + f).then(r => r.ok ? r : Promise.reject())
+  .catch(() => fetch('macro/' + f)).then(r => r.ok ? r[kind]() : null).catch(() => null);
+function spark(vals) {
+  const v = vals.filter(x => x != null); if (v.length < 2) return '';
+  const lo = Math.min(...v), hi = Math.max(...v), w = 90, h = 22;
+  const pts = vals.map((x, i) => `${(i / (vals.length - 1) * w).toFixed(1)},${(h - (x - lo) / ((hi - lo) || 1) * h).toFixed(1)}`).join(' ');
+  return `<svg width="${w}" height="${h}" style="vertical-align:middle"><polyline fill="none" stroke="#5c8dff" stroke-width="1.5" points="${pts}"/></svg>`;
+}
+const fmtv = (x, d = 2) => x == null ? '–' : (+x).toLocaleString(undefined, {maximumFractionDigits: d});
+const trendCls = (t, pillar) => !t ? '' : (t == 'stable' ? 'sub' : (pillar == 'Inflation' ? (t == 'accelerating' ? 'negv' : 'pos') : ''));
+async function loadMacro() {
+  const el = $('#macro');
+  const [d, st, ix] = await Promise.all([mget('data.json', 'json'), mget('state.json', 'json'), mget('index.json', 'json')]);
+  if (!d) { el.innerHTML = '<h2>Macro outlook</h2><div class="sub">No macro data yet.</div>'; return; }
+  const outs = (ix && ix.outlooks) || [];
+  const regs = Object.entries(d.regimes || {}).map(([k, v]) => `<div class="reg"><b>${esc(k)}</b>${esc(v)}</div>`).join('');
+  const ff = d.fed_futures;
+  const ffHtml = !ff ? '' : `<h3>Fed rate expectations <span class="sub">from fed funds futures, CME FedWatch method · effective rate ${ff.effr}%${ff.target_range ? ` · target ${ff.target_range[0]}–${ff.target_range[1]}%` : ''}</span></h3>
+    <div class="wrap"><table><tr><th>FOMC</th><th>Implied rate after</th><th>Change</th><th>Hike</th><th>Hold</th><th>Cut</th></tr>${ff.meetings.map(m =>
+      `<tr><td>${m.date}</td><td>${m.implied_after}%</td><td>${m.change_bp > 0 ? '+' : ''}${m.change_bp} bp</td><td class="${m.p_hike >= 50 ? 'negv' : ''}">${m.p_hike}%</td><td>${m.p_hold}%</td><td class="${m.p_cut >= 50 ? 'pos' : ''}">${m.p_cut}%</td></tr>`).join('')}</table></div>
+    <div class="sub">Implied average rate by month: ${ff.months.map(x => `${x.month} ${x.implied}%`).join(' · ')}. ${esc(ff.note)}</div>`;
+  const tables = d.pillars.map(p => {
+    const rows = d.series.filter(x => x.pillar == p).map((x, k) => `<tr class="ind" data-id="${x.id}">
+        <td>${esc(x.name)}${x.tier1 ? ' <span class="pill2">headline</span>' : ''}</td>
+        <td><b>${fmtv(x.value)}</b> <span class="sub">${esc(x.unit)}</span>${x.mom != null ? `<div class="sub">m/m ${x.mom > 0 ? '+' : ''}${x.mom}% · 3m ann. ${x.ann3m}%</div>` : ''}${x.avg3m != null ? `<div class="sub">3m avg ${x.avg3m > 0 ? '+' : ''}${x.avg3m}k</div>` : ''}${x.yoy != null ? `<div class="sub">${x.yoy > 0 ? '+' : ''}${x.yoy}% y/y</div>` : ''}</td>
+        <td class="sub">${x.value_date.slice(0, 7)}</td><td>${fmtv(x.prev)}</td>
+        <td class="${trendCls(x.trend, p)}">${esc(x.trend)}</td><td>${x.pct_rank_10y}th <div class="sub">${x.range_10y[0]}–${x.range_10y[1]}</div></td>
+        <td>${spark(x.table12.map(t => t.value))}</td></tr>`).join('');
+    return `<h3>${esc(p)}</h3><div class="wrap"><table class="mt"><tr><th>Indicator</th><th>Latest</th><th>For</th><th>Previous</th><th>Trend</th><th>10-year percentile</th><th>Last 12 months</th></tr>${rows}</table></div>`;
+  }).join('');
+  el.innerHTML = `<h2>Macro outlook</h2>
+    <div class="sub">Data updated ${esc(d.generated_et)} ET with each brief; the written outlook is rewritten only after major releases (CPI, PPI, PCE, jobs, GDP, retail sales, JOLTS), Fed decisions / minutes or big policy news.</div>
+    ${st && st.stale ? `<div class="pend">⏳ Update pending: ${esc((st.reasons || []).join('; '))} — the next brief run will rewrite the outlook.</div>` : ''}
+    ${outs.length ? `<p><select id="outPick">${outs.map(o => `<option value="${esc(o.file)}">${esc(o.title)}</option>`).join('')}</select></p><div id="outlook"></div>` : '<div class="sub">No written outlook yet.</div>'}
+    <h3>Regime by pillar</h3><div class="regs">${regs}</div>
+    ${ffHtml}${tables}
+    ${Object.keys(d.errors || {}).length ? `<div class="sub">Not available: ${esc(Object.keys(d.errors).join(', '))}</div>` : ''}
+    <div class="sub" style="margin-top:8px">Sources: FRED (St. Louis Fed), Yahoo Finance fed funds futures. Click an indicator for 10 years of history. Not investment advice.</div>`;
+  if (outs.length) {
+    const show = async f => { const md = await mget(f, 'text'); $('#outlook').innerHTML = md ? DOMPurify.sanitize(marked.parse(md)) : '<div class="sub">Not found.</div>';
+      $('#outlook').querySelectorAll('a').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; }); };
+    $('#outPick').onchange = () => show($('#outPick').value);
+    show(outs[0].file);
+  }
+  el.querySelectorAll('tr.ind').forEach(tr => tr.onclick = () => {
+    const nx = tr.nextElementSibling;
+    if (nx && nx.classList.contains('det')) { nx.remove(); return; }
+    const x = d.series.find(s => s.id == tr.dataset.id);
+    const det = document.createElement('tr'); det.className = 'det';
+    det.innerHTML = `<td colspan="7"><div class="chart" id="mc_${x.id}" style="height:260px"></div>
+      <div class="sub">Last 12 months: ${x.table12.map(t => `${t.date} <b>${fmtv(t.value)}</b>`).join(' · ')} · FRED series ${x.id}, latest observation ${x.latest_obs}</div></td>`;
+    tr.after(det);
+    Plotly.newPlot('mc_' + x.id, [{type:'scatter', mode:'lines', x:x.hist.x, y:x.hist.y, line:{color:'#5c8dff', width:1.6}, hovertemplate:'%{x}: %{y}<extra></extra>'}],
+      {paper_bgcolor:'#171a21', plot_bgcolor:'#171a21', font:{color:'#e6e6e6', size:11}, margin:{l:45, r:10, t:10, b:30},
+       xaxis:{gridcolor:'#2a2f3a'}, yaxis:{gridcolor:'#2a2f3a', title:{text:x.unit, font:{size:11}}}}, {responsive:true, displaylogo:false});
+  });
+}
+loadMacro();
 </script></body></html>
