@@ -1,5 +1,5 @@
 {
- "generated_et": "2026-10-10 13:51",
+ "generated_et": "2026-10-10 13:56",
  "pillars": [
   "Inflation",
   "Labor",
@@ -19,11 +19,11 @@
    "unit": "% y/y",
    "latest_obs": "2026-08-01",
    "latest_raw": 334.131,
-   "value": 3.713,
+   "value": 3.353,
    "value_date": "2026-08-31",
-   "prev": 3.54,
-   "trend": "stable",
-   "pct_rank_10y": 74.0,
+   "prev": 3.304,
+   "trend": "cooling",
+   "pct_rank_10y": 71.0,
    "range_10y": [
     0.2,
     8.98
@@ -39,43 +39,43 @@
     },
     {
      "date": "2025-11",
-     "value": 2.988
+     "value": 2.696
     },
     {
      "date": "2025-12",
-     "value": 3.002
+     "value": 2.653
     },
     {
      "date": "2026-01",
-     "value": 2.829
+     "value": 2.391
     },
     {
      "date": "2026-02",
-     "value": 2.665
+     "value": 2.434
     },
     {
      "date": "2026-03",
-     "value": 3.32
+     "value": 3.286
     },
     {
      "date": "2026-04",
-     "value": 3.947
+     "value": 3.779
     },
     {
      "date": "2026-05",
-     "value": 4.27
+     "value": 4.167
     },
     {
      "date": "2026-06",
-     "value": 3.727
+     "value": 3.464
     },
     {
      "date": "2026-07",
-     "value": 3.54
+     "value": 3.304
     },
     {
      "date": "2026-08",
-     "value": 3.713
+     "value": 3.353
     }
    ],
    "hist": {
@@ -310,16 +310,16 @@
      2.743,
      2.939,
      3.023,
-     2.988,
-     3.002,
-     2.829,
-     2.665,
-     3.32,
-     3.947,
-     4.27,
-     3.727,
-     3.54,
-     3.713
+     2.696,
+     2.653,
+     2.391,
+     2.434,
+     3.286,
+     3.779,
+     4.167,
+     3.464,
+     3.304,
+     3.353
     ]
    },
    "mom": 0.4,
@@ -335,11 +335,11 @@
    "unit": "% y/y",
    "latest_obs": "2026-08-01",
    "latest_raw": 337.765,
-   "value": 2.763,
+   "value": 2.446,
    "value_date": "2026-08-31",
-   "prev": 2.787,
-   "trend": "stable",
-   "pct_rank_10y": 48.0,
+   "prev": 2.467,
+   "trend": "cooling",
+   "pct_rank_10y": 46.0,
    "range_10y": [
     1.18,
     6.62
@@ -355,43 +355,43 @@
     },
     {
      "date": "2025-11",
-     "value": 2.894
+     "value": 2.599
     },
     {
      "date": "2025-12",
-     "value": 2.838
+     "value": 2.646
     },
     {
      "date": "2026-01",
-     "value": 2.949
+     "value": 2.512
     },
     {
      "date": "2026-02",
-     "value": 2.734
+     "value": 2.472
     },
     {
      "date": "2026-03",
-     "value": 2.673
+     "value": 2.602
     },
     {
      "date": "2026-04",
-     "value": 2.988
+     "value": 2.743
     },
     {
      "date": "2026-05",
-     "value": 2.957
+     "value": 2.823
     },
     {
      "date": "2026-06",
-     "value": 2.806
+     "value": 2.566
     },
     {
      "date": "2026-07",
-     "value": 2.787
+     "value": 2.467
     },
     {
      "date": "2026-08",
-     "value": 2.763
+     "value": 2.446
     }
    ],
    "hist": {
@@ -626,16 +626,16 @@
      3.054,
      3.112,
      3.02,
-     2.894,
-     2.838,
-     2.949,
-     2.734,
-     2.673,
-     2.988,
-     2.957,
-     2.806,
-     2.787,
-     2.763
+     2.599,
+     2.646,
+     2.512,
+     2.472,
+     2.602,
+     2.743,
+     2.823,
+     2.566,
+     2.467,
+     2.446
     ]
    },
    "mom": 0.29,
@@ -9800,7 +9800,7 @@
   }
  ],
  "regimes": {
-  "Inflation": "elevated, cooling (core CPI 2.8% y/y, 2.0% 3-month annualized)",
+  "Inflation": "near target, cooling (core CPI 2.4% y/y, 2.0% 3-month annualized)",
   "Labor": "softening (unemployment 4.2%, payrolls 3-month avg +51k)",
   "Growth": "solid (real GDP 2.2% annualized, retail sales +5.4% y/y)",
   "Fed & rates": "mildly restrictive (real policy rate ~+1.0pp = fed funds 4.00% minus core PCE 3.0%)",
