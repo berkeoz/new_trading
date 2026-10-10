@@ -52,6 +52,7 @@ SERIES = [
     ("PAYEMS", "Nonfarm payrolls (monthly change)", "Labor", "payrolls", True, {"unit": "k"}),
     ("UNRATE", "Unemployment rate", "Labor", "level", True, {"unit": "%"}),
     ("ICSA", "Initial jobless claims (weekly)", "Labor", "level", False, {"unit": "", "scale": 1e-3, "suffix": "k"}),
+    ("CCSA", "Continuing jobless claims (weekly)", "Labor", "level", False, {"unit": "", "scale": 1e-6, "suffix": "M"}),
     ("JTSJOL", "Job openings (JOLTS)", "Labor", "level", True, {"unit": "", "scale": 1e-3, "suffix": "M"}),
     ("CES0500000003", "Average hourly earnings", "Labor", "pct", False, {}),
     ("A191RL1Q225SBEA", "Real GDP (q/q annualized)", "Growth", "level", True, {"unit": "%"}),
@@ -59,6 +60,13 @@ SERIES = [
     ("INDPRO", "Industrial production", "Growth", "pct", False, {}),
     ("HOUST", "Housing starts (annualized)", "Growth", "level", False, {"unit": "", "scale": 1e-3, "suffix": "M"}),
     ("UMCSENT", "UMich consumer sentiment", "Growth", "level", False, {"unit": ""}),
+    ("DGORDER", "Durable goods orders", "Growth", "pct", False, {}),
+    ("PERMIT", "Building permits (annualized)", "Growth", "level", False, {"unit": "", "scale": 1e-3, "suffix": "M"}),
+    ("HSN1F", "New home sales (annualized)", "Growth", "level", False, {"unit": "", "suffix": "k"}),
+    ("EXHOSLUSM495S", "Existing home sales (annualized)", "Growth", "level", False, {"unit": "", "scale": 1e-6, "suffix": "M"}),
+    ("GACDFSA066MSFRBPHI", "Philly Fed manufacturing (>0 = expanding)", "Growth", "level", False, {"unit": ""}),
+    ("GACDISA066MSFRBNY", "Empire State manufacturing (>0 = expanding)", "Growth", "level", False, {"unit": ""}),
+    ("BOPGSTB", "Trade balance", "Growth", "level", False, {"unit": "$", "scale": 1e-3, "suffix": "B"}),
     ("DFEDTARU", "Fed funds target (upper)", "Fed & rates", "level", False, {"unit": "%"}),
     ("DGS2", "2-year Treasury yield", "Fed & rates", "level", False, {"unit": "%"}),
     ("DGS10", "10-year Treasury yield", "Fed & rates", "level", False, {"unit": "%"}),
@@ -71,11 +79,15 @@ SERIES = [
     ("M2SL", "M2 money supply", "Financial conditions", "pct", False, {}),
     ("WALCL", "Fed balance sheet", "Financial conditions", "level", False, {"unit": "", "scale": 1e-6, "suffix": "T", "yoy": True}),
     ("SAHMREALTIME", "Sahm rule (>= 0.5 = recession signal)", "Recession signals", "level", False, {"unit": "pp"}),
+    ("NYFED_PROB", "NY Fed yield-curve model: recession odds in 12 months", "Recession signals", "level", False, {"unit": "%"}),
+    ("RECPROUSM156N", "Recession probability now (Chauvet-Piger)", "Recession signals", "level", False, {"unit": "%"}),
+    ("CFNAIMA3", "Chicago Fed activity index, 3-month avg (< -0.7 = recession)", "Recession signals", "level", False, {"unit": ""}),
+    ("BUFFETT", "Buffett indicator: stock market value / GDP", "Valuation", "level", False, {"unit": "%"}),
     ("DCOILWTICO", "WTI crude oil (spot)", "Oil", "level", False, {"unit": "$", "yoy": True}),
     ("DCOILBRENTEU", "Brent crude oil (spot, EIA)", "Oil", "level", False, {"unit": "$", "yoy": True}),
     ("OVXCLS", "Oil volatility index (OVX)", "Oil", "level", False, {"unit": ""}),
 ]
-PILLARS = ["Inflation", "Labor", "Growth", "Fed & rates", "Financial conditions", "Recession signals", "Oil"]
+PILLARS = ["Inflation", "Labor", "Growth", "Fed & rates", "Financial conditions", "Recession signals", "Valuation", "Oil"]
 EXTRA_IDS = ["DFF", "DFEDTARL"]          # used for the Fed-futures calculation only
 
 # FOMC decision days (second day of each meeting); minutes come out 3 weeks later.
@@ -173,8 +185,48 @@ def _trend(p, kind, pillar):
     return "rising" if up else "falling"
 
 
+def _nyfed_prob():
+    """NY Fed yield-curve model (Estrella-Mishkin probit): probability of a recession
+    12 months ahead from the monthly average 10Y minus 3M Treasury spread."""
+    sp = fred("T10Y3M").resample("ME").mean().dropna()
+    return sp.apply(lambda x: 100 * 0.5 * (1 + math.erf((-0.5333 - 0.6330 * x) / math.sqrt(2))))
+
+
+def _buffett():
+    """Market value of US corporate equities (Fed Z.1, nonfinancial corporations) as a
+    % of nominal GDP, quarterly. The latest quarter is extended to today with the move
+    in the Wilshire 5000 (or SPY) since that quarter ended."""
+    global BUFFETT_2000_PEAK
+    eq = fred("NCBEILQ027S", start="1990-01-01")   # millions of dollars
+    gdp = fred("GDP", start="1990-01-01")          # billions of dollars, annualized
+    r = (eq / (gdp * 1000) * 100).dropna()
+    dot = r[(r.index >= "1999-01-01") & (r.index <= "2000-12-31")]
+    if not dot.empty:
+        BUFFETT_2000_PEAK = (round(float(dot.max()), 0), str(dot.idxmax().date())[:7])
+    try:
+        import yfinance as yf
+        h = None
+        for sym in ("^W5000", "SPY"):
+            h = yf.Ticker(sym).history(period="1y")["Close"].dropna()
+            if not h.empty:
+                break
+        h.index = h.index.tz_localize(None)
+        q_end = r.index[-1] + pd.offsets.QuarterEnd(0)
+        base = h[h.index <= q_end]
+        if not base.empty and h.index[-1] > q_end:
+            est = float(r.iloc[-1] * h.iloc[-1] / base.iloc[-1])
+            r = pd.concat([r, pd.Series([est], index=[h.index[-1].normalize()])])
+    except Exception:
+        pass
+    return r
+
+
+BUFFETT_2000_PEAK = None
+COMPUTED = {"NYFED_PROB": _nyfed_prob, "BUFFETT": _buffett}
+
+
 def series_view(sid, name, pillar, kind, tier1, extra):
-    raw = fred(sid)
+    raw = COMPUTED[sid]() if sid in COMPUTED else fred(sid)
     p = _primary(raw, kind)
     scale, suffix, unit = extra.get("scale", 1), extra.get("suffix", ""), extra.get("unit", "%" if kind == "pct" else "")
     pv = p.dropna()
@@ -244,7 +296,16 @@ def regimes(v):
         if sahm >= 0.5: sig.append("Sahm rule triggered")
         if c10y3 is not None and c10y3 < 0: sig.append("10Y-3M curve inverted")
         if g("ICSA", "trend") == "rising": sig.append("jobless claims trending up")
-        out["Recession signals"] = ("; ".join(sig) if sig else "none flashing") + f" (Sahm {sahm:.2f}, 10Y-2Y {c10y2:+.2f}pp)"
+        ny, cf, rp = g("NYFED_PROB"), g("CFNAIMA3"), g("RECPROUSM156N")
+        if ny is not None and ny >= 30: sig.append(f"NY Fed curve model {ny:.0f}%")
+        if cf is not None and cf < -0.7: sig.append("Chicago Fed activity index below -0.7")
+        if rp is not None and rp >= 20: sig.append(f"recession probability {rp:.0f}%")
+        out["Recession signals"] = ("; ".join(sig) if sig else "none flashing") + f" (Sahm {sahm:.2f}, 10Y-2Y {c10y2:+.2f}pp" + \
+            (f", NY Fed 12-month odds {ny:.0f}%" if ny is not None else "") + (f", CFNAI {cf:+.2f}" if cf is not None else "") + ")"
+    bi = g("BUFFETT")
+    if bi is not None:
+        out["Valuation"] = ("extreme" if g("BUFFETT", "pct_rank_10y") >= 95 else "rich" if g("BUFFETT", "pct_rank_10y") >= 75 else "moderate") + \
+            f" (stock market value {bi:.0f}% of GDP, {g('BUFFETT', 'pct_rank_10y'):.0f}th percentile of 10 years" +             (f"; dot-com peak {BUFFETT_2000_PEAK[0]:.0f}% in {BUFFETT_2000_PEAK[1]}, same measure)" if BUFFETT_2000_PEAK else ")")
     oil, ovx = g("DCOILWTICO", "latest_raw"), g("OVXCLS", "latest_raw")
     if oil is not None:
         out["Oil"] = f"WTI ${oil:.0f} ({g('DCOILWTICO', 'yoy'):+.0f}% y/y), price trend {g('DCOILWTICO', 'trend')}" + \

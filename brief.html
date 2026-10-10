@@ -162,7 +162,7 @@ async function loadMacro() {
     <h3>Regime by pillar</h3><div class="regs">${regs}</div>
     ${ffHtml}${tables}
     ${Object.keys(d.errors || {}).length ? `<div class="sub">Not available: ${esc(Object.keys(d.errors).join(', '))}</div>` : ''}
-    <div class="sub" style="margin-top:8px">Sources: FRED (St. Louis Fed), Yahoo Finance fed funds futures. Click an indicator for 10 years of history. Not investment advice.</div>`;
+    <div class="sub" style="margin-top:8px">Sources: FRED (St. Louis Fed), Yahoo Finance fed funds futures. ADP payrolls, ISM PMIs and the Conference Board indexes are not freely published as data, so the written outlook covers them from the news. Click an indicator for 10 years of history. Not investment advice.</div>`;
   if (outs.length) {
     const show = async f => { const md = await mget(f, 'text'); $('#outlook').innerHTML = md ? DOMPurify.sanitize(marked.parse(md)) : '<div class="sub">Not found.</div>';
       $('#outlook').querySelectorAll('a').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; }); };
