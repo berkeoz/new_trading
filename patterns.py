@@ -1160,7 +1160,7 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 <div class="top">
   <div><h1>Chart Formations</h1>
   <div class="sub">Generated __GEN__ · swing-pivot pattern detection · mechanical candidates, not trade advice. Click a table row to zoom.</div></div>
-  <div><a href="/brief">Market brief</a> · <a href="/">Daily signals</a></div>
+  <div><a href="/brief">Market brief</a> · <a href="/x">Twitter analysis</a> · <a href="/">Daily signals</a></div>
 </div>
 <div id="regime" class="sub" style="margin-top:6px"></div>
 <form class="lookup" id="lookup">

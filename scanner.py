@@ -1004,6 +1004,7 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
     <div class="tab" data-panel="p-breakdown">Market Breakdown</div>
     <a class="tab-link" href="/patterns">Chart Formations &rarr;</a>
     <a class="tab-link" style="margin-left:0" href="/brief">Market Brief &rarr;</a>
+    <a class="tab-link" style="margin-left:0" href="/x">Twitter Analysis &rarr;</a>
   </div>
 
   <div id="p-today" class="tab-panel active">
