@@ -576,6 +576,9 @@ def _value_card(r, score, why, val):
 </div>"""
 
 
+VALUE_PICKS = {}
+
+
 def _build_value_lists(results, _section):
     stocks = [dict(r) for r in results if not r.get("error") and r.get("quote_type") == "EQUITY"
               and r.get("close") and r.get("target_px")]
@@ -601,7 +604,11 @@ def _build_value_lists(results, _section):
                   r_html, "#38bdf8", [("Weeks", "#a78bfa"), ("Months", "#f59e0b")])
     s6 = _section("💎", "Quality Growth Below Value", "ROE ≥15% · margins · FCF+ · growth ≥15% · trading at a discount",
                   q_html, "#22c55e", [("Months", "#f59e0b"), ("Year", "#10b981")])
-    return note + s5 + s6
+    # remembered so main() can freeze today's lists in the hit ledger
+    VALUE_PICKS.clear()
+    VALUE_PICKS.update({"rebound": [{"symbol": r["symbol"], "score": sc, "close": r["close"]} for r, sc, _ in reb],
+                        "quality": [{"symbol": r["symbol"], "score": sc, "close": r["close"]} for r, sc, _ in qual]})
+    return note + s5 + s6 + "<!--LEDGER-->"
 
 
 def _build_breakdown(results):
@@ -810,6 +817,9 @@ canvas.spark{{width:100%;height:36px}}
 .bd-why{{margin:6px 0 0;padding-left:16px;font-size:11.5px;color:var(--muted);line-height:1.45}}
 .bd-flag{{font-size:11px;color:var(--amber);margin-top:4px}}
 .bd-note{{font-size:12px;color:var(--muted);margin:22px 0 4px}}
+.bd-ledger{{border-collapse:collapse;font-size:12px;width:100%}}
+.bd-ledger th,.bd-ledger td{{border-bottom:1px solid var(--border);padding:5px 8px;text-align:left;vertical-align:top}}
+.bd-ledger th{{color:var(--muted);font-weight:500}}
 .bd-section{{margin-bottom:36px}}
 .bd-sec-hdr{{display:flex;align-items:center;gap:10px;padding-bottom:10px;
   border-bottom:2px solid var(--border);margin-bottom:12px}}
@@ -2079,6 +2089,14 @@ def main():
         results.append(r)
 
     html = build_html(results)
+    try:   # freeze today's value lists and show their track record
+        import ledger
+        if VALUE_PICKS:
+            ledger.record(VALUE_PICKS)
+        html = html.replace("<!--LEDGER-->", ledger.render(ledger.evaluate()))
+    except Exception as e:
+        print(f"ledger: ERROR {e}")
+        html = html.replace("<!--LEDGER-->", "")
     with open(REPORT_PATH, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"\nReport saved: {REPORT_PATH}")

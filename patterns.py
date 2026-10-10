@@ -797,6 +797,67 @@ def find_candles(df):
 READ_BARS = 30
 
 
+# ── Trend templates: Minervini, Weinstein stage, Qullamaggie setup ────────────
+def trend_templates(df):
+    """Classic momentum templates on daily bars (needs about a year of data)."""
+    c, h, l, v = (df[k].astype(float) for k in ("Close", "High", "Low", "Volume"))
+    if len(c) < 260:
+        return None
+    s50, s150, s200 = c.rolling(50).mean(), c.rolling(150).mean(), c.rolling(200).mean()
+    price, lo52, hi52 = float(c.iloc[-1]), float(l.iloc[-252:].min()), float(h.iloc[-252:].max())
+    rules = [
+        ("Price above the 150- and 200-day averages", price > s150.iloc[-1] and price > s200.iloc[-1]),
+        ("150-day average above the 200-day", s150.iloc[-1] > s200.iloc[-1]),
+        ("200-day average rising vs a month ago", s200.iloc[-1] > s200.iloc[-22]),
+        ("50-day average above the 150- and 200-day", s50.iloc[-1] > s150.iloc[-1] and s50.iloc[-1] > s200.iloc[-1]),
+        ("Price above the 50-day average", price > s50.iloc[-1]),
+        (f"At least 25% above the 52-week low ({lo52:.2f})", price >= 1.25 * lo52),
+        (f"Within 25% of the 52-week high ({hi52:.2f})", price >= 0.75 * hi52),
+    ]
+    # Weinstein: 30-week (150-day) average and its slope over the last 4 weeks
+    slope = float(s150.iloc[-1] / s150.iloc[-21] - 1)
+    above = price > s150.iloc[-1]
+    if abs(slope) <= 0.005:
+        stage = 3 if s150.iloc[-1] > s150.iloc[-127] and above else 1
+    elif slope > 0:
+        stage = 2 if above else 3
+    else:
+        stage = 4 if not above else 1
+    stage_txt = {1: "Stage 1 (basing: flat 30-week average)", 2: "Stage 2 (advancing: above a rising 30-week average)",
+                 3: "Stage 3 (topping: momentum stalling around the 30-week average)", 4: "Stage 4 (declining: below a falling 30-week average)"}[stage]
+    # Qullamaggie: big prior move, tight consolidation near highs, short averages rising, volume drying up
+    atr = float((pd.concat([h - l, (h - c.shift()).abs(), (l - c.shift()).abs()], axis=1).max(axis=1)).rolling(14).mean().iloc[-1])
+    e10, e20 = c.ewm(span=10, adjust=False).mean(), c.ewm(span=20, adjust=False).mean()
+    prior = float(c.iloc[-11] / c.iloc[-74:-11].min() - 1)
+    rng10 = float(h.iloc[-10:].max() - l.iloc[-10:].min())
+    q = [
+        (f"Prior move of 30%+ in the last 1-3 months ({prior * 100:+.0f}%)", prior >= 0.30),
+        (f"Tight 10-day range ({rng10 / price * 100:.1f}% = {rng10 / atr:.1f}x ATR, wants <= 3x)", rng10 <= 3 * atr),
+        ("Within 10% of the 3-month high", price >= 0.90 * float(h.iloc[-63:].max())),
+        ("Above the 10- and 20-day EMAs, 20-day rising", price > e10.iloc[-1] and price > e20.iloc[-1] and e20.iloc[-1] > e20.iloc[-6]),
+        ("Volume drying up in the consolidation", float(v.iloc[-10:].mean()) < 0.85 * float(v.iloc[-60:-10].mean()) if v.sum() > 0 else False),
+    ]
+    breakout = price > float(h.iloc[-11:-1].max()) and (v.sum() == 0 or float(v.iloc[-1]) >= 1.5 * float(v.iloc[-51:-1].mean()))
+    setup = sum(ok for _, ok in q[:4]) == 4
+    return {
+        "minervini": {"passed": int(sum(ok for _, ok in rules)), "of": len(rules), "rules": [{"rule": r_, "ok": bool(ok)} for r_, ok in rules]},
+        "weinstein": {"stage": stage, "text": stage_txt, "slope_pct": round(slope * 100, 2)},
+        "qullamaggie": {"setup": bool(setup), "breakout_today": bool(breakout), "checks": [{"rule": r_, "ok": bool(ok)} for r_, ok in q]},
+    }
+
+
+def market_regime():
+    """Risk-on / risk-off from SPY vs its 200-day average (and that average's slope)."""
+    try:
+        d = load_prices("SPY", "2y", fill_today=True)["Close"]
+        s200 = d.rolling(200).mean()
+        on = d.iloc[-1] > s200.iloc[-1]
+        return {"regime": "RISK-ON" if on else "RISK-OFF", "spy": round(float(d.iloc[-1]), 2), "sma200": round(float(s200.iloc[-1]), 2),
+                "distance_pct": round(float(d.iloc[-1] / s200.iloc[-1] - 1) * 100, 1), "sma200_rising": bool(s200.iloc[-1] > s200.iloc[-22])}
+    except Exception:
+        return None
+
+
 def read_recent(df, pats, piv, n=READ_BARS):
     """Observations about the last n bars, each with a sign (+1 good / -1 bad / 0 neutral)
     and the reason, plus an overall verdict. Rule-based, so every line traces to the data."""
@@ -1021,6 +1082,7 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval=
         "patterns": pats,
         "levels": find_levels(piv, price, tol)[:6],
         "read": read_recent(df, pats, piv),
+        "templates": trend_templates(df) if daily else None,
         "warm": warm["Close"].round(2).tolist(),   # closes before the window, for MA warm-up
         "ohlc": {
             "x": [ts(d) for d in df.index],
@@ -1100,6 +1162,7 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
   <div class="sub">Generated __GEN__ · swing-pivot pattern detection · mechanical candidates, not trade advice. Click a table row to zoom.</div></div>
   <div><a href="/brief">Market brief</a> · <a href="/">Daily signals</a></div>
 </div>
+<div id="regime" class="sub" style="margin-top:6px"></div>
 <form class="lookup" id="lookup">
   <input id="sym" placeholder="Ticker, e.g. NVDA" autocomplete="off" spellcheck="false" required>
   <select id="per">__PERIODS__</select>
@@ -1108,10 +1171,13 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
   <span id="msg" class="sub"></span>
 </form>
 <div id="root"></div>
+<section id="rrg" hidden></section>
 <section id="seas" hidden></section></main>
 <script>
 const DATA = __DATA__;
 const SEAS = __SEAS__;
+const RRG = __RRG__;
+const REGIME = __REGIME__;
 const COL = {bullish:'#26a69a', bearish:'#ef5350', neutral:'#f5b041'};
 const CATS = [['reversal','Reversals'],['triangle','Triangles & wedges'],['channel','Channels'],['trendline','Trendlines'],['range','Ranges'],['wyckoff','Wyckoff'],['volume','Volume'],['candle','Candles']];
 const root = document.getElementById('root');
@@ -1374,6 +1440,14 @@ function render(r, prepend) {
       <label><input type="checkbox" class="ma-strip" checked> trend strip</label>
       <label><input type="checkbox" class="ma-vol" checked> volume</label>
       <span>· hover the chart to see the state on any bar, click to pin it, Shift+click to anchor a VWAP there</span></div>
+    ${r.templates ? (() => { const t = r.templates, m = t.minervini, w = t.weinstein, q = t.qullamaggie;
+      const li = x => `<li><span class="ic ${x.ok ? 'bullish' : 'bearish'}">${x.ok ? '✓' : '✗'}</span>${x.rule}</li>`;
+      return `<details class="read"><summary>Trend templates: <span class="${m.passed == m.of ? 'bullish' : m.passed >= 5 ? 'neutral' : 'bearish'}">Minervini ${m.passed}/${m.of}</span>
+        · <span class="${w.stage == 2 ? 'bullish' : w.stage == 4 ? 'bearish' : 'neutral'}">Weinstein stage ${w.stage}</span>
+        · <span class="${q.breakout_today ? 'bullish' : q.setup ? 'neutral' : 'sub'}">${q.breakout_today ? 'breakout today' : q.setup ? 'Qullamaggie setup' : 'no breakout setup'}</span></summary>
+        <div class="sub" style="margin-top:6px">Minervini trend template (all 7 = strong uptrend)</div><ul>${m.rules.map(li).join('')}</ul>
+        <div class="sub" style="margin-top:6px">Weinstein: ${w.text}; 30-week average ${w.slope_pct > 0 ? '+' : ''}${w.slope_pct}% over 4 weeks</div>
+        <div class="sub" style="margin-top:6px">Qullamaggie breakout setup (first four = setup; breakout = close above the 10-day high on 1.5x volume)</div><ul>${q.checks.map(li).join('')}</ul></details>`; })() : ''}
     ${r.read ? `<details class="read" open><summary>Last ${r.read.bars} ${daily ? 'days' : 'bars'}: <span class="${r.read.score > 0 ? 'bullish' : r.read.score < 0 ? 'bearish' : 'neutral'}">${r.read.verdict}</span>
       <span class="sub">(${r.read.positives} positive · ${r.read.negatives} negative · since ${r.read.from})</span></summary>
       <ul>${r.read.observations.map(o => `<li><span class="ic ${o.sign > 0 ? 'bullish' : o.sign < 0 ? 'bearish' : 'sub'}">${o.sign > 0 ? '▲' : o.sign < 0 ? '▼' : '•'}</span>${o.text}</li>`).join('')}</ul>
@@ -1719,6 +1793,53 @@ function render(r, prepend) {
 
 DATA.forEach(r => render(r, false));
 
+// ── Market regime header ──
+if (REGIME) document.getElementById('regime').innerHTML = `Market regime: <b class="${REGIME.regime == 'RISK-ON' ? 'bullish' : 'bearish'}">${REGIME.regime}</b> · SPY ${REGIME.spy} is ${REGIME.distance_pct > 0 ? '+' : ''}${REGIME.distance_pct}% vs its 200-day average ${REGIME.sma200} (${REGIME.sma200_rising ? 'rising' : 'falling'})`;
+
+// ── Sector rotation map (RRG) ──
+(function () {
+  if (!RRG || !RRG.etfs || !RRG.etfs.length) return;
+  const el = document.getElementById('rrg'); el.hidden = false;
+  const QC = {Leading:'#26a69a', Improving:'#5c8dff', Weakening:'#f5b041', Lagging:'#ef5350'};
+  const groups = [['sector','Sectors'], ['theme','Themes'], ['macro','Macro (gold, bonds, dollar, EM)']];
+  const rows = RRG.etfs.map(x => `<tr><td><b>${x.symbol}</b> <span class="sub">${x.label}</span></td>
+      <td style="color:${QC[x.quadrant]}">${x.quadrant}${x.early_turn ? ' <span class="tag">early turn</span>' : x.quadrant != x.quadrant_1w ? ` <span class="sub">from ${x.quadrant_1w}</span>` : ''}</td>
+      <td>${x.rs > 0 ? '+' : ''}${x.rs}</td><td>${x.rm > 0 ? '+' : ''}${x.rm}</td>
+      <td class="${x.ex_1w > 0 ? 'bullish' : 'bearish'}">${x.ex_1w > 0 ? '+' : ''}${x.ex_1w}%</td><td class="${x.ex_1m > 0 ? 'bullish' : 'bearish'}">${x.ex_1m > 0 ? '+' : ''}${x.ex_1m}%</td>
+      <td class="${x.ex_3m > 0 ? 'bullish' : 'bearish'}">${x.ex_3m > 0 ? '+' : ''}${x.ex_3m}%</td></tr>`).join('');
+  const turns = RRG.etfs.filter(x => x.early_turn);
+  el.innerHTML = `<div class="head"><h2>Sector rotation <span class="sub">relative strength vs SPY and its momentum, as of ${RRG.asof} · SPY 1w ${RRG.spy.r1w}% · 1m ${RRG.spy.r1m}% · 3m ${RRG.spy.r3m}%</span></h2></div>
+    <div class="filters">${groups.map(([g, t]) => `<label><input type="checkbox" data-g="${g}" ${g == 'macro' ? '' : 'checked'}> ${t}</label>`).join('')}
+      <label><input type="checkbox" id="rrgTails" checked> 6-week tails</label></div>
+    ${turns.length ? `<div class="note">Early turns (Lagging → Improving in the last 2 weeks): ${turns.map(x => `<b>${x.symbol}</b> ${x.label}`).join(', ')}</div>` : ''}
+    <div id="rrgChart" style="height:560px"></div>
+    <div class="wrap"><table><tr><th>ETF</th><th>Quadrant</th><th>Strength</th><th>Momentum</th><th>vs SPY 1w</th><th>1m</th><th>3m</th></tr>${rows}</table></div>
+    <div class="sub" style="margin-top:8px">Strength = 0.5 × 1-month + 0.3 × 3-month + 0.2 × 1-week return above SPY (price only). Momentum = change of the 1-month excess return over 21 trading days. Rotation usually runs clockwise: Improving → Leading → Weakening → Lagging. It measures relative price strength, not money flows. Not investment advice.</div>`;
+  function draw() {
+    const on = new Set([...el.querySelectorAll('[data-g]')].filter(b => b.checked).map(b => b.dataset.g)), tails = document.getElementById('rrgTails').checked;
+    const xs = RRG.etfs.filter(x => on.has(x.group)), tr = [];
+    xs.forEach(x => {
+      const c = QC[x.quadrant];
+      if (tails) tr.push({type:'scatter', mode:'lines+markers', x:x.tail.map(t => t.rs), y:x.tail.map(t => t.rm), line:{color:c, width:1}, marker:{size:3, color:c},
+        hoverinfo:'skip', showlegend:false, opacity:0.55});
+      tr.push({type:'scatter', mode:'markers+text', x:[x.rs], y:[x.rm], text:[x.symbol], textposition:'top center', textfont:{color:c, size:10},
+        marker:{size:9, color:c, line:{color:'#fff', width: x.early_turn ? 2 : 0}}, showlegend:false,
+        hovertemplate:`${x.symbol} ${x.label}<br>${x.quadrant}<br>strength %{x:.1f} · momentum %{y:.1f}<extra></extra>`});
+    });
+    const all = xs.flatMap(x => tails ? x.tail : [x]), mx = Math.max(5, ...all.map(t => Math.abs(t.rs))) * 1.1, my = Math.max(5, ...all.map(t => Math.abs(t.rm))) * 1.1;
+    const q = (x0, x1, y0, y1, col, txt, ax, ay) => ({shape:{type:'rect', x0, x1, y0, y1, fillcolor:col, line:{width:0}, layer:'below'},
+      ann:{x:ax, y:ay, text:txt, showarrow:false, font:{color:'#8a93a5', size:12}}});
+    const Q = [q(0, mx, 0, my, 'rgba(38,166,154,0.07)', 'Leading', mx * 0.85, my * 0.93), q(-mx, 0, 0, my, 'rgba(92,141,255,0.07)', 'Improving', -mx * 0.85, my * 0.93),
+               q(0, mx, -my, 0, 'rgba(245,176,65,0.07)', 'Weakening', mx * 0.85, -my * 0.93), q(-mx, 0, -my, 0, 'rgba(239,83,80,0.07)', 'Lagging', -mx * 0.85, -my * 0.93)];
+    Plotly.react('rrgChart', tr, {paper_bgcolor:'#171a21', plot_bgcolor:'#171a21', font:{color:'#e6e6e6'}, margin:{l:50, r:20, t:10, b:45},
+      xaxis:{range:[-mx, mx], gridcolor:'#2a2f3a', zerolinecolor:'#555', title:{text:'relative strength vs SPY →'}},
+      yaxis:{range:[-my, my], gridcolor:'#2a2f3a', zerolinecolor:'#555', title:{text:'momentum ↑'}},
+      shapes:Q.map(z => z.shape), annotations:Q.map(z => z.ann), hovermode:'closest'}, {responsive:true, displaylogo:false});
+  }
+  el.querySelectorAll('input').forEach(b => b.onchange = draw);
+  draw();
+})();
+
 // ── Sector seasonality ──
 (function () {
   if (!SEAS || !SEAS.sectors || !SEAS.sectors.length) return;
@@ -1795,11 +1916,13 @@ async function lookup(sym, per, iv) {
 </script></body></html>"""
 
 
-def write_report(results, path, seas=None):
+def write_report(results, path, seas=None, rrg=None, regime=None):
     opts = "".join(f'<option{" selected" if p == "2y" else ""}>{p}</option>' for p in PERIODS)
     html = (HTML.replace("__GEN__", datetime.now().strftime("%Y-%m-%d %H:%M"))
                 .replace("__PERIODS__", opts)
                 .replace("__SEAS__", json.dumps(seas))
+                .replace("__RRG__", json.dumps(rrg))
+                .replace("__REGIME__", json.dumps(regime))
                 .replace("__DATA__", json.dumps(results)))
     with open(path, "w", encoding="utf-8") as f:
         f.write(html)
@@ -1848,7 +1971,13 @@ def main():
             seas = seasonality.seasonality()
         except Exception as e:
             print(f"seasonality: ERROR {e}")
-    write_report(results, args.out, seas)
+    rrg = None
+    try:
+        import rotation
+        rrg = rotation.rrg()
+    except Exception as e:
+        print(f"rotation: ERROR {e}")
+    write_report(results, args.out, seas, rrg, market_regime())
     print(f"\nReport saved: {args.out}")
     if not args.no_browser:
         webbrowser.open("file:///" + os.path.abspath(args.out).replace(os.sep, "/"))

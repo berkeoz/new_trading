@@ -290,6 +290,7 @@ def ticker_snapshot(sym, spy=None):
         "daily": st,
         "levels": key_levels(d, df, st, price),
         "read30": d.get("read"),
+        "templates": d.get("templates"),
         "open_patterns": [{k: p[k] for k in ("type", "bias", "start", "end", "status", "target", "note")}
                           for p in d["patterns"] if p["open"]][:10],
         "recent_signals": [{k: p[k] for k in ("type", "bias", "start", "status", "note")}
@@ -466,6 +467,10 @@ def summary_text(snap):
             L.append(f"  last {rd['bars']} days read: {rd['verdict']} ({rd['positives']}+ / {rd['negatives']}-)")
             for o_ in rd["observations"]:
                 L.append(f"    {'+' if o_['sign'] > 0 else '-' if o_['sign'] < 0 else '·'} {o_['text']}")
+        if t.get("templates"):
+            tp = t["templates"]
+            L.append(f"  trend templates: Minervini {tp['minervini']['passed']}/{tp['minervini']['of']}, {tp['weinstein']['text']}, "
+                     + ("breakout today" if tp["qullamaggie"]["breakout_today"] else "Qullamaggie setup" if tp["qullamaggie"]["setup"] else "no breakout setup"))
         if t.get("mtf_text"):
             for line in t["mtf_text"].splitlines()[1:]:
                 L.append("  timeframes: " + line.strip())
