@@ -142,7 +142,10 @@ def fred(sid, start="2013-01-01"):
 
 # ── Transformations ───────────────────────────────────────────────────────────
 def _monthly(s):
-    return s.resample("ME").last().dropna()
+    """One value per calendar month; months with no observation stay NaN so that
+    shifts are calendar-correct (e.g. the missing Oct-2025 CPI must not turn a
+    12-month comparison into a 13-month one)."""
+    return s.resample("ME").last()
 
 
 def _primary(s, kind):
@@ -194,13 +197,15 @@ def series_view(sid, name, pillar, kind, tier1, extra):
     }
     if kind == "pct":
         m = _monthly(raw)
-        out["mom"] = round(float((m.iloc[-1] / m.iloc[-2] - 1) * 100), 2)
-        out["ann3m"] = round(float(((m.iloc[-1] / m.iloc[-4]) ** 4 - 1) * 100), 2)
+        mom, a3 = m / m.shift(1) - 1, (m / m.shift(3)) ** 4 - 1
+        out["mom"] = None if np.isnan(mom.iloc[-1]) else round(float(mom.iloc[-1] * 100), 2)
+        out["ann3m"] = None if np.isnan(a3.iloc[-1]) else round(float(a3.iloc[-1] * 100), 2)
     if kind == "payrolls":
         out["avg3m"] = round(float(pv.iloc[-3:].mean()), 0)
     if extra.get("yoy"):
         m = _monthly(raw)
-        out["yoy"] = round(float((m.iloc[-1] / m.iloc[-13] - 1) * 100), 1) if len(m) > 13 else None
+        y = m / m.shift(12) - 1
+        out["yoy"] = None if np.isnan(y.iloc[-1]) else round(float(y.iloc[-1] * 100), 1)
     if raw.index.inferred_freq is None or (raw.index[-1] - raw.index[-2]).days <= 7:
         out["daily_or_weekly"] = True
     return out
@@ -390,7 +395,7 @@ def summary(data, st):
     for p in PILLARS:
         for v in [s for s in data["series"] if s["pillar"] == p]:
             extra = ""
-            if "mom" in v: extra += f", m/m {v['mom']:+.2f}%, 3m ann {v['ann3m']:.1f}%"
+            if v.get("mom") is not None: extra += f", m/m {v['mom']:+.2f}%" + (f", 3m ann {v['ann3m']:.1f}%" if v.get("ann3m") is not None else "")
             if "avg3m" in v: extra += f", 3m avg {v['avg3m']:+.0f}k"
             if v.get("yoy") is not None: extra += f", {v['yoy']:+.1f}% y/y"
             L.append(f"  [{p}] {v['name']}: {v['value']} {v['unit']} ({v['value_date'][:7]}, obs {v['latest_obs']}) | prev {v['prev']}"
