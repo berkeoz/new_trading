@@ -1,39 +1,41 @@
 # X account notes
-Started 2026-10-10 (first run). Revised after each digest.
+Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-11.
 
 ### @DeItaone
 - **Type:** headline news wire (Walter Bloomberg). **Focus:** macro, geopolitics, Trump and Fed headlines.
 - **Style:** all-caps headlines, no opinions. **Signal-to-noise:** high. Lower volume on weekends.
-- **Reliability:** relays reports from wires and state media. Check the original source on single-source items (e.g. Iranian state media).
+- **Reliability:** relays reports from wires and state media. Check the original source on single-source items (e.g. Iranian state media, Trump claims not yet confirmed by the other parties).
 - **Calls log:** none (no calls).
 
 ### @TheProfInvestor
-- **Type:** discretionary trader and educator. **Focus:** mega-cap tech, risk-management tips.
-- **Style:** short motivational posts, occasional breakout callouts. **Signal-to-noise:** medium-low.
+- **Type:** discretionary trader and educator. **Focus:** mega-cap tech, BTC, risk-management tips.
+- **Style:** short motivational and lifestyle posts, occasional breakout callouts. **Signal-to-noise:** medium-low.
 - **Calls log:**
+  - 2026-10-11: BTC bull flag "just getting started". Outcome: open (BTC 83,042 on 10/10).
   - 2026-10-09: AMZN "breakout" going into the weekend. Outcome: open.
 
 ### @pelositracker
 - **Type:** congressional-trade tracker (linked to the Autopilot app). **Focus:** Pelosi and other members' trades.
-- **Style:** trade disclosures plus promotion. **Signal-to-noise:** medium.
+- **Style:** trade disclosures plus promotion and jokes. **Signal-to-noise:** medium; quiet at weekends.
 - **Calls log:**
-  - 2026-10-08: watch UBER, which is below Pelosi's original buy (outside this run's window). Outcome: open.
+  - 2026-10-08: watch UBER, which is below Pelosi's original buy. Outcome: open.
 
 ### @mmonis
 - **Type:** swing trader using Bookmap/order-flow levels. **Focus:** momentum names (NBIS, AEHR).
-- **Style:** setups with liquidity levels; engages with followers. **Signal-to-noise:** medium.
+- **Style:** setups with liquidity levels; engagement posts. **Signal-to-noise:** medium.
 - **Calls log:**
-  - Around 2026-10-09: NBIS long with liquidity at $218/$215; AEHR undercut-and-rally with buyers at $78–85 (seen via an endorsed reply). Outcome: open.
+  - Around 2026-10-09: NBIS long with liquidity at $218/$215; AEHR undercut-and-rally with buyers at $78–85. Outcome: open.
 
 ### @asklivermore
 - **Type:** subscription swing-trading service. **Focus:** subscriber trade recaps.
-- **Style:** "Hi subs" recaps, mostly behind a paywall. **Signal-to-noise:** low publicly.
+- **Style:** "Hi subs" recaps, mostly behind a paywall. **Signal-to-noise:** low publicly. Last post seen 2026-10-09.
 - **Calls log:** none public.
 
 ### @FL0WG0D
-- **Type:** options-flow tracker (Bullflow). **Focus:** large single-name call/put buys.
-- **Style:** flow screenshots, mostly posted after they win (survivorship bias). **Signal-to-noise:** medium for sentiment only.
+- **Type:** options-flow tracker (Bullflow). **Focus:** large single-name and SPX call/put buys.
+- **Style:** flow and P&L screenshots posted after they win (survivorship bias), plus referral promotion for funded accounts. **Signal-to-noise:** medium for sentiment only.
 - **Calls log:**
+  - 2026-10-10: SPXW 7,805 position shown at +79% open P&L. Outcome: n/a (after the fact).
   - 2026-10-09: AMZN 257.5C (10/14) flow, about $0.94M, shown +68% intraday. Outcome: open.
   - 2026-10-09: AAPL 345C (10/23) flow, $1.9M premium, "up 30%". Outcome: open.
 
@@ -43,63 +45,76 @@ Started 2026-10-10 (first run). Revised after each digest.
 - **Calls log:** none public.
 
 ### @TrendSpider
-- **Type:** charting-platform brand account; chart technician plus marketing. **Focus:** pattern setups, insider buys, AI tools.
-- **Style:** clean annotated charts, memes, product promotion; no stops or targets. **Signal-to-noise:** medium.
+- **Type:** charting-platform brand account; chart technician plus marketing. **Focus:** pattern setups, earnings, insider buys.
+- **Style:** clean annotated charts with Fibonacci and analyst-target lines; memes; product promotion; no stops. **Signal-to-noise:** medium. **Bias:** bullish on breakouts.
 - **Calls log:**
+  - 2026-10-11: TSM daily cup-and-handle before Thursday PM earnings; 1.618 at $537.42. Outcome: open.
+  - 2026-10-11: AMD triangle breakout; 1.618 at $702.61. Outcome: open.
+  - 2026-10-11: HOOD holding its rising trendline from April. Outcome: open.
+  - 2026-10-10: GOOG weekly triangle; HPE weekly triangle breakout (73.46); GLD/XLE monthly cup-and-handles. Outcome: open.
   - 2026-10-10: LEN at falling-wedge support after a $135M Berkshire buy. Outcome: open.
-  - 2026-10-10: HIMS Bollinger squeeze; last time it ran 400%+. Outcome: open.
+  - 2026-10-10: HIMS Bollinger squeeze. Outcome: open.
   - 2026-10-10: MU under resistance; analyst targets about 50% higher. Outcome: open.
-  - 2026-10-09: LITE on the watchlist for next week (OCP Summit Monday). Outcome: open.
+  - 2026-10-09: LITE on the watchlist (OCP Summit Monday). Outcome: open.
 
 ### @kpak82
-- **Type:** reversal and contrarian chart technician. **Focus:** indexes, semis, mega-caps, BTC, TLT.
-- **Style:** daily and weekly pattern calls (engulfing, channel breaks, EMAs); few price targets; argues with followers. **Signal-to-noise:** medium-high.
+- **Type:** reversal and contrarian chart technician. **Focus:** indexes (SPX, QQQ, DJI, VIX, DAX, KOSPI), semis, mega-caps, TLT.
+- **Style:** daily and weekly pattern calls (engulfing, channel tops, wedges, EMAs); names triggers but few price targets; argues with followers. **Signal-to-noise:** medium-high.
 - **Bias:** tends to call tops.
 - **Calls log:**
-  - 2026-10-10: TLT bullish weekly reversal at all-time lows. Outcome: open (Sep CPI on Oct 14 is the test).
-  - 2026-10-09: SMH bearish engulfing reversal. Outcome: open.
-  - 2026-10-09: MU failed its second breakout. Outcome: open.
-  - 2026-10-09: AMD below its 3-week channel and 9 EMA. Outcome: open.
-  - 2026-10-09: SNDK below its 5/9/20/50 EMAs. Outcome: open.
-  - 2026-10-09: NVDA and MSFT not to be chased at ATH resistance. Outcome: open.
+  - 2026-10-11: AMZN weekly flag breakout is a likely bull trap. Outcome: open.
+  - 2026-10-11: NVDA weekly bearish engulfing at ATHs; watch a close below the 2-week range and 5/9 EMA. Outcome: open.
+  - 2026-10-11: VIX at 3 supports, breakout possible; bounce Monday. Outcome: open.
+  - 2026-10-10: SPX/SPY failed ATH, weekly reversal, red week expected; "90%" he posts a breakdown Mon/Tue. Outcome: open.
+  - 2026-10-10: QQQ topped at dual channel resistance. Outcome: open.
+  - 2026-10-10: DAX failed weekly reversal; KOSPI weekly breakdown. Outcome: open.
+  - 2026-10-10: TLT bullish weekly reversal at all-time lows. Outcome: open (CPI Oct 14).
+  - 2026-10-09: SMH bearish engulfing. Outcome: open (SOXX -0.69% Fri, held 555.8).
+  - 2026-10-09: MU failed second breakout; AMD below its channel; SNDK below its EMAs. Outcome: open.
 
 ### @unusual_whales
-- **Type:** news, insider trades, congressional trades, flow tools. **Focus:** insider trades, macro headlines, product.
-- **Style:** "BREAKING" headlines plus heavy self-promotion. **Signal-to-noise:** medium.
+- **Type:** news, insider trades, congressional trades, flow tools. **Focus:** insider trades, Fed and macro headlines, product.
+- **Style:** "BREAKING" headlines plus heavy self-promotion (about a third of posts). **Signal-to-noise:** medium.
 - **Calls log:**
-  - 2026-10-10: META insiders 172 trades, zero buys (a bearish read). Outcome: n/a.
+  - 2026-10-10: PLTR insiders sold all year (Karp, Thiel). Outcome: n/a (PLTR at ATH Friday).
+  - 2026-10-10: META insiders 172 trades, zero buys. Outcome: n/a.
   - 2026-10-10: ORCL director bought about $3.5M after a 52% drop. Outcome: n/a.
 
 ### @Mr_Derivatives
-- **Type:** chart technician (Heisenberg). **Focus:** high-beta and mega-cap swing levels, stats.
-- **Style:** exact levels and targets; polls; hints before posting charts. **Signal-to-noise:** high.
+- **Type:** chart technician and stats poster (Heisenberg). **Focus:** high-beta and mega-cap swing levels, event stats (CPI reactions, implied moves, streaks), prediction markets.
+- **Style:** exact levels and targets; polls. **Signal-to-noise:** high.
 - **Bias:** leans bullish and buys dips.
 - **Calls log:**
+  - 2026-10-11: JPM on a multi-year support trendline into Tuesday earnings; implied ±3.5%. Outcome: open.
+  - 2026-10-11: SOXX/SMH down 4 days in a row; 5-day streaks rare. Outcome: open.
+  - 2026-10-11: December hike favoured over October (Polymarket 75%). Outcome: open (FOMC Oct 28).
   - 2026-10-10: IREN support at $30–35, bounce target up to $45. Outcome: open.
   - 2026-10-10: AVGO above the resistance line targets $392.43, then about $400. Outcome: open.
   - 2026-10-10: BIDU bounce off 13.5-year support. Outcome: open.
-  - 2026-10-10: NFLX has fallen after its last 5 earnings reports; reports in 7 trading days. Outcome: open.
+  - 2026-10-10: NFLX has fallen after its last 5 reports. Outcome: open.
   - 2026-10-09: AMZN going for $263 by Friday's close. Outcome: unknown.
 
 ### @DSAkdag
-- **Type:** not yet characterised (posts in Turkish/English; low frequency). No posts in this window.
+- **Type:** not yet characterised (posts in Turkish/English; low frequency). Last post seen 2026-10-08.
 - **Calls log:** none yet.
 
 ### @HeidingOut
-- **Type:** personal or community account. **Focus:** mostly non-market posts.
+- **Type:** personal or community account. **Focus:** sports and non-market posts.
 - **Signal-to-noise:** very low for markets.
 - **Calls log:** none.
 
 ### @TradersMastery
-- **Type:** trading educator (Jordan Lindsey). Low frequency; no posts in this window.
+- **Type:** trading educator (Jordan Lindsey). Low frequency; last post seen 2026-10-08.
 - **Calls log:** none yet.
 
 ### @zerohedge
-- **Type:** macro and geopolitics news plus commentary. **Focus:** oil, shipping, Fed, Goldman/JPM desk notes, politics.
-- **Style:** high volume; many political and culture posts. **Signal-to-noise:** medium-low (market posts useful).
+- **Type:** macro and geopolitics news plus commentary. **Focus:** oil, Gulf, Russia–Ukraine, AI financing, Goldman/Jefferies/UBS desk notes, politics.
+- **Style:** very high volume (40+ posts a day hit the cap); many political and culture posts. **Signal-to-noise:** medium-low (market posts useful).
 - **Bias:** bearish and alarmist framing.
 - **Calls log:**
-  - 2026-10-10: tanker rates (Gulf to Asia) at a record high; Goldman says leadership is narrow. Outcome: n/a.
+  - 2026-10-11: equity risk premium "has vanished"; AI off-balance-sheet financing and circularity risks. Outcome: n/a.
+  - 2026-10-10: Goldman near-record $22 oil risk premium; oil/S&P correlation deeply negative. Outcome: n/a.
+  - 2026-10-10: Gulf-to-Asia tanker rates at a record; Goldman says leadership is narrow. Outcome: n/a.
 
 ### @jaykaeppel
 - **Type:** quantitative and sentiment analyst (SentimenTrader). **Focus:** breadth and seasonality signals.
