@@ -19,7 +19,8 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 LEDGER = os.path.join(ROOT, "ledger", "value_lists.jsonl")
 SUMMARY = os.path.join(ROOT, "ledger", "summary.json")
 HORIZONS = {"1 week": 5, "1 month": 21, "3 months": 63}
-LIST_NAMES = {"rebound": "High-Beta Rebound Candidates", "quality": "Quality Growth Below Value"}
+LIST_NAMES = {"rebound": "High-Beta Rebound Candidates", "quality": "Quality Growth Below Value", "rule40": "Rule of 40"}
+SHORT = {"rebound": "Rebound", "quality": "Quality", "rule40": "Rule of 40"}
 
 
 def _entries():
@@ -80,6 +81,8 @@ def evaluate():
     lists = {}
     for lst in LIST_NAMES:
         rs = [r for r in rows if r["list"] == lst]
+        if not rs:
+            continue
         stats = {}
         for name in list(HORIZONS) + ["to_date"]:
             xs = [r[name]["excess"] for r in rs if name in r]
@@ -113,7 +116,7 @@ def render(s):
                 f"<span style='color:var(--muted)'>beat SPY {st['hit_rate']}% of {st['n']}</span></td>")
     body = "".join(f"<tr><td><b>{v['name']}</b><br><span style='color:var(--muted)'>{v['picks']} picks over {v['days']} days</span></td>"
                    + "".join(cell(v["stats"].get(c)) for c in cols) + "</tr>" for v in s["lists"].values())
-    rec = "".join(f"<tr><td>{r['date']}</td><td>{'Rebound' if r['list'] == 'rebound' else 'Quality'}</td><td><b>{r['symbol']}</b></td>"
+    rec = "".join(f"<tr><td>{r['date']}</td><td>{SHORT.get(r['list'], r['list'])}</td><td><b>{r['symbol']}</b></td>"
                   f"<td>{r['score']}</td><td>{r['close']:.2f}</td>"
                   f"<td style='color:{'var(--green)' if r['to_date']['excess'] > 0 else 'var(--red)'}'>{r['to_date']['ret']:+.1f}% "
                   f"({r['to_date']['excess']:+.1f}% vs SPY, {r['to_date']['days']}d)</td></tr>" for r in s["recent"][:20])

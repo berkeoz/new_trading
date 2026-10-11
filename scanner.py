@@ -376,6 +376,8 @@ def analyze_symbol(ticker):
             today["gross_m"]     = info.get("grossMargins")
             today["op_m"]        = info.get("operatingMargins")
             today["fcf"]         = info.get("freeCashflow")
+            today["total_rev"]   = info.get("totalRevenue")
+            today["ebitda_m"]    = info.get("ebitdaMargins")
             today["de"]          = info.get("debtToEquity")
             today["rec_mean"]    = info.get("recommendationMean")
             today["n_analysts"]  = info.get("numberOfAnalystOpinions")
@@ -604,11 +606,70 @@ def _build_value_lists(results, _section):
                   r_html, "#38bdf8", [("Weeks", "#a78bfa"), ("Months", "#f59e0b")])
     s6 = _section("💎", "Quality Growth Below Value", "ROE ≥15% · margins · FCF+ · growth ≥15% · trading at a discount",
                   q_html, "#22c55e", [("Months", "#f59e0b"), ("Year", "#10b981")])
+    r40 = _rule40(results)
+    r40_html = "".join(_rule40_card(r) for r in r40) or none
+    s7 = _section("📐", "Rule of 40", "Revenue growth % + free-cash-flow margin % ≥ 40 · mkt cap &gt;$1B",
+                  r40_html, "#c084fc", [("Months", "#f59e0b"), ("Year", "#10b981")])
+    r40_note = ("<p class='bd-note'><b>Rule of 40</b>: a growth company is considered healthy when its revenue growth plus its "
+                "free-cash-flow margin is at least 40%, so fast growth can excuse thin cash flow and strong cash flow can excuse slower growth. "
+                "Growth is the latest quarter vs a year earlier; the FCF margin is trailing-twelve-month free cash flow / revenue (Yahoo data). "
+                "It is a quality screen, not a price signal: the cards show how far each stock sits from its high and its target.</p>")
     # remembered so main() can freeze today's lists in the hit ledger
     VALUE_PICKS.clear()
     VALUE_PICKS.update({"rebound": [{"symbol": r["symbol"], "score": sc, "close": r["close"]} for r, sc, _ in reb],
-                        "quality": [{"symbol": r["symbol"], "score": sc, "close": r["close"]} for r, sc, _ in qual]})
-    return note + s5 + s6 + "<!--LEDGER-->"
+                        "quality": [{"symbol": r["symbol"], "score": sc, "close": r["close"]} for r, sc, _ in qual],
+                        "rule40": [{"symbol": r["symbol"], "score": round(r["_r40"]), "close": r["close"]} for r in r40]})
+    return note + s5 + s6 + s7 + r40_note + "<!--LEDGER-->"
+
+
+def _rule40(results, n=10):
+    """Stocks whose revenue growth % + FCF margin % is at least 40, best first."""
+    out = []
+    for r in results:
+        if r.get("error") or r.get("quote_type") != "EQUITY" or not r.get("close"):
+            continue
+        rg, fcf, rev = r.get("rev_growth"), r.get("fcf"), r.get("total_rev")
+        if rg is None or fcf is None or not rev or rev <= 0 or (r.get("mkt_cap") or 0) < 1e9:
+            continue
+        r = dict(r)
+        r["_fcf_m"] = fcf / rev
+        r["_r40"] = (rg + r["_fcf_m"]) * 100
+        if r["_r40"] >= 40:
+            out.append(r)
+    return sorted(out, key=lambda r: -r["_r40"])[:n]
+
+
+def _rule40_card(r):
+    v, rg, fm = r["_r40"], r["rev_growth"], r["_fcf_m"]
+    col = "var(--green)" if v >= 60 else "var(--amber)" if v >= 50 else "#c084fc"
+    tgt = r.get("target_px")
+    up = f"{_pct(tgt / r['close'] - 1)}" if tgt else "—"
+    if fm < 0:
+        shape = "growth carries it while it still burns cash"
+    elif rg < 0.10:
+        shape = "cash flow carries it while growth is slow"
+    elif rg >= 0.20 and fm >= 0.20:
+        shape = "balanced: strong growth and strong cash flow"
+    else:
+        shape = "both parts contribute"
+    em = r.get("ebitda_m")
+    why = [f"revenue growth {_pct(rg)} + FCF margin {_pct(fm)} = <b>{v:.0f}</b>", shape]
+    if em is not None:
+        why.append(f"EBITDA margin {em * 100:.0f}% (the other common version: {(rg + em) * 100:.0f})")
+    if r.get("pe_forward"):
+        why.append(f"forward P/E {r['pe_forward']:.0f}")
+    items = "".join(f"<li>{w}</li>" for w in why)
+    return f"""<div class="bd-card">
+  <div class="bd-top"><span class="bd-ticker">{r['symbol']}</span><span style="font-size:11px;color:var(--muted);margin-left:6px">{(r.get('name') or '')[:22]}</span></div>
+  <div class="bd-bar-row"><div class="bd-bar-out"><div class="bd-bar-in" style="width:{min(v, 100):.0f}%;background:{col}"></div></div><span class="bd-score">{v:.0f}</span></div>
+  <div class="bd-metrics">
+    <div class="bd-m"><span class="bd-ml">Price</span><span class="bd-mv">{r['close']:.2f}</span></div>
+    <div class="bd-m"><span class="bd-ml">From high</span><span class="bd-mv">{_pct(r.get('drawdown'))}</span></div>
+    <div class="bd-m"><span class="bd-ml">To target</span><span class="bd-mv">{up}</span></div>
+    <div class="bd-m"><span class="bd-ml">Gross m.</span><span class="bd-mv">{_pct(r.get('gross_m'))}</span></div>
+  </div>
+  <ul class="bd-why">{items}</ul>
+</div>"""
 
 
 def _build_breakdown(results):

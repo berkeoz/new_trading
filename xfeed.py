@@ -28,7 +28,7 @@ ET = ZoneInfo("America/New_York")
 ACCOUNTS = ["DeItaone", "TheProfInvestor", "pelositracker", "mmonis", "asklivermore", "FL0WG0D", "BeardoTrader",
             "TrendSpider", "kpak82", "unusual_whales", "Mr_Derivatives", "DSAkdag", "HeidingOut", "TradersMastery",
             "zerohedge", "jaykaeppel"]
-MAX_POSTS = 40          # newest posts read per account per run
+MAX_POSTS = 30          # newest posts read per account per run (two runs a day)
 FIRST_RUN_HOURS = 24    # with no saved position, read the last 24 hours
 SHOT_GLOBS = ["mcp-claude-in-chrome-blob-*", "mcp-Claude_Browser-blob-*", "mcp-computer-use-blob-*"]
 
@@ -54,8 +54,11 @@ def plan():
     os.makedirs(XDIR, exist_ok=True)
     open(RUN_START, "w").write(str(time.time()))
     st, now = _load(), datetime.now(ET)
-    did = f"{now:%Y-%m-%d}"
-    print(f"RUN_DATE={did}")
+    slot = "morning" if now.hour < 13 else "evening"      # two runs a day: 9:00 and 18:00 ET
+    did = f"{now:%Y-%m-%d}-{'am' if slot == 'morning' else 'pm'}"
+    print(f"RUN_DATE={now:%Y-%m-%d}")
+    print(f"RUN_ID={did}")
+    print(f"EDITION={slot}")
     print(f"WRITE_DIGEST_TO=xfeed/{did}.md")
     print("ACCOUNT_NOTES=xfeed/accounts.md")
     prev = sorted(glob.glob(os.path.join(XDIR, "20*.md")))
