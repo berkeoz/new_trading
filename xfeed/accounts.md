@@ -1,5 +1,5 @@
 # X account notes
-Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-11.
+Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-11 (evening).
 
 ### @DeItaone
 - **Type:** headline news wire (Walter Bloomberg). **Focus:** macro, geopolitics, Trump and Fed headlines.
@@ -11,6 +11,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Type:** discretionary trader and educator. **Focus:** mega-cap tech, BTC, risk-management tips.
 - **Style:** short motivational and lifestyle posts, occasional breakout callouts. **Signal-to-noise:** medium-low.
 - **Calls log:**
+  - 2026-10-11 (pm): claims AMZN "nailed it"; GOOGL is next (no levels). Agrees with roughly 97% "no recession this year" odds. Outcome: open.
   - 2026-10-11: BTC bull flag "just getting started". Outcome: open (BTC 83,042 on 10/10).
   - 2026-10-09: AMZN "breakout" going into the weekend. Outcome: open.
 
@@ -48,6 +49,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Type:** charting-platform brand account; chart technician plus marketing. **Focus:** pattern setups, earnings, insider buys.
 - **Style:** clean annotated charts with Fibonacci and analyst-target lines; memes; product promotion; no stops. **Signal-to-noise:** medium. **Bias:** bullish on breakouts.
 - **Calls log:**
+  - 2026-10-11 (pm): SHOP monthly pressing its five-year ceiling. Outcome: open.
   - 2026-10-11: TSM daily cup-and-handle before Thursday PM earnings; 1.618 at $537.42. Outcome: open.
   - 2026-10-11: AMD triangle breakout; 1.618 at $702.61. Outcome: open.
   - 2026-10-11: HOOD holding its rising trendline from April. Outcome: open.
@@ -60,22 +62,24 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 ### @kpak82
 - **Type:** reversal and contrarian chart technician. **Focus:** indexes (SPX, QQQ, DJI, VIX, DAX, KOSPI), semis, mega-caps, TLT.
 - **Style:** daily and weekly pattern calls (engulfing, channel tops, wedges, EMAs); names triggers but few price targets; argues with followers. **Signal-to-noise:** medium-high.
-- **Bias:** tends to call tops.
+- **Bias:** tends to call tops. Admits misses publicly (TSLA, 10/11).
 - **Calls log:**
+  - 2026-10-11 (pm): AVGO failed weekly breakout, closed below the daily 50 and 200 EMA; META's hammer failed, below its supports, possible Monday push lower; TSLA at September-high resistance, weekly bearish engulfing expected; BTC 3-day bear flag under the 20 SMA. Outcome: open.
   - 2026-10-11: AMZN weekly flag breakout is a likely bull trap. Outcome: open.
   - 2026-10-11: NVDA weekly bearish engulfing at ATHs; watch a close below the 2-week range and 5/9 EMA. Outcome: open.
   - 2026-10-11: VIX at 3 supports, breakout possible; bounce Monday. Outcome: open.
   - 2026-10-10: SPX/SPY failed ATH, weekly reversal, red week expected; "90%" he posts a breakdown Mon/Tue. Outcome: open.
-  - 2026-10-10: QQQ topped at dual channel resistance. Outcome: open.
-  - 2026-10-10: DAX failed weekly reversal; KOSPI weekly breakdown. Outcome: open.
+  - 2026-10-10: QQQ topped at dual channel resistance; DAX/KOSPI breakdowns. Outcome: open.
   - 2026-10-10: TLT bullish weekly reversal at all-time lows. Outcome: open (CPI Oct 14).
   - 2026-10-09: SMH bearish engulfing. Outcome: open (SOXX -0.69% Fri, held 555.8).
   - 2026-10-09: MU failed second breakout; AMD below its channel; SNDK below its EMAs. Outcome: open.
+  - 2026-10-08: TSLA below its 200 EMA and VWAP is a major bearish signal. Outcome: wrong (gapped back above, highest daily close in 3 months; he conceded).
 
 ### @unusual_whales
 - **Type:** news, insider trades, congressional trades, flow tools. **Focus:** insider trades, Fed and macro headlines, product.
 - **Style:** "BREAKING" headlines plus heavy self-promotion (about a third of posts). **Signal-to-noise:** medium.
 - **Calls log:**
+  - 2026-10-11: GME CEO Cohen bought about $57M of stock Sept 10–29; S&P YTD leaders SNDK, MRNA, DELL, MU, MRVL. Outcome: n/a.
   - 2026-10-10: PLTR insiders sold all year (Karp, Thiel). Outcome: n/a (PLTR at ATH Friday).
   - 2026-10-10: META insiders 172 trades, zero buys. Outcome: n/a.
   - 2026-10-10: ORCL director bought about $3.5M after a 52% drop. Outcome: n/a.
@@ -89,7 +93,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
   - 2026-10-11: SOXX/SMH down 4 days in a row; 5-day streaks rare. Outcome: open.
   - 2026-10-11: December hike favoured over October (Polymarket 75%). Outcome: open (FOMC Oct 28).
   - 2026-10-10: IREN support at $30–35, bounce target up to $45. Outcome: open.
-  - 2026-10-10: AVGO above the resistance line targets $392.43, then about $400. Outcome: open.
+  - 2026-10-10: AVGO above the resistance line targets $392.43, then about $400. Outcome: open, at risk (kpak82: AVGO failed and closed the week below its 50 and 200 EMA).
   - 2026-10-10: BIDU bounce off 13.5-year support. Outcome: open.
   - 2026-10-10: NFLX has fallen after its last 5 reports. Outcome: open.
   - 2026-10-09: AMZN going for $263 by Friday's close. Outcome: unknown.
@@ -112,6 +116,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Style:** very high volume (40+ posts a day hit the cap); many political and culture posts. **Signal-to-noise:** medium-low (market posts useful).
 - **Bias:** bearish and alarmist framing.
 - **Calls log:**
+  - 2026-10-11 (pm): tankers on fire in Hormuz; Riyadh airport struck again; US pressing Ukraine on refinery strikes. Hartnett: a hike is "most bullish"; Goldman: buy the AI losers; markets price a 65% Democratic sweep. Outcome: n/a.
   - 2026-10-11: equity risk premium "has vanished"; AI off-balance-sheet financing and circularity risks. Outcome: n/a.
   - 2026-10-10: Goldman near-record $22 oil risk premium; oil/S&P correlation deeply negative. Outcome: n/a.
   - 2026-10-10: Gulf-to-Asia tanker rates at a record; Goldman says leadership is narrow. Outcome: n/a.
