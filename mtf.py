@@ -154,6 +154,58 @@ def ladder(sym):
     return {"symbol": sym, "timeframes": rows, "errors": errors, "summary": summary}
 
 
+
+# ── Indicator-to-price: which close puts RSI / MACD at a given value ─────────────
+# Wilder's RSI and the MACD EMAs are recursive, so the effect of ONE more close is exact
+# algebra. inverse() returns each timeframe's state before the bar being solved; the page
+# turns any RSI / MACD level into the close that bar would need.
+INV_FRAMES = [("1H", 1), ("2H", 2), ("4H", 4), ("8H = 1D", None)]   # 8h of a 6.5h session = the daily bar
+
+
+def _forming(df, hours, now):
+    """Is the last bar still forming (market open and the bar not finished)?"""
+    t = df.index[-1]
+    close_t = t.normalize() + pd.Timedelta(hours=16)
+    end = close_t if hours is None else min(t + pd.Timedelta(hours=hours), close_t)
+    start = t.normalize() + pd.Timedelta(hours=9, minutes=30) if hours is None else t
+    return start <= now < end
+
+
+def _state(c):
+    d = c.diff()
+    g = d.clip(lower=0).ewm(alpha=1 / 14, adjust=False).mean()
+    l = (-d.clip(upper=0)).ewm(alpha=1 / 14, adjust=False).mean()
+    e12, e26 = _ema(c, 12), _ema(c, 26)
+    m = e12 - e26
+    sig = _ema(m, 9)
+    return {"prev_close": float(c.iloc[-1]), "avg_gain": float(g.iloc[-1]), "avg_loss": float(l.iloc[-1]),
+            "ema12": float(e12.iloc[-1]), "ema26": float(e26.iloc[-1]), "signal": float(sig.iloc[-1]),
+            "rsi": float(100 - 100 / (1 + g.iloc[-1] / l.iloc[-1])) if l.iloc[-1] > 0 else 100.0,
+            "macd": float(m.iloc[-1])}
+
+
+def inverse(sym):
+    from datetime import datetime
+    now = datetime.now(ET).replace(tzinfo=None)
+    h1 = _load(sym, "60m", "1y", "1h")
+    d1 = _load(sym, "1d", "2y", "1D")
+    d1 = P._append_today(d1, sym)
+    price = float(h1["Close"].iloc[-1])
+    out = []
+    for label, hours in INV_FRAMES:
+        df = d1 if hours is None else (h1 if hours == 1 else P._session_bars(h1, hours))
+        forming = _forming(df, hours, now)
+        base = df["Close"].iloc[:-1] if forming else df["Close"]
+        st = _state(base)
+        now_st = _state(df["Close"])
+        t = df.index[-1]
+        out.append({"tf": label, "forming": forming,
+                    "bar": (f"current bar from {t:%H:%M}" if hours else "today's bar") if forming else "next bar",
+                    "rsi_now": round(now_st["rsi"], 1), "macd_now": round(now_st["macd"], 3), "signal_now": round(now_st["signal"], 3),
+                    **{k: round(v, 6) for k, v in st.items()}})
+    return {"symbol": sym, "price": round(price, 2), "asof": f"{h1.index[-1]:%Y-%m-%d %H:%M}", "timeframes": out}
+
+
 def text(l):
     L = [f"{l['symbol']} turn ladder"]
     for r in l["timeframes"]:

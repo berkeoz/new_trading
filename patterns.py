@@ -1320,6 +1320,62 @@ function renderLadder(l, el) {
     <div class="sub" style="margin-top:8px">A turn is confirmed on a timeframe when, after a swing low (high), a bar closes above the swing high (below the swing low) that came before it. A bottom usually confirms on 5m first, then 15m, 1h, 4h; "pending" shows the close each slower timeframe still needs. "Already trending" means that timeframe was already moving that way, so the drop (rise) was only a pullback there. Yahoo intraday data can be delayed ~15 min. Not investment advice.</div>`;
 }
 
+// ── RSI / MACD -> price: the close that would put the indicator at a given value ──
+// Wilder's RSI(14) and MACD(12/26/9) are recursive, so one more close moves them by exact algebra.
+let INV_RSI = '100, 90, 80, 70, 40, 35, 30, 25', INV_MACD = '0, -2, -4';
+try { INV_RSI = localStorage.getItem('invRsi') || INV_RSI; INV_MACD = localStorage.getItem('invMacd') || INV_MACD; } catch (e) {}
+function rsiPrice(st, R) {
+  if (!(R > 0 && R < 100)) return null;              // 0 and 100 need the other side's average to be exactly zero
+  const G = st.avg_gain, L = st.avg_loss, rs = R / (100 - R), cur = L > 0 ? 100 - 100 / (1 + G / L) : 100;
+  const d = R >= cur ? 13 * (rs * L - G) : 13 * (L - G / rs);
+  const p = st.prev_close + d;
+  return p > 0 ? p : null;
+}
+function macdPrice(st, M) {
+  const a1 = 2 / 13, a2 = 2 / 27;
+  const p = (M - (1 - a1) * st.ema12 + (1 - a2) * st.ema26) / (a1 - a2);
+  return p > 0 ? p : null;
+}
+async function toggleInverse(sym, el) {
+  if (!el.hidden) { el.hidden = true; return; }
+  el.hidden = false;
+  if (location.protocol == 'file:') { el.innerHTML = `<div class="sub">Runs on the website.</div>`; return; }
+  el.innerHTML = `<div class="sub">Loading 1H / 2H / 4H / daily for ${sym}…</div>`;
+  try {
+    const res = await fetch(`/api/router?fn=ind&symbol=${encodeURIComponent(sym)}`);
+    const d = await res.json();
+    if (!res.ok || d.error) throw new Error(d.error || res.statusText);
+    renderInverse(d, el);
+  } catch (err) { el.innerHTML = `<div class="flag">${sym}: ${err.message}</div>`; }
+}
+function renderInverse(d, el) {
+  const nums = s => s.split(/[ ,;]+/).map(Number).filter(x => isFinite(x) && String(x) != '');
+  const cell = p => {
+    if (p == null) return '<td class="sub">unreachable</td>';
+    const ch = p / d.price - 1;
+    return `<td><b>${p.toFixed(2)}</b> <span class="${ch >= 0 ? 'bullish' : 'bearish'}">${ch >= 0 ? '+' : ''}${(ch * 100).toFixed(1)}%</span></td>`;
+  };
+  const draw = () => {
+    const R = nums(el.querySelector('.inv-rsi').value), M = nums(el.querySelector('.inv-macd').value), T = d.timeframes;
+    const head = `<tr><th></th>${T.map(t => `<th>${t.tf}<div class="sub">${t.bar}</div></th>`).join('')}</tr>`;
+    const now = `<tr><td class="sub">now</td>${T.map(t => `<td class="sub">RSI ${t.rsi_now} · MACD ${t.macd_now.toFixed(2)} · signal ${t.signal_now.toFixed(2)}</td>`).join('')}</tr>`;
+    const rr = R.map(v => `<tr><td><b>RSI ${v}</b></td>${T.map(t => cell(rsiPrice(t, v))).join('')}</tr>`).join('');
+    const mm = M.map(v => `<tr><td><b>MACD ${v}</b></td>${T.map(t => cell(macdPrice(t, v))).join('')}</tr>`).join('');
+    const sx = `<tr><td><b>MACD = signal</b><div class="sub">histogram 0 (cross)</div></td>${T.map(t => cell(macdPrice(t, t.signal))).join('')}</tr>`;
+    el.querySelector('tbody').innerHTML = head + now + rr + mm + sx;
+  };
+  el.innerHTML = `<h3>${d.symbol} — price for an RSI / MACD value <span class="sub">price ${d.price} at ${d.asof} ET</span></h3>
+    <div class="sub" style="margin:4px 0 8px">RSI levels <input class="inv-rsi ma-cfg" style="width:220px" value="${INV_RSI}"> · MACD levels <input class="inv-macd ma-cfg" style="width:120px" value="${INV_MACD}"></div>
+    <div class="wrap"><table><tbody></tbody></table></div>
+    <div class="sub" style="margin-top:8px">Each cell is the closing price of the bar named in the column header that would put RSI(14) / MACD(12/26/9) at that value, and its distance from the latest price. "current bar" = the bar still forming now (market open); "next bar" = the next one after the close. It is a one-bar answer: over several bars the path matters (a slow slide reaches the same RSI at a higher price than one sharp drop). MACD moves only ~8% of each price change per bar, so far-away MACD values say "not in one bar", not "never". RSI 100 / 0 cannot be reached in one bar. 8H bars on a 6.5-hour session are the daily bar. Yahoo intraday data can be delayed ~15 min. Not investment advice.</div>`;
+  el.querySelectorAll('input').forEach(i => i.oninput = () => {
+    INV_RSI = el.querySelector('.inv-rsi').value; INV_MACD = el.querySelector('.inv-macd').value;
+    try { localStorage.setItem('invRsi', INV_RSI); localStorage.setItem('invMacd', INV_MACD); } catch (e) {}
+    draw();
+  });
+  draw();
+}
+
 // ── Valuation (intrinsic value estimate) ──
 function dcfVal(f0, g1, g2, r, tg, cash, debt, sh) {
   if (r <= tg || sh <= 0) return null;
@@ -1429,11 +1485,12 @@ function render(r, prepend, replace) {
   const IV = r.interval || '1d', daily = IV == '1d';
   const unit = daily ? 'trading days' : 'bars', bu = daily ? 'd' : ' bars';
   s.innerHTML = `<div class="head"><h2>${r.symbol} <span class="sub">${r.price} · ${r.asof} · ${IV.toUpperCase()} · ${r.period} · ATR ${r.atr_pct}%/bar · swing ${r.swing_pct}% · ${r.patterns.length} patterns (${open} open)</span>
-      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button><button class="vbtn tbtn" title="Has a turn been confirmed on 5m, 15m, 1h, 4h and daily?">Timeframes</button></h2>
+      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button><button class="vbtn tbtn" title="Has a turn been confirmed on 5m, 15m, 1h, 4h and daily?">Timeframes</button><button class="vbtn ibtn" title="Which closing price would put RSI / MACD at a given value on 1H, 2H, 4H and 8H = 1D?">RSI / MACD prices</button></h2>
       ${prepend ? '<button class="x" title="Remove">&times;</button>' : ''}</div>
     ${r.note ? `<div class="note">${r.note}</div>` : ''}
     <div class="val" hidden></div>
     <div class="val mtf" hidden></div>
+    <div class="val ind" hidden></div>
     <div>${r.levels.map(l => `<span class="lv ${l.role=='support'?'bullish':'bearish'}">${l.role} ${l.price} ×${l.touches}</span>`).join('')}</div>
     <div class="filters">${CATS.map(([k,t]) => `<label><input type="checkbox" data-cat="${k}" checked> ${t} </label>`).join('')}
       <label><input type="checkbox" data-opt="levels" checked> S/R levels</label>
@@ -1472,6 +1529,7 @@ function render(r, prepend, replace) {
   if (prepend) s.querySelector('.x').onclick = () => { Plotly.purge(div); s.remove(); };
   s.querySelector('.vbtn').onclick = () => toggleValuation(r.symbol, s.querySelector('.val'));
   s.querySelector('.tbtn').onclick = () => toggleLadder(r.symbol, s.querySelector('.mtf'));
+  s.querySelector('.ibtn').onclick = () => toggleInverse(r.symbol, s.querySelector('.ind'));
 
   const C = r.ohlc.close, D = r.ohlc.x, last = C.length - 1;
   const TS = D.map(parseTs);

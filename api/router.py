@@ -1,4 +1,4 @@
-"""The only Vercel function: serves /api/patterns, /api/valuation, /api/mtf and /api/scan.
+"""The only Vercel function: serves /api/patterns, /api/valuation, /api/mtf, /api/scan and /api/ind.
 
 Each Python function on Vercel bundles pandas / numpy / yfinance (~150 MB), and
 Vercel keeps every deployment, so four separate functions used four times the
@@ -12,7 +12,7 @@ from urllib.parse import urlparse, parse_qs
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
-NAMES = ("patterns", "valuation", "mtf", "scan")
+NAMES = ("patterns", "valuation", "mtf", "scan", "ind")
 _cache = {}
 
 
