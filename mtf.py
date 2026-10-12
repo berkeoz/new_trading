@@ -159,15 +159,32 @@ def ladder(sym):
 # Wilder's RSI and the MACD EMAs are recursive, so the effect of ONE more close is exact
 # algebra. inverse() returns each timeframe's state before the bar being solved; the page
 # turns any RSI / MACD level into the close that bar would need.
-INV_FRAMES = [("1H", 1), ("2H", 2), ("4H", 4), ("8H = 1D", None)]   # 8h of a 6.5h session = the daily bar
+# label, bar size: hours for intraday, "D" / "W" / "M" built from daily bars
+INV_FRAMES = [("1H", 1), ("2H", 2), ("4H", 4), ("8H = 1D", "D"), ("1W", "W"), ("1M", "M")]   # 8h of a 6.5h session = the daily bar
+BAR_WORDS = {"D": ("today's bar", "next day"), "W": ("this week's bar", "next week"), "M": ("this month's bar", "next month")}
 
 
-def _forming(df, hours, now):
-    """Is the last bar still forming (market open and the bar not finished)?"""
+def _period_bars(d, rule):
+    """Weekly / monthly bars from daily bars, stamped with the period's first trading day."""
+    g = d.assign(_t=d.index).groupby(d.index.to_period(rule))
+    out = g.agg(Open=("Open", "first"), High=("High", "max"), Low=("Low", "min"),
+                Close=("Close", "last"), Volume=("Volume", "sum"), _t=("_t", "first"))
+    return out.set_index("_t").rename_axis(None)
+
+
+def _forming(df, size, now):
+    """Is the last bar still forming (its session has started and the bar is not finished)?"""
     t = df.index[-1]
-    close_t = t.normalize() + pd.Timedelta(hours=16)
-    end = close_t if hours is None else min(t + pd.Timedelta(hours=hours), close_t)
-    start = t.normalize() + pd.Timedelta(hours=9, minutes=30) if hours is None else t
+    day0 = t.normalize()
+    if size == "W":
+        end = day0 + pd.Timedelta(days=4 - day0.weekday(), hours=16)               # Friday 16:00
+    elif size == "M":
+        end = (day0 + pd.offsets.MonthEnd(0)).normalize() + pd.Timedelta(hours=16)  # last day of the month 16:00
+    elif size == "D":
+        end = day0 + pd.Timedelta(hours=16)
+    else:
+        end = min(t + pd.Timedelta(hours=size), day0 + pd.Timedelta(hours=16))
+    start = t if isinstance(size, int) else day0 + pd.Timedelta(hours=9, minutes=30)
     return start <= now < end
 
 
@@ -190,19 +207,20 @@ def inverse(sym):
     from datetime import datetime
     now = datetime.now(ET).replace(tzinfo=None)
     h1 = _load(sym, "60m", "1y", "1h")
-    d1 = _load(sym, "1d", "2y", "1D")
+    d1 = _load(sym, "1d", "max", "1D")            # long history so monthly RSI / EMAs are settled
     d1 = P._append_today(d1, sym)
     price = float(h1["Close"].iloc[-1])
     out = []
-    for label, hours in INV_FRAMES:
-        df = d1 if hours is None else (h1 if hours == 1 else P._session_bars(h1, hours))
-        forming = _forming(df, hours, now)
+    for label, size in INV_FRAMES:
+        df = (d1 if size == "D" else _period_bars(d1, "W-FRI") if size == "W" else _period_bars(d1, "M") if size == "M"
+              else h1 if size == 1 else P._session_bars(h1, size))
+        forming = _forming(df, size, now)
         base = df["Close"].iloc[:-1] if forming else df["Close"]
         st = _state(base)
         now_st = _state(df["Close"])
         t = df.index[-1]
         out.append({"tf": label, "forming": forming,
-                    "bar": (f"current bar from {t:%H:%M}" if hours else "today's bar") if forming else "next bar",
+                    "bar": (f"current bar from {t:%H:%M}" if forming else "next bar") if isinstance(size, int) else BAR_WORDS[size][0 if forming else 1],
                     "rsi_now": round(now_st["rsi"], 1), "rsi_ma_now": round(now_st["rsi_ma"], 1), "macd_now": round(now_st["macd"], 3), "signal_now": round(now_st["signal"], 3),
                     **{k: round(v, 6) for k, v in st.items()}})
     return {"symbol": sym, "price": round(price, 2), "asof": f"{h1.index[-1]:%Y-%m-%d %H:%M}", "timeframes": out}

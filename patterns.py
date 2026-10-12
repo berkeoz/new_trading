@@ -1340,7 +1340,7 @@ async function toggleInverse(sym, el) {
   if (!el.hidden) { el.hidden = true; return; }
   el.hidden = false;
   if (location.protocol == 'file:') { el.innerHTML = `<div class="sub">Runs on the website.</div>`; return; }
-  el.innerHTML = `<div class="sub">Loading 1H / 2H / 4H / daily for ${sym}…</div>`;
+  el.innerHTML = `<div class="sub">Loading 1H / 2H / 4H / daily / weekly / monthly for ${sym}…</div>`;
   try {
     const res = await fetch(`/api/router?fn=ind&symbol=${encodeURIComponent(sym)}`);
     const d = await res.json();
@@ -1368,7 +1368,7 @@ function renderInverse(d, el) {
   el.innerHTML = `<h3>${d.symbol} — price for an RSI / MACD value <span class="sub">price ${d.price} at ${d.asof} ET</span></h3>
     <div class="sub" style="margin:4px 0 8px">RSI levels <input class="inv-rsi ma-cfg" style="width:220px" value="${INV_RSI}"> · MACD levels <input class="inv-macd ma-cfg" style="width:120px" value="${INV_MACD}"></div>
     <div class="wrap"><table><tbody></tbody></table></div>
-    <div class="sub" style="margin-top:8px">Each cell is the closing price of the bar named in the column header that would put RSI(14) / MACD(12/26/9) at that value, and its distance from the latest price. "current bar" = the bar still forming now (market open); "next bar" = the next one after the close. It is a one-bar answer: over several bars the path matters (a slow slide reaches the same RSI at a higher price than one sharp drop). MACD moves only ~8% of each price change per bar, so far-away MACD values say "not in one bar", not "never". RSI 100 / 0 cannot be reached in one bar. RSI's signal line is the 14-bar simple average of RSI (TradingView's "RSI-based MA" default); RSI crosses it when the new RSI equals the average of the previous 13. 8H bars on a 6.5-hour session are the daily bar. Yahoo intraday data can be delayed ~15 min. Not investment advice.</div>`;
+    <div class="sub" style="margin-top:8px">Each cell is the closing price of the bar named in the column header that would put RSI(14) / MACD(12/26/9) at that value, and its distance from the latest price. "current bar" = the bar still forming now (market open); "next bar" = the next one after the close. It is a one-bar answer: over several bars the path matters (a slow slide reaches the same RSI at a higher price than one sharp drop). MACD moves only ~8% of each price change per bar, so far-away MACD values say "not in one bar", not "never". RSI 100 / 0 cannot be reached in one bar. RSI's signal line is the 14-bar simple average of RSI (TradingView's "RSI-based MA" default); RSI crosses it when the new RSI equals the average of the previous 13. 8H bars on a 6.5-hour session are the daily bar. Weekly bars run Monday to Friday, monthly bars by calendar month. Yahoo intraday data can be delayed ~15 min. Not investment advice.</div>`;
   el.querySelectorAll('input').forEach(i => i.oninput = () => {
     INV_RSI = el.querySelector('.inv-rsi').value; INV_MACD = el.querySelector('.inv-macd').value;
     try { localStorage.setItem('invRsi', INV_RSI); localStorage.setItem('invMacd', INV_MACD); } catch (e) {}
@@ -1486,7 +1486,7 @@ function render(r, prepend, replace) {
   const IV = r.interval || '1d', daily = IV == '1d';
   const unit = daily ? 'trading days' : 'bars', bu = daily ? 'd' : ' bars';
   s.innerHTML = `<div class="head"><h2>${r.symbol} <span class="sub">${r.price} · ${r.asof} · ${IV.toUpperCase()} · ${r.period} · ATR ${r.atr_pct}%/bar · swing ${r.swing_pct}% · ${r.patterns.length} patterns (${open} open)</span>
-      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button><button class="vbtn tbtn" title="Has a turn been confirmed on 5m, 15m, 1h, 4h and daily?">Timeframes</button><button class="vbtn ibtn" title="Which closing price would put RSI / MACD at a given value on 1H, 2H, 4H and 8H = 1D?">RSI / MACD prices</button></h2>
+      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button><button class="vbtn tbtn" title="Has a turn been confirmed on 5m, 15m, 1h, 4h and daily?">Timeframes</button><button class="vbtn ibtn" title="Which closing price would put RSI / MACD at a given value on 1H, 2H, 4H, 8H = 1D, weekly and monthly?">RSI / MACD prices</button></h2>
       ${prepend ? '<button class="x" title="Remove">&times;</button>' : ''}</div>
     ${r.note ? `<div class="note">${r.note}</div>` : ''}
     <div class="val" hidden></div>
