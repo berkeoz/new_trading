@@ -1358,16 +1358,17 @@ function renderInverse(d, el) {
   const draw = () => {
     const R = nums(el.querySelector('.inv-rsi').value), M = nums(el.querySelector('.inv-macd').value), T = d.timeframes;
     const head = `<tr><th></th>${T.map(t => `<th>${t.tf}<div class="sub">${t.bar}</div></th>`).join('')}</tr>`;
-    const now = `<tr><td class="sub">now</td>${T.map(t => `<td class="sub">RSI ${t.rsi_now} · MACD ${t.macd_now.toFixed(2)} · signal ${t.signal_now.toFixed(2)}</td>`).join('')}</tr>`;
+    const now = `<tr><td class="sub">now</td>${T.map(t => `<td class="sub">RSI ${t.rsi_now} (signal ${t.rsi_ma_now}) · MACD ${t.macd_now.toFixed(2)} · signal ${t.signal_now.toFixed(2)}</td>`).join('')}</tr>`;
     const rr = R.map(v => `<tr><td><b>RSI ${v}</b></td>${T.map(t => cell(rsiPrice(t, v))).join('')}</tr>`).join('');
     const mm = M.map(v => `<tr><td><b>MACD ${v}</b></td>${T.map(t => cell(macdPrice(t, v))).join('')}</tr>`).join('');
     const sx = `<tr><td><b>MACD = signal</b><div class="sub">histogram 0 (cross)</div></td>${T.map(t => cell(macdPrice(t, t.signal))).join('')}</tr>`;
-    el.querySelector('tbody').innerHTML = head + now + rr + mm + sx;
+    const rx = `<tr><td><b>RSI = signal</b><div class="sub">RSI crosses its 14-bar average</div></td>${T.map(t => cell(rsiPrice(t, t.rsi_prev13))).join('')}</tr>`;
+    el.querySelector('tbody').innerHTML = head + now + rr + rx + mm + sx;
   };
   el.innerHTML = `<h3>${d.symbol} — price for an RSI / MACD value <span class="sub">price ${d.price} at ${d.asof} ET</span></h3>
     <div class="sub" style="margin:4px 0 8px">RSI levels <input class="inv-rsi ma-cfg" style="width:220px" value="${INV_RSI}"> · MACD levels <input class="inv-macd ma-cfg" style="width:120px" value="${INV_MACD}"></div>
     <div class="wrap"><table><tbody></tbody></table></div>
-    <div class="sub" style="margin-top:8px">Each cell is the closing price of the bar named in the column header that would put RSI(14) / MACD(12/26/9) at that value, and its distance from the latest price. "current bar" = the bar still forming now (market open); "next bar" = the next one after the close. It is a one-bar answer: over several bars the path matters (a slow slide reaches the same RSI at a higher price than one sharp drop). MACD moves only ~8% of each price change per bar, so far-away MACD values say "not in one bar", not "never". RSI 100 / 0 cannot be reached in one bar. 8H bars on a 6.5-hour session are the daily bar. Yahoo intraday data can be delayed ~15 min. Not investment advice.</div>`;
+    <div class="sub" style="margin-top:8px">Each cell is the closing price of the bar named in the column header that would put RSI(14) / MACD(12/26/9) at that value, and its distance from the latest price. "current bar" = the bar still forming now (market open); "next bar" = the next one after the close. It is a one-bar answer: over several bars the path matters (a slow slide reaches the same RSI at a higher price than one sharp drop). MACD moves only ~8% of each price change per bar, so far-away MACD values say "not in one bar", not "never". RSI 100 / 0 cannot be reached in one bar. RSI's signal line is the 14-bar simple average of RSI (TradingView's "RSI-based MA" default); RSI crosses it when the new RSI equals the average of the previous 13. 8H bars on a 6.5-hour session are the daily bar. Yahoo intraday data can be delayed ~15 min. Not investment advice.</div>`;
   el.querySelectorAll('input').forEach(i => i.oninput = () => {
     INV_RSI = el.querySelector('.inv-rsi').value; INV_MACD = el.querySelector('.inv-macd').value;
     try { localStorage.setItem('invRsi', INV_RSI); localStorage.setItem('invMacd', INV_MACD); } catch (e) {}

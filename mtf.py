@@ -178,7 +178,9 @@ def _state(c):
     e12, e26 = _ema(c, 12), _ema(c, 26)
     m = e12 - e26
     sig = _ema(m, 9)
-    return {"prev_close": float(c.iloc[-1]), "avg_gain": float(g.iloc[-1]), "avg_loss": float(l.iloc[-1]),
+    rsi = 100 - 100 / (1 + g / l)
+    return {"rsi_prev13": float(rsi.iloc[-13:].mean()), "rsi_ma": float(rsi.iloc[-14:].mean()),   # RSI signal = SMA14 of RSI
+            "prev_close": float(c.iloc[-1]), "avg_gain": float(g.iloc[-1]), "avg_loss": float(l.iloc[-1]),
             "ema12": float(e12.iloc[-1]), "ema26": float(e26.iloc[-1]), "signal": float(sig.iloc[-1]),
             "rsi": float(100 - 100 / (1 + g.iloc[-1] / l.iloc[-1])) if l.iloc[-1] > 0 else 100.0,
             "macd": float(m.iloc[-1])}
@@ -201,7 +203,7 @@ def inverse(sym):
         t = df.index[-1]
         out.append({"tf": label, "forming": forming,
                     "bar": (f"current bar from {t:%H:%M}" if hours else "today's bar") if forming else "next bar",
-                    "rsi_now": round(now_st["rsi"], 1), "macd_now": round(now_st["macd"], 3), "signal_now": round(now_st["signal"], 3),
+                    "rsi_now": round(now_st["rsi"], 1), "rsi_ma_now": round(now_st["rsi_ma"], 1), "macd_now": round(now_st["macd"], 3), "signal_now": round(now_st["signal"], 3),
                     **{k: round(v, 6) for k, v in st.items()}})
     return {"symbol": sym, "price": round(price, 2), "asof": f"{h1.index[-1]:%Y-%m-%d %H:%M}", "timeframes": out}
 
