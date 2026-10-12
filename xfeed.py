@@ -28,7 +28,7 @@ ET = ZoneInfo("America/New_York")
 ACCOUNTS = ["DeItaone", "TheProfInvestor", "pelositracker", "mmonis", "asklivermore", "FL0WG0D", "BeardoTrader",
             "TrendSpider", "kpak82", "unusual_whales", "Mr_Derivatives", "DSAkdag", "HeidingOut", "TradersMastery",
             "zerohedge", "jaykaeppel"]
-MAX_POSTS = 30          # newest posts read per account per run (two runs a day)
+MAX_POSTS = 30          # newest posts read per account per run (three runs a day)
 FIRST_RUN_HOURS = 24    # with no saved position, read the last 24 hours
 SHOT_GLOBS = ["mcp-claude-in-chrome-blob-*", "mcp-Claude_Browser-blob-*", "mcp-computer-use-blob-*"]
 
@@ -54,8 +54,9 @@ def plan():
     os.makedirs(XDIR, exist_ok=True)
     open(RUN_START, "w").write(str(time.time()))
     st, now = _load(), datetime.now(ET)
-    slot = "morning" if now.hour < 13 else "evening"      # two runs a day: 9:00 and 18:00 ET
-    did = f"{now:%Y-%m-%d}-{'am' if slot == 'morning' else 'pm'}"
+    # three runs a day: 9:00, 13:00 and 18:00 ET
+    slot, tag = ("morning", "am") if now.hour < 12 else ("midday", "mid") if now.hour < 16 else ("evening", "pm")
+    did = f"{now:%Y-%m-%d}-{tag}"
     print(f"RUN_DATE={now:%Y-%m-%d}")
     print(f"RUN_ID={did}")
     print(f"EDITION={slot}")
