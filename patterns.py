@@ -1156,10 +1156,12 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 .read li{margin:3px 0;padding-left:20px;text-indent:-20px}
 .read .ic{display:inline-block;width:16px;text-indent:0;font-weight:700}
 .note{color:var(--neu);font-size:12px}
+.livebtn{background:none;border:1px solid var(--acc);color:var(--acc);border-radius:5px;padding:1px 8px;font:inherit;cursor:pointer}
+.livebtn:disabled{opacity:.6;cursor:wait}
 </style></head><body><main>
 <div class="top">
   <div><h1>Chart Formations</h1>
-  <div class="sub">Generated __GEN__ · swing-pivot pattern detection · mechanical candidates, not trade advice. Click a table row to zoom.</div></div>
+  <div class="sub"><span id="gen">Built __GEN__ ET (daily, after the close)</span> · <button id="live" class="livebtn" title="Re-run the analysis of the tickers below with current prices (today's bar so far)">Refresh with live prices</button> · swing-pivot pattern detection · mechanical candidates, not trade advice. Click a table row to zoom.</div></div>
   <div><a href="/brief">Market brief</a> · <a href="/x">Twitter analysis</a> · <a href="/">Daily signals</a></div>
 </div>
 <div id="regime" class="sub" style="margin-top:6px"></div>
@@ -1419,9 +1421,10 @@ function stripColor(sc) {
   return '#4a5060';
 }
 
-function render(r, prepend) {
+function render(r, prepend, replace) {
   const n = seq++;
   const s = document.createElement('section');
+  if (!prepend) { s.dataset.base = r.symbol; s.dataset.period = r.period; }
   const open = r.patterns.filter(p => p.open).length;
   const IV = r.interval || '1d', daily = IV == '1d';
   const unit = daily ? 'trading days' : 'bars', bu = daily ? 'd' : ' bars';
@@ -1455,7 +1458,8 @@ function render(r, prepend) {
     <div class="state"></div>
     <div class="chart"></div>
     <div class="wrap"><table><thead><tr><th>Pattern</th><th>Bias</th><th>From</th><th>To</th><th>Status</th><th>Target</th><th>Detail</th></tr></thead><tbody></tbody></table></div>`;
-  prepend ? root.prepend(s) : root.appendChild(s);
+  if (replace) { replace.querySelectorAll('.chart').forEach(c => Plotly.purge(c)); replace.replaceWith(s); }
+  else prepend ? root.prepend(s) : root.appendChild(s);
   const div = s.querySelector('.chart'), tbody = s.querySelector('tbody');
   const boxes = [...s.querySelectorAll('.filters input, .filters select')];
   const T0 = parseTs(r.ohlc.x[0]), T1 = parseTs(r.ohlc.x[r.ohlc.x.length - 1]);
@@ -1893,6 +1897,26 @@ if (REGIME) document.getElementById('regime').innerHTML = `Market regime: <b cla
   draw();
 })();
 
+// ── Refresh the built-in tickers with live prices (the page itself is rebuilt once a day after the close) ──
+document.getElementById('live').onclick = async () => {
+  const btn = document.getElementById('live'), gen = document.getElementById('gen');
+  if (location.protocol == 'file:') { gen.textContent = 'Live refresh works on the website. Locally, run: python patterns.py --refresh'; return; }
+  btn.disabled = true; btn.textContent = 'Refreshing…';
+  const secs = [...root.querySelectorAll('section[data-base]')], bad = [];
+  await Promise.all(secs.map(async s => {
+    try {
+      const res = await fetch(`/api/router?fn=patterns&symbol=${encodeURIComponent(s.dataset.base)}&period=${s.dataset.period || '2y'}&interval=1d&live=1`);
+      const j = await res.json();
+      if (!res.ok || j.error) throw new Error(j.error || res.statusText);
+      render(j, false, s);
+    } catch (e) { bad.push(`${s.dataset.base}: ${e.message}`); }
+  }));
+  const t = new Date().toLocaleTimeString('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit'});
+  gen.innerHTML = `Charts and patterns refreshed with live prices at ${t} ET` + (bad.length ? ` <span class="bearish">(failed: ${bad.join('; ')})</span>` : '') +
+    ` · regime, sector rotation and seasonality are from the daily build (__GEN__ ET)`;
+  btn.disabled = false; btn.textContent = 'Refresh again';
+};
+
 document.getElementById('lookup').onsubmit = e => {
   e.preventDefault();
   lookup(document.getElementById('sym').value.trim().toUpperCase(),
@@ -1917,8 +1941,9 @@ async function lookup(sym, per, iv) {
 
 
 def write_report(results, path, seas=None, rrg=None, regime=None):
+    from zoneinfo import ZoneInfo           # imported here: the Vercel API imports this module without needing it
     opts = "".join(f'<option{" selected" if p == "2y" else ""}>{p}</option>' for p in PERIODS)
-    html = (HTML.replace("__GEN__", datetime.now().strftime("%Y-%m-%d %H:%M"))
+    html = (HTML.replace("__GEN__", datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d %H:%M"))
                 .replace("__PERIODS__", opts)
                 .replace("__SEAS__", json.dumps(seas))
                 .replace("__RRG__", json.dumps(rrg))

@@ -14,6 +14,7 @@ class handler(BaseHTTPRequestHandler):
         sym    = qs.get("symbol", [""])[0].upper().strip()
         period = qs.get("period", ["2y"])[0]
         interval = qs.get("interval", ["1d"])[0].lower()
+        live   = qs.get("live", [""])[0] == "1"      # page's "refresh with live prices": skip the price cache
 
         if not re.fullmatch(r"[A-Z0-9.^=\-]{1,15}", sym):
             body, code = {"error": "valid symbol parameter required"}, 400
@@ -23,13 +24,13 @@ class handler(BaseHTTPRequestHandler):
             body, code = {"error": f"interval must be one of {', '.join(INTERVALS)}"}, 400
         else:
             try:
-                body, code = analyze(sym, period, interval=interval, fill_today=interval == "1d"), 200
+                body, code = analyze(sym, period, refresh=live, interval=interval, fill_today=interval == "1d"), 200
             except Exception as e:
                 body, code = {"error": str(e)}, 400
 
         data = json.dumps(body).encode()
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Cache-Control", ("s-maxage=3600" if interval == "1d" else "s-maxage=600") if code == 200 else "no-store")
+        self.send_header("Cache-Control", ("s-maxage=120" if live else "s-maxage=3600" if interval == "1d" else "s-maxage=600") if code == 200 else "no-store")
         self.end_headers()
         self.wfile.write(data)
