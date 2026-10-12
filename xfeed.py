@@ -28,7 +28,7 @@ ET = ZoneInfo("America/New_York")
 ACCOUNTS = ["DeItaone", "TheProfInvestor", "pelositracker", "mmonis", "asklivermore", "FL0WG0D", "BeardoTrader",
             "TrendSpider", "kpak82", "unusual_whales", "Mr_Derivatives", "DSAkdag", "HeidingOut", "TradersMastery",
             "zerohedge", "jaykaeppel"]
-MAX_POSTS = 30          # newest posts read per account per run (three runs a day)
+MAX_POSTS = 30          # newest posts read per account per run (two or three runs a day)
 FIRST_RUN_HOURS = 24    # with no saved position, read the last 24 hours
 SHOT_GLOBS = ["mcp-claude-in-chrome-blob-*", "mcp-Claude_Browser-blob-*", "mcp-computer-use-blob-*"]
 
@@ -43,6 +43,18 @@ EXTRACT_JS = r"""[...document.querySelectorAll('article[data-testid="tweet"]')].
 })"""
 
 
+SLOT_SUFFIX = {"morning": "am", "midday": "mid", "evening": "pm"}
+
+
+def _digests():
+    """Digest files oldest first. Sorts by date, then am < mid < pm (plain YYYY-MM-DD.md counts as am)."""
+    order = {"am": 0, "mid": 1, "pm": 2}
+    def key(f):
+        name = os.path.basename(f)[:-3]
+        return name[:10], order.get(name[11:], 0)
+    return sorted(glob.glob(os.path.join(XDIR, "20*.md")), key=key)
+
+
 def _load():
     try:
         return json.load(open(STATE, encoding="utf-8"))
@@ -54,15 +66,15 @@ def plan():
     os.makedirs(XDIR, exist_ok=True)
     open(RUN_START, "w").write(str(time.time()))
     st, now = _load(), datetime.now(ET)
-    # three runs a day: 9:00, 13:00 and 18:00 ET
-    slot, tag = ("morning", "am") if now.hour < 12 else ("midday", "mid") if now.hour < 16 else ("evening", "pm")
-    did = f"{now:%Y-%m-%d}-{tag}"
+    # runs: 9:00 ET daily (morning), 13:00 ET daily (midday), 18:00 ET daily (evening)
+    slot = "morning" if now.hour < 12 else "midday" if now.hour < 16 else "evening"
+    did = f"{now:%Y-%m-%d}-{SLOT_SUFFIX[slot]}"
     print(f"RUN_DATE={now:%Y-%m-%d}")
     print(f"RUN_ID={did}")
     print(f"EDITION={slot}")
     print(f"WRITE_DIGEST_TO=xfeed/{did}.md")
     print("ACCOUNT_NOTES=xfeed/accounts.md")
-    prev = sorted(glob.glob(os.path.join(XDIR, "20*.md")))
+    prev = _digests()
     if prev:
         print("PREVIOUS_DIGEST=xfeed/" + os.path.basename(prev[-1]))
     print(f"MAX_POSTS_PER_ACCOUNT={MAX_POSTS}")
@@ -87,7 +99,7 @@ def seen(handle, post_id):
 
 def index():
     items = []
-    for f in sorted(glob.glob(os.path.join(XDIR, "20*.md")), reverse=True):
+    for f in reversed(_digests()):
         title = next((l.lstrip("# ").strip() for l in open(f, encoding="utf-8") if l.startswith("# ")), os.path.basename(f))
         items.append({"id": os.path.basename(f)[:-3], "file": os.path.basename(f), "title": title})
     json.dump({"digests": items, "accounts_file": "accounts.md"}, open(os.path.join(XDIR, "index.json"), "w", encoding="utf-8"), indent=1)
