@@ -1,5 +1,5 @@
 {
- "generated_et": "2026-10-12 09:47",
+ "generated_et": "2026-10-12 15:47",
  "pillars": [
   "Inflation",
   "Labor",
@@ -12898,13 +12898,13 @@
    "kind": "level",
    "tier1": false,
    "unit": "",
-   "latest_obs": "2026-10-08",
-   "latest_raw": 48.4,
-   "value": 48.4,
+   "latest_obs": "2026-10-09",
+   "latest_raw": 48.9,
+   "value": 48.9,
    "value_date": "2026-10-31",
    "prev": 52.24,
    "trend": "falling",
-   "pct_rank_10y": 78.0,
+   "pct_rank_10y": 79.0,
    "range_10y": [
     21.32,
     170.55
@@ -12956,7 +12956,7 @@
     },
     {
      "date": "2026-10",
-     "value": 48.4
+     "value": 48.9
     }
    ],
    "hist": {
@@ -13202,7 +13202,7 @@
      63.04,
      44.91,
      52.24,
-     48.4
+     48.9
     ]
    },
    "daily_or_weekly": true
@@ -13216,7 +13216,7 @@
   "Financial conditions": "loose (NFCI -0.49, high-yield spread 3.15pp)",
   "Recession signals": "none flashing (Sahm 0.00, 10Y-2Y +0.44pp, NY Fed 12-month odds 12%, CFNAI +0.01)",
   "Valuation": "extreme (stock market value 263% of GDP, 97th percentile of 10 years; dot-com peak 163% in 2000-01, same measure)",
-  "Oil": "WTI $96 (+56% y/y), price trend rising, oil volatility 48 (78th percentile)"
+  "Oil": "WTI $96 (+56% y/y), price trend rising, oil volatility 49 (79th percentile)"
  },
  "fed_futures": {
   "effr": 3.88,
@@ -13234,12 +13234,12 @@
    {
     "month": "2026-12",
     "symbol": "ZQZ26.CBT",
-    "implied": 4.08
+    "implied": 4.085
    },
    {
     "month": "2027-01",
     "symbol": "ZQF27.CBT",
-    "implied": 4.16
+    "implied": 4.155
    },
    {
     "month": "2027-02",
@@ -13259,12 +13259,12 @@
    {
     "month": "2027-05",
     "symbol": "ZQK27.CBT",
-    "implied": 4.525
+    "implied": 4.53
    },
    {
     "month": "2027-06",
     "symbol": "ZQM27.CBT",
-    "implied": 4.595
+    "implied": 4.605
    }
   ],
   "meetings": [
@@ -13281,10 +13281,10 @@
    {
     "date": "2026-12-09",
     "rate_before": 3.93,
-    "implied_after": 4.16,
-    "change_bp": 23.0,
-    "p_hike": 92,
-    "p_hold": 8,
+    "implied_after": 4.155,
+    "change_bp": 22.5,
+    "p_hike": 90,
+    "p_hold": 10,
     "p_cut": 0,
     "big_move": false
    }
