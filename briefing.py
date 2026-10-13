@@ -13,7 +13,7 @@ narrative brief next to the JSON snapshot in briefs/.
 
 Usage:
     python briefing.py                       # picks the slot from the clock: 9:15 pre,
-                                             # 9:45 open, 15:45 preclose, 16:15 close,
+                                             # 9:45 open, 13:00 midday, 15:45 preclose, 16:15 close,
                                              # anything else = on-demand ("now")
     python briefing.py --session close       # force a specific kind of brief
     python briefing.py --index               # rebuild briefs/index.json
@@ -42,6 +42,7 @@ TICKERS = P.DEFAULT_SYMBOLS
 SESSIONS = {
     "pre":      ((9, 15),  "Pre-market brief"),
     "open":     ((9, 45),  "Opening brief"),
+    "midday":   ((13, 0),  "Midday brief"),
     "preclose": ((15, 45), "Pre-close brief"),
     "close":    ((16, 15), "Closing brief"),
     "now":      (None,     "Market brief"),
