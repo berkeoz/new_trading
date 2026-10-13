@@ -1,5 +1,5 @@
 {
- "generated_et": "2026-10-13 09:45",
+ "generated_et": "2026-10-13 15:46",
  "pillars": [
   "Inflation",
   "Labor",
@@ -6492,22 +6492,18 @@
    "kind": "level",
    "tier1": false,
    "unit": "M",
-   "latest_obs": "2026-08-01",
-   "latest_raw": 3.98,
-   "value": 3.98,
-   "value_date": "2026-08-31",
-   "prev": 4.06,
+   "latest_obs": "2026-09-01",
+   "latest_raw": 3.99,
+   "value": 3.99,
+   "value_date": "2026-09-30",
+   "prev": 3.93,
    "trend": "falling",
-   "pct_rank_10y": 0.0,
+   "pct_rank_10y": 8.0,
    "range_10y": [
-    3.98,
+    3.93,
     4.27
    ],
    "table12": [
-    {
-     "date": "2025-09",
-     "value": 4.08
-    },
     {
      "date": "2025-10",
      "value": 4.11
@@ -6550,12 +6546,15 @@
     },
     {
      "date": "2026-08",
-     "value": 3.98
+     "value": 3.93
+    },
+    {
+     "date": "2026-09",
+     "value": 3.99
     }
    ],
    "hist": {
     "x": [
-     "2025-08",
      "2025-09",
      "2025-10",
      "2025-11",
@@ -6567,10 +6566,10 @@
      "2026-05",
      "2026-06",
      "2026-07",
-     "2026-08"
+     "2026-08",
+     "2026-09"
     ],
     "y": [
-     4.03,
      4.08,
      4.11,
      4.09,
@@ -6582,7 +6581,8 @@
      4.19,
      4.13,
      4.06,
-     3.98
+     3.93,
+     3.99
     ]
    }
   },
@@ -7538,7 +7538,7 @@
    "kind": "level",
    "tier1": false,
    "unit": "%",
-   "latest_obs": "2026-10-12",
+   "latest_obs": "2026-10-13",
    "latest_raw": 4.0,
    "value": 4.0,
    "value_date": "2026-10-31",
@@ -9434,13 +9434,13 @@
    "kind": "level",
    "tier1": false,
    "unit": "pp",
-   "latest_obs": "2026-10-08",
-   "latest_raw": 3.15,
-   "value": 3.15,
+   "latest_obs": "2026-10-12",
+   "latest_raw": 3.11,
+   "value": 3.11,
    "value_date": "2026-10-31",
    "prev": 3.12,
    "trend": "rising",
-   "pct_rank_10y": 57.0,
+   "pct_rank_10y": 51.0,
    "range_10y": [
     2.63,
     4.42
@@ -9492,7 +9492,7 @@
     },
     {
      "date": "2026-10",
-     "value": 3.15
+     "value": 3.11
     }
    ],
    "hist": {
@@ -9572,7 +9572,7 @@
      2.85,
      2.63,
      3.12,
-     3.15
+     3.11
     ]
    },
    "daily_or_weekly": true
@@ -12898,13 +12898,13 @@
    "kind": "level",
    "tier1": false,
    "unit": "",
-   "latest_obs": "2026-10-09",
-   "latest_raw": 48.9,
-   "value": 48.9,
+   "latest_obs": "2026-10-12",
+   "latest_raw": 48.52,
+   "value": 48.52,
    "value_date": "2026-10-31",
    "prev": 52.24,
    "trend": "falling",
-   "pct_rank_10y": 79.0,
+   "pct_rank_10y": 78.0,
    "range_10y": [
     21.32,
     170.55
@@ -12956,7 +12956,7 @@
     },
     {
      "date": "2026-10",
-     "value": 48.9
+     "value": 48.52
     }
    ],
    "hist": {
@@ -13202,7 +13202,7 @@
      63.04,
      44.91,
      52.24,
-     48.9
+     48.52
     ]
    },
    "daily_or_weekly": true
@@ -13213,10 +13213,10 @@
   "Labor": "softening (unemployment 4.2%, payrolls 3-month avg +51k)",
   "Growth": "solid (real GDP 2.2% annualized, retail sales +5.4% y/y)",
   "Fed & rates": "mildly restrictive (real policy rate ~+1.0pp = fed funds 4.00% minus core PCE 3.0%)",
-  "Financial conditions": "loose (NFCI -0.49, high-yield spread 3.15pp)",
+  "Financial conditions": "loose (NFCI -0.49, high-yield spread 3.11pp)",
   "Recession signals": "none flashing (Sahm 0.00, 10Y-2Y +0.44pp, NY Fed 12-month odds 12%, CFNAI +0.01)",
   "Valuation": "extreme (stock market value 263% of GDP, 97th percentile of 10 years; dot-com peak 163% in 2000-01, same measure)",
-  "Oil": "WTI $96 (+56% y/y), price trend rising, oil volatility 49 (79th percentile)"
+  "Oil": "WTI $96 (+56% y/y), price trend rising, oil volatility 49 (78th percentile)"
  },
  "fed_futures": {
   "effr": 3.88,
@@ -13224,7 +13224,7 @@
    {
     "month": "2026-10",
     "symbol": "ZQV26.CBT",
-    "implied": 3.885
+    "implied": 3.882
    },
    {
     "month": "2026-11",
@@ -13234,32 +13234,32 @@
    {
     "month": "2026-12",
     "symbol": "ZQZ26.CBT",
-    "implied": 4.085
+    "implied": 4.09
    },
    {
     "month": "2027-01",
     "symbol": "ZQF27.CBT",
-    "implied": 4.155
+    "implied": 4.165
    },
    {
     "month": "2027-02",
     "symbol": "ZQG27.CBT",
-    "implied": 4.24
+    "implied": 4.255
    },
    {
     "month": "2027-03",
     "symbol": "ZQH27.CBT",
-    "implied": 4.32
+    "implied": 4.33
    },
    {
     "month": "2027-04",
     "symbol": "ZQJ27.CBT",
-    "implied": 4.425
+    "implied": 4.43
    },
    {
     "month": "2027-05",
     "symbol": "ZQK27.CBT",
-    "implied": 4.51
+    "implied": 4.515
    },
    {
     "month": "2027-06",
@@ -13281,10 +13281,10 @@
    {
     "date": "2026-12-09",
     "rate_before": 3.935,
-    "implied_after": 4.155,
-    "change_bp": 22.0,
-    "p_hike": 88,
-    "p_hold": 12,
+    "implied_after": 4.165,
+    "change_bp": 23.0,
+    "p_hike": 92,
+    "p_hold": 8,
     "p_cut": 0,
     "big_move": false
    }
