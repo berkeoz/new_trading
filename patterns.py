@@ -1192,6 +1192,13 @@ let maCfg = MA_DEFAULT;
 try { maCfg = localStorage.getItem('maCfg') || MA_DEFAULT; } catch (e) {}
 if (['EMA9,EMA21,SMA50,SMA200', 'EMA9,EMA21,SMA50,SMA200,RSI14,MACD12/26/9'].includes(maCfg.replace(/\s/g, '')))
   maCfg = MA_DEFAULT;   // upgrade old saved defaults
+// Dated AVWAPs ("AVWAP 2026-07-29") belong to one ticker: they are kept per symbol, the rest of the box is shared.
+const AV_RE = /\s*,?\s*AVWAP\s*\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2})?/gi;
+const stripAnchors = t => t.replace(AV_RE, '').replace(/^\s*,\s*/, '');
+const anchorsOf = t => [...t.matchAll(/AVWAP\s*\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2})?/gi)].map(m => m[0]);
+const getAnchors = sym => { try { return JSON.parse(localStorage.getItem('avwap:' + sym) || '[]'); } catch (e) { return []; } };
+const setAnchors = (sym, a) => { try { localStorage.setItem('avwap:' + sym, JSON.stringify(a)); } catch (e) {} };
+maCfg = stripAnchors(maCfg);   // older pages saved anchors in the shared setting
 function rsi(c, n) {   // Wilder's RSI
   const out = Array(c.length).fill(null);
   if (c.length <= n) return out;
@@ -1496,7 +1503,7 @@ function render(r, prepend, replace) {
     <div class="filters">${CATS.map(([k,t]) => `<label><input type="checkbox" data-cat="${k}" checked> ${t} </label>`).join('')}
       <label><input type="checkbox" data-opt="levels" checked> S/R levels</label>
       <label>Show <select data-opt="show"><option value="recent">open + last 6 months</option><option value="open">open / active only</option><option value="all">all</option></select></label></div>
-    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated. Up to 6 of EMA9 / SMA50 (scored) / WMA20 / HMA55 (shown, not scored), plus VWAP (session, intraday), AVWAP swing (from the last swing low and high), AVWAP 2025-04-07 (anchored; or Shift+click the chart), RSI14, MACD12/26/9">
+    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated. Up to 6 of EMA9 / SMA50 (scored) / WMA20 / HMA55 (shown, not scored), plus VWAP (session, intraday), AVWAP swing (from the last swing low and high), AVWAP 2025-04-07 (anchored, saved for this ticker only; or Shift+click the chart), RSI14, MACD12/26/9">
       <label><input type="checkbox" class="ma-show" checked> lines</label>
       <label><input type="checkbox" class="ma-strip" checked> trend strip</label>
       <label><input type="checkbox" class="ma-vol" checked> volume</label>
@@ -1535,7 +1542,7 @@ function render(r, prepend, replace) {
   const C = r.ohlc.close, D = r.ohlc.x, last = C.length - 1;
   const TS = D.map(parseTs);
   const cfgIn = s.querySelector('.ma-cfg'), stateDiv = s.querySelector('.state');
-  cfgIn.value = maCfg;
+  cfgIn.value = [maCfg, ...getAnchors(r.symbol)].join(', ');
   let mas = [], extras = [], score = [], pairs = [], osc = {}, pinned = last;
   const VOL = r.ohlc.volume || [], hasVolume = VOL.some(v => v > 0);
   const volAvg = sma(VOL.length ? VOL : C.map(() => 0), 20);
@@ -1845,7 +1852,8 @@ function render(r, prepend, replace) {
   boxes.forEach(b => b.onchange = draw);
   s.querySelectorAll('.ma-show, .ma-strip, .ma-vol').forEach(b => b.onchange = draw);
   cfgIn.onchange = () => {
-    maCfg = cfgIn.value;
+    maCfg = stripAnchors(cfgIn.value);
+    setAnchors(r.symbol, anchorsOf(cfgIn.value));
     try { localStorage.setItem('maCfg', maCfg); } catch (e) {}
     computeMA(); draw(); showState(pinned);
   };
