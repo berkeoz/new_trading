@@ -27,7 +27,7 @@ RUN_START = os.path.join(XDIR, ".run_start")          # git-ignored
 ET = ZoneInfo("America/New_York")
 ACCOUNTS = ["DeItaone", "TheProfInvestor", "pelositracker", "mmonis", "asklivermore", "FL0WG0D", "BeardoTrader",
             "TrendSpider", "kpak82", "unusual_whales", "Mr_Derivatives", "DSAkdag", "HeidingOut", "TradersMastery",
-            "zerohedge", "jaykaeppel"]
+            "zerohedge", "jaykaeppel", "amitisinvesting", "Bluekurtic", "KobeissiLetter"]
 MAX_POSTS = 30          # newest posts read per account per run (two or three runs a day)
 FIRST_RUN_HOURS = 24    # with no saved position, read the last 24 hours
 SHOT_GLOBS = ["mcp-claude-in-chrome-blob-*", "mcp-Claude_Browser-blob-*", "mcp-computer-use-blob-*"]
