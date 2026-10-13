@@ -1329,8 +1329,11 @@ function renderLadder(l, el) {
 
 // ── RSI / MACD -> price: the close that would put the indicator at a given value ──
 // Wilder's RSI(14) and MACD(12/26/9) are recursive, so one more close moves them by exact algebra.
-let INV_RSI = '100, 90, 80, 70, 40, 35, 30, 25', INV_MACD = '0, -2, -4';
-try { INV_RSI = localStorage.getItem('invRsi') || INV_RSI; INV_MACD = localStorage.getItem('invMacd') || INV_MACD; } catch (e) {}
+let INV_RSI = '100, 90, 80, 70, 40, 35, 30, 25', INV_MACD = '0, -2, -4', INV_STOCH = '100, 80, 50, 20, 0', INV_SMI = '40, 0, -40';
+try {
+  INV_RSI = localStorage.getItem('invRsi') || INV_RSI; INV_MACD = localStorage.getItem('invMacd') || INV_MACD;
+  INV_STOCH = localStorage.getItem('invStoch') || INV_STOCH; INV_SMI = localStorage.getItem('invSmi') || INV_SMI;
+} catch (e) {}
 function rsiPrice(st, R) {
   if (!(R > 0 && R < 100)) return null;              // 0 and 100 need the other side's average to be exactly zero
   const G = st.avg_gain, L = st.avg_loss, rs = R / (100 - R), cur = L > 0 ? 100 - 100 / (1 + G / L) : 100;
@@ -1342,6 +1345,36 @@ function macdPrice(st, M) {
   const a1 = 2 / 13, a2 = 2 / 27;
   const p = (M - (1 - a1) * st.ema12 + (1 - a2) * st.ema26) / (a1 - a2);
   return p > 0 ? p : null;
+}
+// Stochastic RSI (14,14,3,3): raw = RSI's place in its 14-bar range, %K = SMA3(raw), %D = SMA3(%K).
+// A raw value maps to one RSI value (inside the prior 13 bars' RSI range), which rsiPrice turns into a close.
+function stochRawPrice(st, raw) {
+  const lo = st.rsi_lo13, hi = st.rsi_hi13;
+  if (lo == null || hi == null || hi - lo < 1e-9 || raw < -0.05 || raw > 100.05) return null;
+  if (raw <= 0.05) { const p = rsiPrice(st, lo); return p == null ? null : {p, op: '≤'}; }    // any RSI at or below the low gives 0
+  if (raw >= 99.95) { const p = rsiPrice(st, hi); return p == null ? null : {p, op: '≥'}; }
+  return rsiPrice(st, lo + raw / 100 * (hi - lo));
+}
+function stochKPrice(st, K) {
+  if (st.raw1 == null || st.raw2 == null) return null;
+  return stochRawPrice(st, 3 * K - st.raw1 - st.raw2);     // %K is the average of the last 3 raw values
+}
+// SMI (10, 3, signal EMA 10): 200 x EMA3(EMA3(close - mid of 10-bar range)) / EMA3(EMA3(10-bar range)).
+// The bar's high / low are taken as the close (plus the forming bar's range so far); solved by bisection.
+function smiAt(st, C) {
+  const H = Math.max(C, st.bar_hi ?? C), L = Math.min(C, st.bar_lo ?? C);
+  const hh = Math.max(st.hi9, H), ll = Math.min(st.lo9, L), a = 0.5;
+  const r1 = st.rel_e1 + a * (C - (hh + ll) / 2 - st.rel_e1), r2 = st.rel_e2 + a * (r1 - st.rel_e2);
+  const g1 = st.rng_e1 + a * (hh - ll - st.rng_e1), g2 = st.rng_e2 + a * (g1 - st.rng_e2);
+  return g2 > 0 ? 200 * r2 / g2 : null;
+}
+function smiPrice(st, target) {
+  if (st.rel_e2 == null || st.rng_e2 == null || st.hi9 == null) return null;
+  let lo = st.prev_close * 0.3, hi = st.prev_close * 2;
+  const f = c => smiAt(st, c) - target;
+  if (!(f(lo) <= 0 && f(hi) >= 0)) return null;
+  for (let k = 0; k < 60; k++) { const m = (lo + hi) / 2; f(m) < 0 ? lo = m : hi = m; }
+  return (lo + hi) / 2;
 }
 async function toggleInverse(sym, el) {
   if (!el.hidden) { el.hidden = true; return; }
@@ -1357,10 +1390,11 @@ async function toggleInverse(sym, el) {
 }
 function renderInverse(d, el) {
   const nums = s => s.split(/[ ,;]+/).map(Number).filter(x => isFinite(x) && String(x) != '');
-  const cell = p => {
-    if (p == null) return '<td class="sub">unreachable</td>';
+  const cell = x => {
+    if (x == null) return '<td class="sub">unreachable</td>';
+    const p = typeof x == 'object' ? x.p : x, op = typeof x == 'object' ? x.op + ' ' : '';
     const ch = p / d.price - 1;
-    return `<td><b>${p.toFixed(2)}</b> <span class="${ch >= 0 ? 'bullish' : 'bearish'}">${ch >= 0 ? '+' : ''}${(ch * 100).toFixed(1)}%</span></td>`;
+    return `<td><b>${op}${p.toFixed(2)}</b> <span class="${ch >= 0 ? 'bullish' : 'bearish'}">${ch >= 0 ? '+' : ''}${(ch * 100).toFixed(1)}%</span></td>`;
   };
   const draw = () => {
     const R = nums(el.querySelector('.inv-rsi').value), M = nums(el.querySelector('.inv-macd').value), T = d.timeframes;
@@ -1370,15 +1404,30 @@ function renderInverse(d, el) {
     const mm = M.map(v => `<tr><td><b>MACD ${v}</b></td>${T.map(t => cell(macdPrice(t, v))).join('')}</tr>`).join('');
     const sx = `<tr><td><b>MACD = signal</b><div class="sub">histogram 0 (cross)</div></td>${T.map(t => cell(macdPrice(t, t.signal))).join('')}</tr>`;
     const rx = `<tr><td><b>RSI = signal</b><div class="sub">RSI crosses its 14-bar average</div></td>${T.map(t => cell(rsiPrice(t, t.rsi_prev13))).join('')}</tr>`;
-    el.querySelector('tbody').innerHTML = head + now + rr + rx + mm + sx;
+    const S = nums(el.querySelector('.inv-stoch').value), Q = nums(el.querySelector('.inv-smi').value);
+    const sec = t => `<tr><td colspan="${T.length + 1}" class="sub" style="padding-top:12px"><b>${t}</b></td></tr>`;
+    const f1 = v => v == null ? '–' : v;
+    const snow = `<tr><td class="sub">now</td>${T.map(t => `<td class="sub">%K ${f1(t.stoch_k_now)} · %D ${f1(t.stoch_d_now)}</td>`).join('')}</tr>`;
+    const ss = S.map(v => `<tr><td><b>Stoch RSI %K ${v}</b></td>${T.map(t => cell(stochKPrice(t, v))).join('')}</tr>`).join('');
+    const sk = `<tr><td><b>%K = %D</b><div class="sub">Stoch RSI cross</div></td>${T.map(t => cell(t.k1 == null || t.k2 == null ? null : stochKPrice(t, (t.k1 + t.k2) / 2))).join('')}</tr>`;
+    const s0 = `<tr><td><b>raw 0 / raw 100</b><div class="sub">RSI at a new 14-bar low / high</div></td>${T.map(t => {
+      const a = stochRawPrice(t, 0), b = stochRawPrice(t, 100);
+      return `<td>${a ? `<b>≤ ${a.p.toFixed(2)}</b>` : '–'} / ${b ? `<b>≥ ${b.p.toFixed(2)}</b>` : '–'}</td>`; }).join('')}</tr>`;
+    const qnow = `<tr><td class="sub">now</td>${T.map(t => `<td class="sub">SMI ${f1(t.smi_value_now)} · signal ${f1(t.smi_signal_now)}</td>`).join('')}</tr>`;
+    const qq = Q.map(v => `<tr><td><b>SMI ${v}</b></td>${T.map(t => cell(smiPrice(t, v))).join('')}</tr>`).join('');
+    const qx = `<tr><td><b>SMI = signal</b><div class="sub">SMI crosses its EMA10</div></td>${T.map(t => cell(t.smi_sig == null ? null : smiPrice(t, t.smi_sig))).join('')}</tr>`;
+    el.querySelector('tbody').innerHTML = head + sec('RSI (14) and MACD (12/26/9)') + now + rr + rx + mm + sx
+      + sec('Stochastic RSI (14, 14, 3, 3)') + snow + ss + sk + s0 + sec('Stochastic Momentum Index (10, 3, signal EMA 10)') + qnow + qq + qx;
   };
-  el.innerHTML = `<h3>${d.symbol} — price for an RSI / MACD value <span class="sub">price ${d.price} at ${d.asof} ET</span></h3>
-    <div class="sub" style="margin:4px 0 8px">RSI levels <input class="inv-rsi ma-cfg" style="width:220px" value="${INV_RSI}"> · MACD levels <input class="inv-macd ma-cfg" style="width:120px" value="${INV_MACD}"></div>
+  el.innerHTML = `<h3>${d.symbol} — price for an RSI / MACD / Stoch RSI / SMI value <span class="sub">price ${d.price} at ${d.asof} ET</span></h3>
+    <div class="sub" style="margin:4px 0 8px">RSI levels <input class="inv-rsi ma-cfg" style="width:220px" value="${INV_RSI}"> · MACD levels <input class="inv-macd ma-cfg" style="width:120px" value="${INV_MACD}"> · Stoch RSI %K levels <input class="inv-stoch ma-cfg" style="width:150px" value="${INV_STOCH}"> · SMI levels <input class="inv-smi ma-cfg" style="width:110px" value="${INV_SMI}"></div>
     <div class="wrap"><table><tbody></tbody></table></div>
-    <div class="sub" style="margin-top:8px">Each cell is the closing price of the bar named in the column header that would put RSI(14) / MACD(12/26/9) at that value, and its distance from the latest price. "current bar" = the bar still forming now (market open); "next bar" = the next one after the close. It is a one-bar answer: over several bars the path matters (a slow slide reaches the same RSI at a higher price than one sharp drop). MACD moves only ~8% of each price change per bar, so far-away MACD values say "not in one bar", not "never". RSI 100 / 0 cannot be reached in one bar. RSI's signal line is the 14-bar simple average of RSI (TradingView's "RSI-based MA" default); RSI crosses it when the new RSI equals the average of the previous 13. 8H bars on a 6.5-hour session are the daily bar. Weekly bars run Monday to Friday, monthly bars by calendar month. Yahoo intraday data can be delayed ~15 min. Not investment advice.</div>`;
+    <div class="sub" style="margin-top:8px">Each cell is the closing price of the bar named in the column header that would put RSI(14) / MACD(12/26/9) at that value, and its distance from the latest price. "current bar" = the bar still forming now (market open); "next bar" = the next one after the close. It is a one-bar answer: over several bars the path matters (a slow slide reaches the same RSI at a higher price than one sharp drop). MACD moves only ~8% of each price change per bar, so far-away MACD values say "not in one bar", not "never". RSI 100 / 0 cannot be reached in one bar. RSI's signal line is the 14-bar simple average of RSI (TradingView's "RSI-based MA" default); RSI crosses it when the new RSI equals the average of the previous 13. Stochastic RSI: %K is the 3-bar average of the raw value, so %K 0 or 100 needs the two previous raw values at 0 / 100 too and is often "unreachable" in one bar; the "raw 0 / raw 100" row shows the close that makes RSI a new 14-bar low / high. SMI assumes the bar's high and low equal its close (plus the current bar's range so far), so a long wick changes it slightly. Parameters are TradingView's defaults. 8H bars on a 6.5-hour session are the daily bar. Weekly bars run Monday to Friday, monthly bars by calendar month. Yahoo intraday data can be delayed ~15 min. Not investment advice.</div>`;
   el.querySelectorAll('input').forEach(i => i.oninput = () => {
     INV_RSI = el.querySelector('.inv-rsi').value; INV_MACD = el.querySelector('.inv-macd').value;
-    try { localStorage.setItem('invRsi', INV_RSI); localStorage.setItem('invMacd', INV_MACD); } catch (e) {}
+    INV_STOCH = el.querySelector('.inv-stoch').value; INV_SMI = el.querySelector('.inv-smi').value;
+    try { localStorage.setItem('invRsi', INV_RSI); localStorage.setItem('invMacd', INV_MACD);
+          localStorage.setItem('invStoch', INV_STOCH); localStorage.setItem('invSmi', INV_SMI); } catch (e) {}
     draw();
   });
   draw();
@@ -1493,7 +1542,7 @@ function render(r, prepend, replace) {
   const IV = r.interval || '1d', daily = IV == '1d';
   const unit = daily ? 'trading days' : 'bars', bu = daily ? 'd' : ' bars';
   s.innerHTML = `<div class="head"><h2>${r.symbol} <span class="sub">${r.price} · ${r.asof} · ${IV.toUpperCase()} · ${r.period} · ATR ${r.atr_pct}%/bar · swing ${r.swing_pct}% · ${r.patterns.length} patterns (${open} open)</span>
-      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button><button class="vbtn tbtn" title="Has a turn been confirmed on 5m, 15m, 1h, 4h and daily?">Timeframes</button><button class="vbtn ibtn" title="Which closing price would put RSI / MACD at a given value on 1H, 2H, 4H, 8H = 1D, weekly and monthly?">RSI / MACD prices</button></h2>
+      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button><button class="vbtn tbtn" title="Has a turn been confirmed on 5m, 15m, 1h, 4h and daily?">Timeframes</button><button class="vbtn ibtn" title="Which closing price would put RSI / MACD / Stoch RSI / SMI at a given value on 1H, 2H, 4H, 8H = 1D, weekly and monthly?">Indicator prices</button></h2>
       ${prepend ? '<button class="x" title="Remove">&times;</button>' : ''}</div>
     ${r.note ? `<div class="note">${r.note}</div>` : ''}
     <div class="val" hidden></div>

@@ -188,7 +188,15 @@ def _forming(df, size, now):
     return start <= now < end
 
 
-def _state(c):
+def _num(v, nd=6):
+    v = float(v)
+    return None if np.isnan(v) or np.isinf(v) else round(v, nd)
+
+
+def _state(df):
+    """Indicator state after the last bar of df: what the page needs to solve one more close.
+    RSI(14) Wilder · MACD(12/26/9) · Stoch RSI(14,14,3,3) · SMI(10,3, signal EMA 10) — TradingView defaults."""
+    c, h, lo = df["Close"], df["High"], df["Low"]
     d = c.diff()
     g = d.clip(lower=0).ewm(alpha=1 / 14, adjust=False).mean()
     l = (-d.clip(upper=0)).ewm(alpha=1 / 14, adjust=False).mean()
@@ -196,7 +204,24 @@ def _state(c):
     m = e12 - e26
     sig = _ema(m, 9)
     rsi = 100 - 100 / (1 + g / l)
-    return {"rsi_prev13": float(rsi.iloc[-13:].mean()), "rsi_ma": float(rsi.iloc[-14:].mean()),   # RSI signal = SMA14 of RSI
+    # Stochastic RSI: raw = where RSI sits in its 14-bar range; %K = SMA3(raw); %D = SMA3(%K)
+    rmin, rmax = rsi.rolling(14).min(), rsi.rolling(14).max()
+    raw = (rsi - rmin) / (rmax - rmin) * 100
+    k = raw.rolling(3).mean()
+    dd = k.rolling(3).mean()
+    # SMI (Blau): close vs the middle of the 10-bar range, double-smoothed (EMA3 of EMA3), over half the range
+    hh, ll = h.rolling(10).max(), lo.rolling(10).min()
+    rel, rng = c - (hh + ll) / 2, hh - ll
+    rel1, rng1 = _ema(rel, 3), _ema(rng, 3)
+    rel2, rng2 = _ema(rel1, 3), _ema(rng1, 3)
+    smi = 200 * rel2 / rng2
+    smi_sig = _ema(smi, 10)
+    extra = {"rsi_lo13": rsi.iloc[-13:].min(), "rsi_hi13": rsi.iloc[-13:].max(),
+             "raw1": raw.iloc[-1], "raw2": raw.iloc[-2], "k1": k.iloc[-1], "k2": k.iloc[-2], "k_now": k.iloc[-1], "d_now": dd.iloc[-1],
+             "hi9": h.iloc[-9:].max(), "lo9": lo.iloc[-9:].min(), "rel_e1": rel1.iloc[-1], "rel_e2": rel2.iloc[-1],
+             "rng_e1": rng1.iloc[-1], "rng_e2": rng2.iloc[-1], "smi_now": smi.iloc[-1], "smi_sig": smi_sig.iloc[-1]}
+    return {**{k_: _num(v) for k_, v in extra.items()},
+            "rsi_prev13": float(rsi.iloc[-13:].mean()), "rsi_ma": float(rsi.iloc[-14:].mean()),   # RSI signal = SMA14 of RSI
             "prev_close": float(c.iloc[-1]), "avg_gain": float(g.iloc[-1]), "avg_loss": float(l.iloc[-1]),
             "ema12": float(e12.iloc[-1]), "ema26": float(e26.iloc[-1]), "signal": float(sig.iloc[-1]),
             "rsi": float(100 - 100 / (1 + g.iloc[-1] / l.iloc[-1])) if l.iloc[-1] > 0 else 100.0,
@@ -215,14 +240,18 @@ def inverse(sym):
         df = (d1 if size == "D" else _period_bars(d1, "W-FRI") if size == "W" else _period_bars(d1, "M") if size == "M"
               else h1 if size == 1 else P._session_bars(h1, size))
         forming = _forming(df, size, now)
-        base = df["Close"].iloc[:-1] if forming else df["Close"]
+        base = df.iloc[:-1] if forming else df
         st = _state(base)
-        now_st = _state(df["Close"])
+        now_st = _state(df)
         t = df.index[-1]
         out.append({"tf": label, "forming": forming,
                     "bar": (f"current bar from {t:%H:%M}" if forming else "next bar") if isinstance(size, int) else BAR_WORDS[size][0 if forming else 1],
                     "rsi_now": round(now_st["rsi"], 1), "rsi_ma_now": round(now_st["rsi_ma"], 1), "macd_now": round(now_st["macd"], 3), "signal_now": round(now_st["signal"], 3),
-                    **{k: round(v, 6) for k, v in st.items()}})
+                    "stoch_k_now": _num(now_st["k_now"], 1), "stoch_d_now": _num(now_st["d_now"], 1),
+                    "smi_value_now": _num(now_st["smi_now"], 1), "smi_signal_now": _num(now_st["smi_sig"], 1),
+                    # the forming bar's high / low so far: a close beyond them also moves the SMI range
+                    "bar_hi": float(df["High"].iloc[-1]) if forming else None, "bar_lo": float(df["Low"].iloc[-1]) if forming else None,
+                    **{k: (round(v, 6) if isinstance(v, float) else v) for k, v in st.items()}})
     return {"symbol": sym, "price": round(price, 2), "asof": f"{h1.index[-1]:%Y-%m-%d %H:%M}", "timeframes": out}
 
 
