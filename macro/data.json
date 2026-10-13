@@ -1,5 +1,5 @@
 {
- "generated_et": "2026-10-12 16:16",
+ "generated_et": "2026-10-13 07:08",
  "pillars": [
   "Inflation",
   "Labor",
@@ -12110,16 +12110,16 @@
    "kind": "level",
    "tier1": false,
    "unit": "%",
-   "latest_obs": "2026-10-09",
-   "latest_raw": 262.839,
-   "value": 262.839,
+   "latest_obs": "2026-10-12",
+   "latest_raw": 262.614,
+   "value": 262.614,
    "value_date": "2026-10-31",
    "prev": 255.046,
    "trend": "rising",
    "pct_rank_10y": 97.0,
    "range_10y": [
     128.76,
-    262.84
+    262.61
    ],
    "table12": [
     {
@@ -12168,7 +12168,7 @@
     },
     {
      "date": "2026-10",
-     "value": 262.839
+     "value": 262.614
     }
    ],
    "hist": {
@@ -12252,7 +12252,7 @@
      228.827,
      219.45,
      255.046,
-     262.839
+     262.614
     ]
    },
    "daily_or_weekly": true
@@ -13224,67 +13224,67 @@
    {
     "month": "2026-10",
     "symbol": "ZQV26.CBT",
-    "implied": 3.885
+    "implied": 3.882
    },
    {
     "month": "2026-11",
     "symbol": "ZQX26.CBT",
-    "implied": 3.93
+    "implied": 3.925
    },
    {
     "month": "2026-12",
     "symbol": "ZQZ26.CBT",
-    "implied": 4.085
+    "implied": 4.07
    },
    {
     "month": "2027-01",
     "symbol": "ZQF27.CBT",
-    "implied": 4.155
+    "implied": 4.145
    },
    {
     "month": "2027-02",
     "symbol": "ZQG27.CBT",
-    "implied": 4.245
+    "implied": 4.225
    },
    {
     "month": "2027-03",
     "symbol": "ZQH27.CBT",
-    "implied": 4.33
+    "implied": 4.305
    },
    {
     "month": "2027-04",
     "symbol": "ZQJ27.CBT",
-    "implied": 4.435
+    "implied": 4.41
    },
    {
     "month": "2027-05",
     "symbol": "ZQK27.CBT",
-    "implied": 4.53
+    "implied": 4.495
    },
    {
     "month": "2027-06",
     "symbol": "ZQM27.CBT",
-    "implied": 4.605
+    "implied": 4.57
    }
   ],
   "meetings": [
    {
     "date": "2026-10-28",
     "rate_before": 3.88,
-    "implied_after": 3.93,
-    "change_bp": 5.0,
-    "p_hike": 20,
-    "p_hold": 80,
+    "implied_after": 3.925,
+    "change_bp": 4.5,
+    "p_hike": 18,
+    "p_hold": 82,
     "p_cut": 0,
     "big_move": false
    },
    {
     "date": "2026-12-09",
-    "rate_before": 3.93,
-    "implied_after": 4.155,
-    "change_bp": 22.5,
-    "p_hike": 90,
-    "p_hold": 10,
+    "rate_before": 3.925,
+    "implied_after": 4.145,
+    "change_bp": 22.0,
+    "p_hike": 88,
+    "p_hold": 12,
     "p_cut": 0,
     "big_move": false
    }
