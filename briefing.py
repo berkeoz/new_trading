@@ -37,7 +37,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 BRIEF_DIR = os.path.join(ROOT, "briefs")
 TICKERS = P.DEFAULT_SYMBOLS
 # Scheduled slots (ET). One routine fires at 9:15, 9:45, 15:45 and 16:15; a single
-# cron line also fires at 15:15 and 16:45, which are skipped. Any other time is an
+# cron line (0,15,45 9,13,15,16) also fires at 9:00, 13:15, 13:45, 15:00, 15:15, 16:00 and 16:45, which are skipped. Any other time is an
 # on-demand run ("now").
 SESSIONS = {
     "pre":      ((9, 15),  "Pre-market brief"),
@@ -47,7 +47,7 @@ SESSIONS = {
     "close":    ((16, 15), "Closing brief"),
     "now":      (None,     "Market brief"),
 }
-SKIP_SLOTS = [(15, 15), (16, 45)]
+SKIP_SLOTS = [(9, 0), (13, 15), (13, 45), (15, 0), (15, 15), (16, 0), (16, 45)]
 WINDOW = timedelta(minutes=12)
 
 CONTEXT = [  # symbol, label, group, kind ("yield" values are in %, changes in basis points)
@@ -517,7 +517,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--session", default="auto", choices=["auto"] + list(SESSIONS),
                     help="auto (default): pick the slot from the clock; off-slot times are on-demand runs")
-    ap.add_argument("--force", action="store_true", help="never skip (manual runs at 15:15 / 16:45)")
+    ap.add_argument("--force", action="store_true", help="never skip (manual runs at a skipped slot time)")
     ap.add_argument("--index", action="store_true", help="rebuild briefs/index.json and exit")
     ap.add_argument("--macro-updated", metavar="OUTLOOK_ID", help="mark the macro outlook as rewritten and exit")
     args = ap.parse_args()
