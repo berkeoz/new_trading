@@ -51,7 +51,8 @@ def _digests():
     order = {"am": 0, "mid": 1, "pm": 2}
     def key(f):
         name = os.path.basename(f)[:-3]
-        return name[:10], order.get(name[11:], 0)
+        tag, _, n = name[11:].partition("-")          # extra runs in a slot: 2026-10-14-pm-2
+        return name[:10], order.get(tag, 0), int(n or 1)
     return sorted(glob.glob(os.path.join(XDIR, "20*.md")), key=key)
 
 
@@ -69,6 +70,10 @@ def plan():
     # runs: 9:00 ET daily (morning), 13:00 ET daily (midday), 18:00 ET daily (evening)
     slot = "morning" if now.hour < 12 else "midday" if now.hour < 16 else "evening"
     did = f"{now:%Y-%m-%d}-{SLOT_SUFFIX[slot]}"
+    n = 2
+    while os.path.exists(os.path.join(XDIR, did + ".md")):   # a second run in the same slot gets its own edition
+        did = f"{now:%Y-%m-%d}-{SLOT_SUFFIX[slot]}-{n}"
+        n += 1
     print(f"RUN_DATE={now:%Y-%m-%d}")
     print(f"RUN_ID={did}")
     print(f"EDITION={slot}")
