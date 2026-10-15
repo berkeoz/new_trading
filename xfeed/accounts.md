@@ -1,17 +1,18 @@
 # X account notes
-Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-15 (midday, 2026-10-15-mid). Note: post images load slowly; the extractor's image count can read 0, so open a status page and wait ~5s before zooming. Timelines often load only 2–9 posts at first. In a background tab, new posts load only after a screenshot: scroll with window.scrollBy, take a tiny screenshot (scale 0.1), wait 2s, extract again. The JavaScript tool also seems to return a cached result for identical code, so vary the code (e.g. a comment) on repeat calls.
+Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-15 (evening, 2026-10-15-pm). Note: the JavaScript tool's output is cut at about 1,000 characters and is blocked if it contains URL query strings, so strip links and print posts in small slices. Note: post images load slowly; the extractor's image count can read 0, so open a status page and wait ~5s before zooming. Timelines often load only 2–9 posts at first. In a background tab, new posts load only after a screenshot: scroll with window.scrollBy, take a tiny screenshot (scale 0.1), wait 2s, extract again. The JavaScript tool also seems to return a cached result for identical code, so vary the code (e.g. a comment) on repeat calls.
 
 ### @DeItaone
 - **Type:** headline news wire (Walter Bloomberg). **Focus:** macro, geopolitics, Trump and Fed headlines.
 - **Style:** all-caps headlines, no opinions. **Signal-to-noise:** high. Lower volume on weekends.
 - **Reliability:** relays reports from wires and state media. Check the original source on single-source items (e.g. Iranian state media, Trump claims not yet confirmed by the other parties).
 - **Note:** the pinned post can be a paid partnership (Kalshi on 10/13); skip it.
-- **Calls log:** none (no calls). 10/15 midday (32 posts, 09:01–13:03 ET): SOX -3.6%, $2T lost in 7 sessions; NVDA -3%, AMD -5%, INTC -5.9%, MRVL -5.5%; CRWV low since May 2025 ($60.36); Huang: no CRWV backstop needed, its cost of capital falling; Germany–NVDA partnership; Northlight Dec hike; 5Y/7Y -15bp; mortgages 7.4%; IEA completes 100M bbl, 20M bbl diesel; Ukraine out of Patriots; Apple–Meta Muse. 10/15 am (28 posts, 05:47–09:01 ET only; earlier overnight did not load): PPI 6.3%/core 5.0% vs 5.4%/4.4% est.; retail sales +0.8%; claims 199K; CRWV Mizuho $88, DB $150, Ives buy, record tech CDS; UBS third hike Mar 2027; Yardeni S&P 7,900; "10Y -28bp" (our data -12bp); Hormuz tanker fire; US unhappy with IEA release; KeyBanc AAPL UW $250. 10/14 late (2 posts): Anthropic Q3 revenue $16.8B (FT). 10/14 pm (30 posts, cap): Goolsbee "discouraging"/"unacceptable", Barkin, Beige Book weak growth + persistent inflation, NY Fed $14.6B reinvestment only, Nasdaq -2%, VIX 16.96, CRWV CEO defense, GFS $21B, Barclays Tesla–SpaceX merger before Dec, Starlink/Ukraine. 10/14 09:03–11:19 ET (16 posts; overnight did not load): Street raising core PCE (TD 0.36%), Citi sees Dec hike, Hassett "disappointing", banks index 4-month low, CRWV -14.9%/NBIS -9.7%, Nasdaq -1.00%, euro 1.112, NFLX 6% layoffs, Apple vs OpenAI filings. 10/13 13:20–15:59 ET (24 posts): Williams one more hike in 2026, none in 2027 (yields fell); Barkin; Rosenberg "most stretched in 40 years"; Bassman 20Y-6% scenario; Cleveland Fed nowcast core 0.20% vs 0.21%; Hormuz container ship hit; diesel +4.5%; MS Brent 4Q26 $105. 10/13 09:05–12:20 ET (22 posts): chip and memory selloff numbers, existing home sales 3.99M beat, Sanaa strikes, Trump on the Houthis and Iran, SPR 283M (lowest since 1982), diesel +2.1%, NVDA $2B Europe, Anthropic investor day Wed. 10/13 07:00–09:05 ET: GS beat, Houthi threats to Aramco, Saudi-coalition Sanaa operation, Waller (yields = growth), Hassett, OPEC 2027 demand up and 2026 cut, JPM executives on rate stress. Quiet overnight (no posts 21:05Z–10:31Z on 10/12–13). Key 10/13 items: JPM miss, WFC revenue miss, Goolsbee on AI inflation, BofA's 6% 10Y threshold, HSBC bullish. Key 10/12 items: Hammack wants more, smaller hikes; Riyadh alerts; UKMTO tanker strike; Fitch sees a Hormuz deal in 1Q27.
+- **Calls log:** none (no calls). 10/15 pm (7 posts): Hammack: more aggressive action may be needed, conditions not restrictive; Anthropic IPO talk $2T to $1.5T; CBS: MOAB plans for Iran; CRWV reversed to +2.7%; EU satellite rival to SpaceX; Brazil runoff poll. 10/15 midday (32 posts, 09:01–13:03 ET): SOX -3.6%, $2T lost in 7 sessions; NVDA -3%, AMD -5%, INTC -5.9%, MRVL -5.5%; CRWV low since May 2025 ($60.36); Huang: no CRWV backstop needed, its cost of capital falling; Germany–NVDA partnership; Northlight Dec hike; 5Y/7Y -15bp; mortgages 7.4%; IEA completes 100M bbl, 20M bbl diesel; Ukraine out of Patriots; Apple–Meta Muse. 10/15 am (28 posts, 05:47–09:01 ET only; earlier overnight did not load): PPI 6.3%/core 5.0% vs 5.4%/4.4% est.; retail sales +0.8%; claims 199K; CRWV Mizuho $88, DB $150, Ives buy, record tech CDS; UBS third hike Mar 2027; Yardeni S&P 7,900; "10Y -28bp" (our data -12bp); Hormuz tanker fire; US unhappy with IEA release; KeyBanc AAPL UW $250. 10/14 late (2 posts): Anthropic Q3 revenue $16.8B (FT). 10/14 pm (30 posts, cap): Goolsbee "discouraging"/"unacceptable", Barkin, Beige Book weak growth + persistent inflation, NY Fed $14.6B reinvestment only, Nasdaq -2%, VIX 16.96, CRWV CEO defense, GFS $21B, Barclays Tesla–SpaceX merger before Dec, Starlink/Ukraine. 10/14 09:03–11:19 ET (16 posts; overnight did not load): Street raising core PCE (TD 0.36%), Citi sees Dec hike, Hassett "disappointing", banks index 4-month low, CRWV -14.9%/NBIS -9.7%, Nasdaq -1.00%, euro 1.112, NFLX 6% layoffs, Apple vs OpenAI filings. 10/13 13:20–15:59 ET (24 posts): Williams one more hike in 2026, none in 2027 (yields fell); Barkin; Rosenberg "most stretched in 40 years"; Bassman 20Y-6% scenario; Cleveland Fed nowcast core 0.20% vs 0.21%; Hormuz container ship hit; diesel +4.5%; MS Brent 4Q26 $105. 10/13 09:05–12:20 ET (22 posts): chip and memory selloff numbers, existing home sales 3.99M beat, Sanaa strikes, Trump on the Houthis and Iran, SPR 283M (lowest since 1982), diesel +2.1%, NVDA $2B Europe, Anthropic investor day Wed. 10/13 07:00–09:05 ET: GS beat, Houthi threats to Aramco, Saudi-coalition Sanaa operation, Waller (yields = growth), Hassett, OPEC 2027 demand up and 2026 cut, JPM executives on rate stress. Quiet overnight (no posts 21:05Z–10:31Z on 10/12–13). Key 10/13 items: JPM miss, WFC revenue miss, Goolsbee on AI inflation, BofA's 6% 10Y threshold, HSBC bullish. Key 10/12 items: Hammack wants more, smaller hikes; Riyadh alerts; UKMTO tanker strike; Fitch sees a Hormuz deal in 1Q27.
 
 ### @TheProfInvestor
 - **Type:** discretionary trader and educator. **Focus:** mega-cap tech, BTC, risk-management tips.
 - **Style:** short motivational and lifestyle posts, occasional breakout callouts. **Signal-to-noise:** medium-low.
 - **Calls log:**
+  - 2026-10-15 (pm): ASTS at a key trendline plus horizontal support, where bulls must take control (no stop); "huge bounce", take it as a win, but don't FOMO if you didn't buy the morning; Jensen "bottom ticked" CRWV (+14 off the lows); repeats a VARA fund blow-up rumour. Outcome: bounce right for the day; ASTS open.
   - 2026-10-15 (midday): warns that a real, prolonged 20–30% bear market will come and that "scale in, it's cheaper" will hurt gurus; no timeframe or level. Outcome: open (no test).
   - 2026-10-15 (overnight): KOSPI "textbook bear flag", -45% from ATH, below the weekly 50SMA; find support or 12% lower; "someone else's gonna blow up this week"; "CPI caused the dump, maybe PPI brings the rally" (self-labelled wishful). Outcome: PPI was hot; open.
   - 2026-10-14 (late): "Burry marked the top": QQQ -5%, NVDA -9%, NBIS -27%, INTC -23%, MU -17%, AMD -13%, DELL -11% off highs. Outcome: n/a (retrospective).
@@ -29,6 +30,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Type:** congressional-trade tracker (linked to the Autopilot app). **Focus:** Pelosi and other members' trades.
 - **Style:** trade disclosures plus promotion and jokes. **Signal-to-noise:** medium; quiet at weekends.
 - **Calls log:**
+  - 2026-10-15 (pm): INTC at $94 vs Pelosi's up-to-$5M buy at $115 (May 29); app promotion. Outcome: open.
   - 2026-10-14 (pm): app promotion; political news (DOJ subpoenas). Outcome: n/a.
   - 2026-10-14: Rep. Kevin Hern disclosed 18 trades, all sells (up to ~$945K: LMT, UNH, CVX, DVN, CB, HD, LOW, EMR, LIN). Outcome: n/a.
   - 2026-10-13: a House member's IBRX buys (late Sept) days before an HHS cancer-panel appointment; IBRX +23% in two weeks; also political news. Outcome: n/a.
@@ -38,6 +40,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Type:** swing trader using Bookmap/order-flow levels. **Focus:** momentum names (NBIS, AEHR).
 - **Style:** setups with liquidity levels, defined entries and stops; posts stop-outs openly. **Signal-to-noise:** medium-high.
 - **Calls log:**
+  - 2026-10-15 (pm): 100 of his 107 names closed above their open ("pure oversold reaction"); carrying 50% of his account in SOXL, ~8% account gain so far over two runs; added NBIS. Outcome: oversold-bounce call worked for the day (SOXX 495.79 low to 514.71 close).
   - 2026-10-15 (midday): added SOXL to his TopD list; AXTI was the fastest bounce, then SOXL; at 12:33 ET asks if the AXTI "oversold party" is over. Outcome: intraday bounce worked (SOXX 495.79 to 511), still -2.7% at 13:01.
   - 2026-10-15 (00:04 ET): "100% day trading mode"; expects a big day for oversold bounces, SOXL his pick; poll on "generational opportunity" vs fear. Outcome: worked intraday (see above); check the close.
   - 2026-10-14: "survival is the key"; added GOOG 352.18, TEM 68.2, NBIS 189 (NBIS now 20.79% of portfolio); stopped out of the NBIS swing/day trade; carrying an SNDK trailer. Outcome: open.
@@ -62,6 +65,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Type:** options-flow tracker (Bullflow). **Focus:** large single-name and SPX call/put buys.
 - **Style:** flow and P&L screenshots posted after they win (survivorship bias), plus referral promotion for funded accounts. **Signal-to-noise:** medium for sentiment only.
 - **Calls log:**
+  - 2026-10-15 (pm, 8 posts): TE 3C 1/15/27 14.4K on the ask at ~$0.60 ($865K); DAL 81C 10/23 4.5K at ~$0.61 ($275K); BRUN $496K and GPN $687K calls; QCOM next-week bull and a heatmap "push to those 772" (likely SPY) subscriber-only. Outcome: SPY closed 771.79.
   - 2026-10-15 (midday, ~27 posts from 09:35 ET): CRWV 90C 4/16/27, ~20K at ~8.07, $16.2M premium (13:00 ET); MSFT calls "all over"; IBIT $2.6M calls, JBS $1.8M calls, AAOI $2.7M put sale, AKAM/ALC/M/FRMI calls; heatmaps: SPX 7670 lit up, then SPY 771 target hit, 770 support; MRNA 227.50 break, 235 "tough", took profits; LLY options "rip 40%". Outcome: SPY 771 lined up with the high (771.23).
   - 2026-10-15: TLT 85C 11/30/26, ~146K on the ask, $2.5M premium, bought near the 10/14 close. Outcome: bonds rallied overnight (10Y -12bp); open.
   - 2026-10-14 (pm): MRNA 227.50 target hit; "770 hit" on SPY, SPX 7700 next on his heatmap; ENPH 25P 1/15/27 ~$687K at $1.88; BTDR 9C 1/15/27 $450K at $1.35; TLT bet. Outcome: SPY 770 and MRNA worked; 7700 open.
@@ -76,6 +80,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Type:** subscriber day-trading room. **Focus:** intraday index and options trades.
 - **Style:** most posts locked to subscribers (daily "Weekly Open" article); occasional public trading-psychology posts and custom indicators. **Signal-to-noise:** low publicly.
 - **Calls log:**
+  - 2026-10-15 (18:10 ET): subscriber-only evening update ("markets finished the day hi…"). Outcome: n/a.
   - 2026-10-15 (09:23 and 11:32 ET): subscriber-only "Morning Market Update" article (expects more of the sell-off pattern "over the next few days") and a locked post. Outcome: open.
   - 2026-10-15: if his 9/12 stat holds (all 5 hike cycles in 30+ years saw an SPX drawdown of 7%+ within 2 months of the first hike), SPY ~$700 within 30 days. Outcome: check ~11/14 (SPY 767.45 pre-market 10/15).
   - 2026-10-14 (pm): chart indexes first; recaps last month's subscriber calls (QQQ pump into early Oct, SMH/MAGS strength, higher yields, weaker metals, IWM struggle). Outcome: self-graded; broadly consistent with Oct price action.
@@ -88,6 +93,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Type:** charting-platform brand account; chart technician plus marketing. **Focus:** pattern setups, earnings, insider buys.
 - **Style:** clean annotated charts with Fibonacci and analyst-target lines; memes; product promotion; no stops. **Signal-to-noise:** medium. **Bias:** bullish on breakouts.
 - **Calls log:**
+  - 2026-10-15 (pm): QQQ daily bounced near the lower Bollinger Band (~724; mid ~743, upper ~762); NVDA cup-and-handle "stress test" at ~217.43; CRWV vs Street targets; TSM dip-and-bounce; CVS downtrend "expired". Outcome: QQQ closed 728.0; rest open.
   - 2026-10-15 (midday): "red hot" PPI with a surprisingly quiet reaction (Sidekick promo); IREN "in free fall"; NFLX below its 200-week SMA for the first time in years; GOOG "next big move brewing"; TSMC live show. Outcome: open.
   - 2026-10-15 (am): SPY 3-month ascending wedge "awfully tight", price on the lower line, squeeze on; TSM double beat (EPS $4.60, sales $46.72B, Q4 raised); SCHW EPS beat, sales slight miss. Outcome: open (wedge break would fit the brief's 766.5 bearish trigger).
   - 2026-10-14 (late): AXON below its 200-week SMA for the 3rd time ever; Anthropic Q3 (+44% QoQ, profitable, IPO near $2T). Outcome: n/a.
@@ -108,6 +114,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Style:** daily and weekly pattern calls (engulfing, channel tops, wedges, EMAs); names triggers but few price targets; argues with followers. **Signal-to-noise:** medium-high.
 - **Bias:** tends to call tops (says AMD top worked "after 20 tries"). Admits misses publicly (TSLA, 10/11).
 - **Calls log:**
+  - 2026-10-15 (pm): HOOD no longer a strong short (too extended daily), but weekly/monthly vulnerable, don't buy the dip; NVDA below the weekly 5/9 EMA (his newsletter call from two weeks ago). Outcome: NVDA call right so far; HOOD open.
   - 2026-10-15 (midday, 12 posts): SPY lost key supports, bears in control until reclaimed; later SPY bouncing off the 50 EMA (behind the last 5 bottoms in 4 months); VIX breaking out of a year-long squeeze; AVGO weekly major reversal, "start of a major downtrend"; HIMS -15% off resistance, channel break; HOOD -15% to the 200 EMA; MRVL "much worse"; SPCX -20% from highs, below the 50 EMA; AAPL stuck at weekly resistance; SMH "invincible" no more. Outcome: SPY 50 EMA bounce held (low 764.43, SMA50 767.4); rest open.
   - 2026-10-15 (overnight): IGV weekly bearish-engulfing false breakout, last week's breakout a "bull trap" (supports his MSFT top call); CRWD "warned ya at the top reversal, booya"; BTC "thin ice", flush if the 1-month range breaks; offers a bearish MRNA update but admits the last one failed. Outcome: CRWD right; MRNA bear call wrong; IGV/BTC open.
   - 2026-10-14 (late): MAGS daily rejection at the ascending wedge "booya" (the 10/13 pm RSI-divergence/wedge call worked); SPCX 15m triangle breakdown "booya" (10/12 "choose your fate" post worked); bottoms: look for major supports after an 8–12% drop, not after the first -1% day. Outcome: MAGS and SPCX right.
@@ -128,6 +135,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Type:** news, insider trades, congressional trades, flow tools. **Focus:** insider trades, Fed and macro headlines, product.
 - **Style:** "BREAKING" headlines plus heavy self-promotion (about a third of posts). **Signal-to-noise:** medium.
 - **Calls log:**
+  - 2026-10-15 (pm, 16 posts): Russell 2000 in correction (-10%+ from high); CRWV -15% in a month after a $3B convertible; China shifting US bond holdings to Canada; GOOGL quantum "magic states" 99.99%; Tesla–SpaceX merger odds rising (Polymarket, Barclays); Hormuz fertilizer deadline; Ukraine out of Patriots; mostly politics otherwise. Outcome: n/a.
   - 2026-10-15 (midday, 14 posts): PPI 6.3% vs 5.3%; UBS: hikes in Dec 2026 and Mar 2027, then pause; CRWV bonds bounce (Oct-31s 82.8c, Jun-30s 91.3c); US asks IEA for 100M more barrels; worst smartphone quarter ever; Trump: Iran war ends "very soon"; Tesla Roadster unveil; live-show promos. Outcome: n/a.
   - 2026-10-15 (am, 11 posts): Barclays: SpaceX all-stock bid for Tesla possible before December (~0.7 SpaceX per TSLA); Musk "$100T" SpaceX claim; US households $60T+ in stocks/funds (WSJ); BofA "funflation"; McKinsey AI job switches; car age record; politics. Outcome: n/a.
   - 2026-10-14 (late): Anthropic adjusted profit, $16.8B Q3 revenue; AI drafting software that took incumbents decades; Omar citizenship case; promo. Outcome: n/a.
@@ -146,6 +154,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Style:** exact levels and targets; polls. **Signal-to-noise:** high.
 - **Bias:** leans bullish and buys dips.
 - **Calls log:**
+  - 2026-10-15 (pm, 7 posts): QQQ gap filled and green at 15:19 ET; VIX 18 at the peak, near a 15 handle; SPY ~1.3% from ATH; "shocked" if SKHY makes 10 straight red days, SOXX/SMH 9 (tagged #gamblersfallacy). Outcome: VIX streak held (close 16.46); SOXX 9th-day test on 10/16.
   - 2026-10-15 (midday, 11 posts): NVDA candle almost entirely below the lower Bollinger Band, "bounce try into Friday"; SOXX -2.4%, 8 days down, needs a DCB off $490–500; QQQ $715s→$725s; SPY gap filled; VIX 17.99 (a close above 17.84 ends a 54-day streak); SKHY $135s→$145s; NKE/MCD/TLT/NFLX "trashy names" popping. Outcome: QQQ range matched (715.43–726.1); VIX 16.81 at 13:01, streak intact so far; NVDA/SOXX open.
   - 2026-10-15 (am, 15 posts): 10Y 5.34%→5.08% (our data: 5.068%, -12bp from the close), "not helping equities"; TLT $76s to ~$81s; SPX only -1.7% from ATH but sentiment feels -15%; SKHY 9 straight red days ($195→$135 in 9 days); WMT ~$120 (+18% from $102); VIX Friday tally (mostly red); Oct hike odds steady, Dec rising; asks who buys the tech dip. Outcome: open.
   - 2026-10-14 (late, 12 posts): IWM "big spot" at the 200dma (RSI lowest since April 2025); SKHY implies a 9th red day, SOXX/SMH an 8th; QQQ -5.5% ATH to overnight trough; KOSPI opens -5%; SNDK 4 red weeks (first ever); S&P top 10 now led by MRNA, VLO. Outcome: open (check the 10/15 close; SOXX "trampoline" still not seen).
@@ -166,6 +175,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Type:** commentator posting in Turkish and English; low frequency. **Focus so far:** tech-industry commentary (10/12: skeptical of tech CEOs' claims of a special edge).
 - **Signal-to-noise:** low-medium; occasional useful market stats. 10/12 also posted a "$wve" video (not reviewed).
 - **Calls log:**
+  - 2026-10-15 (pm, Turkish): MRVL meme; says he avoids reading people who share his position. Outcome: n/a.
   - 2026-10-15 (midday, Turkish): closed his RKLB puts, will short again on a bounce; says Jensen rushed to praise CoreWeave as selling deepened, then the Nasdaq outage ("totally normal"); relays a rumour that a VARA fund blow-up drove the drop; Korea's president tells people not to despair (KOSPI). Outcome: open.
   - 2026-10-15: Nasdaq has gone 2,402 days without a circuit breaker (Turkish); two joke posts. Outcome: n/a.
   - 2026-10-14 (pm): MRNA post with a biotech forecasting/valuation book; "where are we?" with the classic bubble-stages chart (implies late-cycle). Outcome: n/a (MRNA +4% per Mr_Derivatives).
@@ -177,6 +187,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Type:** Elliott-wave chartist and community account; also posts sports and non-market content. **Focus:** MU wave counts with Fibonacci levels.
 - **Signal-to-noise:** low overall, but the MU posts are detailed.
 - **Calls log:**
+  - 2026-10-15 (pm): MU +8.5% off the lows, "at least $936", suspects higher; nothing on RSI undoes the setup, but it must start hitting upside targets. Outcome: open.
   - 2026-10-15 (midday): MU 12H RSI at its March 30 level, hidden bullish divergence, "at least a nice bounce"; SNDK hidden bullish divergence on several timeframes (not a buy signal yet); AAOI 78.02 (low 77.05), RSI 21, testing the July low zone 76.01, WXY bias, past the 88% retrace (94). Outcome: open; his $83.85 AAOI buy zone was overrun.
   - 2026-10-15 (overnight): recalls his MU $889 target "given 10H ago"; trying to rule out $591 as an "immediate option" for MU; AAOI analysis pending. Outcome: open (MU -4% pre-market).
   - 2026-10-14: traveling, trading less; will buy AAOI "hand over fist" at $83.85 unless his wave count or stochastic/RSI changes his mind; claims he said NVDA would fail its breakout last week; running AAOI, SOXL, NVDA, SNDK charts. Outcome: open (NVDA claim self-reported; breakout did fail).
@@ -197,6 +208,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Style:** very high volume (40+ posts a day hit the cap); many political and culture posts. **Signal-to-noise:** medium-low (market posts useful).
 - **Bias:** bearish and alarmist framing.
 - **Calls log:**
+  - 2026-10-15 (pm, 28 posts): Anthropic Q3 "a big miss" vs the July run-rate (near-zero Aug–Sep growth; compares a quarter with one month); junk bonds "one CoreWeave away" from distress; hedge funds dumped AI at the 2nd-fastest pace; Goldman midday: SPX holding the 50dma (7707), RTY outperforming; MOAB for Iran; Hormuz "closed"; Moody's ~$2,000/household war cost; DRAM demand; MBS. Outcome: n/a.
   - 2026-10-15 (midday, 27 posts from 10:03 ET): Nasdaq network disruption from Carteret (11:31 ET); "After Jensen saves the world, Nasdaq breaks"; Korea circuit breakers in KOSPI and KOSDAQ, semis -12%, foreigners -$3.6bn; Citadel strategist warns of a "more meaningful test"; Goldman on compute financing; IG hyperscaler issuance collapse; smartphone shipments -22%; Harvard endowment $68B; SPR drains halted. Outcome: n/a.
   - 2026-10-15 (am, 29 posts, cap back to 00:07 ET): PPI "red hot" 1.3% m/m / 6.3% y/y, core 0.7%/5.0%; final-demand goods +2.6% (record), 80%+ energy, gasoline +20.3%; retail sales 0.8% but control group 0.1% vs 0.3%; "Futures slide as AI unwind goes global, Kospi bear market, Treasuries soar"; premarket movers (AAPL only green mega-cap); CRWV CDS "points up"; UBS on Hormuz flows; US weighs heavy bombs on Iran. Outcome: n/a.
   - 2026-10-14 (late, 11 posts): Goldman EOD (first -1% SPX / -2% NDX since late July, AI sentiment step lower); IEA diesel squeeze into 2027; US mulls easing shadow-fleet sanctions (Reuters) and European release of some Russian assets (FT); KOSPI -5%; Houthi missiles with Chinese help; Anthropic. Outcome: n/a.
@@ -213,6 +225,8 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Type:** quantitative and sentiment analyst (SentimenTrader). **Focus:** breadth and seasonality signals.
 - **Style:** rule-based, posts rarely, candid about uncertainty. **Signal-to-noise:** high.
 - **Calls log:**
+  - 2026-10-15: concedes his Oct 9 TLT call (lower until bottom pickers puke, mid-November seasonal low around Nov 12, then a bounce) was wrong; Treasuries "popped". Outcome: wrong (10Y 5.089%, -10bp on 10/15).
+  - 2026-10-09: TLT seasonal weakness into ~Nov 12 before a rebound. Outcome: wrong so far (see above).
   - 2026-10-13 (pm): still bullish because his indicators are, but "a lot" of warning signs (breadth below -1 std); "head on a swivel". Outcome: open.
   - 2026-10-13: gold miners (HUI) could rally, but late October has historically been a poor time to hold them. Outcome: open (check early November).
   - 2026-10-10: "gut" worries about a downdraft, but weight-of-the-evidence indicators (SPY % above the 50dma crossing 30%, ETF above its 50-day) stay favourable. Outcome: open.
@@ -223,6 +237,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Focus:** semis/memory (MU, SNDK, SMH), META and AI capex, bonds vs tech.
 - **Style:** narrative, few price levels, openly undecided when unsure. **Signal-to-noise:** medium.
 - **Calls log:**
+  - 2026-10-15 (pm): bought $7,500 of beaten-down semis near 52-week lows for a decade-long hold (SMCI, TSM, AVGO, NBIS; SMCI favoured); says CRWV bonds, Anthropic and hot CPI/PPI don't justify SMH -11% in a week and high-beta growth -30–40%. Outcome: open.
   - 2026-10-15 (midday): Huang clips (CoreWeave fine, compute spend only going higher), credits Jensen for the semis recovery; relays Gerstner: Altimeter sold all CRWV, cut exposure over 3 months, moved 10% into META and TSLA. Outcome: n/a.
   - 2026-10-15: PPI "disgustingly bad" (uses 5.3% consensus); KOSPI below the July deleveraging lows, Samsung/SK Hynix -7%; asks if another fund is blowing up. Outcome: n/a.
   - 2026-10-14 (late): Anthropic Q3 $16.8B vs Q2 $11.5B (+46%); Nasdaq futures hammered after hours, semis sliding, Wall Street "not impressed". Outcome: n/a.
@@ -239,6 +254,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Focus:** event studies and forward-return tables (indexes, KOSPI, BTC, earnings-day patterns).
 - **Style:** one chart plus one table per post; specific and testable; small samples. **Signal-to-noise:** medium-high. **Bias:** leans on bull-market base rates.
 - **Calls log:**
+  - 2026-10-15 (pm): midterm seasonality: since 1950 the S&P rose in 18 of 19 midterm years from 5 trading days before Election Day to 2 after; window starts at the Oct 27 close (h/t GroupFinom). Outcome: check ~11/5.
   - 2026-10-15 (midday): SOXX down 8 straight days, longest since 2010 (record 9 in 2006); rebounded over the next 2 days in all 6 prior cases. Outcome: check by 10/19 (SOXX 505.58 at 13:01, low 495.79).
   - 2026-10-15: KOSPI -20%+ in 7 sessions, seen only in 1997, 2008, 2020, all followed by a rally over the next 2 weeks; could reignite the AI trade (SPY/QQQ). S&P's 19th -1% day of 2026 vs a 25/yr average; not dot-com. Outcome: check ~10/29.
   - 2026-10-14 (late): S&P first -1% day in 54 sessions; VRTX tactical pick (10/13) +2.7%; after a lower-BB close VRTX rallied 90% of the time over 3 weeks. Outcome: working (check ~11/3).
@@ -259,6 +275,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-10-
 - **Style:** clean sourced charts, high volume (~12 posts/day), viral framing. **Signal-to-noise:** medium-high for macro data.
 - **Reliability:** trade claims are self-reported after the fact (WTI long).
 - **Calls log:**
+  - 2026-10-15 (pm): semis lost more than $2T since Oct 6, -17% at today's low, a red close makes SOXX's 8th straight loss; inflation table (CPI 3.7%, PPI 6.3%, core PPI 5.0%, PCE 3.4%, Brent $106); BofA FMS 37% overweight tech (most since Aug 2020); active home sellers 1.51M. Outcome: SOXX closed red (-0.91%).
   - 2026-10-15 (midday): 10Y at its lowest since Sept 23 (~5.06%) as tech sells; TLT long from 10/2 (10Y at 5.30%) with an $80+ target "nearing"; NDX, SOX and S&P software all -2%+ on 10/14, second such day in 2026. Outcome: TLT call working (self-reported).
   - 2026-10-15: KOSPI -7% then Level 1 circuit breaker at -8%, -40% from the June 19 high; PPI 6.3% vs 5.3%, core 5.0% vs 4.4%, "second highest since Nov 2022", hike odds rising (wrote "August" for the September print); Musk mulls an Amazon rival. Outcome: n/a.
   - 2026-10-14 (late): Anthropic Q3 $16.8B ("nearly +50%"; actual ~46%), $2T+ IPO as soon as next month; SPY's Friday volume 22.6M, lowest since Nov 2005 (repeats a Bluekurtic 10/12 stat). Outcome: n/a.
