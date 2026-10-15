@@ -49,6 +49,7 @@ SESSIONS = {
 }
 SKIP_SLOTS = [(9, 0), (13, 15), (13, 45), (15, 0), (15, 15), (16, 0), (16, 45)]
 WINDOW = timedelta(minutes=12)
+SKIP_WINDOW = timedelta(minutes=2)   # unused cron fires arrive within seconds; a manual run near them still runs
 
 CONTEXT = [  # symbol, label, group, kind ("yield" values are in %, changes in basis points)
     ("ES=F",     "S&P 500 futures",        "Futures",    "price"),
@@ -506,7 +507,7 @@ def pick_session(now, force=False):
     at = lambda hm: now.replace(hour=hm[0], minute=hm[1], second=0, microsecond=0)
     if now.weekday() >= 5:
         return "now"
-    if not force and any(abs(now - at(hm)) <= WINDOW for hm in SKIP_SLOTS):
+    if not force and any(abs(now - at(hm)) <= SKIP_WINDOW for hm in SKIP_SLOTS):
         return None
     return next((k for k, (hm, _) in SESSIONS.items() if hm and abs(now - at(hm)) <= WINDOW), "now")
 
