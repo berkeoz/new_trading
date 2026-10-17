@@ -1084,6 +1084,7 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval=
         "read": read_recent(df, pats, piv),
         "templates": trend_templates(df) if daily else None,
         "warm": warm["Close"].round(2).tolist(),   # closes before the window, for MA warm-up
+        "warm_high": warm["High"].round(2).tolist(), "warm_low": warm["Low"].round(2).tolist(),   # for WaveTrend (hlc3)
         "ohlc": {
             "x": [ts(d) for d in df.index],
             "volume": df["Volume"].astype(float).round(0).tolist(),
@@ -1115,7 +1116,7 @@ h1{font-size:20px;margin:4px 0 2px} h2{font-size:17px;margin:0}
 section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin:16px 0}
 .head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .x{cursor:pointer;color:var(--mute);background:none;border:0;font-size:18px}
-.chart{height:580px}
+.chart{height:760px}
 .filters{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 2px;font-size:13px}
 .filters label{cursor:pointer;user-select:none;color:var(--mute)} .filters input{vertical-align:-2px}
 .filters select{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:4px;font:inherit}
@@ -1186,12 +1187,15 @@ const root = document.getElementById('root');
 let seq = 0;
 
 // ── Moving averages (computed in the browser so they are configurable) ──
-const MA_DEFAULT = 'EMA9, EMA21, SMA50, SMA200, WMA20, HMA55, AVWAP swing, RSI14, MACD12/26/9';
+const MA_DEFAULT = 'EMA9, EMA21, SMA50, SMA200, WMA20, HMA55, AVWAP swing, RSI14, MACD12/26/9, WT10/21';
 const MA_COLORS = ['#ffd54f','#4fc3f7','#ba68c8','#ff8a65','#e0e0e0','#81c784'];
 let maCfg = MA_DEFAULT;
 try { maCfg = localStorage.getItem('maCfg') || MA_DEFAULT; } catch (e) {}
 if (['EMA9,EMA21,SMA50,SMA200', 'EMA9,EMA21,SMA50,SMA200,RSI14,MACD12/26/9'].includes(maCfg.replace(/\s/g, '')))
   maCfg = MA_DEFAULT;   // upgrade old saved defaults
+try {   // WaveTrend was added later: switch it on once for configs saved before it existed
+  if (!localStorage.getItem('wtAdded')) { if (!/\bWT/i.test(maCfg)) { maCfg += ', WT10/21'; localStorage.setItem('maCfg', maCfg); } localStorage.setItem('wtAdded', '1'); }
+} catch (e) {}
 // Dated AVWAPs ("AVWAP 2026-07-29") belong to one ticker: they are kept per symbol, the rest of the box is shared.
 const AV_RE = /\s*,?\s*AVWAP\s*\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2})?/gi;
 const stripAnchors = t => t.replace(AV_RE, '').replace(/^\s*,\s*/, '');
@@ -1223,8 +1227,10 @@ function macd(c, f, sl, sg) {
 }
 function parseOsc(txt) {
   const r = txt.match(/RSI\s*(\d+)/i), m = txt.match(/MACD\s*(\d+)\s*\/\s*(\d+)\s*\/\s*(\d+)/i);
+  const w = txt.match(/\bWT\s*(\d+)?\s*(?:\/\s*(\d+))?/i);
   return {rsi: r ? Math.min(Math.max(+r[1], 2), 100) : null,
-          macd: m && +m[1] < +m[2] ? [+m[1], +m[2], +m[3]] : null};
+          macd: m && +m[1] < +m[2] ? [+m[1], +m[2], +m[3]] : null,
+          wt: w ? [Math.max(+(w[1] || 10), 2), Math.max(+(w[2] || 21), 2)] : null};
 }
 function sma(c, n) {
   const out = Array(c.length).fill(null); let sum = 0;
@@ -1237,6 +1243,27 @@ function ema(c, n) {
   let v = c.slice(0, n).reduce((a, b) => a + b, 0) / n; out[n-1] = v;
   for (let i = n; i < c.length; i++) { v = c[i] * k + v * (1 - k); out[i] = v; }
   return out;
+}
+// EMA of a series that may start with nulls (seeded with the average of its first n values)
+function emaN(a, n) {
+  const out = Array(a.length).fill(null), k = 2 / (n + 1), s0 = a.findIndex(v => v != null);
+  if (s0 < 0 || a.length - s0 < n) return out;
+  let v = 0;
+  for (let i = s0; i < s0 + n; i++) v += a[i];
+  v /= n; out[s0 + n - 1] = v;
+  for (let i = s0 + n; i < a.length; i++) { if (a[i] != null) v = a[i] * k + v * (1 - k); out[i] = v; }
+  return out;
+}
+// WaveTrend oscillator (LazyBear's WT_CROSS_LB): ap = hlc3, esa = EMA(ap, n1), d = EMA(|ap - esa|, n1),
+// ci = (ap - esa) / (0.015 d), WT1 = EMA(ci, n2), WT2 = SMA(WT1, 4). Overbought 60 / 53, oversold -60 / -53.
+function wavetrend(h, l, c, n1, n2) {
+  const ap = c.map((x, i) => (h[i] + l[i] + x) / 3);
+  const esa = emaN(ap, n1);
+  const dev = emaN(ap.map((x, i) => esa[i] == null ? null : Math.abs(x - esa[i])), n1);
+  const ci = ap.map((x, i) => esa[i] == null || !dev[i] ? null : (x - esa[i]) / (0.015 * dev[i]));
+  const wt1 = emaN(ci, n2);
+  const wt2 = wt1.map((_, i) => i < 3 || wt1[i - 3] == null ? null : (wt1[i] + wt1[i - 1] + wt1[i - 2] + wt1[i - 3]) / 4);
+  return {wt1, wt2};
 }
 function wma(c, n) {   // linearly weighted: newest bar weight n, oldest weight 1
   const out = Array(c.length).fill(null), den = n * (n + 1) / 2;
@@ -1552,7 +1579,7 @@ function render(r, prepend, replace) {
     <div class="filters">${CATS.map(([k,t]) => `<label><input type="checkbox" data-cat="${k}" checked> ${t} </label>`).join('')}
       <label><input type="checkbox" data-opt="levels" checked> S/R levels</label>
       <label>Show <select data-opt="show"><option value="recent">open + last 6 months</option><option value="open">open / active only</option><option value="all">all</option></select></label></div>
-    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated. Up to 6 of EMA9 / SMA50 (scored) / WMA20 / HMA55 (shown, not scored), plus VWAP (session, intraday), AVWAP swing (from the last swing low and high), AVWAP 2025-04-07 (anchored, saved for this ticker only; or Shift+click the chart), RSI14, MACD12/26/9">
+    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated. Up to 6 of EMA9 / SMA50 (scored) / WMA20 / HMA55 (shown, not scored), plus VWAP (session, intraday), AVWAP swing (from the last swing low and high), AVWAP 2025-04-07 (anchored, saved for this ticker only; or Shift+click the chart), RSI14, MACD12/26/9, WT10/21 (WaveTrend, LazyBear WT_CROSS_LB: panel under the chart)">
       <label><input type="checkbox" class="ma-show" checked> lines</label>
       <label><input type="checkbox" class="ma-strip" checked> trend strip</label>
       <label><input type="checkbox" class="ma-vol" checked> volume</label>
@@ -1681,6 +1708,19 @@ function render(r, prepend, replace) {
         if (x0 >= 0 && x1 < 0) osc.macd.ev.push({i, up: false});
       }
     }
+    if (cfg.wt) {
+      const ok = (r.warm_high || []).length == W.length && (r.warm_low || []).length == W.length, off = ok ? W.length : 0;
+      const w = wavetrend((ok ? r.warm_high : []).concat(r.ohlc.high), (ok ? r.warm_low : []).concat(r.ohlc.low),
+                          (ok ? W : []).concat(C), ...cfg.wt);
+      osc.wt = {wt1: w.wt1.slice(off), wt2: w.wt2.slice(off), ev: []};
+      const {wt1, wt2} = osc.wt;
+      for (let i = 1; i < C.length; i++) {
+        if ([wt1[i-1], wt2[i-1], wt1[i], wt2[i]].includes(null)) continue;
+        const x0 = wt1[i-1] - wt2[i-1], x1 = wt1[i] - wt2[i];
+        if (x0 <= 0 && x1 > 0) osc.wt.ev.push({i, up: true});
+        if (x0 >= 0 && x1 < 0) osc.wt.ev.push({i, up: false});
+      }
+    }
   }
 
   function oscHtml(i) {
@@ -1715,6 +1755,21 @@ function render(r, prepend, replace) {
           `${line[i] > sig[i] ? b('bullish', 'above signal') : b('bearish', 'below signal')} · ` +
           `${line[i] > 0 ? b('bullish', 'above zero') : b('bearish', 'below zero')} · ${mom}` +
           (e ? `<br>&nbsp;&nbsp;last MACD ${e.up ? b('bullish', 'bullish cross') : b('bearish', 'bearish cross')} ${D[e.i]} (${i - e.i} ${unit} before)` : ''));
+      }
+    }
+    if (osc.wt) {
+      const {wt1, wt2, ev} = osc.wt, [n1, n2] = osc.cfg.wt;
+      if (wt1[i] == null || wt2[i] == null) out.push(`WaveTrend ${n1}/${n2}: not enough history`);
+      else {
+        const v = wt1[i], e = ev.filter(x => x.i <= i).pop();
+        const zone = v >= 60 ? b('bearish', 'overbought (above 60)') : v >= 53 ? b('neutral', 'near overbought (53 to 60)')
+                   : v <= -60 ? b('bullish', 'oversold (below −60)') : v <= -53 ? b('neutral', 'near oversold (−53 to −60)')
+                   : v > 0 ? 'above 0' : 'below 0';
+        const where = !e ? '' : wt2[e.i] >= 53 ? ' in the overbought zone (stronger sell signal)'
+                    : wt2[e.i] <= -53 ? ' in the oversold zone (stronger buy signal)' : ' near the middle (weaker signal)';
+        out.push(`WaveTrend ${n1}/${n2} WT1 <b>${v.toFixed(1)}</b> vs WT2 ${wt2[i].toFixed(1)} · ` +
+          `${v > wt2[i] ? b('bullish', 'WT1 above WT2') : b('bearish', 'WT1 below WT2')} · ${zone}` +
+          (e ? `<br>&nbsp;&nbsp;last WT ${e.up ? b('bullish', 'bullish cross') : b('bearish', 'bearish cross')} ${D[e.i]}${where} (${i - e.i} ${unit} before)` : ''));
       }
     }
     return out.join('<br>');
@@ -1755,7 +1810,7 @@ function render(r, prepend, replace) {
         ${r.patterns.filter(p => (p.cat == 'volume' || p.cat == 'candle') && p.events.some(e => e.date == D[i]))
            .map(p => `<div class="sub"><b class="${p.bias}">${p.type}</b> · ${p.status}</div>`).join('')}</div>
       <div><table><tr><th>MA</th><th>Value</th><th>Price vs MA</th><th>Slope (5 bars)</th></tr>${rows ||
-        '<tr><td colspan="4" class="sub">Enter moving averages, e.g. EMA9, EMA21, SMA50, SMA200, RSI14, MACD12/26/9</td></tr>'}</table>
+        '<tr><td colspan="4" class="sub">Enter moving averages, e.g. EMA9, EMA21, SMA50, SMA200, RSI14, MACD12/26/9, WT10/21</td></tr>'}</table>
         <div class="crosses">${cr}</div>
         <div class="crosses">${oscHtml(i)}</div></div>`;
   }
@@ -1796,6 +1851,25 @@ function render(r, prepend, replace) {
       marker:{color:score.map(stripColor)}, hovertext:score.map((sc, i) => verdict(sc, score[i - SLOPE_BARS])[0]),
       hoverinfo:'text+x', showlegend:false});
     const shapes = [], ann = [];
+    const wtOn = !!osc.wt, base = wtOn ? 0.21 : 0;
+    if (wtOn) {
+      const {wt1, wt2, ev} = osc.wt;
+      traces.push({type:'scatter', mode:'lines', x:D, y:wt1.map((v, i) => v == null || wt2[i] == null ? null : v - wt2[i]), yaxis:'y4',
+        fill:'tozeroy', line:{color:'rgba(66,165,245,0.5)', width:0}, fillcolor:'rgba(66,165,245,0.25)',
+        hovertemplate:'WT1 − WT2 %{y:.1f}<extra></extra>', showlegend:false});
+      traces.push({type:'scatter', mode:'lines', x:D, y:wt1, yaxis:'y4', line:{color:'#26a69a', width:1.4},
+        hovertemplate:'WT1 %{y:.1f}<extra></extra>', showlegend:false});
+      traces.push({type:'scatter', mode:'lines', x:D, y:wt2, yaxis:'y4', line:{color:'#ef5350', width:1.2, dash:'dot'},
+        hovertemplate:'WT2 %{y:.1f}<extra></extra>', showlegend:false});
+      traces.push({type:'scatter', mode:'markers', x:ev.map(e => D[e.i]), y:ev.map(e => wt2[e.i]), yaxis:'y4',
+        marker:{size:8, color:ev.map(e => e.up ? '#00e676' : '#ff5252'), line:{color:'#000', width:1.5}},
+        customdata:ev.map(e => e.up ? 'bullish cross' : 'bearish cross'),
+        hovertemplate:'WaveTrend %{customdata}<br>%{x}<extra></extra>', showlegend:false});
+      [[60, '#ef5350', 'solid'], [53, '#ef5350', 'dot'], [0, '#8a93a5', 'dot'], [-53, '#26a69a', 'dot'], [-60, '#26a69a', 'solid']]
+        .forEach(([y, c, dash]) => shapes.push({type:'line', xref:'paper', yref:'y4', x0:0, x1:1, y0:y, y1:y, line:{color:c, width:1, dash}}));
+    }
+    const wtVals = wtOn ? osc.wt.wt1.concat(osc.wt.wt2).filter(v => v != null) : [];
+    const wtRange = wtOn ? [Math.min(-70, ...wtVals) - 5, Math.max(70, ...wtVals) + 5] : undefined;
     pats.forEach(p => {
       if (!p.box && p.events && p.events.length) {   // volume climaxes / candle patterns: labelled markers
         const c = COL[p.bias], bull = p.bias == 'bullish';
@@ -1845,9 +1919,10 @@ function render(r, prepend, replace) {
           {count:3,label:'3M',step:'month',stepmode:'backward'},{count:6,label:'6M',step:'month',stepmode:'backward'},
           {count:1,label:'1Y',step:'year',stepmode:'backward'},{count:2,label:'2Y',step:'year',stepmode:'backward'},
           {step:'all',label:'All'}])}},
-      yaxis:{gridcolor:'#2a2f3a', autorange:true, domain: [(strip ? 0.07 : 0) + (volOn ? 0.17 : 0) + (strip || volOn ? 0.02 : 0), 1]},
-      yaxis2:{domain:[0, 0.05], visible:false, fixedrange:true, range:[0, 1]},
-      yaxis3:{domain: strip ? [0.07, 0.24] : [0, 0.17], gridcolor:'#2a2f3a', showticklabels:false, fixedrange:true, rangemode:'tozero'}, bargap:0
+      yaxis:{gridcolor:'#2a2f3a', autorange:true, domain: [base + (strip ? 0.07 : 0) + (volOn ? 0.17 : 0) + (strip || volOn ? 0.02 : 0), 1]},
+      yaxis2:{domain:[base, base + 0.05], visible:false, fixedrange:true, range:[0, 1]},
+      yaxis3:{domain: strip ? [base + 0.07, base + 0.24] : [base, base + 0.17], gridcolor:'#2a2f3a', showticklabels:false, fixedrange:true, rangemode:'tozero'},
+      yaxis4:{domain:[0, 0.18], visible:wtOn, gridcolor:'#2a2f3a', zeroline:false, fixedrange:true, range:wtRange, tickvals:[-60, 0, 60]}, bargap:0
     }, {responsive:true, displaylogo:false});
     if (!div._maEvents) {
       // map the mouse x-position to the nearest trading day (works anywhere on the chart)
