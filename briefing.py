@@ -571,6 +571,12 @@ def main():
         print(MAC.summary(md, mst))
     except Exception as e:
         print(f"\nMACRO: ERROR {e}")
+    try:   # 6-12 month outlook portfolio (thesis/): trades on current prices, says when the weekly review is due
+        import thesis
+        print()
+        print(thesis.run(now, session))
+    except Exception as e:
+        print(f"\nTHESIS PORTFOLIO: ERROR {e}")
 
 
 if __name__ == "__main__":

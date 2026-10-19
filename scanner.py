@@ -742,7 +742,15 @@ def _build_breakdown(results):
     s3 = _section("🚀", "High Momentum / Max Return",   "Beta &gt;1.5 or Rev growth &gt;40%",            m_html, "#f43f5e", [("Days","#60a5fa"),("Weeks","#a78bfa")])
     s4 = _section("👁", "Watchlist — One Signal Away",  "WATCH · analyst buy · &gt;20% upside",          w_html, "#a78bfa", [("Weeks","#a78bfa"),("Months","#f59e0b")])
 
-    return s1 + s2 + s3 + s4 + _build_value_lists(results, _section)
+    return _thesis_section() + s1 + s2 + s3 + s4 + _build_value_lists(results, _section)
+
+
+def _thesis_section():
+    """6-12 month outlook portfolio (thesis.py): the page loads thesis/state.json live from GitHub."""
+    try:
+        return open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis_section.html"), encoding="utf-8").read()
+    except OSError:
+        return ""
 
 
 # ── HTML ───────────────────────────────────────────────────────────────────────

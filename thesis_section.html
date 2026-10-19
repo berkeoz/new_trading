@@ -1,0 +1,111 @@
+<div class="bd-section" id="thesis-root">
+  <div class="bd-sec-hdr" style="border-bottom-color:#f59e0b">
+    <div class="bd-icon" style="background:#f59e0b22">🧭</div>
+    <div><div class="bd-sec-title">6–12 Month Outlook Portfolio</div><div class="bd-chips"><span class="bd-chip" style="background:#f59e0b18;color:#f59e0b;border:1px solid #f59e0b33">Months</span><span class="bd-chip" style="background:#10b98118;color:#10b981;border:1px solid #10b98133">Year</span></div></div>
+    <div class="bd-sec-sub">Paper $100,000 · themes from the weekly outlook in the market brief · bought only at the planned entry · updated at every brief</div>
+  </div>
+  <div id="th-body" style="font-size:13px;color:var(--muted)">Loading…</div>
+</div>
+<style>
+#thesis-root .th-kpis{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+#thesis-root .th-kpi{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 12px;min-width:110px}
+#thesis-root .th-kpi b{display:block;font-size:17px;color:var(--text)}
+#thesis-root .th-kpi span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+#thesis-root table{border-collapse:collapse;width:100%;font-size:12.5px;margin:6px 0 14px}
+#thesis-root th,#thesis-root td{border-bottom:1px solid var(--border);padding:5px 8px;text-align:left;vertical-align:top}
+#thesis-root th{color:var(--muted);font-weight:500}
+#thesis-root h4{margin:16px 0 4px;font-size:14px;color:var(--text)}
+#thesis-root .th-out{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:8px 0;color:var(--text)}
+#thesis-root .th-theme{display:inline-block;margin:3px 6px 3px 0;padding:3px 8px;border-radius:12px;background:var(--bg3);border:1px solid var(--border);font-size:12px;color:var(--text)}
+#thesis-root .pos{color:var(--green)} #thesis-root .neg{color:var(--red)}
+#thesis-root details summary{cursor:pointer;color:var(--accent);margin:6px 0}
+#thesis-root .th-md h1{font-size:16px} #thesis-root .th-md h2{font-size:14px;margin:12px 0 4px}
+#thesis-root .wrapx{overflow-x:auto}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<script>
+(function () {
+  const RAW = 'https://raw.githubusercontent.com/berkeoz/new_trading/master/thesis/';
+  const get = (f, kind) => fetch(RAW + f + '?t=' + Date.now()).then(r => r.ok ? r : Promise.reject())
+    .catch(() => fetch('thesis/' + f)).then(r => r.ok ? r[kind]() : null).catch(() => null);
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  const money = x => (x < 0 ? '−$' : '$') + Math.abs(x).toLocaleString('en-US', {maximumFractionDigits: 0});
+  const pct = (x, d = 1) => x == null || !isFinite(x) ? '—' : `<span class="${x >= 0 ? 'pos' : 'neg'}">${x >= 0 ? '+' : ''}${x.toFixed(d)}%</span>`;
+  const START = 100000;
+  function curve(eq) {
+    if (!eq || eq.length < 2) return '<div style="color:var(--muted);font-size:12px">The equity curve starts after the first trading day.</div>';
+    const W = 640, H = 150, P = 28, s0 = eq[0].spy;
+    const a = eq.map(p => p.equity), b = eq.map(p => START * p.spy / s0);
+    const lo = Math.min(...a, ...b), hi = Math.max(...a, ...b), span = hi - lo || 1;
+    const X = i => P + i * (W - 2 * P) / (eq.length - 1), Y = v => H - P / 2 - (v - lo) / span * (H - P);
+    const path = v => v.map((y, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(y).toFixed(1)}`).join('');
+    return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:${W}px;height:auto">
+      <line x1="${P}" x2="${W - P}" y1="${Y(START)}" y2="${Y(START)}" stroke="var(--border)" stroke-dasharray="3 3"/>
+      <path d="${path(b)}" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <path d="${path(a)}" fill="none" stroke="#f59e0b" stroke-width="2"/>
+      <text x="${P}" y="12" fill="#f59e0b" font-size="11">Portfolio</text><text x="${P + 70}" y="12" fill="var(--muted)" font-size="11">SPY (same $100k)</text>
+      <text x="${P}" y="${H - 2}" fill="var(--muted)" font-size="10">${eq[0].date}</text>
+      <text x="${W - P}" y="${H - 2}" fill="var(--muted)" font-size="10" text-anchor="end">${eq[eq.length - 1].date}</text></svg>`;
+  }
+  get('state.json', 'json').then(async st => {
+    const body = document.getElementById('th-body');
+    if (!st || !st.outlook) {
+      body.innerHTML = 'The first 6–12 month outlook is written by the next market brief run; candidates and positions appear here after it.';
+      return;
+    }
+    const o = st.outlook, pos = Object.entries(st.positions || {}), watch = Object.entries(st.watch || {});
+    const eq = st.equity || [], last = eq[eq.length - 1];
+    const equity = last ? last.equity : st.cash;
+    const spyRet = eq.length && st.spy_last ? (st.spy_last / eq[0].spy - 1) * 100 : null;
+    const invested = pos.reduce((s, [, p]) => s + p.shares * (p.last ?? p.entry_price), 0);
+    let h = `<div class="th-out"><b>${esc(o.regime || '')}</b> <span style="color:var(--muted)">· outlook ${esc(o.id)} · horizon ${esc(o.horizon || '6–12 months')}</span>
+      <div style="margin-top:4px">${esc(o.summary || '')}</div>
+      ${(o.drivers || []).length ? `<div style="margin-top:6px;color:var(--muted)">Drivers: ${o.drivers.map(esc).join(' · ')}</div>` : ''}
+      ${(o.risks || []).length ? `<div style="margin-top:4px;color:var(--muted)">Risks: ${o.risks.map(esc).join(' · ')}</div>` : ''}
+      <div style="margin-top:6px">${(o.themes || []).map(t => `<span class="th-theme" title="${esc(t.why)}"><b>${esc(t.name)}</b> ${esc((t.symbols || []).join(', '))}</span>`).join('')}</div>
+      ${o.narrative_file ? `<details><summary>Read the full outlook</summary><div class="th-md" id="th-md">Loading…</div></details>` : ''}</div>`;
+    h += `<div class="th-kpis">
+      <div class="th-kpi"><span>Equity</span><b>${money(equity)}</b></div>
+      <div class="th-kpi"><span>Return</span><b>${pct((equity / START - 1) * 100, 2)}</b></div>
+      <div class="th-kpi"><span>SPY same period</span><b>${pct(spyRet, 2)}</b></div>
+      <div class="th-kpi"><span>Cash</span><b>${money(st.cash)}</b></div>
+      <div class="th-kpi"><span>Invested</span><b>${money(invested)}</b></div>
+      <div class="th-kpi"><span>Positions / watching</span><b>${pos.length} / ${watch.length}</b></div></div>`;
+    h += curve(eq);
+    h += `<h4>Positions</h4>` + (pos.length ? `<div class="wrapx"><table><tr><th>Symbol</th><th>Theme</th><th>Bought</th><th>Last</th><th>P&amp;L</th><th>vs SPY</th><th>Weight</th><th>Stop / target</th><th>Thesis</th></tr>` +
+      pos.map(([s, p]) => {
+        const lp = p.last ?? p.entry_price, r = (lp / p.entry_price - 1) * 100;
+        const vs = p.spy_entry && st.spy_last ? r - (st.spy_last / p.spy_entry - 1) * 100 : null;
+        return `<tr><td><b>${esc(s)}</b><div style="color:var(--muted)">conviction ${p.conviction}</div></td><td>${esc(p.theme)}</td>
+          <td>${p.shares} @ ${p.entry_price.toFixed(2)}<div style="color:var(--muted)">${esc(p.entry_date)}</div></td><td>${lp.toFixed(2)}</td>
+          <td>${pct(r)}<div style="color:var(--muted)">${money(p.shares * (lp - p.entry_price))}</div></td><td>${pct(vs)}</td>
+          <td>${(p.shares * lp / equity * 100).toFixed(1)}%</td><td>${p.stop} / ${p.target}<div style="color:var(--muted)">${pct((p.stop / lp - 1) * 100)} / ${pct((p.target / lp - 1) * 100)}</div></td>
+          <td style="max-width:360px">${esc(p.thesis)}${p.invalidation ? `<div style="color:var(--muted)">Wrong if: ${esc(p.invalidation)}</div>` : ''}</td></tr>`;
+      }).join('') + `</table></div>` : `<div>No positions yet: candidates are bought only when they reach their entry.</div>`);
+    h += `<h4>Watch list (waiting for the entry)</h4>` + (watch.length ? `<div class="wrapx"><table><tr><th>Symbol</th><th>Theme</th><th>Last</th><th>Entry</th><th>Distance</th><th>Stop / target</th><th>Thesis</th></tr>` +
+      watch.sort((a, b) => b[1].conviction - a[1].conviction).map(([s, c]) => {
+        const e = c.entry, lp = c.last;
+        const dist = e.type == 'now' || lp == null ? null : lp > e.high ? (e.high / lp - 1) * 100 : lp < e.low ? (e.low / lp - 1) * 100 : 0;
+        return `<tr><td><b>${esc(s)}</b><div style="color:var(--muted)">conviction ${c.conviction} · since ${esc(c.added)}</div></td><td>${esc(c.theme)}</td>
+          <td>${lp != null ? lp.toFixed(2) : '—'}</td><td>${e.type == 'now' ? 'buy at next run' : `zone ${e.low}–${e.high}`}</td>
+          <td>${dist == null ? '—' : dist == 0 ? '<b class="pos">in zone</b>' : pct(dist)}</td><td>${c.stop} / ${c.target}</td>
+          <td style="max-width:380px">${esc(c.thesis)}${c.catalysts ? `<div style="color:var(--muted)">Catalysts: ${esc(Array.isArray(c.catalysts) ? c.catalysts.join('; ') : c.catalysts)}</div>` : ''}</td></tr>`;
+      }).join('') + `</table></div>` : `<div>Nothing waiting.</div>`);
+    const closed = (st.closed || []).slice().reverse();
+    if (closed.length) h += `<h4>Closed</h4><div class="wrapx"><table><tr><th>Symbol</th><th>Bought</th><th>Sold</th><th>Result</th><th>Why</th></tr>` +
+      closed.map(c => `<tr><td><b>${esc(c.symbol)}</b><div style="color:var(--muted)">${esc(c.theme)}</div></td><td>${c.entry_price.toFixed(2)}<div style="color:var(--muted)">${esc(c.entry_date)}</div></td>
+        <td>${c.exit_price.toFixed(2)}<div style="color:var(--muted)">${esc(c.exit_date)}</div></td><td>${pct(c.ret_pct)} ${money(c.pnl)}</td><td>${esc(c.reason)}</td></tr>`).join('') + `</table></div>`;
+    const ev = (st.events || []).slice(-12).reverse();
+    if (ev.length) h += `<details><summary>Recent activity</summary><div class="wrapx"><table>${ev.map(e => `<tr><td style="white-space:nowrap">${esc(e.time)}</td><td>${esc(e.kind)}</td><td><b>${esc(e.symbol)}</b></td><td>${esc(e.text)}</td></tr>`).join('')}</table></div></details>`;
+    h += `<p class="bd-note">Rules: a candidate is bought only when its price is inside the buy zone set in the weekly outlook (5 / 8 / 12% of equity for conviction 1 / 2 / 3); it is sold at its stop, at its target, or when the weekly review drops the thesis. Trades happen at the brief runs during market hours at the last price seen (Yahoo, can lag ~15 min), with no commissions. Updated ${esc((st.updated || '').replace('T', ' ').slice(0, 16))} ET. A model portfolio for tracking the outlook, not investment advice.</p>`;
+    body.style.color = 'var(--text)';
+    body.innerHTML = h;
+    if (o.narrative_file) {
+      const md = await get(o.narrative_file, 'text');
+      const el = document.getElementById('th-md');
+      if (el) el.innerHTML = md && window.marked ? DOMPurify.sanitize(marked.parse(md)) : 'Not found.';
+    }
+  });
+})();
+</script>
