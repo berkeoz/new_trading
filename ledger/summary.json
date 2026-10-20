@@ -1,17 +1,23 @@
 {
  "first_date": "2026-10-10",
- "asof": "2026-10-16",
+ "asof": "2026-10-19",
  "lists": {
   "rebound": {
    "name": "High-Beta Rebound Candidates",
    "picks": 24,
    "days": 3,
    "stats": {
+    "1 week": {
+     "n": 8,
+     "hit_rate": 0,
+     "avg_excess": -8.46,
+     "median_excess": -9.73
+    },
     "to_date": {
      "n": 24,
-     "hit_rate": 12,
-     "avg_excess": -3.34,
-     "median_excess": -2.44
+     "hit_rate": 4,
+     "avg_excess": -5.61,
+     "median_excess": -5.73
     }
    }
   },
@@ -20,11 +26,17 @@
    "picks": 24,
    "days": 3,
    "stats": {
+    "1 week": {
+     "n": 8,
+     "hit_rate": 0,
+     "avg_excess": -8.6,
+     "median_excess": -9.98
+    },
     "to_date": {
      "n": 24,
-     "hit_rate": 8,
-     "avg_excess": -3.03,
-     "median_excess": -2.48
+     "hit_rate": 4,
+     "avg_excess": -5.67,
+     "median_excess": -5.65
     }
    }
   },
@@ -36,8 +48,8 @@
     "to_date": {
      "n": 20,
      "hit_rate": 0,
-     "avg_excess": -2.33,
-     "median_excess": -0.14
+     "avg_excess": -5.0,
+     "median_excess": -2.88
     }
    }
   }
@@ -53,7 +65,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -66,7 +78,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -79,7 +91,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -92,7 +104,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -105,7 +117,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -118,7 +130,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -131,7 +143,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -144,7 +156,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -157,7 +169,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -170,7 +182,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -183,7 +195,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -196,7 +208,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -209,7 +221,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -222,7 +234,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -235,7 +247,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -248,7 +260,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -261,7 +273,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -274,7 +286,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -287,7 +299,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -300,7 +312,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -313,7 +325,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -326,7 +338,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -339,7 +351,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -352,7 +364,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -365,7 +377,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -378,7 +390,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -389,9 +401,9 @@
    "score": 130,
    "close": 200.84,
    "to_date": {
-    "ret": -9.99,
-    "excess": -9.19,
-    "days": 3
+    "ret": -14.43,
+    "excess": -12.53,
+    "days": 4
    }
   },
   {
@@ -402,9 +414,9 @@
    "score": 183,
    "close": 262.28,
    "to_date": {
-    "ret": -10.31,
-    "excess": -9.51,
-    "days": 3
+    "ret": -16.0,
+    "excess": -14.1,
+    "days": 4
    }
   },
   {
@@ -415,9 +427,9 @@
    "score": 214,
    "close": 15.02,
    "to_date": {
-    "ret": -6.32,
-    "excess": -5.52,
-    "days": 3
+    "ret": -12.64,
+    "excess": -10.74,
+    "days": 4
    }
   },
   {
@@ -428,9 +440,9 @@
    "score": 251,
    "close": 36.27,
    "to_date": {
-    "ret": -1.09,
-    "excess": -0.29,
-    "days": 3
+    "ret": -9.93,
+    "excess": -8.04,
+    "days": 4
    }
   },
   {
@@ -441,9 +453,9 @@
    "score": 286,
    "close": 162.23,
    "to_date": {
-    "ret": -6.97,
-    "excess": -6.17,
-    "days": 3
+    "ret": -13.1,
+    "excess": -11.2,
+    "days": 4
    }
   },
   {
@@ -454,9 +466,9 @@
    "score": 293,
    "close": 12.86,
    "to_date": {
-    "ret": -5.01,
-    "excess": -4.21,
-    "days": 3
+    "ret": -11.49,
+    "excess": -9.6,
+    "days": 4
    }
   },
   {
@@ -467,9 +479,9 @@
    "score": 383,
    "close": 13.25,
    "to_date": {
-    "ret": -1.17,
-    "excess": -0.37,
-    "days": 3
+    "ret": -7.67,
+    "excess": -5.77,
+    "days": 4
    }
   },
   {
@@ -480,9 +492,9 @@
    "score": 401,
    "close": 989.04,
    "to_date": {
-    "ret": -2.29,
-    "excess": -1.49,
-    "days": 3
+    "ret": -7.79,
+    "excess": -5.89,
+    "days": 4
    }
   },
   {
@@ -493,9 +505,9 @@
    "score": 410,
    "close": 1487.33,
    "to_date": {
-    "ret": -5.9,
-    "excess": -5.1,
-    "days": 3
+    "ret": -12.35,
+    "excess": -10.45,
+    "days": 4
    }
   },
   {
@@ -506,9 +518,9 @@
    "score": 1066,
    "close": 51.46,
    "to_date": {
-    "ret": -5.53,
-    "excess": -4.74,
-    "days": 3
+    "ret": -13.61,
+    "excess": -11.71,
+    "days": 4
    }
   },
   {
@@ -519,9 +531,9 @@
    "score": 62,
    "close": 497.53,
    "to_date": {
-    "ret": -7.37,
-    "excess": -6.57,
-    "days": 3
+    "ret": -11.84,
+    "excess": -9.94,
+    "days": 4
    }
   },
   {
@@ -532,9 +544,9 @@
    "score": 62,
    "close": 265.86,
    "to_date": {
-    "ret": -10.23,
-    "excess": -9.43,
-    "days": 3
+    "ret": -15.22,
+    "excess": -13.32,
+    "days": 4
    }
   },
   {
@@ -545,9 +557,9 @@
    "score": 65,
    "close": 386.94,
    "to_date": {
-    "ret": -6.37,
-    "excess": -5.57,
-    "days": 3
+    "ret": -12.79,
+    "excess": -10.9,
+    "days": 4
    }
   },
   {
@@ -558,9 +570,9 @@
    "score": 67,
    "close": 200.84,
    "to_date": {
-    "ret": -9.99,
-    "excess": -9.19,
-    "days": 3
+    "ret": -14.43,
+    "excess": -12.53,
+    "days": 4
    }
   }
  ]
