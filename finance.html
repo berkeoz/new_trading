@@ -1,0 +1,320 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Finances</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--fg:#e6e6e6;--mute:#8a93a5;--bull:#26a69a;--bear:#ef5350;--neu:#f5b041;--line:#2a2f3a;--acc:#5c8dff;--acc2:#3a4560}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 system-ui,Segoe UI,sans-serif}
+main{max-width:1100px;margin:auto;padding:16px}
+a{color:var(--acc)}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+h1{font-size:21px;margin:4px 0} h2{font-size:17px;margin:0 0 10px}
+.sub{color:var(--mute);font-size:12px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:16px 0}
+input,button{background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font:inherit}
+button{background:var(--acc);border-color:var(--acc);color:#fff;cursor:pointer}
+#lock{max-width:420px;margin:60px auto}
+#lock form{display:flex;gap:8px;margin-top:12px} #lock input[type=password]{flex:1;min-width:0}
+.err{color:var(--bear);font-size:13px;min-height:1.4em}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.tile .k{color:var(--mute);font-size:12px} .tile .v{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums} .tile .s{color:var(--mute);font-size:12px}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;font-size:13px;width:100%}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{color:var(--mute);font-weight:500} td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tfoot td{font-weight:600;border-bottom:0}
+.flag{display:inline-block;font-size:12px;border-radius:4px;padding:1px 6px;margin-top:3px}
+.flag.bad{background:rgba(239,83,80,.15);color:#ff8a87} .flag.warn{background:rgba(245,176,65,.15);color:var(--neu)} .flag.ok{background:rgba(38,166,154,.15);color:#5fd3c6}
+.q{color:var(--mute)} .note{color:var(--mute);font-size:12px}
+.bars{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:6px 10px;align-items:center;font-size:13px}
+.bar{position:relative;height:18px;display:flex;gap:2px}
+.bar span{display:block;height:100%;border-radius:0 4px 4px 0}
+.bar span.i{background:var(--acc)} .bar span.p{background:var(--acc2)} .bar span.u{background:repeating-linear-gradient(45deg,var(--acc2) 0 4px,transparent 4px 8px)}
+.bar b{position:absolute;left:calc(var(--w) + 6px);top:0;font-weight:400;color:var(--fg);font-size:12px;line-height:18px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--mute);margin:8px 0 10px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.grid2 section{margin:0}
+#tip{position:fixed;pointer-events:none;background:#000c;border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12px;display:none;z-index:9}
+.soon{color:var(--neu)} .today{color:var(--bear)}
+ol li{margin:4px 0}
+.hidden{display:none}
+</style></head><body><main>
+<div class="top">
+  <div><h1>Finances</h1><div class="sub" id="asof">Private. Data is encrypted; unlock with your passphrase.</div></div>
+  <div><button id="relock" class="hidden" style="padding:4px 10px;font-size:13px">Lock</button></div>
+</div>
+
+<div id="lock"><section>
+  <h2>Unlock</h2>
+  <div class="sub">Decryption happens in this browser. The passphrase is never sent anywhere.</div>
+  <form id="f"><input type="password" id="pw" placeholder="Passphrase" autocomplete="current-password" autofocus><button>Unlock</button></form>
+  <label class="sub"><input type="checkbox" id="keep"> Keep unlocked in this tab</label>
+  <div class="err" id="err"></div>
+</section></div>
+
+<div id="app" class="hidden">
+  <div class="tiles" id="tiles"></div>
+  <section><h2>Debts</h2><div class="wrap"><table id="debts"></table></div>
+    <div class="note">Monthly interest = balance × rate ÷ 12 (estimate; banks charge daily). Bi-weekly payments are shown as a monthly average (× 26 ÷ 12). Credit cards cost no interest when the statement is paid in full by the due date.</div></section>
+  <div class="grid2">
+    <section><h2>What your monthly payments buy</h2>
+      <div class="legend"><span><i style="background:var(--acc)"></i>Interest</span><span><i style="background:var(--acc2)"></i>Principal</span><span><i style="background:repeating-linear-gradient(45deg,var(--acc2) 0 3px,transparent 3px 6px)"></i>Split unknown (rate or balance missing)</span></div>
+      <div class="bars" id="paychart"></div></section>
+    <section><h2>Debt by balance</h2><div class="bars" id="mixchart" style="margin-top:28px"></div></section>
+  </div>
+  <section><h2>Calendar — next 45 days</h2><div class="wrap"><table id="cal"></table></div><div class="note" id="calnote"></div></section>
+  <section><h2>12-month cash-flow projection</h2><div id="proj"></div></section>
+  <section><h2>Interest cost and pay-down order</h2><div id="order"></div></section>
+  <section><h2>Income and cash flow</h2><div id="cash"></div></section>
+  <section><h2>Missing information</h2><ol id="qs"></ol></section>
+  <p class="sub">Arithmetic on the numbers you provided, not financial advice.</p>
+</div>
+<div id="tip"></div>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const SRC = ['https://raw.githubusercontent.com/berkeoz/new_trading/master/finance/data.enc.json', 'finance/data.enc.json'];
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt = (n, d = 0) => n == null || isNaN(n) ? '—' : n.toLocaleString('en-CA', {style: 'currency', currency: 'CAD', minimumFractionDigits: d, maximumFractionDigits: d});
+const fmt2 = n => fmt(n, 2);
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const DAY = 864e5;
+const ymd = d => d.toISOString().slice(0, 10);
+const parse = s => new Date(s + 'T12:00:00');
+
+async function load() {
+  for (const u of SRC) {
+    try { const r = await fetch(u + '?t=' + Date.now(), {cache: 'no-store'}); if (r.ok) return r.json(); } catch {}
+  }
+  throw new Error('Could not load the encrypted data file.');
+}
+async function decrypt(blob, pass) {
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({name: 'PBKDF2', hash: 'SHA-256', salt: unb64(blob.salt), iterations: blob.iter}, base,
+    {name: 'AES-GCM', length: 256}, false, ['decrypt']);
+  const pt = await crypto.subtle.decrypt({name: 'AES-GCM', iv: unb64(blob.iv)}, key, unb64(blob.ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+
+// ---- finance math ----
+const perMonth = (amt, freq) => ({monthly: amt, biweekly: amt * 26 / 12, weekly: amt * 52 / 12, semimonthly: amt * 2, yearly: amt / 12, annual: amt / 12})[freq] ?? 0;
+// monthly interest if the balance is carried; cards are assumed paid in full, so they count as 0 elsewhere
+const carry = d => d.balance != null && d.rate != null ? d.balance * d.rate / 100 / 12 : null;
+const interest = d => d.type === 'card' ? null : carry(d);
+const payAmt = d => !d.payment ? 0 : d.payment.interestOnly ? (carry(d) || 0) : d.payment.amount;
+const offBank = d => !!d.payment?.offBank;
+const recurring = d => d.payment && d.payment.freq !== 'once' ? perMonth(payAmt(d), d.payment.freq) : 0;
+const bankRecurring = d => offBank(d) ? 0 : recurring(d);
+function flag(d) {
+  const i = interest(d), p = recurring(d);
+  if (d.type === 'card') return ['warn', d.rate == null ? 'Pay statement in full to avoid ~20% interest' : `Pay statement in full: a carried balance costs ${d.rate}%`];
+  if (d.payment?.interestOnly && offBank(d)) return ['bad', `~${fmt(i)}/mo interest is added to the balance: it compounds`];
+  if (i != null && !d.payment) return ['warn', `No payment set: ~${fmt(i)}/mo interest accrues`];
+  if (i == null || !p) return null;
+  if (p < i) return ['bad', `Payment is ${fmt(i - p)}/mo short of interest: balance grows`];
+  if (p < i * 1.15) return ['warn', 'Mostly interest: principal barely moves'];
+  return null;
+}
+// dates a schedule {freq, date | day | last | next} falls on within [from, end]
+function occurrences(p, from, end) {
+  const out = [];
+  if (p.freq === 'once') { const t = parse(p.date); if (t >= from && t <= end) out.push(t); }
+  else if (p.freq === 'monthly') {
+    for (let y = from.getFullYear(), mo = from.getMonth(); new Date(y, mo, 1) <= end; mo++) {
+      const t = new Date(y, mo, Math.min(p.day, new Date(y, mo + 1, 0).getDate()), 12);
+      if (t >= from && t <= end) out.push(t);
+    }
+  } else if (p.freq === 'biweekly' && (p.last || p.next)) {
+    let t = parse(p.last || p.next);
+    while (t > from) t = new Date(t.getTime() - 14 * DAY);
+    while (t < from) t = new Date(t.getTime() + 14 * DAY);
+    for (; t <= end; t = new Date(t.getTime() + 14 * DAY)) if (!p.next || t >= parse(p.next)) out.push(t);
+  }
+  return out;
+}
+// income amount on a date, applying scheduled changes
+const amountAt = (x, t) => (x.changes || []).reduce((a, c) => t >= parse(c.from) ? c.amount : a, x.amount);
+// [date, item, amount, isIncome] for debts and income between from and end
+function upcoming(D, from, days, end = new Date(from.getTime() + days * DAY)) {
+  const out = [];
+  for (const d of D.debts) if (d.payment) for (const t of occurrences(d.payment, from, end)) out.push([t, d, payAmt(d), false]);
+  for (const x of D.income || []) for (const t of occurrences(x, from, end)) out.push([t, x, amountAt(x, t), true]);
+  for (const h of D.planned || []) if (h.units) for (const t of occurrences(h, from, end)) out.push([t, {name: h.ticker + ' distribution'}, h.units * h.perUnit, true]);
+  return out.sort((a, b) => a[0] - b[0] || b[3] - a[3]);
+}
+
+// ---- render ----
+function bars(el, rows, max) {
+  el.innerHTML = rows.map(r => {
+    const segs = r.segs.filter(s => s.v > 0);
+    const w = segs.reduce((a, s) => a + s.v, 0) / max * 100;
+    return `<div>${esc(r.label)}</div><div class="bar" style="--w:${w.toFixed(2)}%">${segs.map(s =>
+      `<span class="${s.c}" style="width:${(s.v / max * 100).toFixed(2)}%" data-tip="${esc(r.label + ' · ' + s.t + ': ' + fmt(s.v))}"></span>`).join('')}<b>${esc(r.text)}</b></div>`;
+  }).join('');
+}
+function render(D) {
+  const today = new Date(); today.setHours(12, 0, 0, 0);
+  const debts = D.debts;
+  $('#asof').textContent = `Figures as of ${D.asOf} · amounts in ${D.currency || 'CAD'} · page date ${ymd(today)}`;
+
+  const nonMort = debts.filter(d => d.type !== 'mortgage');
+  const totalNM = nonMort.reduce((a, d) => a + (d.balance || 0), 0);
+  const mort = debts.find(d => d.type === 'mortgage');
+  const totalAll = totalNM + (mort?.balance || 0);
+  const monthlyPay = debts.reduce((a, d) => a + bankRecurring(d), 0);
+  const bankEv = x => !(x[1].payment && offBank(x[1]));
+  const knownInt = debts.reduce((a, d) => a + (interest(d) || 0), 0);
+  const missingInt = debts.filter(d => interest(d) == null && d.type !== 'card').map(d => d.name);
+  const cash = (D.assets || []).filter(a => a.type === 'cash').reduce((a, x) => a + x.amount, 0);
+  let low = {v: cash, t: today};
+  upcoming(D, today, 45).filter(bankEv).reduce((b, x) => { b += x[3] ? x[2] : -x[2]; if (b < low.v) low = {v: b, t: x[0]}; return b; }, cash);
+  const next30 = upcoming(D, today, 30).filter(x => !x[3] && bankEv(x));
+  const due30 = next30.reduce((a, x) => a + x[2], 0);
+  const incomeM = (D.income || []).reduce((a, x) => a + perMonth(amountAt(x, today), x.freq || 'monthly'), 0);
+  const expM = (D.expenses || []).reduce((a, x) => a + perMonth(x.amount, x.freq || 'monthly'), 0);
+
+  $('#tiles').innerHTML = [
+    ['Cash', fmt(cash), 'bank balance entered ' + ((D.assets || []).find(a => a.type === 'cash')?.asOf || '')],
+    ['Lowest cash, next 45 days', `<span style="color:${low.v < 0 ? 'var(--bear)' : 'inherit'}">${low.v < 0 ? '−' + fmt(-low.v) : fmt(low.v)}</span>`,
+      (low.v < 0 ? 'overdrawn' : 'lowest point') + ' on ' + low.t.toLocaleDateString('en-CA', {month: 'short', day: 'numeric'}) + ', before living expenses'],
+    ...(D.assets || []).filter(a => a.type === 'investments').map(a => [esc(a.name), fmt(a.amount), a.expected ? 'expected to grow to ' + fmt(a.expected) : '']),
+    ['Total debt', fmt(mort?.balance ? totalAll : totalNM), mort?.balance ? 'including mortgage' : 'excluding mortgage (balance not given)'],
+    ['Regular debt payments', fmt(monthlyPay) + '/mo', 'from the bank; card statements extra'],
+    ['Estimated interest', fmt(knownInt) + '/mo', missingInt.length ? 'unknown for: ' + missingInt.join(', ') : 'all debts with a known rate'],
+    ['Due in the next 30 days', fmt(due30), next30.length + ' payments'],
+    ['Income', incomeM ? fmt(incomeM) + '/mo' : '—', incomeM ? 'current pay, monthly average' : 'not entered'],
+    ['Left after debt payments', incomeM ? fmt(incomeM - monthlyPay - expM) + '/mo' : '—', incomeM ? (expM ? 'after entered expenses' : 'before living expenses and card statements') : 'needs income figures'],
+  ].map(([k, v, s]) => `<div class="tile"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${esc(s)}</div></div>`).join('');
+
+  // debts table
+  const rows = debts.map(d => {
+    const i = interest(d), p = recurring(d), f = flag(d);
+    const pay = !d.payment ? '<span class="q">not set</span>' : d.payment.interestOnly ? `≈ ${fmt2(payAmt(d))} interest, day ${d.payment.day}${offBank(d) ? '<div class="note">charged to the account, not the bank</div>' : ''}` : d.payment.freq === 'once'
+      ? `${fmt2(d.payment.amount)} due ${d.payment.date}` : `${fmt2(d.payment.amount)} ${d.payment.freq}${d.payment.day ? ' (day ' + d.payment.day + ')' : ''}`;
+    return `<tr><td>${esc(d.name)}${d.note ? `<div class="note">${esc(d.note)}</div>` : ''}${f ? `<div class="flag ${f[0]}">${esc(f[1])}</div>` : ''}</td>
+      <td class="n">${d.balance == null ? '<span class="q">?</span>' : fmt2(d.balance) + (d.balanceApprox ? ' <span class="q">≈</span>' : '')}</td>
+      <td class="n">${d.rate == null ? '<span class="q">?</span>' : d.rate.toFixed(2) + '%' + (d.rateUnsure ? ' <span class="q">?</span>' : '')}</td>
+      <td class="n">${pay}</td><td class="n">${p ? fmt2(p) + (offBank(d) ? '<div class="note">added to balance</div>' : '') : '—'}</td>
+      <td class="n">${i == null ? (d.type === 'card' ? (carry(d) != null ? `0 if paid in full<div class="note">${fmt2(carry(d))} if carried</div>` : '0 if paid in full') : '<span class="q">?</span>') : fmt2(i)}</td></tr>`;
+  }).join('');
+  $('#debts').innerHTML = `<thead><tr><th>Debt</th><th class="n">Balance</th><th class="n">Rate</th><th class="n">Payment</th><th class="n">Per month</th><th class="n">Interest / mo</th></tr></thead>
+    <tbody>${rows}</tbody><tfoot><tr><td>Total</td><td class="n">${fmt2(totalAll)}</td><td></td><td></td><td class="n">${fmt2(monthlyPay)}<div class="note">from bank</div></td><td class="n">${fmt2(knownInt)}</td></tr></tfoot>`;
+
+  // payment chart: interest vs principal of each recurring payment, plus accruing interest with no payment
+  const pr = debts.filter(d => recurring(d) || interest(d)).map(d => {
+    const p = recurring(d), i = interest(d);
+    let segs;
+    if (i == null) segs = [{c: 'u', v: p, t: 'payment, split unknown'}];
+    else if (!p) segs = [{c: 'i', v: i, t: 'interest accruing (no payment)'}];
+    else segs = [{c: 'i', v: Math.min(i, p), t: 'interest'}, {c: 'p', v: Math.max(p - i, 0), t: 'principal'}];
+    const text = !p ? fmt(i) + ' interest, unpaid' : i == null ? fmt(p) : p < i ? `${fmt(p)} (all interest)` : `${fmt(p)} · ${Math.round(i / p * 100)}% interest`;
+    return {label: d.name.replace(/,.*/, ''), segs, text, tot: Math.max(p, i || 0)};
+  }).sort((a, b) => b.tot - a.tot);
+  bars($('#paychart'), pr, Math.max(...pr.map(r => r.tot)) * 1.45);
+
+  const mr = debts.filter(d => d.balance != null).sort((a, b) => b.balance - a.balance)
+    .map(d => ({label: d.name.replace(/,.*/, ''), segs: [{c: 'i', v: d.balance, t: 'balance'}], text: `${fmt(d.balance)} · ${Math.round(d.balance / totalAll * 100)}%`}));
+  bars($('#mixchart'), mr, Math.max(...mr.map(r => r.segs[0].v)) * 1.4);
+
+  // calendar
+  const cal = upcoming(D, today, 45);
+  let run = cash;
+  $('#cal').innerHTML = `<thead><tr><th>Date</th><th>In</th><th>Item</th><th class="n">Amount</th><th class="n">Cash after</th></tr></thead><tbody>
+    <tr><td>Now</td><td></td><td class="q">Starting cash</td><td></td><td class="n">${fmt2(cash)}</td></tr>` +
+    cal.map(([t, d, a, inc]) => { const ob = !inc && offBank(d); if (!ob) run += inc ? a : -a; const n = Math.round((t - today) / DAY);
+      return `<tr><td>${t.toLocaleDateString('en-CA', {weekday: 'short', month: 'short', day: 'numeric'})}</td>
+      <td class="${n === 0 ? 'today' : n <= 3 ? 'soon' : ''}">${n === 0 ? 'today' : n + ' d'}</td><td>${inc ? `<span class="flag ok">${d.freq === 'once' ? 'One-off' : 'Payday'}</span> ` : ''}${esc(d.name)}</td>
+      <td class="n">${inc ? '+' : '−'}${fmt2(a)}</td><td class="n">${ob ? '<span class="q">added to balance</span>' : run < 0 ? '−' + fmt2(-run) : fmt2(run)}</td></tr>`; }).join('') + '</tbody>';
+  $('#calnote').textContent = `Starts from cash of ${fmt2(cash)}. Only scheduled debt payments and pay are counted: living expenses${expM ? '' : ' (not entered)'} and new card spending come on top. A negative value means the account would be overdrawn on that date.`;
+
+  // 12-month projection
+  const months = [];
+  for (let k = 0; k < 12; k++) {
+    const s = new Date(today.getFullYear(), today.getMonth() + k, 1, 12), e = new Date(s.getFullYear(), s.getMonth() + 1, 0, 12);
+    const ev = upcoming(D, k ? s : today, 0, e);
+    const inc = ev.filter(x => x[3]), out = ev.filter(x => !x[3] && bankEv(x));
+    months.push({s, partial: k === 0, pays: inc.filter(x => x[1].freq === 'biweekly').length, oneoff: inc.filter(x => x[1].freq === 'once').reduce((a, x) => a + x[2], 0), inc: inc.reduce((a, x) => a + x[2], 0), debt: out.reduce((a, x) => a + x[2], 0),
+      cards: out.filter(x => x[1].type === 'card').reduce((a, x) => a + x[2], 0)});
+  }
+  let bal = cash;
+  const money = v => v < 0 ? '−' + fmt(-v) : fmt(v);
+  $('#proj').innerHTML = `<div class="wrap"><table><thead><tr><th>Month</th><th class="n">Paydays</th><th class="n">Income</th><th class="n">Debt payments</th><th class="n">Left over</th><th class="n">Cash at month end</th><th></th></tr></thead><tbody>` +
+    months.map(m => { const left = m.inc - m.debt - expM; bal += left; const endBal = `<td class="n">${money(bal)}</td>`;
+      return `<tr><td>${m.s.toLocaleDateString('en-CA', {month: 'short', year: 'numeric'})}${m.partial ? ' <span class="q">(rest of month)</span>' : ''}</td><td class="n">${m.pays}</td>
+      <td class="n">${fmt(m.inc)}</td><td class="n">${fmt(m.debt)}${m.cards ? `<div class="note">incl. ${fmt(m.cards)} card statements</div>` : ''}</td>
+      <td class="n">${money(left)}</td>${endBal}<td>${left < 0 ? '<span class="flag bad">short</span>' : [m.pays === 3 ? '<span class="flag ok">3-pay month</span>' : '', m.oneoff ? `<span class="flag ok">+${fmt(m.oneoff)} one-off</span>` : ''].join(' ')}</td></tr>`; }).join('') +
+    `</tbody></table></div><p class="note">Card statements are counted only where a due amount was given. Future card bills, Wealthsimple interest${expM ? '' : ' and living expenses'} are not included, so the real figure left over is lower.</p>`;
+
+  // pay-down order (highest rate first, mortgage last; unknown-rate cards first as they are likely ~20%)
+  const ranked = debts.filter(d => d.type !== 'mortgage' && d.balance).map(d => ({d, r: d.rate ?? (d.type === 'card' ? 20 : null)}))
+    .sort((a, b) => (b.r ?? -1) - (a.r ?? -1));
+  $('#order').innerHTML = `<p class="note">Avalanche method: every extra dollar goes to the highest-rate debt first. That saves the most interest. Each 1,000 moved off a debt saves about rate × 1,000 per year.</p>
+    <div class="wrap"><table><thead><tr><th>#</th><th>Debt</th><th class="n">Rate</th><th class="n">Interest / year</th><th class="n">Saved per 1,000 repaid / yr</th></tr></thead><tbody>` +
+    ranked.map((x, k) => { const i = interest(x.d);
+      return `<tr><td>${k + 1}</td><td>${esc(x.d.name)}</td><td class="n">${x.d.rate != null ? x.d.rate.toFixed(2) + '%' : x.r != null ? '<span class="q">~' + x.r + '% (typical card)</span>' : '<span class="q">?</span>'}</td>
+      <td class="n">${i != null ? fmt(i * 12) : x.d.type === 'card' ? (carry(x.d) != null ? '0 if paid in full (' + fmt(carry(x.d) * 12) + ' if carried)' : '0 if paid in full') : '<span class="q">?</span>'}</td><td class="n">${x.r != null ? fmt(x.r * 10) : '?'}</td></tr>`; }).join('') +
+    `</tbody></table></div><p class="note">Known interest across debts with a rate: about <b>${fmt(knownInt * 12)} per year</b>${missingInt.length ? ' plus ' + esc(missingInt.join(', ')) : ''}.</p>`;
+
+  // cash flow
+  if (!incomeM) $('#cash').innerHTML = `<p class="q">No income entered yet. Once income and regular expenses are added, this shows monthly cash flow after debt payments and how much is free to put toward debt.</p>
+    <p>Fixed debt payments to cover each month: <b>${fmt2(monthlyPay)}</b>, plus credit card statements.</p>`;
+  else {
+    const line = (k, v, cls = '') => `<tr><td>${k}</td><td class="n ${cls}">${fmt2(v)}</td></tr>`;
+    const net = incomeM - monthlyPay - expM;
+    const sched = (D.income || []).filter(x => x.changes?.length).map(x => `<p class="note">${esc(x.name)}: ${fmt2(x.amount)} ${x.freq} now` +
+      x.changes.map(c => `, ${fmt2(c.amount)} from ${c.from} (≈ ${fmt(perMonth(c.amount, x.freq))}/mo, ${fmt(perMonth(c.amount, x.freq) - monthlyPay - expM)}/mo left after debt payments)`).join('') + '.</p>').join('');
+    $('#cash').innerHTML = `<div class="wrap"><table><tbody>${(D.income || []).filter(x => x.freq !== 'once').map(x => line(esc(x.name) + ' <span class="q">(monthly avg)</span>', perMonth(amountAt(x, today), x.freq || 'monthly'))).join('')}
+      ${line('<b>Income</b>', incomeM)}${line('Debt payments', -monthlyPay)}${(D.expenses || []).map(x => line(esc(x.name), -perMonth(x.amount, x.freq || 'monthly'))).join('')}
+      </tbody><tfoot>${line('Net per month', net)}</tfoot></table></div>
+      ${(D.income || []).filter(x => x.freq === 'once').map(x => `<p class="note">One-off: ${esc(x.name)} ${fmt(x.amount)} on ${x.date}${x.note ? ' · ' + esc(x.note) : ''} (included in the calendar and projection).</p>`).join('')}<p class="note">Regular debt payments take ${Math.round(monthlyPay / incomeM * 100)}% of current income.</p>${sched}`;
+  }
+  // planned income (e.g. dividend ETFs)
+  $('#cash').insertAdjacentHTML('beforeend', (D.planned || []).map(h => {
+    const y = h.perUnit * 12 / h.price, per1k = 1000 / h.price * h.perUnit;
+    const wsRate = debts.find(d => d.type === 'margin')?.rate;
+    return `<h3 style="font-size:15px;margin:18px 0 6px">Planned: ${esc(h.name)}</h3>
+      <p class="note">${esc(h.note || '')}</p>
+      <div class="wrap"><table><tbody>
+      <tr><td>Distribution yield at today's price</td><td class="n">${(y * 100).toFixed(2)}% / yr</td></tr>
+      <tr><td>Per 1,000 invested (${(1000 / h.price).toFixed(1)} units)</td><td class="n">${fmt2(per1k)}/mo · ${fmt(per1k * 12)}/yr</td></tr>
+      ${[5000, 10000, 25000].map(a => `<tr><td>${fmt(a)} invested</td><td class="n">${fmt2(a / 1000 * per1k)}/mo</td></tr>`).join('')}
+      ${h.target ? `<tr><td><b>Target ${fmt(h.target)}</b> (${Math.round(h.target / h.price)} units)</td><td class="n"><b>${fmt2(h.target / h.price * h.perUnit)}/mo · ${fmt(h.target / h.price * h.perUnit * 12)}/yr</b></td></tr>` : ''}${h.units ? `<tr><td>Owned now: ${h.units} units</td><td class="n">${fmt2(h.units * h.perUnit)}/mo</td></tr>` : h.target ? '<tr><td>Owned now</td><td class="n">0 units</td></tr>' : ''}
+      </tbody></table></div>
+      <p class="note">Before tax and in a non-registered account. Distributions on covered-call ETFs are not guaranteed: they can be cut, part of them can be return of capital, and the unit price can fall while the payout continues.
+      ${wsRate ? `If it is bought with money borrowed at ${wsRate}% (Wealthsimple credit), the net is about ${((y * 100) - wsRate).toFixed(2)} points a year, and you keep the price risk.` : ''}</p>`;
+  }).join(''));
+
+  $('#qs').innerHTML = (D.open_questions || []).map(q => `<li>${esc(q)}</li>`).join('') || '<li class="q">None.</li>';
+}
+
+// tooltips
+const tip = $('#tip');
+document.addEventListener('mousemove', e => {
+  const t = e.target.closest('[data-tip]');
+  if (!t) return tip.style.display = 'none';
+  tip.textContent = t.dataset.tip; tip.style.display = 'block';
+  tip.style.left = Math.min(e.clientX + 12, innerWidth - tip.offsetWidth - 8) + 'px'; tip.style.top = (e.clientY + 14) + 'px';
+});
+
+// unlock flow
+let blobP = load();
+async function unlock(pass) {
+  const D = await decrypt(await blobP, pass);
+  render(D);
+  $('#lock').classList.add('hidden'); $('#app').classList.remove('hidden'); $('#relock').classList.remove('hidden');
+}
+$('#f').addEventListener('submit', async e => {
+  e.preventDefault(); $('#err').textContent = 'Decrypting…';
+  try {
+    await unlock($('#pw').value);
+    try { if ($('#keep').checked) sessionStorage.setItem('fin_pw', $('#pw').value); } catch {}
+    $('#pw').value = ''; $('#err').textContent = '';
+  } catch (x) { $('#err').textContent = x.name === 'OperationError' ? 'Wrong passphrase.' : x.message; blobP = load(); }
+});
+$('#relock').onclick = () => { try { sessionStorage.removeItem('fin_pw'); } catch {} location.reload(); };
+try { const s = sessionStorage.getItem('fin_pw'); if (s) unlock(s).catch(() => sessionStorage.removeItem('fin_pw')); } catch {}
+</script>
+</body></html>

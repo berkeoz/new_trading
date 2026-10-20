@@ -4,3 +4,7 @@ __pycache__/
 data/
 .fred_key
 xfeed/.run_start
+
+# finances: only the encrypted file may be committed
+finance/*
+!finance/data.enc.json
