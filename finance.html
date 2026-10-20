@@ -179,11 +179,15 @@ function render(D) {
   const incomeM = (D.income || []).reduce((a, x) => a + perMonth(amountAt(x, today), x.freq || 'monthly'), 0);
   const expM = (D.expenses || []).reduce((a, x) => a + perMonth(x.amount, x.freq || 'monthly'), 0);
 
+  const money = v => v < 0 ? '−' + fmt(-v) : fmt(v);
   $('#tiles').innerHTML = [
     ['Cash', fmt(cash), 'bank balance entered ' + ((D.assets || []).find(a => a.type === 'cash')?.asOf || '')],
     ['Lowest cash, next 45 days', `<span style="color:${low.v < 0 ? 'var(--bear)' : 'inherit'}">${low.v < 0 ? '−' + fmt(-low.v) : fmt(low.v)}</span>`,
       (low.v < 0 ? 'overdrawn' : 'lowest point') + ' on ' + low.t.toLocaleDateString('en-CA', {month: 'short', day: 'numeric'}) + ', before living expenses'],
     ...(D.assets || []).filter(a => a.type === 'investments').map(a => [esc(a.name), fmt(a.amount), a.expected ? 'expected to grow to ' + fmt(a.expected) : '']),
+    ...(() => { const as = D.assets || [], tot = as.reduce((a, x) => a + x.amount, 0), prop = as.filter(x => x.type === 'property').reduce((a, x) => a + x.amount, 0);
+      if (!prop) return []; const nw = tot - totalAll;
+      return [['Net worth', money(nw), `assets ${fmt(tot)} − debts ${fmt(totalAll)} · home equity ${fmt(prop - (mort?.balance || 0))}`]]; })(),
     ['Total debt', fmt(mort?.balance ? totalAll : totalNM), mort?.balance ? 'including mortgage' : 'excluding mortgage (balance not given)'],
     ['Regular debt payments', fmt(monthlyPay) + '/mo', 'from the bank; card statements extra'],
     ['Estimated interest', fmt(knownInt) + '/mo', missingInt.length ? 'unknown for: ' + missingInt.join(', ') : 'all debts with a known rate'],
@@ -244,7 +248,6 @@ function render(D) {
       cards: out.filter(x => x[1].type === 'card').reduce((a, x) => a + x[2], 0)});
   }
   let bal = cash;
-  const money = v => v < 0 ? '−' + fmt(-v) : fmt(v);
   $('#proj').innerHTML = `<div class="wrap"><table><thead><tr><th>Month</th><th class="n">Paydays</th><th class="n">Income</th><th class="n">Debt payments</th><th class="n">Left over</th><th class="n">Cash at month end</th><th></th></tr></thead><tbody>` +
     months.map(m => { const left = m.inc - m.debt - expM; bal += left; const endBal = `<td class="n">${money(bal)}</td>`;
       return `<tr><td>${m.s.toLocaleDateString('en-CA', {month: 'short', year: 'numeric'})}${m.partial ? ' <span class="q">(rest of month)</span>' : ''}</td><td class="n">${m.pays}</td>
