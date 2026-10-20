@@ -142,7 +142,10 @@ function upcoming(D, from, days, end = new Date(from.getTime() + days * DAY)) {
   const out = [];
   for (const d of D.debts) if (d.payment) for (const t of occurrences(d.payment, from, end)) out.push([t, d, payAmt(d), false]);
   for (const x of D.income || []) for (const t of occurrences(x, from, end)) out.push([t, x, amountAt(x, t), true]);
-  for (const h of D.planned || []) if (h.units) for (const t of occurrences(h, from, end)) out.push([t, {name: h.ticker + ' distribution'}, h.units * h.perUnit, true]);
+  for (const h of D.planned || []) {
+    const u = h.targetUnits || h.units, st = h.start ? parse(h.start) : from;
+    if (u) for (const t of occurrences(h, st > from ? st : from, end)) out.push([t, {name: h.ticker + ' distribution' + (h.targetUnits ? ' (planned)' : ''), planned: !!h.targetUnits}, u * h.perUnit, true]);
+  }
   return out.sort((a, b) => a[0] - b[0] || b[3] - a[3]);
 }
 
@@ -185,6 +188,7 @@ function render(D) {
     ['Regular debt payments', fmt(monthlyPay) + '/mo', 'from the bank; card statements extra'],
     ['Estimated interest', fmt(knownInt) + '/mo', missingInt.length ? 'unknown for: ' + missingInt.join(', ') : 'all debts with a known rate'],
     ['Due in the next 30 days', fmt(due30), next30.length + ' payments'],
+    ...(D.planned || []).filter(h => h.targetUnits).map(h => ['Planned ' + esc(h.ticker) + ' income', fmt(h.targetUnits * h.perUnit) + '/mo', h.targetUnits.toLocaleString('en-CA') + ' units from ' + h.start + ' (cost ' + fmt(h.targetUnits * h.price) + ')']),
     ['Income', incomeM ? fmt(incomeM) + '/mo' : '—', incomeM ? 'current pay, monthly average' : 'not entered'],
     ['Left after debt payments', incomeM ? fmt(incomeM - monthlyPay - expM) + '/mo' : '—', incomeM ? (expM ? 'after entered expenses' : 'before living expenses and card statements') : 'needs income figures'],
   ].map(([k, v, s]) => `<div class="tile"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${esc(s)}</div></div>`).join('');
@@ -226,7 +230,7 @@ function render(D) {
     <tr><td>Now</td><td></td><td class="q">Starting cash</td><td></td><td class="n">${fmt2(cash)}</td></tr>` +
     cal.map(([t, d, a, inc]) => { const ob = !inc && offBank(d); if (!ob) run += inc ? a : -a; const n = Math.round((t - today) / DAY);
       return `<tr><td>${t.toLocaleDateString('en-CA', {weekday: 'short', month: 'short', day: 'numeric'})}</td>
-      <td class="${n === 0 ? 'today' : n <= 3 ? 'soon' : ''}">${n === 0 ? 'today' : n + ' d'}</td><td>${inc ? `<span class="flag ok">${d.freq === 'once' ? 'One-off' : 'Payday'}</span> ` : ''}${esc(d.name)}</td>
+      <td class="${n === 0 ? 'today' : n <= 3 ? 'soon' : ''}">${n === 0 ? 'today' : n + ' d'}</td><td>${inc ? `<span class="flag ${d.planned ? 'warn' : 'ok'}">${d.planned ? 'Planned' : d.freq === 'once' ? 'One-off' : 'Payday'}</span> ` : ''}${esc(d.name)}</td>
       <td class="n">${inc ? '+' : '−'}${fmt2(a)}</td><td class="n">${ob ? '<span class="q">added to balance</span>' : run < 0 ? '−' + fmt2(-run) : fmt2(run)}</td></tr>`; }).join('') + '</tbody>';
   $('#calnote').textContent = `Starts from cash of ${fmt2(cash)}. Only scheduled debt payments and pay are counted: living expenses${expM ? '' : ' (not entered)'} and new card spending come on top. A negative value means the account would be overdrawn on that date.`;
 
@@ -275,15 +279,23 @@ function render(D) {
   $('#cash').insertAdjacentHTML('beforeend', (D.planned || []).map(h => {
     const y = h.perUnit * 12 / h.price, per1k = 1000 / h.price * h.perUnit;
     const wsRate = debts.find(d => d.type === 'margin')?.rate;
+    const cost = (h.targetUnits || 0) * h.price, port = (D.assets || []).find(a => a.type === 'investments');
+    const gap = Math.max(cost - (port ? (port.expected || port.amount) : 0), 0);
     return `<h3 style="font-size:15px;margin:18px 0 6px">Planned: ${esc(h.name)}</h3>
       <p class="note">${esc(h.note || '')}</p>
       <div class="wrap"><table><tbody>
       <tr><td>Distribution yield at today's price</td><td class="n">${(y * 100).toFixed(2)}% / yr</td></tr>
       <tr><td>Per 1,000 invested (${(1000 / h.price).toFixed(1)} units)</td><td class="n">${fmt2(per1k)}/mo · ${fmt(per1k * 12)}/yr</td></tr>
       ${[5000, 10000, 25000].map(a => `<tr><td>${fmt(a)} invested</td><td class="n">${fmt2(a / 1000 * per1k)}/mo</td></tr>`).join('')}
-      ${h.target ? `<tr><td><b>Target ${fmt(h.target)}</b> (${Math.round(h.target / h.price)} units)</td><td class="n"><b>${fmt2(h.target / h.price * h.perUnit)}/mo · ${fmt(h.target / h.price * h.perUnit * 12)}/yr</b></td></tr>` : ''}${h.units ? `<tr><td>Owned now: ${h.units} units</td><td class="n">${fmt2(h.units * h.perUnit)}/mo</td></tr>` : h.target ? '<tr><td>Owned now</td><td class="n">0 units</td></tr>' : ''}
+      ${h.targetUnits ? `<tr><td><b>Target ${h.targetUnits.toLocaleString('en-CA')} units</b>${h.start ? ' from ' + h.start : ''}</td><td class="n"><b>${fmt2(h.targetUnits * h.perUnit)}/mo · ${fmt(h.targetUnits * h.perUnit * 12)}/yr</b></td></tr>
+      <tr><td>Cost at ${fmt2(h.price)} a unit</td><td class="n">${fmt(cost)}</td></tr>
+      ${port ? `<tr><td>Portfolio now / expected</td><td class="n">${fmt(port.amount)} / ${fmt(port.expected || port.amount)}</td></tr>
+      <tr><td>Still to fund beyond the expected portfolio</td><td class="n">${fmt(gap)}</td></tr>` : ''}
+      ${wsRate && gap ? `<tr><td>Interest if that gap is borrowed at ${wsRate}%</td><td class="n">${fmt(gap * wsRate / 1200)}/mo</td></tr>
+      <tr><td>Distributions minus that interest</td><td class="n">${fmt(h.targetUnits * h.perUnit - gap * wsRate / 1200)}/mo</td></tr>
+      <tr><td>Interest if all of it is borrowed at ${wsRate}%</td><td class="n">${fmt(cost * wsRate / 1200)}/mo</td></tr>` : ''}` : ''}${h.units ? `<tr><td>Owned now: ${h.units} units</td><td class="n">${fmt2(h.units * h.perUnit)}/mo</td></tr>` : h.targetUnits ? '<tr><td>Owned now</td><td class="n">0 units</td></tr>' : ''}
       </tbody></table></div>
-      <p class="note">Before tax and in a non-registered account. Distributions on covered-call ETFs are not guaranteed: they can be cut, part of them can be return of capital, and the unit price can fall while the payout continues.
+      <p class="note">Before tax and in a non-registered account. Distributions on covered-call ETFs are not guaranteed: they can be cut, part of them can be return of capital, and the unit price can fall while the payout continues. Planned distributions are included in the calendar and projection from ${esc(h.start || 'now')}.
       ${wsRate ? `If it is bought with money borrowed at ${wsRate}% (Wealthsimple credit), the net is about ${((y * 100) - wsRate).toFixed(2)} points a year, and you keep the price risk.` : ''}</p>`;
   }).join(''));
 
