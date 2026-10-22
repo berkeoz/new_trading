@@ -1,13 +1,13 @@
 {
  "start": "2026-10-19",
- "cash": 72496.80954360962,
+ "cash": 76595.45944595337,
  "positions": {
   "SLB": {
    "shares": 163,
    "entry_price": 49.06,
    "entry_date": "2026-10-19 13:58",
    "spy_entry": 767.4600219726562,
-   "last": 49.88,
+   "last": 49.425,
    "theme": "Energy supply squeeze",
    "thesis": "Oilfield services lag crude (SLB -18.6% from its high while WTI is +72% y/y), so a higher-for-longer oil price should lift international and offshore activity and earnings estimates. Basing in Stage 1 above a 4-touch support at 47.5.",
    "conviction": 2,
@@ -30,7 +30,7 @@
    "entry_price": 70.33,
    "entry_date": "2026-10-19 13:58",
    "spy_entry": 767.4600219726562,
-   "last": 70.685,
+   "last": 70.66,
    "theme": "Energy supply squeeze",
    "thesis": "Gas pipelines with fee-based cash flows benefit from LNG exports and power-generation demand from data centres; trading at a 6-touch support (68.4) in a flat base with an analyst target of 85.",
    "conviction": 1,
@@ -52,7 +52,7 @@
    "entry_price": 553.045,
    "entry_date": "2026-10-19 13:58",
    "spy_entry": 767.4600219726562,
-   "last": 583.39,
+   "last": 584.29,
    "theme": "Defense and geopolitics",
    "thesis": "Middle East conflict and depleted munitions stockpiles support multi-year defense demand; forward P/E 16.9, 19% below its high, holding a 5-touch support at 548.9 above the 50-day average.",
    "conviction": 1,
@@ -74,7 +74,7 @@
    "entry_price": 996.5101,
    "entry_date": "2026-10-19 13:58",
    "spy_entry": 767.4600219726562,
-   "last": 1006.0,
+   "last": 1012.25,
    "theme": "Defensive consumer compounder",
    "thesis": "Membership retail gains share when consumer sentiment is at the 5th percentile and prices are high; trading on an 11-touch support near 996 and back above its 200-day average.",
    "conviction": 1,
@@ -89,28 +89,6 @@
     "type": "zone",
     "low": 965,
     "high": 1000
-   }
-  },
-  "GEV": {
-   "shares": 5,
-   "entry_price": 910.605,
-   "entry_date": "2026-10-19 13:58",
-   "spy_entry": 767.4600219726562,
-   "last": 861.36,
-   "theme": "Power and grid build-out",
-   "thesis": "Gas turbines, grid equipment and electrification have multi-year backlogs tied to power demand rather than AI financing alone; the stock is 24% off its high at a 6-touch support near 877 with an analyst target of 1224.",
-   "conviction": 1,
-   "stop": 835,
-   "target": 1082,
-   "invalidation": "A daily close below 835 (loses the 877 support) or order cancellations tied to data-centre financing stress.",
-   "catalysts": [
-    "Q3 results (date n/a)",
-    "Meta capex update Wed Oct 21"
-   ],
-   "entry": {
-    "type": "zone",
-    "low": 880,
-    "high": 915
    }
   }
  },
@@ -132,7 +110,7 @@
     "FOMC decision Oct 28"
    ],
    "added": "2026-10-19",
-   "last": 1299.3049
+   "last": 1307.51
   },
   "JNJ": {
    "theme": "Quality health care",
@@ -151,7 +129,7 @@
     "Q4 results in January (date n/a)"
    ],
    "added": "2026-10-19",
-   "last": 262.85
+   "last": 267.44
   },
   "PGR": {
    "theme": "Higher-for-longer financials",
@@ -170,10 +148,24 @@
     "FOMC decision Oct 28"
    ],
    "added": "2026-10-19",
-   "last": 224.655
+   "last": 228.09
   }
  },
- "closed": [],
+ "closed": [
+  {
+   "symbol": "GEV",
+   "theme": "Power and grid build-out",
+   "shares": 5,
+   "entry_price": 910.605,
+   "entry_date": "2026-10-19 13:58",
+   "exit_price": 819.73,
+   "exit_date": "2026-10-22 13:01",
+   "pnl": -454.38,
+   "ret_pct": -9.98,
+   "reason": "stop 835 hit",
+   "spy_entry": 767.4600219726562
+  }
+ ],
  "equity": [
   {
    "date": "2026-10-19",
@@ -187,8 +179,8 @@
   },
   {
    "date": "2026-10-22",
-   "equity": 100233.19,
-   "spy": 766.02
+   "equity": 99988.45,
+   "spy": 763.26
   }
  ],
  "events": [
@@ -269,12 +261,18 @@
    "kind": "buy",
    "symbol": "GEV",
    "text": "bought 5 at 910.60 (4,553, 5% target weight)"
+  },
+  {
+   "time": "2026-10-22 13:01",
+   "kind": "sell",
+   "symbol": "GEV",
+   "text": "sold 5 at 819.73 (stop 835 hit); P&L -454 (-10.0%)"
   }
  ],
  "outlook_id": "2026-10-19",
  "outlook_applied": "2026-10-19T13:58-04:00",
- "updated": "2026-10-22T09:52-04:00",
- "spy_last": 766.02001953125,
+ "updated": "2026-10-22T13:01-04:00",
+ "spy_last": 763.260009765625,
  "outlook": {
   "id": "2026-10-19",
   "horizon": "6-12 months",
