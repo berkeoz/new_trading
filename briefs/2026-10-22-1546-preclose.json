@@ -1,0 +1,2399 @@
+{
+ "session": "preclose",
+ "title": "Pre-close brief \u2014 Thu Oct 22, 2026 15:46 ET",
+ "generated_et": "2026-10-22 15:46",
+ "context": [
+  {
+   "symbol": "ES=F",
+   "label": "S&P 500 futures",
+   "group": "Futures",
+   "kind": "price",
+   "last": 7689.75,
+   "date": "2026-10-22",
+   "chg_1d": -1.42,
+   "chg_5d": -1.3,
+   "chg_1m": -1.06,
+   "chg_3m": 3.25,
+   "chg_6m": 7.65,
+   "chg_1y": 13.53,
+   "unit": "%",
+   "range_3m": [
+    7351.25,
+    7874.0
+   ]
+  },
+  {
+   "symbol": "NQ=F",
+   "label": "Nasdaq 100 futures",
+   "group": "Futures",
+   "kind": "price",
+   "last": 29091.0,
+   "date": "2026-10-22",
+   "chg_1d": -3.05,
+   "chg_5d": -3.49,
+   "chg_1m": -5.44,
+   "chg_3m": 2.86,
+   "chg_6m": 8.01,
+   "chg_1y": 15.01,
+   "unit": "%",
+   "range_3m": [
+    27342.0,
+    31483.25
+   ]
+  },
+  {
+   "symbol": "^VIX",
+   "label": "VIX",
+   "group": "Volatility",
+   "kind": "level",
+   "last": 19.4,
+   "date": "2026-10-22",
+   "chg_1d": 16.31,
+   "chg_5d": 17.86,
+   "chg_1m": 27.8,
+   "chg_3m": 3.91,
+   "chg_6m": 7.66,
+   "chg_1y": 12.14,
+   "unit": "%",
+   "range_3m": [
+    14.21,
+    20.66
+   ]
+  },
+  {
+   "symbol": "^VIX9D",
+   "label": "VIX 9-day",
+   "group": "Volatility",
+   "kind": "level",
+   "last": 19.38,
+   "date": "2026-10-22",
+   "chg_1d": 25.11,
+   "chg_5d": 38.73,
+   "chg_1m": 44.09,
+   "chg_3m": 9.99,
+   "chg_6m": 7.43,
+   "chg_1y": 14.81,
+   "unit": "%",
+   "range_3m": [
+    10.61,
+    20.38
+   ]
+  },
+  {
+   "symbol": "^IRX",
+   "label": "US 13-week T-bill",
+   "group": "Rates",
+   "kind": "yield",
+   "last": 4.022,
+   "date": "2026-10-22",
+   "chg_1d": -4.1,
+   "chg_5d": -6.6,
+   "chg_1m": -0.6,
+   "chg_3m": 21.7,
+   "chg_6m": 42.7,
+   "chg_1y": 23.7,
+   "unit": "bp",
+   "range_3m": [
+    3.66,
+    4.09
+   ]
+  },
+  {
+   "symbol": "^FVX",
+   "label": "US 5Y yield",
+   "group": "Rates",
+   "kind": "yield",
+   "last": 4.768,
+   "date": "2026-10-22",
+   "chg_1d": -20.4,
+   "chg_5d": -13.1,
+   "chg_1m": -22.9,
+   "chg_3m": 34.2,
+   "chg_6m": 81.6,
+   "chg_1y": 120.8,
+   "unit": "bp",
+   "range_3m": [
+    4.31,
+    5.09
+   ]
+  },
+  {
+   "symbol": "^TNX",
+   "label": "US 10Y yield",
+   "group": "Rates",
+   "kind": "yield",
+   "last": 4.953,
+   "date": "2026-10-22",
+   "chg_1d": -19.3,
+   "chg_5d": -13.6,
+   "chg_1m": -16.1,
+   "chg_3m": 27.4,
+   "chg_6m": 63.0,
+   "chg_1y": 99.0,
+   "unit": "bp",
+   "range_3m": [
+    4.6,
+    5.31
+   ]
+  },
+  {
+   "symbol": "^TYX",
+   "label": "US 30Y yield",
+   "group": "Rates",
+   "kind": "yield",
+   "last": 5.287,
+   "date": "2026-10-22",
+   "chg_1d": -15.2,
+   "chg_5d": -14.2,
+   "chg_1m": -11.4,
+   "chg_3m": 12.5,
+   "chg_6m": 36.9,
+   "chg_1y": 73.9,
+   "unit": "bp",
+   "range_3m": [
+    5.1,
+    5.66
+   ]
+  },
+  {
+   "symbol": "TLT",
+   "label": "20+Y Treasury ETF",
+   "group": "Rates",
+   "kind": "price",
+   "last": 81.75,
+   "date": "2026-10-22",
+   "chg_1d": 1.88,
+   "chg_5d": 2.22,
+   "chg_1m": 2.01,
+   "chg_3m": -0.64,
+   "chg_6m": -3.34,
+   "chg_1y": -7.03,
+   "unit": "%",
+   "range_3m": [
+    77.11,
+    83.25
+   ]
+  },
+  {
+   "symbol": "HYG",
+   "label": "High-yield bond ETF",
+   "group": "Credit",
+   "kind": "price",
+   "last": 77.07,
+   "date": "2026-10-22",
+   "chg_1d": 0.12,
+   "chg_5d": -0.07,
+   "chg_1m": -0.87,
+   "chg_3m": -1.27,
+   "chg_6m": -1.21,
+   "chg_1y": 1.22,
+   "unit": "%",
+   "range_3m": [
+    76.81,
+    79.13
+   ]
+  },
+  {
+   "symbol": "DX-Y.NYB",
+   "label": "US dollar index",
+   "group": "FX",
+   "kind": "price",
+   "last": 101.61,
+   "date": "2026-10-22",
+   "chg_1d": -0.17,
+   "chg_5d": -0.39,
+   "chg_1m": 0.5,
+   "chg_3m": 0.13,
+   "chg_6m": 2.84,
+   "chg_1y": 2.7,
+   "unit": "%",
+   "range_3m": [
+    98.77,
+    102.58
+   ]
+  },
+  {
+   "symbol": "CL=F",
+   "label": "WTI crude oil",
+   "group": "Commodities",
+   "kind": "price",
+   "last": 99.4,
+   "date": "2026-10-22",
+   "chg_1d": 2.32,
+   "chg_5d": 1.46,
+   "chg_1m": 7.86,
+   "chg_3m": 11.3,
+   "chg_6m": 3.7,
+   "chg_1y": 71.91,
+   "unit": "%",
+   "range_3m": [
+    75.22,
+    105.83
+   ]
+  },
+  {
+   "symbol": "BZ=F",
+   "label": "Brent crude oil",
+   "group": "Commodities",
+   "kind": "price",
+   "last": 113.18,
+   "date": "2026-10-22",
+   "chg_1d": 4.01,
+   "chg_5d": 6.85,
+   "chg_1m": 9.8,
+   "chg_3m": 16.95,
+   "chg_6m": 7.72,
+   "chg_1y": 84.57,
+   "unit": "%",
+   "range_3m": [
+    79.36,
+    113.18
+   ]
+  },
+  {
+   "symbol": "GC=F",
+   "label": "Gold",
+   "group": "Commodities",
+   "kind": "price",
+   "last": 4041.3,
+   "date": "2026-10-22",
+   "chg_1d": -2.62,
+   "chg_5d": -3.09,
+   "chg_1m": -6.42,
+   "chg_3m": -0.72,
+   "chg_6m": -14.45,
+   "chg_1y": -1.65,
+   "unit": "%",
+   "range_3m": [
+    4036.3,
+    4697.8
+   ]
+  },
+  {
+   "symbol": "BTC-USD",
+   "label": "Bitcoin",
+   "group": "Crypto",
+   "kind": "price",
+   "last": 81267.23,
+   "date": "2026-10-22",
+   "chg_1d": -3.27,
+   "chg_5d": -0.14,
+   "chg_1m": -4.23,
+   "chg_3m": 11.28,
+   "chg_6m": 29.21,
+   "chg_1y": 22.72,
+   "unit": "%",
+   "range_3m": [
+    75612.51,
+    86602.91
+   ]
+  },
+  {
+   "symbol": "ETH-USD",
+   "label": "Ether",
+   "group": "Crypto",
+   "kind": "price",
+   "last": 2378.88,
+   "date": "2026-10-22",
+   "chg_1d": -3.72,
+   "chg_5d": -0.87,
+   "chg_1m": -12.07,
+   "chg_3m": 2.26,
+   "chg_6m": 39.15,
+   "chg_1y": 22.19,
+   "unit": "%",
+   "range_3m": [
+    2378.88,
+    2776.47
+   ]
+  }
+ ],
+ "sectors": [
+  {
+   "symbol": "XLK",
+   "label": "Technology",
+   "last": 181.72,
+   "date": "2026-10-22",
+   "chg_1d": -3.62,
+   "chg_5d": -3.95,
+   "chg_1m": -6.97,
+   "chg_3m": 3.44,
+   "chg_6m": 16.88,
+   "chg_1y": 26.69,
+   "vs_spy_1d": -2.19,
+   "vs_spy_5d": -2.69,
+   "vs_spy_1m": -6.22,
+   "vs_spy_3m": 0.06,
+   "vs_spy_6m": 8.77,
+   "vs_spy_1y": 11.95
+  },
+  {
+   "symbol": "SMH",
+   "label": "Semiconductors",
+   "last": 521.21,
+   "date": "2026-10-22",
+   "chg_1d": -6.38,
+   "chg_5d": -6.73,
+   "chg_1m": -13.34,
+   "chg_3m": -7.12,
+   "chg_6m": 8.17,
+   "chg_1y": 51.41,
+   "vs_spy_1d": -4.95,
+   "vs_spy_5d": -5.47,
+   "vs_spy_1m": -12.59,
+   "vs_spy_3m": -10.5,
+   "vs_spy_6m": 0.06,
+   "vs_spy_1y": 36.67
+  },
+  {
+   "symbol": "XLC",
+   "label": "Communication services (telecom, media)",
+   "last": 107.0,
+   "date": "2026-10-22",
+   "chg_1d": -1.81,
+   "chg_5d": -4.84,
+   "chg_1m": -4.94,
+   "chg_3m": 0.99,
+   "chg_6m": -8.32,
+   "chg_1y": -7.14,
+   "vs_spy_1d": -0.38,
+   "vs_spy_5d": -3.58,
+   "vs_spy_1m": -4.19,
+   "vs_spy_3m": -2.39,
+   "vs_spy_6m": -16.43,
+   "vs_spy_1y": -21.88
+  },
+  {
+   "symbol": "XLY",
+   "label": "Consumer discretionary",
+   "last": 114.83,
+   "date": "2026-10-22",
+   "chg_1d": -0.6,
+   "chg_5d": 1.26,
+   "chg_1m": 3.78,
+   "chg_3m": 5.19,
+   "chg_6m": -2.06,
+   "chg_1y": -3.18,
+   "vs_spy_1d": 0.83,
+   "vs_spy_5d": 2.52,
+   "vs_spy_1m": 4.53,
+   "vs_spy_3m": 1.81,
+   "vs_spy_6m": -10.17,
+   "vs_spy_1y": -17.92
+  },
+  {
+   "symbol": "XLP",
+   "label": "Consumer staples",
+   "last": 89.75,
+   "date": "2026-10-22",
+   "chg_1d": 3.04,
+   "chg_5d": 3.55,
+   "chg_1m": 8.89,
+   "chg_3m": 7.39,
+   "chg_6m": 8.97,
+   "chg_1y": 16.3,
+   "vs_spy_1d": 4.47,
+   "vs_spy_5d": 4.81,
+   "vs_spy_1m": 9.64,
+   "vs_spy_3m": 4.01,
+   "vs_spy_6m": 0.86,
+   "vs_spy_1y": 1.56
+  },
+  {
+   "symbol": "XLF",
+   "label": "Financials",
+   "last": 56.56,
+   "date": "2026-10-22",
+   "chg_1d": 0.94,
+   "chg_5d": 2.34,
+   "chg_1m": 3.71,
+   "chg_3m": 0.81,
+   "chg_6m": 9.97,
+   "chg_1y": 8.96,
+   "vs_spy_1d": 2.37,
+   "vs_spy_5d": 3.6,
+   "vs_spy_1m": 4.46,
+   "vs_spy_3m": -2.57,
+   "vs_spy_6m": 1.86,
+   "vs_spy_1y": -5.78
+  },
+  {
+   "symbol": "KRE",
+   "label": "Regional banks",
+   "last": 72.28,
+   "date": "2026-10-22",
+   "chg_1d": 2.35,
+   "chg_5d": 3.63,
+   "chg_1m": 2.7,
+   "chg_3m": -4.01,
+   "chg_6m": 4.45,
+   "chg_1y": 22.05,
+   "vs_spy_1d": 3.78,
+   "vs_spy_5d": 4.89,
+   "vs_spy_1m": 3.45,
+   "vs_spy_3m": -7.39,
+   "vs_spy_6m": -3.66,
+   "vs_spy_1y": 7.31
+  },
+  {
+   "symbol": "XLV",
+   "label": "Health care",
+   "last": 181.36,
+   "date": "2026-10-22",
+   "chg_1d": 1.35,
+   "chg_5d": 2.35,
+   "chg_1m": 7.44,
+   "chg_3m": 11.99,
+   "chg_6m": 25.04,
+   "chg_1y": 27.05,
+   "vs_spy_1d": 2.78,
+   "vs_spy_5d": 3.61,
+   "vs_spy_1m": 8.19,
+   "vs_spy_3m": 8.61,
+   "vs_spy_6m": 16.93,
+   "vs_spy_1y": 12.31
+  },
+  {
+   "symbol": "XLI",
+   "label": "Industrials",
+   "last": 166.29,
+   "date": "2026-10-22",
+   "chg_1d": -1.2,
+   "chg_5d": -0.96,
+   "chg_1m": -2.24,
+   "chg_3m": -8.72,
+   "chg_6m": -3.98,
+   "chg_1y": 8.59,
+   "vs_spy_1d": 0.23,
+   "vs_spy_5d": 0.3,
+   "vs_spy_1m": -1.49,
+   "vs_spy_3m": -12.1,
+   "vs_spy_6m": -12.09,
+   "vs_spy_1y": -6.15
+  },
+  {
+   "symbol": "IYT",
+   "label": "Transportation",
+   "last": 81.78,
+   "date": "2026-10-22",
+   "chg_1d": 2.28,
+   "chg_5d": 1.08,
+   "chg_1m": 2.53,
+   "chg_3m": -6.88,
+   "chg_6m": 0.63,
+   "chg_1y": 14.7,
+   "vs_spy_1d": 3.71,
+   "vs_spy_5d": 2.34,
+   "vs_spy_1m": 3.28,
+   "vs_spy_3m": -10.26,
+   "vs_spy_6m": -7.48,
+   "vs_spy_1y": -0.04
+  },
+  {
+   "symbol": "XLE",
+   "label": "Energy",
+   "last": 67.51,
+   "date": "2026-10-22",
+   "chg_1d": -0.95,
+   "chg_5d": 1.43,
+   "chg_1m": 8.25,
+   "chg_3m": 13.92,
+   "chg_6m": 20.05,
+   "chg_1y": 60.2,
+   "vs_spy_1d": 0.48,
+   "vs_spy_5d": 2.69,
+   "vs_spy_1m": 9.0,
+   "vs_spy_3m": 10.54,
+   "vs_spy_6m": 11.94,
+   "vs_spy_1y": 45.46
+  },
+  {
+   "symbol": "XLB",
+   "label": "Materials",
+   "last": 51.54,
+   "date": "2026-10-22",
+   "chg_1d": 0.44,
+   "chg_5d": 1.95,
+   "chg_1m": 2.52,
+   "chg_3m": 1.02,
+   "chg_6m": 0.32,
+   "chg_1y": 18.47,
+   "vs_spy_1d": 1.87,
+   "vs_spy_5d": 3.21,
+   "vs_spy_1m": 3.27,
+   "vs_spy_3m": -2.36,
+   "vs_spy_6m": -7.79,
+   "vs_spy_1y": 3.73
+  },
+  {
+   "symbol": "XLRE",
+   "label": "Real estate",
+   "last": 42.47,
+   "date": "2026-10-22",
+   "chg_1d": 0.96,
+   "chg_5d": 1.13,
+   "chg_1m": 1.49,
+   "chg_3m": -6.81,
+   "chg_6m": -1.73,
+   "chg_1y": 3.81,
+   "vs_spy_1d": 2.39,
+   "vs_spy_5d": 2.39,
+   "vs_spy_1m": 2.24,
+   "vs_spy_3m": -10.19,
+   "vs_spy_6m": -9.84,
+   "vs_spy_1y": -10.93
+  },
+  {
+   "symbol": "XLU",
+   "label": "Utilities",
+   "last": 42.74,
+   "date": "2026-10-22",
+   "chg_1d": 1.75,
+   "chg_5d": 2.61,
+   "chg_1m": 7.51,
+   "chg_3m": -7.0,
+   "chg_6m": -6.0,
+   "chg_1y": -2.98,
+   "vs_spy_1d": 3.18,
+   "vs_spy_5d": 3.87,
+   "vs_spy_1m": 8.26,
+   "vs_spy_3m": -10.38,
+   "vs_spy_6m": -14.11,
+   "vs_spy_1y": -17.72
+  },
+  {
+   "symbol": "ITB",
+   "label": "Homebuilders",
+   "last": 90.82,
+   "date": "2026-10-22",
+   "chg_1d": 4.91,
+   "chg_5d": 4.69,
+   "chg_1m": 2.29,
+   "chg_3m": -5.67,
+   "chg_6m": -9.02,
+   "chg_1y": -12.9,
+   "vs_spy_1d": 6.34,
+   "vs_spy_5d": 5.95,
+   "vs_spy_1m": 3.04,
+   "vs_spy_3m": -9.05,
+   "vs_spy_6m": -17.13,
+   "vs_spy_1y": -27.64
+  },
+  {
+   "symbol": "IWM",
+   "label": "Small caps (Russell 2000)",
+   "last": 275.91,
+   "date": "2026-10-22",
+   "chg_1d": -0.21,
+   "chg_5d": 0.3,
+   "chg_1m": -2.13,
+   "chg_3m": -4.99,
+   "chg_6m": 0.64,
+   "chg_1y": 12.84,
+   "vs_spy_1d": 1.22,
+   "vs_spy_5d": 1.56,
+   "vs_spy_1m": -1.38,
+   "vs_spy_3m": -8.37,
+   "vs_spy_6m": -7.47,
+   "vs_spy_1y": -1.9
+  }
+ ],
+ "tickers": [
+  {
+   "symbol": "QQQ",
+   "last_close": 702.4,
+   "last_close_date": "2026-10-22",
+   "prev_close": 725.2,
+   "change_1d_pct": -3.14,
+   "change_5d_pct": -3.52,
+   "change_1m_pct": -5.24,
+   "high_52w": 762.86,
+   "low_52w": 554.41,
+   "live": {
+    "price": 702.38,
+    "time_et": "2026-10-22 15:45"
+   },
+   "daily": {
+    "score": -0.27,
+    "score_5_bars_ago": 0.27,
+    "verdict": "Turning bearish",
+    "mas": {
+     "EMA9": {
+      "value": 722.74,
+      "price_vs_pct": -2.81,
+      "slope_5_bars_pct": -2.41
+     },
+     "EMA21": {
+      "value": 729.36,
+      "price_vs_pct": -3.7,
+      "slope_5_bars_pct": -1.23
+     },
+     "SMA50": {
+      "value": 725.94,
+      "price_vs_pct": -3.24,
+      "slope_5_bars_pct": -0.06
+     },
+     "SMA200": {
+      "value": 675.68,
+      "price_vs_pct": 3.96,
+      "slope_5_bars_pct": 0.37
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 731.36,
+      "price_vs_pct": -3.96,
+      "slope_5_bars_pct": -1.7
+     },
+     "HMA55": {
+      "value": 743.4,
+      "price_vs_pct": -5.52,
+      "slope_5_bars_pct": -0.93,
+      "last_turn": {
+       "direction": "down",
+       "when": "2026-10-16",
+       "bars_ago": 4
+      }
+     }
+    },
+    "rsi14": 35.9,
+    "rsi14_5_bars_ago": 44.2,
+    "macd": {
+     "line": -3.628,
+     "signal": 1.484,
+     "hist": -5.113,
+     "hist_prev": -4.294,
+     "last_cross": {
+      "when": "2026-10-13",
+      "type": "bearish",
+      "bars_ago": 7
+     }
+    }
+   },
+   "levels": {
+    "supports": [
+     {
+      "price": 701.19,
+      "what": "horizontal level (3 touches)",
+      "distance_pct": -0.17
+     },
+     {
+      "price": 675.68,
+      "what": "SMA200",
+      "distance_pct": -3.8
+     },
+     {
+      "price": 645.24,
+      "what": "parallel channel (rising) lower line",
+      "distance_pct": -8.14
+     },
+     {
+      "price": 619.59,
+      "what": "horizontal level (4 touches)",
+      "distance_pct": -11.79
+     }
+    ],
+    "resistances": [
+     {
+      "price": 714.27,
+      "what": "anchored VWAP from 6-month low (2026-04-28)",
+      "distance_pct": 1.69
+     },
+     {
+      "price": 725.94,
+      "what": "SMA50",
+      "distance_pct": 3.35
+     },
+     {
+      "price": 729.36,
+      "what": "EMA21",
+      "distance_pct": 3.84
+     },
+     {
+      "price": 730.49,
+      "what": "anchored VWAP from last swing high (2026-10-06)",
+      "distance_pct": 4.0
+     },
+     {
+      "price": 730.49,
+      "what": "anchored VWAP from 6-month high (2026-10-06)",
+      "distance_pct": 4.0
+     },
+     {
+      "price": 732.87,
+      "what": "anchored VWAP from last swing low (2026-09-16)",
+      "distance_pct": 4.34
+     }
+    ]
+   },
+   "read30": {
+    "bars": 30,
+    "from": "2026-09-11",
+    "verdict": "Bearish",
+    "score": -3,
+    "positives": 5,
+    "negatives": 8,
+    "observations": [
+     {
+      "sign": 0,
+      "text": "-0.8% over the last 30 days; closed in the lower third of its 699.27-762.86 range",
+      "kind": "performance"
+     },
+     {
+      "sign": 1,
+      "text": "higher highs and higher lows (low 699.27 \u2192 702.22 on 2026-10-22): uptrend structure intact",
+      "kind": "structure"
+     },
+     {
+      "sign": 1,
+      "text": "no lower low: the window's low 699.27 held above the previous 30-day low 672.60",
+      "kind": "structure"
+     },
+     {
+      "sign": -1,
+      "text": "latest day (2026-10-22) -3.1% on 1.5x average volume, a move of 1.8x the usual range",
+      "kind": "recent"
+     },
+     {
+      "sign": -1,
+      "text": "sharp pullback: -3.7% from the 2026-10-15 high 729.43 within 5 days",
+      "kind": "recent"
+     },
+     {
+      "sign": -1,
+      "text": "gap down on 2026-10-13 (-0.9%, volume 0.9x average), still unfilled \u2192 gap resistance above at 746.04",
+      "kind": "gap"
+     },
+     {
+      "sign": -1,
+      "text": "gap down on 2026-10-22 (-1.6%, volume 1.5x average), still unfilled \u2192 gap resistance above at 725.20",
+      "kind": "gap"
+     },
+     {
+      "sign": 0,
+      "text": "7 other gaps on normal volume already filled",
+      "kind": "gap"
+     },
+     {
+      "sign": -1,
+      "text": "more volume on down days than up days (1.4x): distribution",
+      "kind": "volume"
+     },
+     {
+      "sign": -1,
+      "text": "heaviest volume on 2026-10-16 (1.9x average) was an down day (-2.5%)",
+      "kind": "volume"
+     },
+     {
+      "sign": 1,
+      "text": "Inverse head & shoulders confirmed 2026-09-21",
+      "kind": "formation"
+     },
+     {
+      "sign": 1,
+      "text": "Broadening (falling) broke up 2026-09-21",
+      "kind": "formation"
+     },
+     {
+      "sign": 1,
+      "text": "Parallel channel (rising) (2025-01-06 \u2192 2026-06-03): active",
+      "kind": "formation"
+     },
+     {
+      "sign": -1,
+      "text": "price below the 21-day EMA (729.36) and below the 50-day average (725.94)",
+      "kind": "trend"
+     },
+     {
+      "sign": -1,
+      "text": "EMA9 crossed below EMA21 on 2026-10-16",
+      "kind": "trend"
+     }
+    ]
+   },
+   "templates": {
+    "minervini": {
+     "passed": 6,
+     "of": 7,
+     "rules": [
+      {
+       "rule": "Price above the 150- and 200-day averages",
+       "ok": true
+      },
+      {
+       "rule": "150-day average above the 200-day",
+       "ok": true
+      },
+      {
+       "rule": "200-day average rising vs a month ago",
+       "ok": true
+      },
+      {
+       "rule": "50-day average above the 150- and 200-day",
+       "ok": true
+      },
+      {
+       "rule": "Price above the 50-day average",
+       "ok": false
+      },
+      {
+       "rule": "At least 25% above the 52-week low (554.41)",
+       "ok": true
+      },
+      {
+       "rule": "Within 25% of the 52-week high (762.86)",
+       "ok": true
+      }
+     ]
+    },
+    "weinstein": {
+     "stage": 2,
+     "text": "Stage 2 (advancing: above a rising 30-week average)",
+     "slope_pct": 2.65
+    },
+    "qullamaggie": {
+     "setup": false,
+     "breakout_today": false,
+     "checks": [
+      {
+       "rule": "Prior move of 30%+ in the last 1-3 months (+13%)",
+       "ok": false
+      },
+      {
+       "rule": "Tight 10-day range (7.2% = 4.2x ATR, wants <= 3x)",
+       "ok": false
+      },
+      {
+       "rule": "Within 10% of the 3-month high",
+       "ok": true
+      },
+      {
+       "rule": "Above the 10- and 20-day EMAs, 20-day rising",
+       "ok": false
+      },
+      {
+       "rule": "Volume drying up in the consolidation",
+       "ok": false
+      }
+     ]
+    }
+   },
+   "open_patterns": [
+    {
+     "type": "Parallel channel (rising)",
+     "bias": "bullish",
+     "start": "2025-01-06",
+     "end": "2026-06-03",
+     "status": "active",
+     "target": null,
+     "note": "3+2 touches, width 20.3%, +0.12%/bar, now 645.24-809.30"
+    }
+   ],
+   "recent_signals": [],
+   "recent_breaks": [
+    {
+     "type": "Rising support trendline",
+     "bias": "bullish",
+     "status": "broke down 2026-10-16",
+     "target": null
+    }
+   ],
+   "vs_spy_pct": {
+    "1d": -1.69,
+    "5d": -2.24,
+    "1m": -4.47
+   },
+   "next_earnings": null,
+   "mtf": {
+    "summary": {
+     "dir": "down",
+     "from_swing": {
+      "price": 704.84,
+      "when": "2026-10-22 15:25"
+     },
+     "steps": [
+      {
+       "tf": "5m",
+       "status": "confirmed",
+       "when": "2026-10-22 15:45",
+       "level": 702.38
+      },
+      {
+       "tf": "15m",
+       "status": "already trending down",
+       "when": "2026-10-22 12:30",
+       "level": 706.7
+      },
+      {
+       "tf": "1h",
+       "status": "already trending down",
+       "when": "2026-10-22 09:30",
+       "level": 710.39
+      },
+      {
+       "tf": "4h",
+       "status": "already trending down",
+       "when": "2026-10-22 09:30",
+       "level": 707.23
+      },
+      {
+       "tf": "1D",
+       "status": "pending",
+       "level": 702.22,
+       "distance_pct": -0.02
+      }
+     ],
+     "next": {
+      "tf": "1D",
+      "status": "pending",
+      "level": 702.22,
+      "distance_pct": -0.02
+     }
+    },
+    "timeframes": [
+     {
+      "tf": "5m",
+      "trend": "down",
+      "rsi": 36.0,
+      "last_turn": {
+       "dir": "down",
+       "kind": "continuation",
+       "when": "2026-10-22 15:45",
+       "level": 702.38,
+       "swing": {
+        "price": 704.84,
+        "when": "2026-10-22 15:25"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "turn",
+       "level": 704.84,
+       "from_swing": {
+        "price": 702.21,
+        "when": "2026-10-22 15:40",
+        "confirmed": false
+       },
+       "distance_pct": 0.35
+      }
+     },
+     {
+      "tf": "15m",
+      "trend": "down",
+      "rsi": 27.3,
+      "last_turn": {
+       "dir": "down",
+       "kind": "reversal",
+       "when": "2026-10-22 12:30",
+       "level": 706.7,
+       "swing": {
+        "price": 710.29,
+        "when": "2026-10-22 12:15"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "turn",
+       "level": 710.29,
+       "from_swing": {
+        "price": 702.21,
+        "when": "2026-10-22 15:30",
+        "confirmed": false
+       },
+       "distance_pct": 1.13
+      }
+     },
+     {
+      "tf": "1h",
+      "trend": "down",
+      "rsi": 28.4,
+      "last_turn": {
+       "dir": "down",
+       "kind": "reversal",
+       "when": "2026-10-22 09:30",
+       "level": 710.39,
+       "swing": {
+        "price": 727.95,
+        "when": "2026-10-21 12:30"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "turn",
+       "level": 727.95,
+       "from_swing": {
+        "price": 702.21,
+        "when": "2026-10-22 15:30",
+        "confirmed": false
+       },
+       "distance_pct": 3.64
+      }
+     },
+     {
+      "tf": "4h",
+      "trend": "down",
+      "rsi": 32.0,
+      "last_turn": {
+       "dir": "down",
+       "kind": "continuation",
+       "when": "2026-10-22 09:30",
+       "level": 707.23,
+       "swing": {
+        "price": 727.95,
+        "when": "2026-10-21 09:30"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "turn",
+       "level": 727.95,
+       "from_swing": {
+        "price": 702.21,
+        "when": "2026-10-22 13:30",
+        "confirmed": false
+       },
+       "distance_pct": 3.64
+      }
+     },
+     {
+      "tf": "1D",
+      "trend": "down",
+      "rsi": 35.9,
+      "last_turn": {
+       "dir": "up",
+       "kind": "continuation",
+       "when": "2026-09-21",
+       "level": 733.82,
+       "swing": {
+        "price": 699.27,
+        "when": "2026-09-16"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "continuation",
+       "level": 762.86,
+       "from_swing": {
+        "price": 702.22,
+        "when": "2026-10-22",
+        "confirmed": false
+       },
+       "distance_pct": 8.62
+      }
+     }
+    ]
+   },
+   "mtf_text": "QQQ turn ladder\n  5m   trend down  RSI  36.0 MACD +\u2193 | turned down (continuation) 2026-10-22 15:45: closed below the prior swing low 702.38 after the high 704.84 (2026-10-22 15:25) | next turn up: close above 704.84 (+0.35%)\n  15m  trend down  RSI  27.3 MACD +\u2193 | turned down (reversal) 2026-10-22 12:30: closed below the prior swing low 706.7 after the high 710.29 (2026-10-22 12:15) | next turn up: close above 710.29 (+1.13%)\n  1h   trend down  RSI  28.4 MACD -\u2193 | turned down (reversal) 2026-10-22 09:30: closed below the prior swing low 710.39 after the high 727.95 (2026-10-21 12:30) | next turn up: close above 727.95 (+3.64%)\n  4h   trend down  RSI  32.0 MACD -\u2193 | turned down (continuation) 2026-10-22 09:30: closed below the prior swing low 707.23 after the high 727.95 (2026-10-21 09:30) | next turn up: close above 727.95 (+3.64%)\n  1D   trend down  RSI  35.9 MACD -\u2193 | turned up (continuation) 2026-09-21: closed above the prior swing high 733.82 after the low 699.27 (2026-09-16) | next continuation up: close above 762.86 (+8.62%)\n  cascade (turn down from the 704.84 swing at 2026-10-22 15:25): 5m confirmed 2026-10-22 15:45; 15m already trending down; 1h already trending down; 4h already trending down; 1D needs a close below 702.22 (-0.02%)",
+   "valuation": {
+    "etf": {
+     "pe": 26.89,
+     "earnings_yield": 0.0372,
+     "equity_risk_premium": -0.0123
+    },
+    "scenarios": null,
+    "implied_growth": null,
+    "flags": [],
+    "text": "QQQ Invesco QQQ Trust, Series 1 \u2014 price 702.38 USD, 10Y 4.95%\n  ETF P/E 26.89, earnings yield 3.72% vs 10Y 4.95% \u2192 equity risk premium -1.23pp"
+   },
+   "volume_vs_20d_avg": 1.48,
+   "today": {
+    "date": "2026-10-22",
+    "open": 713.68,
+    "gap_pct": -1.59,
+    "opening_range_15m": [
+     712.45,
+     714.74
+    ],
+    "high": 715.43,
+    "low": 702.21,
+    "last": 702.35,
+    "last_bar_et": "2026-10-22 15:45"
+   },
+   "h4": {
+    "score": -0.64,
+    "score_5_bars_ago": -0.64,
+    "verdict": "Bearish",
+    "mas": {
+     "EMA9": {
+      "value": 716.44,
+      "price_vs_pct": -1.97,
+      "slope_5_bars_pct": -0.9
+     },
+     "EMA21": {
+      "value": 724.98,
+      "price_vs_pct": -3.12,
+      "slope_5_bars_pct": -0.86
+     },
+     "SMA50": {
+      "value": 737.24,
+      "price_vs_pct": -4.73,
+      "slope_5_bars_pct": 0.07
+     },
+     "SMA200": {
+      "value": 720.14,
+      "price_vs_pct": -2.47,
+      "slope_5_bars_pct": -0.08
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 720.48,
+      "price_vs_pct": -2.52,
+      "slope_5_bars_pct": -1.14
+     },
+     "HMA55": {
+      "value": 723.91,
+      "price_vs_pct": -2.98,
+      "slope_5_bars_pct": -1.67,
+      "last_turn": {
+       "direction": "down",
+       "when": "2026-10-12 09:30",
+       "bars_ago": 17
+      }
+     }
+    },
+    "rsi14": 32.0,
+    "rsi14_5_bars_ago": 38.1,
+    "macd": {
+     "line": -7.958,
+     "signal": -5.969,
+     "hist": -1.989,
+     "hist_prev": -1.421,
+     "last_cross": {
+      "when": "2026-10-08 09:30",
+      "type": "bearish",
+      "bars_ago": 21
+     }
+    },
+    "asof": "2026-10-22 13:30"
+   },
+   "session": {
+    "date": "2026-10-22",
+    "open": 713.68,
+    "high": 715.43,
+    "low": 702.21,
+    "last": 702.33,
+    "vwap": 707.66
+   }
+  },
+  {
+   "symbol": "SPY",
+   "last_close": 761.91,
+   "last_close_date": "2026-10-22",
+   "prev_close": 773.09,
+   "change_1d_pct": -1.45,
+   "change_5d_pct": -1.28,
+   "change_1m_pct": -0.77,
+   "high_52w": 781.62,
+   "low_52w": 626.11,
+   "live": {
+    "price": 761.91,
+    "time_et": "2026-10-22 15:45"
+   },
+   "daily": {
+    "score": -0.27,
+    "score_5_bars_ago": 0.82,
+    "verdict": "Turning bearish",
+    "mas": {
+     "EMA9": {
+      "value": 768.99,
+      "price_vs_pct": -0.92,
+      "slope_5_bars_pct": -0.58
+     },
+     "EMA21": {
+      "value": 769.34,
+      "price_vs_pct": -0.97,
+      "slope_5_bars_pct": -0.2
+     },
+     "SMA50": {
+      "value": 767.18,
+      "price_vs_pct": -0.69,
+      "slope_5_bars_pct": -0.04
+     },
+     "SMA200": {
+      "value": 723.61,
+      "price_vs_pct": 5.29,
+      "slope_5_bars_pct": 0.3
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 770.73,
+      "price_vs_pct": -1.14,
+      "slope_5_bars_pct": -0.26
+     },
+     "HMA55": {
+      "value": 772.94,
+      "price_vs_pct": -1.43,
+      "slope_5_bars_pct": 0.09,
+      "last_turn": {
+       "direction": "down",
+       "when": "2026-10-22",
+       "bars_ago": 0
+      }
+     }
+    },
+    "rsi14": 43.9,
+    "rsi14_5_bars_ago": 52.3,
+    "macd": {
+     "line": 0.555,
+     "signal": 1.822,
+     "hist": -1.268,
+     "hist_prev": -0.773,
+     "last_cross": {
+      "when": "2026-10-15",
+      "type": "bearish",
+      "bars_ago": 5
+     }
+    }
+   },
+   "levels": {
+    "supports": [
+     {
+      "price": 761.35,
+      "what": "rising support trendline",
+      "distance_pct": -0.07
+     },
+     {
+      "price": 752.72,
+      "what": "horizontal level (4 touches)",
+      "distance_pct": -1.21
+     },
+     {
+      "price": 752.18,
+      "what": "consolidation range bottom",
+      "distance_pct": -1.28
+     },
+     {
+      "price": 749.92,
+      "what": "anchored VWAP from 6-month low (2026-04-29)",
+      "distance_pct": -1.57
+     },
+     {
+      "price": 747.74,
+      "what": "double top neckline",
+      "distance_pct": -1.86
+     },
+     {
+      "price": 723.61,
+      "what": "SMA200",
+      "distance_pct": -5.03
+     }
+    ],
+    "resistances": [
+     {
+      "price": 762.95,
+      "what": "broadening (rising) upper line",
+      "distance_pct": 0.14
+     },
+     {
+      "price": 766.6,
+      "what": "anchored VWAP from last swing high (2026-08-13)",
+      "distance_pct": 0.62
+     },
+     {
+      "price": 767.18,
+      "what": "SMA50",
+      "distance_pct": 0.69
+     },
+     {
+      "price": 768.01,
+      "what": "anchored VWAP from last swing low (2026-09-16)",
+      "distance_pct": 0.8
+     },
+     {
+      "price": 769.34,
+      "what": "EMA21",
+      "distance_pct": 0.98
+     },
+     {
+      "price": 771.41,
+      "what": "anchored VWAP from 6-month high (2026-10-06)",
+      "distance_pct": 1.25
+     }
+    ]
+   },
+   "read30": {
+    "bars": 30,
+    "from": "2026-09-11",
+    "verdict": "Leaning bearish",
+    "score": -2,
+    "positives": 5,
+    "negatives": 7,
+    "observations": [
+     {
+      "sign": 0,
+      "text": "+0.8% over the last 30 days; closed in the middle third of its 747.74-781.62 range",
+      "kind": "performance"
+     },
+     {
+      "sign": 1,
+      "text": "higher highs and higher lows (low 727.29 \u2192 747.74 on 2026-09-16): uptrend structure intact",
+      "kind": "structure"
+     },
+     {
+      "sign": 1,
+      "text": "no lower low: the window's low 747.74 held above the previous 30-day low 732.77",
+      "kind": "structure"
+     },
+     {
+      "sign": -1,
+      "text": "latest day (2026-10-22) -1.4% on 0.9x average volume, a move of 1.5x the usual range",
+      "kind": "recent"
+     },
+     {
+      "sign": 1,
+      "text": "gap up on 2026-09-17 (+1.2%, volume 1.3x average), still unfilled \u2192 gap support below at 752.18",
+      "kind": "gap"
+     },
+     {
+      "sign": -1,
+      "text": "gap down on 2026-10-22 (-0.9%, volume 0.9x average), still unfilled \u2192 gap resistance above at 773.09",
+      "kind": "gap"
+     },
+     {
+      "sign": 0,
+      "text": "3 other gaps on normal volume already filled",
+      "kind": "gap"
+     },
+     {
+      "sign": -1,
+      "text": "more volume on down days than up days (1.5x): distribution",
+      "kind": "volume"
+     },
+     {
+      "sign": 0,
+      "text": "Consolidation range (2026-08-03 \u2192 2026-10-22): active (inside range)",
+      "kind": "formation"
+     },
+     {
+      "sign": -1,
+      "text": "Wyckoff distribution (candidate) (2026-08-03 \u2192 2026-10-22): Phase C, still in range",
+      "kind": "formation"
+     },
+     {
+      "sign": 1,
+      "text": "Bullish engulfing on 2026-10-19, confirmed 2026-10-21",
+      "kind": "candle"
+     },
+     {
+      "sign": -1,
+      "text": "Double top (2026-08-13 \u2192 2026-10-06): possible (2nd peak still forming)",
+      "kind": "formation"
+     },
+     {
+      "sign": 1,
+      "text": "Morning star on 2026-09-16, confirmed 2026-09-21",
+      "kind": "candle"
+     },
+     {
+      "sign": 0,
+      "text": "Broadening (rising) (2026-06-26 \u2192 2026-09-16): active (price inside lines)",
+      "kind": "formation"
+     },
+     {
+      "sign": -1,
+      "text": "price below the 21-day EMA (769.34) and below the 50-day average (767.18)",
+      "kind": "trend"
+     },
+     {
+      "sign": -1,
+      "text": "EMA9 crossed below EMA21 on 2026-10-22",
+      "kind": "trend"
+     }
+    ]
+   },
+   "templates": {
+    "minervini": {
+     "passed": 5,
+     "of": 7,
+     "rules": [
+      {
+       "rule": "Price above the 150- and 200-day averages",
+       "ok": true
+      },
+      {
+       "rule": "150-day average above the 200-day",
+       "ok": true
+      },
+      {
+       "rule": "200-day average rising vs a month ago",
+       "ok": true
+      },
+      {
+       "rule": "50-day average above the 150- and 200-day",
+       "ok": true
+      },
+      {
+       "rule": "Price above the 50-day average",
+       "ok": false
+      },
+      {
+       "rule": "At least 25% above the 52-week low (626.11)",
+       "ok": false
+      },
+      {
+       "rule": "Within 25% of the 52-week high (781.62)",
+       "ok": true
+      }
+     ]
+    },
+    "weinstein": {
+     "stage": 2,
+     "text": "Stage 2 (advancing: above a rising 30-week average)",
+     "slope_pct": 1.8
+    },
+    "qullamaggie": {
+     "setup": false,
+     "breakout_today": false,
+     "checks": [
+      {
+       "rule": "Prior move of 30%+ in the last 1-3 months (+6%)",
+       "ok": false
+      },
+      {
+       "rule": "Tight 10-day range (2.5% = 2.6x ATR, wants <= 3x)",
+       "ok": true
+      },
+      {
+       "rule": "Within 10% of the 3-month high",
+       "ok": true
+      },
+      {
+       "rule": "Above the 10- and 20-day EMAs, 20-day rising",
+       "ok": false
+      },
+      {
+       "rule": "Volume drying up in the consolidation",
+       "ok": false
+      }
+     ]
+    }
+   },
+   "open_patterns": [
+    {
+     "type": "Consolidation range",
+     "bias": "neutral",
+     "start": "2026-08-03",
+     "end": "2026-10-22",
+     "status": "active (inside range)",
+     "target": null,
+     "note": "58 bars, closing range 752.18-779.09 (3.6%, 3.0x ATR), top tested 2x, bottom 2x, volume 0.86x the prior 20 bars"
+    },
+    {
+     "type": "Wyckoff distribution (candidate)",
+     "bias": "bearish",
+     "start": "2026-08-03",
+     "end": "2026-10-22",
+     "status": "Phase C, still in range",
+     "target": null,
+     "note": "Phase C \u00b7 prior trend +5% \u00b7 UTAD 2026-10-06 on light volume (0.9x range avg)"
+    },
+    {
+     "type": "Double top",
+     "bias": "bearish",
+     "start": "2026-08-13",
+     "end": "2026-10-06",
+     "status": "possible (2nd peak still forming)",
+     "target": 715.96,
+     "note": "peaks 0.5% apart, 37 bars, neckline 747.74"
+    },
+    {
+     "type": "Broadening (rising)",
+     "bias": "neutral",
+     "start": "2026-06-26",
+     "end": "2026-09-16",
+     "status": "active (price inside lines)",
+     "target": null,
+     "note": "56 bars, upper +0.15%/bar, lower +0.08%/bar"
+    },
+    {
+     "type": "Rising support trendline",
+     "bias": "bullish",
+     "start": "2026-06-26",
+     "end": "2026-09-16",
+     "status": "active",
+     "target": null,
+     "note": "3 touches over 56 bars, +0.08%/bar, now at 761.35"
+    },
+    {
+     "type": "Rising resistance trendline",
+     "bias": "neutral",
+     "start": "2024-12-26",
+     "end": "2026-08-13",
+     "status": "active",
+     "target": null,
+     "note": "6 touches over 407 bars, +0.08%/bar, now at 797.09"
+    },
+    {
+     "type": "Rising resistance trendline",
+     "bias": "neutral",
+     "start": "2025-03-25",
+     "end": "2025-10-29",
+     "status": "active",
+     "target": null,
+     "note": "4 touches over 151 bars, +0.13%/bar, now at 856.93"
+    }
+   ],
+   "recent_signals": [
+    {
+     "type": "Bullish engulfing",
+     "bias": "bullish",
+     "start": "2026-10-19",
+     "status": "confirmed 2026-10-21",
+     "note": "after a -1.5% 5-bar move; confirms on a close above 772.29"
+    }
+   ],
+   "recent_breaks": [],
+   "next_earnings": null,
+   "mtf": {
+    "summary": {
+     "dir": "down",
+     "from_swing": {
+      "price": 763.98,
+      "when": "2026-10-22 13:35"
+     },
+     "steps": [
+      {
+       "tf": "5m",
+       "status": "confirmed",
+       "when": "2026-10-22 14:00",
+       "level": 762.16
+      },
+      {
+       "tf": "15m",
+       "status": "pending",
+       "level": 761.16,
+       "distance_pct": -0.1
+      },
+      {
+       "tf": "1h",
+       "status": "already trending down",
+       "when": "2026-10-22 09:30",
+       "level": 767.82
+      },
+      {
+       "tf": "4h",
+       "status": "pending",
+       "level": 761.16,
+       "distance_pct": -0.1
+      },
+      {
+       "tf": "1D",
+       "status": "pending",
+       "level": 760.64,
+       "distance_pct": -0.17
+      }
+     ],
+     "next": {
+      "tf": "15m",
+      "status": "pending",
+      "level": 761.16,
+      "distance_pct": -0.1
+     }
+    },
+    "timeframes": [
+     {
+      "tf": "5m",
+      "trend": "down",
+      "rsi": 42.8,
+      "last_turn": {
+       "dir": "down",
+       "kind": "continuation",
+       "when": "2026-10-22 14:00",
+       "level": 762.16,
+       "swing": {
+        "price": 763.98,
+        "when": "2026-10-22 13:35"
+       }
+      },
+      "pending": {
+       "dir": "down",
+       "kind": "continuation",
+       "level": 761.16,
+       "from_swing": {
+        "price": 763.25,
+        "when": "2026-10-22 15:25",
+        "confirmed": false
+       },
+       "distance_pct": -0.1
+      }
+     },
+     {
+      "tf": "15m",
+      "trend": "down",
+      "rsi": 36.6,
+      "last_turn": {
+       "dir": "up",
+       "kind": "reversal",
+       "when": "2026-10-22 11:45",
+       "level": 764.74,
+       "swing": {
+        "price": 762.4,
+        "when": "2026-10-22 11:30"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "continuation",
+       "level": 763.76,
+       "from_swing": {
+        "price": 761.16,
+        "when": "2026-10-22 15:00",
+        "confirmed": false
+       },
+       "distance_pct": 0.24
+      }
+     },
+     {
+      "tf": "1h",
+      "trend": "down",
+      "rsi": 36.1,
+      "last_turn": {
+       "dir": "down",
+       "kind": "reversal",
+       "when": "2026-10-22 09:30",
+       "level": 767.82,
+       "swing": {
+        "price": 774.44,
+        "when": "2026-10-21 13:30"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "turn",
+       "level": 774.44,
+       "from_swing": {
+        "price": 761.16,
+        "when": "2026-10-22 14:30",
+        "confirmed": false
+       },
+       "distance_pct": 1.64
+      }
+     },
+     {
+      "tf": "4h",
+      "trend": "down",
+      "rsi": 39.7,
+      "last_turn": {
+       "dir": "up",
+       "kind": "continuation",
+       "when": "2026-10-06 09:30",
+       "level": 775.14,
+       "swing": {
+        "price": 758.79,
+        "when": "2026-10-01 09:30"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "continuation",
+       "level": 774.44,
+       "from_swing": {
+        "price": 761.16,
+        "when": "2026-10-22 13:30",
+        "confirmed": false
+       },
+       "distance_pct": 1.64
+      }
+     },
+     {
+      "tf": "1D",
+      "trend": "down",
+      "rsi": 43.9,
+      "last_turn": {
+       "dir": "up",
+       "kind": "continuation",
+       "when": "2026-10-06",
+       "level": 777.44,
+       "swing": {
+        "price": 747.74,
+        "when": "2026-09-16"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "continuation",
+       "level": 781.62,
+       "from_swing": {
+        "price": 760.64,
+        "when": "2026-10-16",
+        "confirmed": false
+       },
+       "distance_pct": 2.58
+      }
+     }
+    ]
+   },
+   "mtf_text": "SPY turn ladder\n  5m   trend down  RSI  42.8 MACD +\u2193 | turned down (continuation) 2026-10-22 14:00: closed below the prior swing low 762.16 after the high 763.98 (2026-10-22 13:35) | next continuation down: close below 761.16 (-0.10%)\n  15m  trend down  RSI  36.6 MACD +\u2193 | turned up (reversal) 2026-10-22 11:45: closed above the prior swing high 764.74 after the low 762.4 (2026-10-22 11:30) | next continuation up: close above 763.76 (+0.24%)\n  1h   trend down  RSI  36.1 MACD -\u2193 | turned down (reversal) 2026-10-22 09:30: closed below the prior swing low 767.82 after the high 774.44 (2026-10-21 13:30) | next turn up: close above 774.44 (+1.64%)\n  4h   trend down  RSI  39.7 MACD -\u2193 | turned up (continuation) 2026-10-06 09:30: closed above the prior swing high 775.14 after the low 758.79 (2026-10-01 09:30) | next continuation up: close above 774.44 (+1.64%)\n  1D   trend down  RSI  43.9 MACD -\u2193 | turned up (continuation) 2026-10-06: closed above the prior swing high 777.44 after the low 747.74 (2026-09-16) | next continuation up: close above 781.62 (+2.58%)\n  cascade (turn down from the 763.98 swing at 2026-10-22 13:35): 5m confirmed 2026-10-22 14:00; 15m needs a close below 761.16 (-0.10%); 1h already trending down; 4h needs a close below 761.16 (-0.10%); 1D needs a close below 760.64 (-0.17%)",
+   "valuation": {
+    "etf": {
+     "pe": 24.19,
+     "earnings_yield": 0.0413,
+     "equity_risk_premium": -0.0082
+    },
+    "scenarios": null,
+    "implied_growth": null,
+    "flags": [],
+    "text": "SPY State Street SPDR S&P 500 ETF T \u2014 price 761.93 USD, 10Y 4.95%\n  ETF P/E 24.19, earnings yield 4.13% vs 10Y 4.95% \u2192 equity risk premium -0.82pp"
+   },
+   "volume_vs_20d_avg": 0.89,
+   "today": {
+    "date": "2026-10-22",
+    "open": 766.39,
+    "gap_pct": -0.87,
+    "opening_range_15m": [
+     765.95,
+     767.45
+    ],
+    "high": 767.71,
+    "low": 761.16,
+    "last": 761.91,
+    "last_bar_et": "2026-10-22 15:45"
+   },
+   "h4": {
+    "score": -0.27,
+    "score_5_bars_ago": 0.27,
+    "verdict": "Turning bearish",
+    "mas": {
+     "EMA9": {
+      "value": 767.65,
+      "price_vs_pct": -0.75,
+      "slope_5_bars_pct": -0.15
+     },
+     "EMA21": {
+      "value": 769.43,
+      "price_vs_pct": -0.98,
+      "slope_5_bars_pct": -0.13
+     },
+     "SMA50": {
+      "value": 770.18,
+      "price_vs_pct": -1.07,
+      "slope_5_bars_pct": 0.12
+     },
+     "SMA200": {
+      "value": 758.3,
+      "price_vs_pct": 0.48,
+      "slope_5_bars_pct": 0.04
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 768.83,
+      "price_vs_pct": -0.9,
+      "slope_5_bars_pct": -0.24
+     },
+     "HMA55": {
+      "value": 771.67,
+      "price_vs_pct": -1.26,
+      "slope_5_bars_pct": -0.3,
+      "last_turn": {
+       "direction": "down",
+       "when": "2026-10-15 09:30",
+       "bars_ago": 11
+      }
+     }
+    },
+    "rsi14": 39.7,
+    "rsi14_5_bars_ago": 48.6,
+    "macd": {
+     "line": -1.354,
+     "signal": -0.548,
+     "hist": -0.806,
+     "hist_prev": -0.465,
+     "last_cross": {
+      "when": "2026-10-14 09:30",
+      "type": "bearish",
+      "bars_ago": 13
+     }
+    },
+    "asof": "2026-10-22 13:30"
+   },
+   "session": {
+    "date": "2026-10-22",
+    "open": 766.39,
+    "high": 767.71,
+    "low": 761.16,
+    "last": 761.92,
+    "vwap": 763.33
+   }
+  },
+  {
+   "symbol": "SOXX",
+   "last_close": 472.57,
+   "last_close_date": "2026-10-22",
+   "prev_close": 510.36,
+   "change_1d_pct": -7.4,
+   "change_5d_pct": -8.19,
+   "change_1m_pct": -16.47,
+   "high_52w": 655.52,
+   "low_52w": 259.61,
+   "live": {
+    "price": 472.47,
+    "time_et": "2026-10-22 15:45"
+   },
+   "daily": {
+    "score": -0.45,
+    "score_5_bars_ago": -0.09,
+    "verdict": "Turning bearish",
+    "mas": {
+     "EMA9": {
+      "value": 510.71,
+      "price_vs_pct": -7.47,
+      "slope_5_bars_pct": -6.36
+     },
+     "EMA21": {
+      "value": 529.29,
+      "price_vs_pct": -10.72,
+      "slope_5_bars_pct": -3.81
+     },
+     "SMA50": {
+      "value": 533.81,
+      "price_vs_pct": -11.47,
+      "slope_5_bars_pct": -0.77
+     },
+     "SMA200": {
+      "value": 470.84,
+      "price_vs_pct": 0.37,
+      "slope_5_bars_pct": 0.98
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 529.22,
+      "price_vs_pct": -10.7,
+      "slope_5_bars_pct": -5.2
+     },
+     "HMA55": {
+      "value": 551.45,
+      "price_vs_pct": -14.3,
+      "slope_5_bars_pct": -3.71,
+      "last_turn": {
+       "direction": "down",
+       "when": "2026-10-14",
+       "bars_ago": 6
+      }
+     }
+    },
+    "rsi14": 30.2,
+    "rsi14_5_bars_ago": 36.0,
+    "macd": {
+     "line": -13.799,
+     "signal": -4.142,
+     "hist": -9.657,
+     "hist_prev": -8.542,
+     "last_cross": {
+      "when": "2026-10-09",
+      "type": "bearish",
+      "bars_ago": 9
+     }
+    }
+   },
+   "levels": {
+    "supports": [
+     {
+      "price": 471.25,
+      "what": "horizontal level (3 touches)",
+      "distance_pct": -0.28
+     },
+     {
+      "price": 470.84,
+      "what": "SMA200",
+      "distance_pct": -0.37
+     }
+    ],
+    "resistances": [
+     {
+      "price": 473.48,
+      "what": "broadening formation upper line",
+      "distance_pct": 0.19
+     },
+     {
+      "price": 491.83,
+      "what": "horizontal level (4 touches)",
+      "distance_pct": 4.08
+     },
+     {
+      "price": 527.85,
+      "what": "anchored VWAP from last swing high (2026-10-02)",
+      "distance_pct": 11.7
+     }
+    ]
+   },
+   "read30": {
+    "bars": 30,
+    "from": "2026-09-11",
+    "verdict": "Bearish",
+    "score": -11,
+    "positives": 1,
+    "negatives": 12,
+    "observations": [
+     {
+      "sign": -1,
+      "text": "-8.6% over the last 30 days; closed in the lower third of its 472.57-596.44 range",
+      "kind": "performance"
+     },
+     {
+      "sign": 0,
+      "text": "higher high (596.44) but a lower low (472.57 on 2026-10-22): widening swings",
+      "kind": "structure"
+     },
+     {
+      "sign": -1,
+      "text": "made a lower low (472.57) below the previous 30-day low 485.39",
+      "kind": "structure"
+     },
+     {
+      "sign": -1,
+      "text": "latest day (2026-10-22) -7.4% on 1.6x average volume, a move of 1.8x the usual range",
+      "kind": "recent"
+     },
+     {
+      "sign": -1,
+      "text": "sharp pullback: -8.6% from the 2026-10-15 high 517.12 within 5 days",
+      "kind": "recent"
+     },
+     {
+      "sign": 0,
+      "text": "gap down on 2026-09-14 (-5.7%, volume 1.6x average), filled since",
+      "kind": "gap"
+     },
+     {
+      "sign": -1,
+      "text": "gap down on 2026-10-07 (-2.2%, volume 0.8x average), still unfilled \u2192 gap resistance above at 589.45",
+      "kind": "gap"
+     },
+     {
+      "sign": -1,
+      "text": "gap down on 2026-10-13 (-2.6%, volume 1.3x average), still unfilled \u2192 gap resistance above at 544.85",
+      "kind": "gap"
+     },
+     {
+      "sign": -1,
+      "text": "gap down on 2026-10-14 (-2.2%, volume 1.7x average), still unfilled \u2192 sellers in control",
+      "kind": "gap"
+     },
+     {
+      "sign": -1,
+      "text": "gap down on 2026-10-15 (-3.7%, volume 2.5x average), still unfilled \u2192 sellers in control",
+      "kind": "gap"
+     },
+     {
+      "sign": -1,
+      "text": "gap down on 2026-10-22 (-4.0%, volume 1.6x average), still unfilled \u2192 sellers in control",
+      "kind": "gap"
+     },
+     {
+      "sign": 0,
+      "text": "4 other gaps on normal volume already filled",
+      "kind": "gap"
+     },
+     {
+      "sign": 0,
+      "text": "up- and down-day volume roughly balanced (0.9x)",
+      "kind": "volume"
+     },
+     {
+      "sign": 1,
+      "text": "heaviest volume on 2026-10-15 (2.5x average) was an up day (-0.9%)",
+      "kind": "volume"
+     },
+     {
+      "sign": 0,
+      "text": "Broadening formation (2026-09-03 \u2192 2026-10-22): active (price inside lines)",
+      "kind": "formation"
+     },
+     {
+      "sign": -1,
+      "text": "Parallel channel (rising) broke down 2026-10-16",
+      "kind": "formation"
+     },
+     {
+      "sign": -1,
+      "text": "price below the 21-day EMA (529.29) and below the 50-day average (533.81)",
+      "kind": "trend"
+     },
+     {
+      "sign": -1,
+      "text": "EMA9 crossed below EMA21 on 2026-10-14",
+      "kind": "trend"
+     }
+    ]
+   },
+   "templates": {
+    "minervini": {
+     "passed": 4,
+     "of": 7,
+     "rules": [
+      {
+       "rule": "Price above the 150- and 200-day averages",
+       "ok": false
+      },
+      {
+       "rule": "150-day average above the 200-day",
+       "ok": true
+      },
+      {
+       "rule": "200-day average rising vs a month ago",
+       "ok": true
+      },
+      {
+       "rule": "50-day average above the 150- and 200-day",
+       "ok": true
+      },
+      {
+       "rule": "Price above the 50-day average",
+       "ok": false
+      },
+      {
+       "rule": "At least 25% above the 52-week low (259.61)",
+       "ok": true
+      },
+      {
+       "rule": "Within 25% of the 52-week high (655.52)",
+       "ok": false
+      }
+     ]
+    },
+    "weinstein": {
+     "stage": 3,
+     "text": "Stage 3 (topping: momentum stalling around the 30-week average)",
+     "slope_pct": 5.56
+    },
+    "qullamaggie": {
+     "setup": false,
+     "breakout_today": false,
+     "checks": [
+      {
+       "rule": "Prior move of 30%+ in the last 1-3 months (+21%)",
+       "ok": false
+      },
+      {
+       "rule": "Tight 10-day range (20.9% = 5.2x ATR, wants <= 3x)",
+       "ok": false
+      },
+      {
+       "rule": "Within 10% of the 3-month high",
+       "ok": false
+      },
+      {
+       "rule": "Above the 10- and 20-day EMAs, 20-day rising",
+       "ok": false
+      },
+      {
+       "rule": "Volume drying up in the consolidation",
+       "ok": false
+      }
+     ]
+    }
+   },
+   "open_patterns": [
+    {
+     "type": "Broadening formation",
+     "bias": "neutral",
+     "start": "2026-09-03",
+     "end": "2026-10-22",
+     "status": "active (price inside lines)",
+     "target": null,
+     "note": "34 bars, upper +0.70%/bar, lower -0.11%/bar"
+    }
+   ],
+   "recent_signals": [
+    {
+     "type": "Volume spike",
+     "bias": "neutral",
+     "start": "2026-10-16",
+     "status": "down day on 2.1x volume",
+     "note": "volume 2.1x the 20-bar average, down -4.1%, range 1.0x ATR; back to normal 2026-10-21"
+    },
+    {
+     "type": "Volume spike",
+     "bias": "neutral",
+     "start": "2026-10-15",
+     "status": "up day on 2.5x volume",
+     "note": "volume 2.5x the 20-bar average, up -0.9%, range 1.3x ATR; back to normal 2026-10-21"
+    }
+   ],
+   "recent_breaks": [
+    {
+     "type": "Parallel channel (rising)",
+     "bias": "bullish",
+     "status": "broke down 2026-10-16",
+     "target": null
+    }
+   ],
+   "vs_spy_pct": {
+    "1d": -5.95,
+    "5d": -6.91,
+    "1m": -15.7
+   },
+   "next_earnings": null,
+   "mtf": {
+    "summary": {
+     "dir": "down",
+     "from_swing": {
+      "price": 477.9,
+      "when": "2026-10-22 15:30"
+     },
+     "steps": [
+      {
+       "tf": "5m",
+       "status": "confirmed",
+       "when": "2026-10-22 15:35",
+       "level": 474.82
+      },
+      {
+       "tf": "15m",
+       "status": "confirmed",
+       "when": "2026-10-22 15:30",
+       "level": 475.67
+      },
+      {
+       "tf": "1h",
+       "status": "already trending down",
+       "when": "2026-10-22 09:30",
+       "level": 489.7
+      },
+      {
+       "tf": "4h",
+       "status": "already trending down",
+       "when": "2026-10-22 09:30",
+       "level": 489.7
+      },
+      {
+       "tf": "1D",
+       "status": "already trending down",
+       "when": "2026-10-16",
+       "level": 494.83
+      }
+     ],
+     "next": null
+    },
+    "timeframes": [
+     {
+      "tf": "5m",
+      "trend": "down",
+      "rsi": 31.8,
+      "last_turn": {
+       "dir": "down",
+       "kind": "continuation",
+       "when": "2026-10-22 15:35",
+       "level": 474.82,
+       "swing": {
+        "price": 477.9,
+        "when": "2026-10-22 15:30"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "turn",
+       "level": 477.9,
+       "from_swing": {
+        "price": 472.39,
+        "when": "2026-10-22 15:45",
+        "confirmed": false
+       },
+       "distance_pct": 1.17
+      }
+     },
+     {
+      "tf": "15m",
+      "trend": "down",
+      "rsi": 27.2,
+      "last_turn": {
+       "dir": "down",
+       "kind": "continuation",
+       "when": "2026-10-22 15:30",
+       "level": 475.67,
+       "swing": {
+        "price": 480.54,
+        "when": "2026-10-22 13:30"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "turn",
+       "level": 480.54,
+       "from_swing": {
+        "price": 472.4,
+        "when": "2026-10-22 15:45",
+        "confirmed": false
+       },
+       "distance_pct": 1.72
+      }
+     },
+     {
+      "tf": "1h",
+      "trend": "down",
+      "rsi": 25.5,
+      "last_turn": {
+       "dir": "down",
+       "kind": "continuation",
+       "when": "2026-10-22 09:30",
+       "level": 489.7,
+       "swing": {
+        "price": 513.08,
+        "when": "2026-10-21 12:30"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "turn",
+       "level": 513.08,
+       "from_swing": {
+        "price": 472.4,
+        "when": "2026-10-22 15:30",
+        "confirmed": false
+       },
+       "distance_pct": 8.61
+      }
+     },
+     {
+      "tf": "4h",
+      "trend": "down",
+      "rsi": 27.5,
+      "last_turn": {
+       "dir": "down",
+       "kind": "continuation",
+       "when": "2026-10-22 09:30",
+       "level": 489.7,
+       "swing": {
+        "price": 513.08,
+        "when": "2026-10-21 09:30"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "turn",
+       "level": 513.08,
+       "from_swing": {
+        "price": 472.4,
+        "when": "2026-10-22 13:30",
+        "confirmed": false
+       },
+       "distance_pct": 8.61
+      }
+     },
+     {
+      "tf": "1D",
+      "trend": "down",
+      "rsi": 30.2,
+      "last_turn": {
+       "dir": "down",
+       "kind": "reversal",
+       "when": "2026-10-16",
+       "level": 494.83,
+       "swing": {
+        "price": 596.44,
+        "when": "2026-10-02"
+       }
+      },
+      "pending": {
+       "dir": "up",
+       "kind": "turn",
+       "level": 596.44,
+       "from_swing": {
+        "price": 472.37,
+        "when": "2026-10-22",
+        "confirmed": false
+       },
+       "distance_pct": 26.27
+      }
+     }
+    ]
+   },
+   "mtf_text": "SOXX turn ladder\n  5m   trend down  RSI  31.8 MACD -\u2193 | turned down (continuation) 2026-10-22 15:35: closed below the prior swing low 474.82 after the high 477.9 (2026-10-22 15:30) | next turn up: close above 477.9 (+1.17%)\n  15m  trend down  RSI  27.2 MACD +\u2193 | turned down (continuation) 2026-10-22 15:30: closed below the prior swing low 475.67 after the high 480.54 (2026-10-22 13:30) | next turn up: close above 480.54 (+1.72%)\n  1h   trend down  RSI  25.5 MACD -\u2193 | turned down (continuation) 2026-10-22 09:30: closed below the prior swing low 489.7 after the high 513.08 (2026-10-21 12:30) | next turn up: close above 513.08 (+8.61%)\n  4h   trend down  RSI  27.5 MACD -\u2193 | turned down (continuation) 2026-10-22 09:30: closed below the prior swing low 489.7 after the high 513.08 (2026-10-21 09:30) | next turn up: close above 513.08 (+8.61%)\n  1D   trend down  RSI  30.2 MACD -\u2193 | turned down (reversal) 2026-10-16: closed below the prior swing low 494.83 after the high 596.44 (2026-10-02) | next turn up: close above 596.44 (+26.27%)\n  cascade (turn down from the 477.9 swing at 2026-10-22 15:30): 5m confirmed 2026-10-22 15:35; 15m confirmed 2026-10-22 15:30; 1h already trending down; 4h already trending down; 1D already trending down",
+   "valuation": {
+    "etf": {
+     "pe": 27.77,
+     "earnings_yield": 0.036,
+     "equity_risk_premium": -0.0135
+    },
+    "scenarios": null,
+    "implied_growth": null,
+    "flags": [],
+    "text": "SOXX iShares PHLX SOX Semiconductor  \u2014 price 472.37 USD, 10Y 4.95%\n  ETF P/E 27.77, earnings yield 3.60% vs 10Y 4.95% \u2192 equity risk premium -1.35pp"
+   },
+   "volume_vs_20d_avg": 1.57,
+   "today": {
+    "date": "2026-10-22",
+    "open": 489.73,
+    "gap_pct": -4.04,
+    "opening_range_15m": [
+     487.28,
+     491.18
+    ],
+    "high": 494.0,
+    "low": 472.5,
+    "last": 472.5,
+    "last_bar_et": "2026-10-22 15:45"
+   },
+   "h4": {
+    "score": -1.0,
+    "score_5_bars_ago": -1.0,
+    "verdict": "Bearish",
+    "mas": {
+     "EMA9": {
+      "value": 497.25,
+      "price_vs_pct": -5.04,
+      "slope_5_bars_pct": -2.7
+     },
+     "EMA21": {
+      "value": 515.53,
+      "price_vs_pct": -8.4,
+      "slope_5_bars_pct": -2.6
+     },
+     "SMA50": {
+      "value": 548.22,
+      "price_vs_pct": -13.87,
+      "slope_5_bars_pct": -0.27
+     },
+     "SMA200": {
+      "value": 549.42,
+      "price_vs_pct": -14.05,
+      "slope_5_bars_pct": -0.34
+     }
+    },
+    "not_scored": {
+     "WMA20": {
+      "value": 504.59,
+      "price_vs_pct": -6.42,
+      "slope_5_bars_pct": -3.11
+     },
+     "HMA55": {
+      "value": 504.7,
+      "price_vs_pct": -6.44,
+      "slope_5_bars_pct": -4.85,
+      "last_turn": {
+       "direction": "down",
+       "when": "2026-10-08 13:30",
+       "bars_ago": 20
+      }
+     }
+    },
+    "rsi14": 27.4,
+    "rsi14_5_bars_ago": 33.4,
+    "macd": {
+     "line": -18.189,
+     "signal": -15.311,
+     "hist": -2.878,
+     "hist_prev": -1.973,
+     "last_cross": {
+      "when": "2026-10-07 09:30",
+      "type": "bearish",
+      "bars_ago": 23
+     }
+    },
+    "asof": "2026-10-22 13:30"
+   },
+   "session": {
+    "date": "2026-10-22",
+    "open": 489.73,
+    "high": 494.0,
+    "low": 472.21,
+    "last": 472.21,
+    "vwap": 479.64
+   }
+  }
+ ]
+}
