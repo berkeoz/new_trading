@@ -846,10 +846,11 @@ def trend_templates(df):
     }
 
 
-def market_regime():
-    """Risk-on / risk-off from SPY vs its 200-day average (and that average's slope)."""
+def market_regime(spy_close=None):
+    """Risk-on / risk-off from SPY vs its 200-day average (and that average's slope).
+    spy_close: SPY closes to use (the backtest passes the history up to a past date)."""
     try:
-        d = load_prices("SPY", "2y", fill_today=True)["Close"]
+        d = load_prices("SPY", "2y", fill_today=True)["Close"] if spy_close is None else spy_close
         s200 = d.rolling(200).mean()
         on = d.iloc[-1] > s200.iloc[-1]
         return {"regime": "RISK-ON" if on else "RISK-OFF", "spy": round(float(d.iloc[-1]), 2), "sma200": round(float(s200.iloc[-1]), 2),
@@ -1045,7 +1046,8 @@ def find_levels(piv, price, tol, min_touches=3):
 
 
 # ── Analysis per symbol ────────────────────────────────────────────────────────
-def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval="1d", fill_today=False):
+def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval="1d", fill_today=False, full=None, regime=None):
+    """full / regime: pre-loaded bars and market regime (the verdict backtest replays past dates with them)."""
     daily = interval == "1d"
     note = ""
     if not daily and MONTHS[period] > MONTHS[INTRADAY_MAX[interval]]:
@@ -1053,7 +1055,8 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval=
         period = INTRADAY_MAX[interval]
     # download a longer period so moving averages (up to 200+ bars) are already
     # warmed up at the start of the chart; patterns use only the requested period
-    full = load_prices(sym, WARMUP_PERIOD[period] if daily else None, refresh, interval, fill_today)
+    if full is None:
+        full = load_prices(sym, WARMUP_PERIOD[period] if daily else None, refresh, interval, fill_today)
     start = full.index[-1] - pd.DateOffset(months=MONTHS[period])
     df = full[full.index > start]
     warm = full[full.index <= start].tail(300)
@@ -1094,7 +1097,7 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval=
     }
     if daily and len(full) >= 220:
         try:
-            out["assessment"] = assess(full, out, market_regime())
+            out["assessment"] = assess(full, out, regime or market_regime())
         except Exception as e:
             out["assessment"] = {"error": str(e)}
     return out
@@ -1527,6 +1530,8 @@ const VCOL = {'Buy': '#26a69a', 'Buy on dip': '#4fc3f7', 'Hold': '#b0bec5', 'Wai
 const VERDICTS = location.protocol == 'file:' ? Promise.resolve(null) :
   fetch('https://raw.githubusercontent.com/berkeoz/new_trading/master/briefs/verdicts.json?t=' + Date.now())
     .then(x => x.ok ? x.json() : null).catch(() => null);
+const BACKTEST = location.protocol == 'file:' ? Promise.resolve(null) :
+  fetch('https://raw.githubusercontent.com/berkeoz/new_trading/master/verdicts/backtest.json?t=' + Date.now()).then(x => x.ok ? x.json() : null).catch(() => null);
 const vesc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
 function fillVerdict(s, r) {
   const el = s.querySelector('.verdict'), a = r.assessment;
@@ -1553,8 +1558,16 @@ function fillVerdict(s, r) {
     h += `<div class="sub" style="margin-top:4px">stop ${lv.stop} · target ${lv.target} · reward/risk ${lv.rr ?? '–'} : 1 · trailing stop ${a.trailing_stop} · support ${lv.support ?? '–'} · resistance ${lv.resistance ?? '–'}</div>
       <details><summary>Buying checklist: ${a.good} ✓ / ${a.bad} ✗</summary>${rows(a.checks)}</details>
       <details><summary>Selling checklist (if you hold it): ${a.sell_alerts} alert${a.sell_alerts == 1 ? '' : 's'}</summary>${rows(a.sell_checks)}</details>
+      <div class="sub bt-line"></div>
       <div class="sub" style="margin-top:4px">Model assessment from the checklist on the <a href="/#checklist">main page</a>, not investment advice.</div></div>`;
     el.innerHTML = h;
+    BACKTEST.then(bt => {
+      const t = bt && bt.tickers && bt.tickers[r.symbol], line = el.querySelector('.bt-line');
+      if (!t || !line) return;
+      const g = t.strategy, m = (t.stats[a.verdict] || {})['1 month'];
+      line.innerHTML = `Track record since ${vesc(bt.start)}: following the checklist verdicts ${g.return_pct >= 0 ? '+' : ''}${g.return_pct}% vs buy &amp; hold ${g.buy_hold_pct >= 0 ? '+' : ''}${g.buy_hold_pct}%` +
+        (m ? ` · after "${vesc(a.verdict)}" days ${r.symbol} averaged ${m.avg >= 0 ? '+' : ''}${m.avg}% the next month (${m.n} days)` : '') + ` · <a href="/#checklist">details</a>`;
+    });
   });
 }
 

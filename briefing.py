@@ -533,7 +533,15 @@ def main():
     args = ap.parse_args()
     os.makedirs(BRIEF_DIR, exist_ok=True)
     if args.index:
-        rebuild_index(); return
+        rebuild_index()
+        try:   # store the brief's verdicts (briefs/verdict_log.jsonl) for the track record
+            import verdicts
+            n = verdicts.record_brief()
+            if n:
+                print(f"verdict log: {n} verdicts recorded")
+        except Exception as e:
+            print(f"verdict log: ERROR {e}")
+        return
     if args.macro_updated:
         MAC.mark_updated(args.macro_updated)
         print(f"macro outlook {args.macro_updated} marked as current"); return
