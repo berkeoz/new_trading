@@ -1200,27 +1200,6 @@ def assess(full, r, regime=None):
     bad = sum(1 for k in checks if k["status"] == "bad")
     capit = any(p["bias"] == "bullish" for p in vol_ev)
     ob_sell = cross and not cross["up"] and cross["level"] >= 53
-    if down or stage == 4:
-        verdict = "Wait" if rsi < 30 or capit else "Sell"
-        why = ("downtrend, but oversold / capitulation: watch for a turn, no buy yet" if verdict == "Wait"
-               else "downtrend: price below falling averages")
-    elif up:
-        if rsi > 75 or ext > 3.5:
-            verdict = "Take profit" if (ob_sell or rsi > 78) else "Hold"
-            why = "uptrend but stretched: " + (f"RSI {rsi:.0f}" if rsi > 75 else f"{ext:.1f} ATR above EMA21") + ("; momentum rolling over at the top" if ob_sell else "; don't add here")
-        elif price < ema21 and h0 < 0 and h0 <= h1:
-            verdict, why = "Warning", f"uptrend pullback deepening: below EMA21 with MACD falling; the 50-day {sma50:.2f} is the line to hold"
-        elif abs(ext) <= 1.5 and rr and rr >= 2 and good > bad:
-            verdict, why = "Buy", "uptrend, near the 21-day average, reward/risk of 2:1 or better"
-        elif rr and rr >= 1.5:
-            verdict, why = "Buy on dip", f"uptrend; a better entry is nearer EMA21 {ema21:.2f}" + (f" / support {sup:.2f}" if sup else "")
-        else:
-            verdict, why = "Hold", "uptrend, but little room to the next resistance"
-    else:
-        verdict = "Warning" if price < sma50 else "Wait"
-        why = ("trend is breaking: below the 50-day average" if price < sma50 else "mixed trend: wait for the averages to line up")
-    if regime and regime.get("regime") != "RISK-ON" and verdict == "Buy":
-        verdict, why = "Buy on dip", why + "; market regime is risk-off, so only on a dip"
 
     # selling checklist: alerts for someone who already holds it
     sells = []
@@ -1247,13 +1226,75 @@ def assess(full, r, regime=None):
     sell("At resistance / target zone", near_res, f"resistance {res:.2f}" if res else "no resistance above")
     sell("Bearish pattern open", open_bear > 0, f"{open_bear} bearish pattern(s) open")
     n_alert = sum(1 for s_ in sells if s_["status"] == "alert")
-    if verdict in ("Buy", "Buy on dip", "Hold") and n_alert >= 3:
-        verdict, why = "Warning", why + f"; but {n_alert} selling-checklist alerts are on"
-    return {"verdict": verdict, "why": why, "good": good, "bad": bad, "checks": checks,
+    f = {"price": price, "ema21": ema21, "sma50": sma50, "sma200": sma200, "s200_rising": sma200 > s200_prev, "stage": stage,
+         "rsi": rsi, "h0": h0, "h1": h1, "ext": ext, "rr": rr, "good": good, "bad": bad, "capit": capit, "ob_sell": bool(ob_sell),
+         "n_alert": n_alert, "risk_on": (regime or {}).get("regime", "RISK-ON") == "RISK-ON", "sup": sup}
+    verdict, why = decide(f)
+    return {"verdict": verdict, "why": why, "good": good, "bad": bad, "checks": checks, "features": {k: (round(v, 4) if isinstance(v, float) else v) for k, v in f.items()},
             "sell_checks": sells, "sell_alerts": n_alert, "trailing_stop": round(chand, 2),
             "levels": {"price": round(price, 2), "ema21": round(ema21, 2), "sma50": round(sma50, 2), "sma200": round(sma200, 2),
                        "support": sup, "resistance": res, "stop": round(stop, 2), "target": round(target, 2),
                        "rr": round(rr, 2) if rr else None, "rsi": round(rsi, 1)}}
+
+
+# Decision rules: features of one day -> verdict. The thresholds are settings so they can be
+# calibrated (calibrate.py tunes them on 2021-2025 and tests on 2026); the tuned values live in
+# verdict_params.json. DEFAULT_PARAMS are the original hand-set rules.
+DEFAULT_PARAMS = {"trend": "stack", "down": "stack", "stretch_rsi": 75, "stretch_ext": 3.5, "tp_rsi": 78,
+                  "warn": "ema21_macd", "buy_ext": 1.5, "buy_rr": 2.0, "dip_rr": 1.5, "mixed_hold": False,
+                  "alerts_warn": 3, "regime_filter": True}
+
+
+def _params():
+    try:
+        return {**DEFAULT_PARAMS, **json.load(open(os.path.join(ROOT, "verdict_params.json"), encoding="utf-8")).get("params", {})}
+    except Exception:
+        return dict(DEFAULT_PARAMS)
+
+
+PARAMS = _params()
+
+
+def decide(f, p=None):
+    """(verdict, reason) from the day's features."""
+    p = p or PARAMS
+    price, ema21, sma50, sma200, rsi, ext, rr = f["price"], f["ema21"], f["sma50"], f["sma200"], f["rsi"], f["ext"], f["rr"]
+    if p["trend"] == "stack":
+        up = price > sma50 > sma200
+    else:                                                    # "sma200": above a rising 200-day average
+        up = price > sma200 and f["s200_rising"]
+    if p["down"] == "stack":
+        down = price < sma50 < sma200 or f["stage"] == 4
+    else:
+        down = price < sma200 and not f["s200_rising"]
+    if down:
+        if rsi < 30 or f["capit"]:
+            return "Wait", "downtrend, but oversold / capitulation: watch for a turn, no buy yet"
+        return "Sell", "downtrend: price below falling averages"
+    if up:
+        if rsi > p["stretch_rsi"] or ext > p["stretch_ext"]:
+            stretched = f"RSI {rsi:.0f}" if rsi > p["stretch_rsi"] else f"{ext:.1f} ATR above EMA21"
+            if f["ob_sell"] or rsi > p["tp_rsi"]:
+                return "Take profit", f"uptrend but stretched: {stretched}; momentum rolling over at the top"
+            return "Hold", f"uptrend but stretched: {stretched}; don't add here"
+        warn = (p["warn"] == "ema21_macd" and price < ema21 and f["h0"] < 0 and f["h0"] <= f["h1"]) or \
+               (p["warn"] == "sma50" and price < sma50)
+        if warn:
+            return "Warning", f"uptrend pullback deepening; the 50-day {sma50:.2f} is the line to hold"
+        if f["n_alert"] >= p["alerts_warn"]:
+            return "Warning", f"uptrend, but {f['n_alert']} selling-checklist alerts are on"
+        if abs(ext) <= p["buy_ext"] and rr and rr >= p["buy_rr"] and f["good"] > f["bad"]:
+            if p["regime_filter"] and not f["risk_on"]:
+                return "Buy on dip", "uptrend near the 21-day average, but the market regime is risk-off: only on a dip"
+            return "Buy", f"uptrend, near the 21-day average, reward/risk {rr:.1f}:1"
+        if rr and rr >= p["dip_rr"]:
+            return "Buy on dip", f"uptrend; a better entry is nearer EMA21 {ema21:.2f}" + (f" / support {f['sup']:.2f}" if f.get("sup") else "")
+        return "Hold", "uptrend, but little room to the next resistance"
+    if p["mixed_hold"] and price > sma200:
+        return "Hold", "mixed trend above the 200-day average: hold, don't add"
+    if price < sma50:
+        return "Warning", "trend is breaking: below the 50-day average"
+    return "Wait", "mixed trend: wait for the averages to line up"
 
 
 # ── Report ─────────────────────────────────────────────────────────────────────

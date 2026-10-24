@@ -89,8 +89,10 @@ def replay(sym, prev_days, spy):
         a = r.get("assessment") or {}
         if "verdict" not in a:
             continue
-        days.append([ds, round(float(sl["Close"].iloc[-1]), 2), a["verdict"], a["good"], a["bad"], a["sell_alerts"]])
+        days.append([ds, round(float(sl["Close"].iloc[-1]), 2), a["verdict"], a["good"], a["bad"], a["sell_alerts"], a.get("features")])
     days.sort(key=lambda x: x[0])
+    # re-apply the current decision rules (verdict_params.json) to the stored features
+    days = [d[:2] + [P.decide(d[6])[0] if len(d) > 6 and d[6] else d[2]] + d[3:] for d in days]
     return days, full
 
 
@@ -99,7 +101,7 @@ def score(days, full, spy):
     c, o = full["Close"].values, full["Open"].values
     spyc = spy.reindex(full.index).ffill().values
     by = {}
-    for ds, _, v, *_ in days:
+    for ds, _, v, *_rest in days:
         i = idx.get(ds)
         if i is None:
             continue
@@ -115,7 +117,7 @@ def score(days, full, spy):
                            "vs_spy": round(float(np.mean([e for _, e in x])) * 100, 2),
                            "up_pct": round(100 * sum(a > 0 for a, _ in x) / len(x))} for name, x in hs.items()}
     # follow the verdicts: decide at the close, trade at the next open
-    pos = {ds: (v in LONG) for ds, _, v, *_ in days}
+    pos = {d[0]: (d[2] in LONG) for d in days}
     eq, bh, curve, trades, inpos = 1.0, 1.0, [], 0, False
     first = idx.get(days[0][0]) if days else None
     if first is not None:
@@ -177,7 +179,8 @@ def run(extra=()):
     allv = {}
     for sym in syms:
         try:
-            days, full = replay(sym, st["tickers"].get(sym, {}).get("days", []), spy)
+            prev = [d for d in st["tickers"].get(sym, {}).get("days", []) if len(d) > 6]   # older rows without features are replayed
+            days, full = replay(sym, prev, spy)
             stats, strat = score(days, full, spy)
         except Exception as e:
             print(f"{sym}: ERROR {e}")
@@ -195,6 +198,9 @@ def run(extra=()):
     st["live"] = score_log(spy)
     st["updated"] = datetime.now().strftime("%Y-%m-%d %H:%M")
     st["labels"] = LABELS
+    st["params"] = P.PARAMS
+    for t in st["tickers"].values():                      # keep the published file small: no features
+        t["days"] = [d[:6] for d in t["days"]]
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     json.dump(st, open(OUT, "w", encoding="utf-8"), separators=(",", ":"))
     for v in LABELS:

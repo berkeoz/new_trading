@@ -7923,7 +7923,7 @@ Model rules for discipline, not investment advice.</div>
 <tr><td><span class="pill" style="background:#4fc3f7">Buy on dip</span></td><td>Good trend, wrong spot: wait for the level named in the card (21-day average / support).</td></tr>
 <tr><td><span class="pill" style="background:#b0bec5">Hold</span></td><td>If you own it, keep it; not a fresh entry (stretched, or little room to resistance).</td></tr>
 <tr><td><span class="pill" style="background:#f5b041">Wait</span></td><td>No buy yet: trend mixed, or a downtrend that is oversold and may be turning; wait for confirmation.</td></tr>
-<tr><td><span class="pill" style="background:#ff9800">Warning</span></td><td>Setup deteriorating: below the 50-day average, or several selling alerts on. Tighten stops, don't add.</td></tr>
+<tr><td><span class="pill" style="background:#ff9800">Warning</span></td><td>Trend breaking: the averages no longer line up and price is below the 50-day average. Tighten stops, don't add. (Selling-checklist alerts are shown on each card but, after calibration, no longer change the verdict on their own.)</td></tr>
 <tr><td><span class="pill" style="background:#ba68c8">Take profit</span></td><td>Uptrend but overbought and rolling over, or at the target: trim / sell part.</td></tr>
 <tr><td><span class="pill" style="background:#ef5350">Sell</span></td><td>Downtrend (below falling averages, Weinstein stage 4) or thesis broken: exit / avoid.</td></tr>
 </table></div>
@@ -7999,6 +7999,25 @@ Model rules for discipline, not investment advice.</div>
     if ((lv.rows || []).length) h += `<div class="wrapx"><table><tr><th>When</th><th>Ticker</th><th>Verdict</th><th>Price then</th><th>Since then</th><th>vs SPY</th><th>1 week</th><th>1 month</th></tr>` +
       lv.rows.slice().reverse().slice(0, 15).map(r => `<tr><td class="mu">${esc(r.time)}</td><td><b>${esc(r.symbol)}</b></td><td><span class="pill" style="background:${VC[r.verdict] || '#8a93a5'}">${esc(r.verdict)}</span></td><td>${r.price ?? '—'}</td><td>${sg(r.since_pct)}</td><td>${sg(r.since_vs_spy)}</td><td>${sg(r['1 week'])}</td><td>${sg(r['1 month'])}</td></tr>`).join('') + `</table></div>`;
     el.innerHTML = h; el.classList.remove('mu');
+    get('verdicts/calibration.json').then(cal => {
+      if (!cal) return;
+      const row = (name, e) => `<tr><td>${name}</td><td>${e.avg_sharpe.toFixed(2)}</td><td>${sg(e.avg_return_pct)}</td><td class="no">${e.avg_max_dd_pct}%</td><td>${e.avg_in_market_pct}%</td></tr>`;
+      const bh = e => `<tr><td>Buy &amp; hold</td><td>${e.avg_buy_hold_sharpe.toFixed(2)}</td><td>${sg(e.avg_buy_hold_pct)}</td><td class="no">${e.avg_buy_hold_dd_pct}%</td><td>100%</td></tr>`;
+      const p = cal.params;
+      const rules = [p.trend == 'sma200' ? 'uptrend = price above a rising 200-day average' : 'uptrend = price above the 50-day above the 200-day',
+        p.down == 'stack' ? 'downtrend (Sell) = price below the 50-day below the 200-day, or Weinstein stage 4' : 'downtrend (Sell) = price below a falling 200-day average',
+        `stretched above RSI ${p.stretch_rsi > 100 ? '— (off)' : p.stretch_rsi} or ${p.stretch_ext} ATR above the 21-day average; Take profit above RSI ${p.tp_rsi > 100 ? '— (off)' : p.tp_rsi} or on a WaveTrend sell in the overbought zone`,
+        p.warn == 'none' ? 'a pullback below the 21 / 50-day average inside an uptrend is not a Warning' : 'Warning on a pullback ' + (p.warn == 'sma50' ? 'below the 50-day average' : 'below the 21-day average with MACD falling'),
+        p.alerts_warn > 20 ? 'selling alerts are information only' : `Warning when ${p.alerts_warn}+ selling alerts are on`];
+      el.insertAdjacentHTML('beforeend', `<h4 style="margin:14px 0 4px">Calibration</h4>
+        <div class="mu">The decision rules were tuned on ${esc(cal.trained_on)} (${cal.universe.length} ETFs: ${cal.universe.join(', ')}) and then tested on 2026, which the tuning never saw. Averages per ticker; Sharpe = return per unit of risk.</div>
+        <div class="cols"><div><b>2021–2025 (tuning)</b><div class="wrapx"><table><tr><th>Rules</th><th>Sharpe</th><th>Return</th><th>Max drawdown</th><th>In market</th></tr>
+        ${row('Original', cal.default_train)}${row('Calibrated', cal.tuned_train)}${bh(cal.tuned_train)}</table></div></div>
+        <div><b>2026 (unseen test)</b><div class="wrapx"><table><tr><th>Rules</th><th>Sharpe</th><th>Return</th><th>Max drawdown</th><th>In market</th></tr>
+        ${row('Original', cal.default_test)}${row('Calibrated', cal.tuned_test)}${bh(cal.tuned_test)}</table></div></div></div>
+        <div style="margin-top:6px"><b>Rules now in use:</b><ul style="margin:4px 0 0 18px">${rules.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>
+        <div class="mu">Calibrated ${esc(cal.updated)}. In both periods the verdict labels rank 1-month returns only weakly (dips in these ETFs mostly recovered), so treat the verdicts as trend and risk control, not as a forecast.</div>`);
+    });
   });
   Promise.all([get('briefs/verdicts.json'), get('thesis/state.json')]).then(([v, th]) => {
     const tr = document.getElementById('cl-trends'), vd = document.getElementById('cl-verdicts');

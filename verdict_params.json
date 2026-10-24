@@ -1,0 +1,18 @@
+{
+ "params": {
+  "trend": "sma200",
+  "down": "stack",
+  "stretch_rsi": 75,
+  "stretch_ext": 3.5,
+  "tp_rsi": 78,
+  "warn": "none",
+  "buy_ext": 1.5,
+  "buy_rr": 2.0,
+  "dip_rr": 1.5,
+  "mixed_hold": false,
+  "alerts_warn": 99,
+  "regime_filter": true
+ },
+ "trained_on": "2021-01-04 to 2025-12-31",
+ "updated": "2026-10-24 17:59"
+}
