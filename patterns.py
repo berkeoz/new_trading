@@ -1073,7 +1073,7 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval=
         pats = [p for p in pats if p["status"] not in ("failed", "expired")]
     pats.sort(key=lambda p: p["i1"], reverse=True)
     price = float(df["Close"].iloc[-1])
-    return {
+    out = {
         "symbol": sym, "period": period, "interval": interval, "note": note,
         "price": round(price, 2), "asof": ts(df.index[-1]),
         "atr_pct": round(a * 100, 2), "swing_pct": round(swing * 100, 1),
@@ -1092,6 +1092,165 @@ def analyze(sym, period="2y", pct=None, refresh=False, show_all=False, interval=
             "low": df["Low"].round(2).tolist(), "close": df["Close"].round(2).tolist(),
         },
     }
+    if daily and len(full) >= 220:
+        try:
+            out["assessment"] = assess(full, out, market_regime())
+        except Exception as e:
+            out["assessment"] = {"error": str(e)}
+    return out
+
+
+# ── Buying checklist: technical assessment and verdict ────────────────────────
+# The same checks as the "Buying checklist" on the main page. The market-brief routine adds
+# the context (theme, news, upcoming events) and writes the final verdict in briefs/verdicts.json.
+VERDICTS = ["Buy", "Buy on dip", "Hold", "Wait", "Warning", "Take profit", "Sell"]
+
+
+def _wt(df, n1=10, n2=21):
+    ap = (df["High"] + df["Low"] + df["Close"]) / 3
+    esa = ap.ewm(span=n1, adjust=False).mean()
+    d = (ap - esa).abs().ewm(span=n1, adjust=False).mean()
+    wt1 = ((ap - esa) / (0.015 * d)).ewm(span=n2, adjust=False).mean()
+    return wt1, wt1.rolling(4).mean()
+
+
+def assess(full, r, regime=None):
+    """Checklist items (good / bad / neutral) and a technical verdict from daily bars."""
+    c, v = full["Close"], full["Volume"]
+    price = float(c.iloc[-1])
+    ema21, sma50, sma200 = (float(x.iloc[-1]) for x in (c.ewm(span=21, adjust=False).mean(), c.rolling(50).mean(), c.rolling(200).mean()))
+    s200_prev = float(c.rolling(200).mean().iloc[-21])
+    d = c.diff()
+    g = d.clip(lower=0).ewm(alpha=1 / 14, adjust=False).mean()
+    l_ = (-d.clip(upper=0)).ewm(alpha=1 / 14, adjust=False).mean()
+    rsi = float((100 - 100 / (1 + g / l_)).iloc[-1])
+    m = c.ewm(span=12, adjust=False).mean() - c.ewm(span=26, adjust=False).mean()
+    hist = m - m.ewm(span=9, adjust=False).mean()
+    h0, h1 = float(hist.iloc[-1]), float(hist.iloc[-2])
+    wt1, wt2 = _wt(full)
+    x = (wt1 - wt2).values
+    cross = None
+    for k in range(len(x) - 1, max(len(x) - 6, 1), -1):            # WaveTrend cross in the last 5 bars
+        if x[k - 1] <= 0 < x[k] or x[k - 1] >= 0 > x[k]:
+            cross = {"up": bool(x[k] > 0), "bars_ago": len(x) - 1 - k, "level": round(float(wt2.iloc[k]), 1)}
+            break
+    atr = r["atr_pct"] / 100 * price
+    ext = (price - ema21) / atr if atr else 0
+    vol_ratio = float(v.iloc[-1] / v.iloc[-21:-1].mean()) if v.iloc[-21:-1].mean() > 0 else None
+    sup = max([l["price"] for l in r["levels"] if l["price"] < price], default=None)
+    res = min([l["price"] for l in r["levels"] if l["price"] > price], default=None)
+    stop = (sup - 0.5 * atr) if sup and price - sup < 4 * atr else price - 2 * atr
+    target = res if res and res - price > atr else price + 3 * atr
+    rr = (target - price) / (price - stop) if price > stop else None
+    t = r.get("templates") or {}
+    stage = (t.get("weinstein") or {}).get("stage")
+    mini = (t.get("minervini") or {}).get("passed")
+    n_days = len(c)
+    recent = [p for p in r["patterns"] if p.get("i1", 0) >= n_days - 1 - 10 or p.get("open")]
+    vol_ev = [p for p in r["patterns"] if p["cat"] == "volume" and (pd.Timestamp(r["asof"][:10]) - pd.Timestamp(p["start"][:10])).days <= 14]
+    open_bull = sum(1 for p in r["patterns"] if p.get("open") and p["bias"] == "bullish" and p["cat"] not in ("volume", "candle"))
+    open_bear = sum(1 for p in r["patterns"] if p.get("open") and p["bias"] == "bearish" and p["cat"] not in ("volume", "candle"))
+
+    checks = []
+    def add(group, name, status, detail):
+        checks.append({"group": group, "name": name, "status": status, "detail": detail})
+
+    if regime:
+        add("Market", "Market regime", "good" if regime.get("regime") == "RISK-ON" else "bad",
+            f"{regime.get('regime')}: SPY {regime.get('distance_pct'):+}% vs its 200-day average ({'rising' if regime.get('sma200_rising') else 'falling'})")
+    up = price > sma50 > sma200
+    down = price < sma50 < sma200
+    add("Trend", "Moving-average stack", "good" if up else "bad" if down else "neutral",
+        f"price {price:.2f} · SMA50 {sma50:.2f} · SMA200 {sma200:.2f}" + (" (price > 50 > 200)" if up else " (price < 50 < 200)" if down else " (mixed)"))
+    add("Trend", "200-day average direction", "good" if sma200 > s200_prev else "bad",
+        f"{'rising' if sma200 > s200_prev else 'falling'} {(sma200 / s200_prev - 1) * 100:+.1f}% over 20 days")
+    if stage:
+        add("Trend", "Weinstein stage", "good" if stage == 2 else "bad" if stage == 4 else "neutral", (t.get("weinstein") or {}).get("text", ""))
+    if mini is not None:
+        add("Trend", "Minervini trend template", "good" if mini >= 6 else "bad" if mini <= 3 else "neutral", f"{mini}/{t['minervini']['of']} rules pass")
+    add("Entry", "Distance from the 21-day average", "bad" if ext > 3 else "good" if -1.5 <= ext <= 1.5 else "neutral",
+        f"{ext:+.1f} ATR from EMA21 {ema21:.2f}" + (" — extended, don't chase" if ext > 3 else " — near the average (a normal entry area)" if -1.5 <= ext <= 1.5 else ""))
+    if sup:
+        add("Entry", "Nearest support", "good" if (price - sup) / atr <= 1.5 else "neutral", f"{sup:.2f} ({(sup / price - 1) * 100:+.1f}%, {(price - sup) / atr:.1f} ATR below)")
+    add("Momentum", "RSI 14", "bad" if rsi > 75 or rsi < 40 else "good" if 50 <= rsi <= 70 else "neutral",
+        f"{rsi:.0f}" + (" overbought" if rsi > 70 else " oversold" if rsi < 30 else ""))
+    add("Momentum", "MACD histogram", "good" if h0 > 0 and h0 >= h1 else "bad" if h0 < 0 and h0 <= h1 else "neutral",
+        f"{h0:+.2f} ({'rising' if h0 > h1 else 'falling'})")
+    if cross:
+        zone = "oversold zone" if cross["level"] <= -53 else "overbought zone" if cross["level"] >= 53 else "middle"
+        add("Momentum", "WaveTrend cross", ("good" if cross["up"] else "bad") if zone != "middle" else "neutral",
+            f"{'bullish' if cross['up'] else 'bearish'} cross {cross['bars_ago']} bars ago in the {zone} (WT2 {cross['level']})")
+    else:
+        add("Momentum", "WaveTrend", "good" if x[-1] > 0 else "bad", f"WT1 {'above' if x[-1] > 0 else 'below'} WT2 ({float(wt1.iloc[-1]):.0f} vs {float(wt2.iloc[-1]):.0f})")
+    for p in vol_ev[:1]:
+        add("Volume", p["type"], "good" if p["bias"] == "bullish" else "bad", f"{p['start'][:10]} · {p['status']}")
+    if vol_ratio is not None:
+        upday = c.iloc[-1] >= c.iloc[-2]
+        add("Volume", "Last bar volume", ("good" if upday else "bad") if vol_ratio >= 1.5 else "neutral",
+            f"{vol_ratio:.1f}x the 20-day average on a {'up' if upday else 'down'} day")
+    add("Patterns", "Open chart patterns", "good" if open_bull > open_bear else "bad" if open_bear > open_bull else "neutral",
+        f"{open_bull} bullish / {open_bear} bearish open")
+    add("Risk", "Reward / risk", "good" if rr and rr >= 2 else "bad" if not rr or rr < 1 else "neutral",
+        f"stop {stop:.2f} ({(stop / price - 1) * 100:+.1f}%) · target {target:.2f} ({(target / price - 1) * 100:+.1f}%) · {rr:.1f} : 1" if rr else "no room above the stop")
+
+    good = sum(1 for k in checks if k["status"] == "good")
+    bad = sum(1 for k in checks if k["status"] == "bad")
+    capit = any(p["bias"] == "bullish" for p in vol_ev)
+    ob_sell = cross and not cross["up"] and cross["level"] >= 53
+    if down or stage == 4:
+        verdict = "Wait" if rsi < 30 or capit else "Sell"
+        why = ("downtrend, but oversold / capitulation: watch for a turn, no buy yet" if verdict == "Wait"
+               else "downtrend: price below falling averages")
+    elif up:
+        if rsi > 75 or ext > 3.5:
+            verdict = "Take profit" if (ob_sell or rsi > 78) else "Hold"
+            why = "uptrend but stretched: " + (f"RSI {rsi:.0f}" if rsi > 75 else f"{ext:.1f} ATR above EMA21") + ("; momentum rolling over at the top" if ob_sell else "; don't add here")
+        elif price < ema21 and h0 < 0 and h0 <= h1:
+            verdict, why = "Warning", f"uptrend pullback deepening: below EMA21 with MACD falling; the 50-day {sma50:.2f} is the line to hold"
+        elif abs(ext) <= 1.5 and rr and rr >= 2 and good > bad:
+            verdict, why = "Buy", "uptrend, near the 21-day average, reward/risk of 2:1 or better"
+        elif rr and rr >= 1.5:
+            verdict, why = "Buy on dip", f"uptrend; a better entry is nearer EMA21 {ema21:.2f}" + (f" / support {sup:.2f}" if sup else "")
+        else:
+            verdict, why = "Hold", "uptrend, but little room to the next resistance"
+    else:
+        verdict = "Warning" if price < sma50 else "Wait"
+        why = ("trend is breaking: below the 50-day average" if price < sma50 else "mixed trend: wait for the averages to line up")
+    if regime and regime.get("regime") != "RISK-ON" and verdict == "Buy":
+        verdict, why = "Buy on dip", why + "; market regime is risk-off, so only on a dip"
+
+    # selling checklist: alerts for someone who already holds it
+    sells = []
+    def sell(name, alert, detail):
+        sells.append({"name": name, "status": "alert" if alert else "ok", "detail": detail})
+    hh22 = float(full["High"].iloc[-22:].max())
+    chand = hh22 - 3 * atr
+    sell("Trailing stop (3 ATR below the 22-day high)", price < chand, f"stop {chand:.2f} (high {hh22:.2f}); price is {abs(price / chand - 1) * 100:.1f}% {'above' if price >= chand else 'below'} it")
+    sell("Close below the 21-day average", price < ema21, f"EMA21 {ema21:.2f} — short-term trend {'lost' if price < ema21 else 'intact'}")
+    sell("Close below the 50-day average", price < sma50, f"SMA50 {sma50:.2f} — swing trend {'lost' if price < sma50 else 'intact'}")
+    sell("Close below the 200-day average", price < sma200, f"SMA200 {sma200:.2f} — long-term trend {'lost' if price < sma200 else 'intact'}")
+    rmax5 = float((100 - 100 / (1 + g / l_)).iloc[-6:].max())
+    sell("Overbought and rolling over", rmax5 > 75 and rsi < rmax5 - 5, f"RSI peaked at {rmax5:.0f} in the last 5 bars, now {rsi:.0f}")
+    rs = (100 - 100 / (1 + g / l_))
+    win_hi = float(c.iloc[-20:].max())
+    div = price >= win_hi * 0.99 and rsi < float(rs.iloc[-20:].max()) - 5
+    sell("Bearish RSI divergence", div, "price near its 20-day high but RSI well below its high" if div else "no divergence")
+    sell("WaveTrend bearish cross in the overbought zone", bool(ob_sell), f"WT2 {cross['level']}, {cross['bars_ago']} bars ago" if ob_sell else "none in the last 5 bars")
+    mcross = any(hist.iloc[-k - 1] >= 0 > hist.iloc[-k] for k in range(1, 4))
+    sell("MACD bearish cross (last 3 bars)", mcross, f"histogram {h0:+.2f}")
+    dist = vol_ratio is not None and vol_ratio >= 1.5 and c.iloc[-1] < c.iloc[-2]
+    sell("Distribution day (down on heavy volume)", dist, f"{vol_ratio:.1f}x average volume" if vol_ratio else "no volume data")
+    near_res = res is not None and (res - price) <= 0.5 * atr
+    sell("At resistance / target zone", near_res, f"resistance {res:.2f}" if res else "no resistance above")
+    sell("Bearish pattern open", open_bear > 0, f"{open_bear} bearish pattern(s) open")
+    n_alert = sum(1 for s_ in sells if s_["status"] == "alert")
+    if verdict in ("Buy", "Buy on dip", "Hold") and n_alert >= 3:
+        verdict, why = "Warning", why + f"; but {n_alert} selling-checklist alerts are on"
+    return {"verdict": verdict, "why": why, "good": good, "bad": bad, "checks": checks,
+            "sell_checks": sells, "sell_alerts": n_alert, "trailing_stop": round(chand, 2),
+            "levels": {"price": round(price, 2), "ema21": round(ema21, 2), "sma50": round(sma50, 2), "sma200": round(sma200, 2),
+                       "support": sup, "resistance": res, "stop": round(stop, 2), "target": round(target, 2),
+                       "rr": round(rr, 2) if rr else None, "rsi": round(rsi, 1)}}
 
 
 # ── Report ─────────────────────────────────────────────────────────────────────
@@ -1157,6 +1316,15 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 .read li{margin:3px 0;padding-left:20px;text-indent:-20px}
 .read .ic{display:inline-block;width:16px;text-indent:0;font-weight:700}
 .note{color:var(--neu);font-size:12px}
+.verdict{margin:8px 0}
+.vcard{border:1px solid var(--line);border-left:4px solid var(--vc);border-radius:8px;padding:10px 12px;background:#12151c}
+.vpill{display:inline-block;padding:2px 10px;border-radius:12px;font-weight:600;background:var(--vc);color:#0f1115;margin-right:8px}
+.vcard .vsum{margin:6px 0 2px}
+.vcard ul{margin:4px 0 4px 18px;padding:0}
+.vcard table{font-size:12px;margin:4px 0}
+.vcard td{padding:2px 8px 2px 0;border:none;vertical-align:top}
+.vcard details summary{cursor:pointer;color:var(--acc);margin-top:6px;font-size:13px}
+.vk-good{color:var(--bull)} .vk-bad{color:var(--bear)} .vk-neutral{color:var(--mute)} .vk-alert{color:var(--bear)} .vk-ok{color:var(--mute)}
 .livebtn{background:none;border:1px solid var(--acc);color:var(--acc);border-radius:5px;padding:1px 8px;font:inherit;cursor:pointer}
 .livebtn:disabled{opacity:.6;cursor:wait}
 </style></head><body><main>
@@ -1352,6 +1520,42 @@ function renderLadder(l, el) {
     <div class="wrap"><table><tr><th>TF</th><th>Trend</th><th>Last confirmed turn</th><th>Next confirmation</th><th>RSI</th><th>MACD</th><th></th></tr>${rows}</table></div>
     ${Object.entries(l.errors || {}).map(([k, e]) => `<div class="flag">${k}: ${e}</div>`).join('')}
     <div class="sub" style="margin-top:8px">A turn is confirmed on a timeframe when, after a swing low (high), a bar closes above the swing high (below the swing low) that came before it. A bottom usually confirms on 5m first, then 15m, 1h, 4h; "pending" shows the close each slower timeframe still needs. "Already trending" means that timeframe was already moving that way, so the drop (rise) was only a pullback there. Yahoo intraday data can be delayed ~15 min. Not investment advice.</div>`;
+}
+
+// ── Verdict: technical checklist (computed with the chart data) + the market brief's verdict with context ──
+const VCOL = {'Buy': '#26a69a', 'Buy on dip': '#4fc3f7', 'Hold': '#b0bec5', 'Wait': '#f5b041', 'Warning': '#ff9800', 'Take profit': '#ba68c8', 'Sell': '#ef5350'};
+const VERDICTS = location.protocol == 'file:' ? Promise.resolve(null) :
+  fetch('https://raw.githubusercontent.com/berkeoz/new_trading/master/briefs/verdicts.json?t=' + Date.now())
+    .then(x => x.ok ? x.json() : null).catch(() => null);
+const vesc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+function fillVerdict(s, r) {
+  const el = s.querySelector('.verdict'), a = r.assessment;
+  if (!a || a.error) { el.innerHTML = a && a.error ? `<div class="sub">Checklist: ${vesc(a.error)}</div>` : (r.interval && r.interval != '1d' ? '<div class="sub">The buy / sell checklist uses daily bars: open the 1D chart for the verdict.</div>' : ''); return; }
+  VERDICTS.then(v => {
+    const rv = v && v.tickers && v.tickers[r.symbol];
+    const fin = rv ? rv.verdict : a.verdict, col = VCOL[fin] || '#8a93a5';
+    const icon = k => k.status == 'good' ? '✓' : k.status == 'bad' ? '✗' : k.status == 'alert' ? '⚠' : '·';
+    const rows = list => `<table>${list.map(k => `<tr><td class="vk-${k.status}">${icon(k)}</td><td>${k.group ? `<span class="sub">${vesc(k.group)}</span> ` : ''}${vesc(k.name)}</td><td class="sub">${vesc(k.detail)}</td></tr>`).join('')}</table>`;
+    const lv = a.levels;
+    let h = `<div class="vcard" style="--vc:${col}"><span class="vpill">${vesc(fin)}</span>`;
+    if (rv) {
+      h += `<b>${vesc(rv.headline || '')}</b> <span class="sub">market brief ${vesc(v.updated || '')}${rv.confidence ? ' · confidence ' + vesc(rv.confidence) : ''}</span>
+        <div class="vsum">${vesc(rv.summary || '')}</div>
+        ${(rv.reasons || []).length ? `<ul>${rv.reasons.map(x => `<li>${vesc(x)}</li>`).join('')}</ul>` : ''}
+        ${(rv.risks || []).length ? `<div><b>Risks / upcoming:</b> ${rv.risks.map(vesc).join(' · ')}</div>` : ''}
+        ${(rv.upcoming || []).length ? `<div class="sub">${rv.upcoming.map(u => `${vesc(u.date)} ${vesc(u.event)}`).join(' · ')}</div>` : ''}
+        ${rv.levels ? `<div class="sub" style="margin-top:4px">${Object.entries(rv.levels).map(([k, x]) => `${vesc(k.replace(/_/g, ' '))} <b>${vesc(x)}</b>`).join(' · ')}</div>` : ''}
+        ${rv.changes_if ? `<div class="sub">Changes if: ${vesc(rv.changes_if)}</div>` : ''}
+        <div class="sub" style="margin-top:4px">Technical checklist alone: <b>${vesc(a.verdict)}</b> — ${vesc(a.why)}</div>`;
+    } else {
+      h += `<b>${vesc(a.why)}</b> <span class="sub">technical checklist only${v ? ' (the market brief covers the watchlist tickers)' : ''}</span>`;
+    }
+    h += `<div class="sub" style="margin-top:4px">stop ${lv.stop} · target ${lv.target} · reward/risk ${lv.rr ?? '–'} : 1 · trailing stop ${a.trailing_stop} · support ${lv.support ?? '–'} · resistance ${lv.resistance ?? '–'}</div>
+      <details><summary>Buying checklist: ${a.good} ✓ / ${a.bad} ✗</summary>${rows(a.checks)}</details>
+      <details><summary>Selling checklist (if you hold it): ${a.sell_alerts} alert${a.sell_alerts == 1 ? '' : 's'}</summary>${rows(a.sell_checks)}</details>
+      <div class="sub" style="margin-top:4px">Model assessment from the checklist on the <a href="/#checklist">main page</a>, not investment advice.</div></div>`;
+    el.innerHTML = h;
+  });
 }
 
 // ── RSI / MACD -> price: the close that would put the indicator at a given value ──
@@ -1572,6 +1776,7 @@ function render(r, prepend, replace) {
       <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button><button class="vbtn tbtn" title="Has a turn been confirmed on 5m, 15m, 1h, 4h and daily?">Timeframes</button><button class="vbtn ibtn" title="Which closing price would put RSI / MACD / Stoch RSI / SMI at a given value on 1H, 2H, 4H, 8H = 1D, weekly and monthly?">Indicator prices</button></h2>
       ${prepend ? '<button class="x" title="Remove">&times;</button>' : ''}</div>
     ${r.note ? `<div class="note">${r.note}</div>` : ''}
+    <div class="verdict"></div>
     <div class="val" hidden></div>
     <div class="val mtf" hidden></div>
     <div class="val ind" hidden></div>
@@ -1601,6 +1806,7 @@ function render(r, prepend, replace) {
     <div class="wrap"><table><thead><tr><th>Pattern</th><th>Bias</th><th>From</th><th>To</th><th>Status</th><th>Target</th><th>Detail</th></tr></thead><tbody></tbody></table></div>`;
   if (replace) { replace.querySelectorAll('.chart').forEach(c => Plotly.purge(c)); replace.replaceWith(s); }
   else prepend ? root.prepend(s) : root.appendChild(s);
+  fillVerdict(s, r);
   const div = s.querySelector('.chart'), tbody = s.querySelector('tbody');
   const boxes = [...s.querySelectorAll('.filters input, .filters select')];
   const T0 = parseTs(r.ohlc.x[0]), T1 = parseTs(r.ohlc.x[r.ohlc.x.length - 1]);
@@ -1610,7 +1816,7 @@ function render(r, prepend, replace) {
     const v = b.dataset.iv;
     lookup(r.symbol, v == '1d' ? '2y' : {'4h': '1y', '2h': '6mo', '1h': '3mo'}[v], v);
   });
-  if (prepend) s.querySelector('.x').onclick = () => { Plotly.purge(div); s.remove(); };
+  if (prepend) s.querySelector('.x').onclick = () => { Plotly.purge(div); s.remove(); savePin(r.symbol, r.period, r.interval || '1d', false); };
   s.querySelector('.vbtn').onclick = () => toggleValuation(r.symbol, s.querySelector('.val'));
   s.querySelector('.tbtn').onclick = () => toggleLadder(r.symbol, s.querySelector('.mtf'));
   s.querySelector('.ibtn').onclick = () => toggleInverse(r.symbol, s.querySelector('.ind'));
@@ -2108,12 +2314,21 @@ document.getElementById('live').onclick = async () => {
   btn.disabled = false; btn.textContent = 'Refresh again';
 };
 
+// tickers added with the lookup box stay on the page (saved in this browser)
+function getPins() { try { return JSON.parse(localStorage.getItem('pins') || '[]'); } catch (e) { return []; } }
+function savePin(sym, per, iv, on) {
+  let p = getPins().filter(x => !(x.sym == sym && x.iv == iv));
+  if (on && !(iv == '1d' && DATA.some(d => d.symbol == sym))) p.push({sym, per, iv});   // the built-in tickers are always shown
+  try { localStorage.setItem('pins', JSON.stringify(p.slice(-12))); } catch (e) {}
+}
+if (location.protocol != 'file:') getPins().forEach(x => lookup(x.sym, x.per, x.iv, true));
+
 document.getElementById('lookup').onsubmit = e => {
   e.preventDefault();
   lookup(document.getElementById('sym').value.trim().toUpperCase(),
          document.getElementById('per').value, document.getElementById('iv').value);
 };
-async function lookup(sym, per, iv) {
+async function lookup(sym, per, iv, quiet) {
   const msg = document.getElementById('msg'), btn = document.getElementById('go');
   if (!sym) return;
   if (location.protocol == 'file:') { msg.textContent = `Lookup works on the website. Locally, run: python patterns.py ${sym} --interval ${iv} --period ${per}`; return; }
@@ -2123,12 +2338,13 @@ async function lookup(sym, per, iv) {
     const j = await res.json();
     if (!res.ok || j.error) throw new Error(j.error || res.statusText);
     render(j, true);
+    savePin(sym, per, iv, true);
     msg.textContent = '';
-    window.scrollTo({top: root.offsetTop - 10, behavior:'smooth'});
+    if (!quiet) window.scrollTo({top: root.offsetTop - 10, behavior:'smooth'});
   } catch (err) { msg.textContent = `${sym}: ${err.message}`; }
   btn.disabled = false;
 }
-</script></body></html>"""
+</script><script src="/nav.js" defer></script></body></html>"""
 
 
 def write_report(results, path, seas=None, rrg=None, regime=None):

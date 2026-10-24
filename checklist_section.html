@@ -1,0 +1,108 @@
+<div id="cl-root">
+<style>
+#cl-root{font-size:13.5px;line-height:1.5;color:var(--text);max-width:1150px}
+#cl-root h2{font-size:18px;margin:18px 0 6px} #cl-root h3{font-size:15px;margin:16px 0 6px}
+#cl-root .cl-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin:10px 0}
+#cl-root table{border-collapse:collapse;width:100%;font-size:13px}
+#cl-root th,#cl-root td{border-bottom:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top}
+#cl-root th{color:var(--muted);font-weight:500;white-space:nowrap}
+#cl-root .ok{color:var(--green)} #cl-root .no{color:var(--red)} #cl-root .mu{color:var(--muted)}
+#cl-root .pill{display:inline-block;padding:1px 9px;border-radius:11px;font-weight:600;font-size:12px;color:#0f1117}
+#cl-root .wrapx{overflow-x:auto}
+#cl-root .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
+#cl-root a{color:var(--accent)}
+</style>
+
+<h2>Buy &amp; sell checklist</h2>
+<div class="mu">What to look at before buying, and when to sell or trim. The same checks run on every ticker on the
+<a href="/patterns">Chart formations</a> page (verdict card under each ticker's name), and the market brief adds the theme, news and upcoming events.
+Model rules for discipline, not investment advice.</div>
+
+<div class="cl-card"><h3 style="margin-top:0">Current trends <span class="mu" id="cl-asof"></span></h3>
+  <div id="cl-trends" class="mu">Loading…</div></div>
+
+<div class="cl-card"><h3 style="margin-top:0">Verdicts now</h3>
+  <div id="cl-verdicts" class="mu">Loading…</div></div>
+
+<h3>Verdict labels</h3>
+<div class="wrapx"><table>
+<tr><td><span class="pill" style="background:#26a69a">Buy</span></td><td>Uptrend, entry near the 21-day average or support, reward/risk of at least 2:1, market not risk-off, no event right ahead.</td></tr>
+<tr><td><span class="pill" style="background:#4fc3f7">Buy on dip</span></td><td>Good trend, wrong spot: wait for the level named in the card (21-day average / support).</td></tr>
+<tr><td><span class="pill" style="background:#b0bec5">Hold</span></td><td>If you own it, keep it; not a fresh entry (stretched, or little room to resistance).</td></tr>
+<tr><td><span class="pill" style="background:#f5b041">Wait</span></td><td>No buy yet: trend mixed, or a downtrend that is oversold and may be turning; wait for confirmation.</td></tr>
+<tr><td><span class="pill" style="background:#ff9800">Warning</span></td><td>Setup deteriorating: below the 50-day average, or several selling alerts on. Tighten stops, don't add.</td></tr>
+<tr><td><span class="pill" style="background:#ba68c8">Take profit</span></td><td>Uptrend but overbought and rolling over, or at the target: trim / sell part.</td></tr>
+<tr><td><span class="pill" style="background:#ef5350">Sell</span></td><td>Downtrend (below falling averages, Weinstein stage 4) or thesis broken: exit / avoid.</td></tr>
+</table></div>
+
+<div class="cols">
+<div>
+<h3>Buying checklist</h3>
+<div class="wrapx"><table>
+<tr><th>Check</th><th>Good</th><th>Red flag</th><th>Where</th></tr>
+<tr><td><b>1. Current trends &amp; market</b></td><td>Market regime risk-on (SPY above a rising 200-day average); VIX calm; the trend of rates, oil and the dollar not fighting the stock; the stock's theme is one of the current leaders.</td><td>Risk-off regime, VIX spiking, the theme is the one being sold.</td><td>Current trends above · <a href="/brief">Market brief</a> · regime line on <a href="/patterns">Chart formations</a></td></tr>
+<tr><td><b>2. Macro &amp; calendar</b></td><td>Macro outlook supports the sector (e.g. falling yields for growth stocks); no CPI / FOMC / earnings in the next few days, or the size accounts for it.</td><td>Buying the day before earnings or a Fed decision at full size.</td><td><a href="/brief#macro">Macro outlook</a> · brief calendar</td></tr>
+<tr><td><b>3. Sector &amp; theme</b></td><td>Sector in the Leading or Improving quadrant of the rotation map; fits a theme of the 6–12 month outlook; seasonality not strongly against it.</td><td>Sector Lagging and weakening; theme losing money flows.</td><td>Rotation map and seasonality on <a href="/patterns">Chart formations</a> · <a href="/#breakdown">Outlook portfolio</a></td></tr>
+<tr><td><b>4. Trend</b></td><td>Price &gt; 50-day &gt; 200-day average, 200-day rising; Weinstein stage 2; Minervini 6–7/7; the turn ladder confirmed on 1h / 4h / daily.</td><td>Price below falling averages (stage 4); buying only because it "looks cheap".</td><td>MA panel, trend templates, Timeframes button</td></tr>
+<tr><td><b>5. Entry location</b></td><td>Within ~1.5 ATR of the 21-day average, a swing AVWAP or a support level; a breakout from a base on volume.</td><td>More than 3 ATR above the 21-day average (chasing); right under resistance.</td><td>Verdict card (distance from EMA21, support) · S/R lines</td></tr>
+<tr><td><b>6. Momentum</b></td><td>RSI 50–70 and rising; MACD histogram positive and growing; WaveTrend bullish cross (strongest from the oversold zone).</td><td>RSI &gt; 75 or falling below 40; bearish divergence; WaveTrend bearish cross in the overbought zone.</td><td>State panel · WaveTrend panel · Indicator prices</td></tr>
+<tr><td><b>7. Volume</b></td><td>Up days on above-average volume; a selling capitulation followed by a reversal.</td><td>Down days on heavy volume (distribution); breakouts on thin volume.</td><td>Volume bars · volume climax markers</td></tr>
+<tr><td><b>8. Patterns</b></td><td>Open bullish pattern (double bottom, inverse H&amp;S, ascending triangle, bull flag) with a clear invalidation.</td><td>Open bearish pattern (head &amp; shoulders, rising wedge, breakdown from a range).</td><td>Pattern table on each chart</td></tr>
+<tr><td><b>9. Risk</b></td><td>The stop sits below the support that would break the setup; reward/risk ≥ 2:1; size so that a stop-out loses ≤ 1% of the account.</td><td>No stop, or a stop so wide that the position is too big to hold.</td><td>Verdict card (stop, target, reward/risk)</td></tr>
+<tr><td><b>10. Fundamentals &amp; valuation</b></td><td>Growth and margins solid (Rule of 40 for growth names); the reverse DCF's implied growth is achievable; analyst targets above the price.</td><td>Price implies growth the company has never delivered; falling estimates.</td><td>Valuation button · Rule of 40 / value lists on <a href="/#breakdown">Market breakdown</a></td></tr>
+<tr><td><b>11. News &amp; sentiment</b></td><td>Fresh catalyst (earnings beat, guidance raise, policy tailwind); accounts we follow constructive; insider buying.</td><td>Crowded euphoria; negative news the price hasn't absorbed; insider selling clusters.</td><td><a href="/x">Twitter analysis</a> · brief headlines</td></tr>
+</table></div>
+</div>
+<div>
+<h3>Selling checklist (if you hold it)</h3>
+<div class="wrapx"><table>
+<tr><th>Alert</th><th>What it means</th><th>Typical action</th></tr>
+<tr><td><b>Stop hit</b></td><td>Price closed below the stop set at entry (below the support that defined the setup).</td><td>Exit, no exceptions.</td></tr>
+<tr><td><b>Trailing stop</b></td><td>Price below the 22-day high minus 3 ATR (chandelier stop): the up-move is over.</td><td>Exit or cut most of it.</td></tr>
+<tr><td><b>Below the 21-day average</b></td><td>Short-term trend lost.</td><td>Tighten the stop; don't add.</td></tr>
+<tr><td><b>Below the 50-day average</b></td><td>Swing trend lost (Warning).</td><td>Trim; exit if it fails to reclaim within a few days.</td></tr>
+<tr><td><b>Below the 200-day average</b></td><td>Long-term trend lost.</td><td>Exit long-term positions unless the thesis is intact and it reclaims quickly.</td></tr>
+<tr><td><b>Overbought and rolling over</b></td><td>RSI above 75 then dropping; WaveTrend bearish cross in the overbought zone.</td><td>Take profit on part.</td></tr>
+<tr><td><b>Bearish divergence</b></td><td>New price high, weaker RSI: momentum is fading.</td><td>Tighten the stop or trim.</td></tr>
+<tr><td><b>MACD bearish cross</b></td><td>Momentum turning down.</td><td>Watch; act if the 21-day average also breaks.</td></tr>
+<tr><td><b>Distribution day</b></td><td>Down day on 1.5×+ average volume: institutions selling.</td><td>Several in a few weeks: reduce.</td></tr>
+<tr><td><b>At resistance / target</b></td><td>Price reached the planned target or a strong resistance.</td><td>Take profit on part; raise the stop.</td></tr>
+<tr><td><b>Bearish pattern</b></td><td>Head &amp; shoulders, rising wedge, double top forming.</td><td>Exit on the confirmed break of its neckline / lower line.</td></tr>
+<tr><td><b>Thesis or news change</b></td><td>The reason you bought is gone (guidance cut, policy change, theme out of favour), or a big event is coming that you do not want to hold through.</td><td>Sell regardless of the chart, or reduce before the event.</td></tr>
+</table></div>
+<h3>Discipline</h3>
+<ul>
+<li>Decide the stop and the target <b>before</b> buying; write down why you bought (the thesis) and what would prove it wrong.</li>
+<li>Risk ≤ 1% of the account per position; add only to winners, never average down a downtrend.</li>
+<li>Take part of the profit at the target and trail the rest with the 21-day average or the trailing stop.</li>
+<li>Reduce size into earnings, CPI and FOMC days; cash is a position when the market regime is risk-off.</li>
+</ul>
+</div>
+</div>
+</div>
+<script>
+(function () {
+  const RAW = 'https://raw.githubusercontent.com/berkeoz/new_trading/master/';
+  const VC = {'Buy': '#26a69a', 'Buy on dip': '#4fc3f7', 'Hold': '#b0bec5', 'Wait': '#f5b041', 'Warning': '#ff9800', 'Take profit': '#ba68c8', 'Sell': '#ef5350'};
+  const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  const get = f => fetch(RAW + f + '?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null);
+  Promise.all([get('briefs/verdicts.json'), get('thesis/state.json')]).then(([v, th]) => {
+    const tr = document.getElementById('cl-trends'), vd = document.getElementById('cl-verdicts');
+    let h = '';
+    if (v && (v.trends || []).length) {
+      document.getElementById('cl-asof').textContent = '· from the market brief ' + (v.updated || '');
+      h += `<div class="wrapx"><table><tr><th>Area</th><th>Trend now</th><th>What it means for buying</th></tr>` +
+        v.trends.map(t => `<tr><td><b>${esc(t.area)}</b></td><td>${esc(t.now)}</td><td>${esc(t.implication)}</td></tr>`).join('') + `</table></div>`;
+    } else h += '<div>The market brief writes the current trends at its next run.</div>';
+    if (th && th.outlook) h += `<div style="margin-top:8px"><b>6–12 month outlook:</b> ${esc(th.outlook.regime)} · themes: ${(th.outlook.themes || []).map(t => esc(t.name)).join(', ')} <a href="/#breakdown">(portfolio)</a></div>`;
+    tr.innerHTML = h; tr.classList.remove('mu');
+    const T = v && v.tickers ? Object.entries(v.tickers) : [];
+    vd.innerHTML = T.length ? `<div class="wrapx"><table><tr><th>Ticker</th><th>Verdict</th><th>Why</th><th>Key levels</th></tr>` +
+      T.map(([s, x]) => `<tr><td><b><a href="/patterns">${esc(s)}</a></b></td><td><span class="pill" style="background:${VC[x.verdict] || '#8a93a5'}">${esc(x.verdict)}</span></td>
+        <td>${esc(x.headline || x.summary || '')}${x.technical && x.technical != x.verdict ? `<div class="mu">technical checklist: ${esc(x.technical)}</div>` : ''}</td>
+        <td class="mu">${x.levels ? Object.entries(x.levels).map(([k, y]) => `${esc(k.replace(/_/g, ' '))} ${esc(y)}`).join(' · ') : ''}</td></tr>`).join('') + `</table></div>`
+      : 'The market brief writes the verdicts at its next run; the technical checklist is already on each chart.';
+    vd.classList.remove('mu');
+  });
+})();
+</script>

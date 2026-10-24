@@ -293,6 +293,7 @@ def ticker_snapshot(sym, spy=None):
         "levels": key_levels(d, df, st, price),
         "read30": d.get("read"),
         "templates": d.get("templates"),
+        "assessment": d.get("assessment"),
         "open_patterns": [{k: p[k] for k in ("type", "bias", "start", "end", "status", "target", "note")}
                           for p in d["patterns"] if p["open"]][:10],
         "recent_signals": [{k: p[k] for k in ("type", "bias", "start", "status", "note")}
@@ -473,6 +474,14 @@ def summary_text(snap):
             tp = t["templates"]
             L.append(f"  trend templates: Minervini {tp['minervini']['passed']}/{tp['minervini']['of']}, {tp['weinstein']['text']}, "
                      + ("breakout today" if tp["qullamaggie"]["breakout_today"] else "Qullamaggie setup" if tp["qullamaggie"]["setup"] else "no breakout setup"))
+        if t.get("assessment") and "verdict" in t["assessment"]:
+            a_ = t["assessment"]
+            L.append(f"  CHECKLIST (technical verdict): {a_['verdict']} — {a_['why']} ({a_['good']} good / {a_['bad']} bad checks, {a_['sell_alerts']} sell alerts)")
+            L.append("    buying checks: " + "; ".join(f"{'+' if k['status'] == 'good' else '-' if k['status'] == 'bad' else '·'} {k['name']}: {k['detail']}" for k in a_["checks"]))
+            L.append("    sell alerts: " + ("; ".join(f"{k['name']}: {k['detail']}" for k in a_["sell_checks"] if k["status"] == "alert") or "none"))
+            lv = a_["levels"]
+            L.append(f"    checklist levels: EMA21 {lv['ema21']}, SMA50 {lv['sma50']}, SMA200 {lv['sma200']}, support {lv['support']}, resistance {lv['resistance']}, "
+                     f"stop {lv['stop']}, target {lv['target']}, reward/risk {lv['rr']}, trailing stop {a_['trailing_stop']}")
         if t.get("mtf_text"):
             for line in t["mtf_text"].splitlines()[1:]:
                 L.append("  timeframes: " + line.strip())
@@ -557,6 +566,7 @@ def main():
     print(f"BRIEF_ID={bid}")
     print(f"DATA={os.path.relpath(path, ROOT)}")
     print(f"WRITE_BRIEF_TO=briefs/{bid}.md")
+    print("WRITE_VERDICTS_TO=briefs/verdicts.json")
     prev = sorted(glob.glob(os.path.join(BRIEF_DIR, "*.md")))
     if prev:
         print(f"PREVIOUS_BRIEF={os.path.relpath(prev[-1], ROOT)}")

@@ -745,10 +745,10 @@ def _build_breakdown(results):
     return _thesis_section() + s1 + s2 + s3 + s4 + _build_value_lists(results, _section)
 
 
-def _thesis_section():
+def _thesis_section(name="thesis_section.html"):
     """6-12 month outlook portfolio (thesis.py): the page loads thesis/state.json live from GitHub."""
     try:
-        return open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis_section.html"), encoding="utf-8").read()
+        return open(os.path.join(os.path.dirname(os.path.abspath(__file__)), name), encoding="utf-8").read()
     except OSError:
         return ""
 
@@ -769,6 +769,7 @@ def build_html(results):
     hist_json      = json.dumps({r["symbol"]:r.get("history",[])
                                   for r in results if not r.get("error")})
     breakdown_html = _build_breakdown(results)
+    checklist_html = _thesis_section("checklist_section.html")
 
     return f"""<!doctype html>
 <html lang="en">
@@ -1071,6 +1072,7 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
     <div class="tab active" data-panel="p-today">Today's Signals</div>
     <div class="tab" data-panel="p-timeline">Signal Timeline (90 days)</div>
     <div class="tab" data-panel="p-breakdown">Market Breakdown</div>
+    <div class="tab" data-panel="p-checklist">Buy &amp; Sell Checklist</div>
     <a class="tab-link" href="/patterns">Chart Formations &rarr;</a>
     <a class="tab-link" style="margin-left:0" href="/brief">Market Brief &rarr;</a>
     <a class="tab-link" style="margin-left:0" href="/x">Twitter Analysis &rarr;</a>
@@ -1165,6 +1167,10 @@ footer{{color:var(--muted);font-size:11px;text-align:center;padding-top:4px}}
 
   <div id="p-breakdown" class="tab-panel">
     {breakdown_html}
+  </div>
+
+  <div id="p-checklist" class="tab-panel">
+    {checklist_html}
   </div>
 
   <footer>Entry: 7 rules × 20 pts — score ≥60 = BUY · ≥40 = WATCH · Exit: ≥2 signals incl. ≥1 independent · Data from Yahoo Finance, updated daily after market close</footer>
@@ -1950,6 +1956,7 @@ function drawBigTL(sym) {{
   canvas.onmouseleave = () => {{ tip.textContent='Hover over the chart to see daily details'; }};
 }}
 </script>
+<script src="/nav.js" defer></script>
 </body>
 </html>"""
 

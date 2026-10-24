@@ -54,4 +54,4 @@ get('index.json', 'json').then(async ix => {
   const acc = await get((ix && ix.accounts_file) || 'accounts.md', 'text');
   if (acc) show($('#accounts'), acc); else $('#accounts').innerHTML = '<h2>Accounts</h2><div class="sub">Account notes appear after the first run.</div>';
 });
-</script></body></html>
+</script><script src="/nav.js" defer></script></body></html>
