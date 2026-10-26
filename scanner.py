@@ -324,6 +324,11 @@ def analyze_symbol(ticker):
 
         df = raw.copy()
         df.columns = [c[0].lower() if isinstance(c, tuple) else c.lower() for c in df.columns]
+        # Yahoo sometimes returns the latest day with no close yet (e.g. right after the close):
+        # drop it, otherwise every price, change and screen for the day becomes NaN
+        df = df.dropna(subset=["close"])
+        if len(df) < 60:
+            return {"symbol": ticker, "error": "insufficient data"}
 
         close, high, low, volume = df["close"], df["high"], df["low"], df["volume"]
         ma5   = close.rolling(5).mean()
