@@ -1,8 +1,8 @@
 {
  "asof": "2026-10-27",
- "updated": "2026-10-27 16:23",
+ "updated": "2026-10-27 16:26",
  "composite": {
-  "score": -0.9,
+  "score": -0.6,
   "percentile_10y": 66,
   "score_1w_ago": 3.2,
   "score_1m_ago": -1.5,
@@ -1046,7 +1046,7 @@
    ],
    [
     "2026-10-27",
-    -0.9
+    -0.6
    ]
   ]
  },
@@ -1056,8 +1056,8 @@
    "label": "VIX (fear gauge)",
    "group": "Fear & complacency",
    "how": "percentile of the VIX vs 10 years; high = fear",
-   "value": 17.5,
-   "signal": -0.08,
+   "value": 17.54,
+   "signal": -0.09,
    "signal_1m_ago": 0.15,
    "reading": "neutral",
    "note": "",
@@ -1072,8 +1072,8 @@
    "label": "VIX vs 3-month VIX",
    "group": "Fear & complacency",
    "how": "above 1 = near-term panic (backwardation)",
-   "value": 0.8951,
-   "signal": 0.05,
+   "value": 0.8958,
+   "signal": 0.04,
    "signal_1m_ago": 0.18,
    "reading": "neutral",
    "note": "",
@@ -1280,7 +1280,7 @@
    "label": "Bitcoin",
    "group": "Intermarket",
    "how": "speculative risk appetite",
-   "value": 80600.1,
+   "value": 80612.3,
    "signal": 0.02,
    "signal_1m_ago": 1.0,
    "reading": "neutral",
