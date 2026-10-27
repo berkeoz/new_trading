@@ -11,6 +11,10 @@
 #cl-root .wrapx{overflow-x:auto}
 #cl-root .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
 #cl-root a{color:var(--accent)}
+#cl-root .fbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 6px}
+#cl-root .fbar input,#cl-root .fbar select{background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font:inherit;font-size:12.5px}
+#cl-root .tag{display:inline-block;padding:0 7px;border-radius:9px;font-size:11.5px;font-weight:600}
+#cl-root .t-on{background:#34d39933;color:var(--green)} #cl-root .t-off{background:#f8717133;color:var(--red)} #cl-root .t-neu{background:var(--bg3);color:var(--muted)}
 </style>
 
 <h2>Buy &amp; sell checklist</h2>
@@ -20,6 +24,12 @@ Model rules for discipline, not investment advice.</div>
 
 <div class="cl-card"><h3 style="margin-top:0">Current trends <span class="mu" id="cl-asof"></span></h3>
   <div id="cl-trends" class="mu">Loading…</div></div>
+
+<div class="cl-card"><h3 style="margin-top:0">Sentiment &amp; leadership <span class="mu" id="cl-sent-asof"></span></h3>
+  <div id="cl-sent" class="mu">Loading…</div></div>
+
+<div class="cl-card"><h3 style="margin-top:0">Political &amp; geopolitical risks <span class="mu" id="cl-risk-asof"></span></h3>
+  <div id="cl-risk" class="mu">Loading…</div></div>
 
 <div class="cl-card"><h3 style="margin-top:0">Verdicts now</h3>
   <div id="cl-verdicts" class="mu">Loading…</div></div>
@@ -106,9 +116,10 @@ Model rules for discipline, not investment advice.</div>
         return `<tr><td><b>${esc(s)}</b>${g.in_position_now ? '<div class="mu">in the market now</div>' : '<div class="mu">in cash now</div>'}</td><td>${sg(g.return_pct)}</td><td>${sg(g.buy_hold_pct)}</td><td>${g.entries}</td><td>${g.in_market_pct}%</td><td class="no">${g.max_drawdown_pct}%</td><td>${strip}</td></tr>`; }).join('') + `</table></div>`;
     const lv = bt.live || {};
     h += `<div class="mu" style="margin-top:10px">The market brief's verdicts (checklist + news, theme and events) are recorded at every brief${lv.first ? ' since ' + esc(lv.first) : ''}; their results build up from there.</div>`;
-    if ((lv.rows || []).length) h += `<div class="wrapx"><table><tr><th>When</th><th>Ticker</th><th>Verdict</th><th>Price then</th><th>Since then</th><th>vs SPY</th><th>1 week</th><th>1 month</th></tr>` +
-      lv.rows.slice().reverse().slice(0, 15).map(r => `<tr><td class="mu">${esc(r.time)}</td><td><b>${esc(r.symbol)}</b></td><td><span class="pill" style="background:${VC[r.verdict] || '#8a93a5'}">${esc(r.verdict)}</span></td><td>${r.price ?? '—'}</td><td>${sg(r.since_pct)}</td><td>${sg(r.since_vs_spy)}</td><td>${sg(r['1 week'])}</td><td>${sg(r['1 month'])}</td></tr>`).join('') + `</table></div>`;
+    if ((lv.rows || []).length) h += `<div id="cl-log">` + filterBar({limit: true}) + `<div class="wrapx"><table><tr><th>When</th><th>Ticker</th><th>Verdict</th><th>Price then</th><th>Since then</th><th>vs SPY</th><th>1 week</th><th>1 month</th></tr>` +
+      lv.rows.slice().reverse().map(r => `<tr data-text="${esc(r.symbol)}" data-v="${esc(r.verdict)}"><td class="mu">${esc(r.time)}</td><td><b>${esc(r.symbol)}</b></td><td><span class="pill" style="background:${VC[r.verdict] || '#8a93a5'}">${esc(r.verdict)}</span></td><td>${r.price ?? '—'}</td><td>${sg(r.since_pct)}</td><td>${sg(r.since_vs_spy)}</td><td>${sg(r['1 week'])}</td><td>${sg(r['1 month'])}</td></tr>`).join('') + `</table></div></div>`;
     el.innerHTML = h; el.classList.remove('mu');
+    const lg = document.getElementById('cl-log'); if (lg) wireFilter(lg);
     get('verdicts/calibration.json').then(cal => {
       if (!cal) return;
       const row = (name, e) => `<tr><td>${name}</td><td>${e.avg_sharpe.toFixed(2)}</td><td>${sg(e.avg_return_pct)}</td><td class="no">${e.avg_max_dd_pct}%</td><td>${e.avg_in_market_pct}%</td></tr>`;
@@ -129,6 +140,76 @@ Model rules for discipline, not investment advice.</div>
         <div class="mu">Calibrated ${esc(cal.updated)}. In both periods the verdict labels rank 1-month returns only weakly (dips in these ETFs mostly recovered), so treat the verdicts as trend and risk control, not as a forecast.</div>`);
     });
   });
+  const VL = ['Buy', 'Buy on dip', 'Hold', 'Wait', 'Warning', 'Take profit', 'Sell'];
+  // filter bar for long tables: rows carry data-sym / data-v / data-text
+  const filterBar = (opts = {}) => `<div class="fbar"><input class="f-q" placeholder="${opts.placeholder || 'Ticker'}" size="12">` +
+    (opts.verdicts === false ? '' : `<select class="f-v"><option value="">All verdicts</option>${VL.map(v => `<option>${v}</option>`).join('')}</select>`) +
+    (opts.limit ? `<select class="f-n"><option value="20">Latest 20</option><option value="100">Latest 100</option><option value="0">All</option></select>` : '') +
+    `<span class="mu f-count"></span></div>`;
+  const wireFilter = box => {
+    const run = () => {
+      const q = box.querySelector('.f-q').value.trim().toUpperCase(), v = box.querySelector('.f-v')?.value || '', n = +(box.querySelector('.f-n')?.value || 0);
+      let shown = 0, total = 0;
+      box.querySelectorAll('tr[data-text]').forEach(tr => {
+        total++;
+        const ok = (!q || tr.dataset.text.toUpperCase().includes(q)) && (!v || tr.dataset.v == v) && (!n || shown < n);
+        tr.style.display = ok ? '' : 'none';
+        if (ok) shown++;
+      });
+      box.querySelector('.f-count').textContent = `${shown} of ${total}`;
+    };
+    box.querySelectorAll('input,select').forEach(e => e.oninput = run);
+    run();
+  };
+  window.__clFilter = wireFilter;
+
+  // sentiment & leadership
+  Promise.all([get('context/sentiment.json'), get('context/sentiment_ext.json')]).then(([d, ext]) => {
+    const el = document.getElementById('cl-sent');
+    if (!d) { el.textContent = 'Appears after the next market brief run.'; return; }
+    document.getElementById('cl-sent-asof').textContent = `· as of ${d.asof}`;
+    const c = d.composite, col = c.score > 10 ? 'var(--green)' : c.score < -10 ? 'var(--red)' : 'var(--muted)';
+    const H = c.history || [], W = 600, Ht = 70;
+    const lo = Math.min(-60, ...H.map(x => x[1])), hi = Math.max(60, ...H.map(x => x[1]));
+    const X = i => i * W / Math.max(H.length - 1, 1), Y = v => Ht - (v - lo) / (hi - lo) * Ht;
+    const line = H.map((x, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(x[1]).toFixed(1)}`).join('');
+    const tag = r => `<span class="tag ${r == 'risk-on' ? 't-on' : r == 'risk-off' ? 't-off' : 't-neu'}">${esc(r)}</span>`;
+    let h = `<div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+      <div><div class="mu" style="font-size:11px;text-transform:uppercase">Risk appetite score</div><div style="font-size:26px;font-weight:700;color:${col}">${c.score > 0 ? '+' : ''}${c.score}</div>
+      <div>${esc(c.label)} · 10-year percentile ${c.percentile_10y} · 1 week ago ${c.score_1w_ago > 0 ? '+' : ''}${c.score_1w_ago} · 1 month ago ${c.score_1m_ago > 0 ? '+' : ''}${c.score_1m_ago}</div></div>
+      <svg viewBox="0 0 ${W} ${Ht}" style="flex:1;min-width:240px;max-width:600px;height:70px"><line x1="0" x2="${W}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--border)"/><path d="${line}" fill="none" stroke="${col}" stroke-width="1.6"/></svg></div>`;
+    if ((d.alerts || []).length) h += `<div style="margin:8px 0" class="no">${d.alerts.map(a => '⚠ ' + esc(a)).join('<br>')}</div>`;
+    h += filterBar({placeholder: 'Filter indicators', verdicts: false}).replace('class="fbar"', 'class="fbar" style="margin-top:8px"') +
+      `<div class="wrapx"><table><tr><th>Group</th><th>Indicator</th><th>Value</th><th>Reading</th><th>In the score</th><th>Lead on SPY next month<br><span class="mu">2012-21 / 2022+</span></th></tr>` +
+      d.indicators.map(r => `<tr data-text="${esc(r.group + ' ' + r.label)}"><td class="mu">${esc(r.group)}</td><td><b>${esc(r.label)}</b><div class="mu">${esc(r.how)}</div></td>
+        <td>${r.value}</td><td>${tag(r.reading)}${r.note ? `<div class="mu">${esc(r.note)}</div>` : ''}</td>
+        <td>${r.used ? `✓ ${esc(r.direction)}` : '<span class="mu">no (no consistent lead)</span>'}</td>
+        <td class="mu">${r.ic_train ?? '—'} / ${r.ic_test ?? '—'}</td></tr>`).join('') + `</table></div>`;
+    if (ext && (ext.gauges || []).length) h += `<div style="margin-top:8px"><b>Web gauges</b> <span class="mu">(looked up by the market brief ${esc(ext.updated)})</span>: ` +
+      ext.gauges.map(g => `${esc(g.name)} <b>${esc(g.value)}</b> <span class="mu">(${esc(g.date)}${g.reading ? ', ' + esc(g.reading) : ''})</span>`).join(' · ') + `</div>`;
+    const m = d.model.composite;
+    h += `<div class="mu" style="margin-top:6px">How the score is built: each indicator becomes a −1…+1 signal; only those that led SPY's next month the same way in 2012–16 and 2017–21 count, weighted by that lead ("contrarian" = extreme fear has come before gains). Lead (rank correlation) of the score: ${m.ic_train} on 2012–21, ${m.ic_test} on 2022+ (unseen). SPY's average next month since 2022 by score fifth, lowest to highest: ${Object.values(m.test_quintiles).map(x => (x > 0 ? '+' : '') + x + '%').join(', ')}. A modest edge: context, not a timing signal.</div>`;
+    el.innerHTML = h; el.classList.remove('mu');
+    wireFilter(el);
+  });
+
+  // political & geopolitical risk register
+  get('context/risks.json').then(r => {
+    const el = document.getElementById('cl-risk');
+    if (!r || !(r.risks || []).length) { el.textContent = 'The market brief builds the register at its next run.'; return; }
+    document.getElementById('cl-risk-asof').textContent = `· updated ${r.updated} (full review ${r.full_review})`;
+    const tr = t => t == 'rising' ? '<span class="no">▲ rising</span>' : t == 'falling' ? '<span class="ok">▼ falling</span>' : `<span class="mu">${esc(t)}</span>`;
+    el.innerHTML = (r.summary ? `<div style="margin-bottom:6px">${esc(r.summary)}</div>` : '') + filterBar({placeholder: 'Filter: region, ticker, topic', verdicts: false}) +
+      `<div class="wrapx"><table><tr><th>Risk</th><th>Now</th><th>Next date</th><th>Odds</th><th>Trend</th><th>Market channels / affected</th><th>Impact</th></tr>` +
+      r.risks.map(x => `<tr data-text="${esc([x.title, x.region, x.category, (x.channels || []).join(' '), (x.affected || []).join(' ')].join(' '))}">
+        <td><b>${esc(x.title)}</b><div class="mu">${esc(x.region)} · ${esc(x.category)}</div></td><td>${esc(x.status)}${x.market_pricing ? `<div class="mu">Priced: ${esc(x.market_pricing)}</div>` : ''}</td>
+        <td>${esc(x.next_date || '—')}</td><td>${esc(x.odds || 'n/a')}</td><td>${tr(x.trend)}</td>
+        <td>${esc((x.channels || []).join(', '))}<div class="mu">${esc((x.affected || []).join(', '))}</div></td>
+        <td>${esc(x.impact || '')}${(x.sources || []).length ? `<div class="mu">${x.sources.slice(0, 3).map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">source ${i + 1}</a>`).join(' · ')}</div>` : ''}</td></tr>`).join('') + `</table></div>`;
+    el.classList.remove('mu');
+    wireFilter(el);
+  });
+
   Promise.all([get('briefs/verdicts.json'), get('thesis/state.json')]).then(([v, th]) => {
     const tr = document.getElementById('cl-trends'), vd = document.getElementById('cl-verdicts');
     let h = '';
@@ -140,12 +221,13 @@ Model rules for discipline, not investment advice.</div>
     if (th && th.outlook) h += `<div style="margin-top:8px"><b>6–12 month outlook:</b> ${esc(th.outlook.regime)} · themes: ${(th.outlook.themes || []).map(t => esc(t.name)).join(', ')} <a href="/#breakdown">(portfolio)</a></div>`;
     tr.innerHTML = h; tr.classList.remove('mu');
     const T = v && v.tickers ? Object.entries(v.tickers) : [];
-    vd.innerHTML = T.length ? `<div class="wrapx"><table><tr><th>Ticker</th><th>Verdict</th><th>Why</th><th>Key levels</th></tr>` +
-      T.map(([s, x]) => `<tr><td><b><a href="/patterns">${esc(s)}</a></b></td><td><span class="pill" style="background:${VC[x.verdict] || '#8a93a5'}">${esc(x.verdict)}</span></td>
+    vd.innerHTML = T.length ? filterBar() + `<div class="wrapx"><table><tr><th>Ticker</th><th>Verdict</th><th>Why</th><th>Key levels</th></tr>` +
+      T.map(([s, x]) => `<tr data-text="${esc(s)}" data-v="${esc(x.verdict)}"><td><b><a href="/patterns">${esc(s)}</a></b></td><td><span class="pill" style="background:${VC[x.verdict] || '#8a93a5'}">${esc(x.verdict)}</span></td>
         <td>${esc(x.headline || x.summary || '')}${x.technical && x.technical != x.verdict ? `<div class="mu">technical checklist: ${esc(x.technical)}</div>` : ''}</td>
         <td class="mu">${x.levels ? Object.entries(x.levels).map(([k, y]) => `${esc(k.replace(/_/g, ' '))} ${esc(y)}`).join(' · ') : ''}</td></tr>`).join('') + `</table></div>`
       : 'The market brief writes the verdicts at its next run; the technical checklist is already on each chart.';
     vd.classList.remove('mu');
+    if (T.length) wireFilter(vd);
   });
 })();
 </script>

@@ -521,6 +521,34 @@ def pick_session(now, force=False):
     return next((k for k, (hm, _) in SESSIONS.items() if hm and abs(now - at(hm)) <= WINDOW), "now")
 
 
+def context_status(now):
+    """What the routine has to update in context/: the political & geopolitical risk register and
+    the gauges it looks up on the web (Fear & Greed, AAII, put/call, NAAIM)."""
+    cdir = os.path.join(ROOT, "context")
+    L = ["POLITICAL & GEOPOLITICAL RISK REGISTER (context/risks.json)"]
+    try:
+        r = json.load(open(os.path.join(cdir, "risks.json"), encoding="utf-8"))
+        full = datetime.strptime(r.get("full_review", "2000-01-01 00:00")[:16], "%Y-%m-%d %H:%M").replace(tzinfo=ET)
+        upd = datetime.strptime(r.get("updated", "2000-01-01 00:00")[:16], "%Y-%m-%d %H:%M").replace(tzinfo=ET)
+        for x in r.get("risks", []):
+            L.append(f"  {x.get('title')} [{x.get('region')}] · {x.get('status', '')} · next {x.get('next_date') or '—'} · odds {x.get('odds') or '—'} "
+                     f"· trend {x.get('trend', '')} · affects {', '.join(x.get('affected', []))}")
+        due = "full" if (now - full).days >= 7 else "refresh" if (now - upd).total_seconds() > 20 * 3600 else "no"
+    except Exception:
+        due = "full"
+        L.append("  (no register yet)")
+    L.append(f"RISKS_REVIEW_DUE={due}")
+    try:
+        x = json.load(open(os.path.join(cdir, "sentiment_ext.json"), encoding="utf-8"))
+        upd = datetime.strptime(x.get("updated", "2000-01-01 00:00")[:16], "%Y-%m-%d %H:%M").replace(tzinfo=ET)
+        L.append("WEB SENTIMENT GAUGES (context/sentiment_ext.json): " + "; ".join(f"{g.get('name')} {g.get('value')} ({g.get('date')})" for g in x.get("gauges", [])))
+        ext_due = (now - upd).total_seconds() > 20 * 3600
+    except Exception:
+        ext_due = True
+    L.append(f"SENTIMENT_EXT_DUE={'yes' if ext_due else 'no'}")
+    return "\n".join(L)
+
+
 def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
@@ -589,6 +617,14 @@ def main():
         print(MAC.summary(md, mst))
     except Exception as e:
         print(f"\nMACRO: ERROR {e}")
+    try:   # sentiment & leadership layer (context/sentiment.json)
+        import sentiment
+        print()
+        print(sentiment.summary(sentiment.refresh()))
+    except Exception as e:
+        print(f"\nSENTIMENT: ERROR {e}")
+    print()
+    print(context_status(now))
     try:   # 6-12 month outlook portfolio (thesis/): trades on current prices, says when the weekly review is due
         import thesis
         print()
