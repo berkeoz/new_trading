@@ -1,11 +1,11 @@
 {
  "first_date": "2026-10-10",
- "asof": "2026-10-26",
+ "asof": "2026-10-27",
  "lists": {
   "rebound": {
    "name": "High-Beta Rebound Candidates",
-   "picks": 32,
-   "days": 4,
+   "picks": 40,
+   "days": 5,
    "stats": {
     "1 week": {
      "n": 24,
@@ -14,17 +14,17 @@
      "median_excess": -5.1
     },
     "to_date": {
-     "n": 32,
-     "hit_rate": 12,
-     "avg_excess": -5.92,
-     "median_excess": -5.15
+     "n": 40,
+     "hit_rate": 15,
+     "avg_excess": -4.12,
+     "median_excess": 0.0
     }
    }
   },
   "quality": {
    "name": "Quality Growth Below Value",
-   "picks": 32,
-   "days": 4,
+   "picks": 40,
+   "days": 5,
    "stats": {
     "1 week": {
      "n": 24,
@@ -33,17 +33,17 @@
      "median_excess": -5.41
     },
     "to_date": {
-     "n": 32,
-     "hit_rate": 9,
-     "avg_excess": -5.68,
-     "median_excess": -5.57
+     "n": 40,
+     "hit_rate": 10,
+     "avg_excess": -4.05,
+     "median_excess": -0.07
     }
    }
   },
   "rule40": {
    "name": "Rule of 40",
-   "picks": 30,
-   "days": 3,
+   "picks": 40,
+   "days": 4,
    "stats": {
     "1 week": {
      "n": 20,
@@ -52,15 +52,353 @@
      "median_excess": -6.96
     },
     "to_date": {
-     "n": 30,
-     "hit_rate": 10,
-     "avg_excess": -5.04,
-     "median_excess": -1.71
+     "n": 40,
+     "hit_rate": 8,
+     "avg_excess": -3.65,
+     "median_excess": 0.0
     }
    }
   }
  },
  "recent": [
+  {
+   "date": "2026-10-27",
+   "list": "rule40",
+   "rank": 10,
+   "symbol": "CRDO",
+   "score": 130,
+   "close": 147.29,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rule40",
+   "rank": 9,
+   "symbol": "BE",
+   "score": 138,
+   "close": 193.3,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rule40",
+   "rank": 8,
+   "symbol": "CORZ",
+   "score": 214,
+   "close": 13.1,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rule40",
+   "rank": 7,
+   "symbol": "IONQ",
+   "score": 251,
+   "close": 31.27,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rule40",
+   "rank": 6,
+   "symbol": "SKHY",
+   "score": 286,
+   "close": 137.02,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rule40",
+   "rank": 5,
+   "symbol": "LUNR",
+   "score": 293,
+   "close": 10.52,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rule40",
+   "rank": 4,
+   "symbol": "RGTI",
+   "score": 383,
+   "close": 11.52,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rule40",
+   "rank": 3,
+   "symbol": "MU",
+   "score": 401,
+   "close": 877.55,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rule40",
+   "rank": 2,
+   "symbol": "SNDK",
+   "score": 410,
+   "close": 1238.03,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rule40",
+   "rank": 1,
+   "symbol": "ASTS",
+   "score": 1066,
+   "close": 39.79,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rebound",
+   "rank": 8,
+   "symbol": "STX",
+   "score": 72,
+   "close": 630.49,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rebound",
+   "rank": 7,
+   "symbol": "WDC",
+   "score": 72,
+   "close": 343.67,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rebound",
+   "rank": 6,
+   "symbol": "MRVL",
+   "score": 72,
+   "close": 228.51,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rebound",
+   "rank": 5,
+   "symbol": "FSLR",
+   "score": 75,
+   "close": 171.99,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rebound",
+   "rank": 4,
+   "symbol": "SMTC",
+   "score": 77,
+   "close": 132.0,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rebound",
+   "rank": 3,
+   "symbol": "SKHY",
+   "score": 77,
+   "close": 137.02,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rebound",
+   "rank": 2,
+   "symbol": "VRT",
+   "score": 80,
+   "close": 194.32,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "rebound",
+   "rank": 1,
+   "symbol": "MU",
+   "score": 87,
+   "close": 877.55,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "quality",
+   "rank": 8,
+   "symbol": "STX",
+   "score": 79,
+   "close": 630.49,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "quality",
+   "rank": 7,
+   "symbol": "WDC",
+   "score": 79,
+   "close": 343.67,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "quality",
+   "rank": 6,
+   "symbol": "LRCX",
+   "score": 80,
+   "close": 230.1,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "quality",
+   "rank": 5,
+   "symbol": "SKHY",
+   "score": 82,
+   "close": 137.02,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "quality",
+   "rank": 4,
+   "symbol": "SNDK",
+   "score": 82,
+   "close": 1238.03,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "quality",
+   "rank": 3,
+   "symbol": "AVGO",
+   "score": 83,
+   "close": 321.68,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "quality",
+   "rank": 2,
+   "symbol": "RDDT",
+   "score": 88,
+   "close": 144.25,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "list": "quality",
+   "rank": 1,
+   "symbol": "MU",
+   "score": 92,
+   "close": 877.55,
+   "to_date": {
+    "ret": 0.0,
+    "excess": 0.0,
+    "days": 0
+   }
+  },
   {
    "date": "2026-10-26",
    "list": "rule40",
@@ -71,7 +409,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -84,7 +422,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -97,7 +435,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -110,7 +448,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -123,7 +461,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -136,7 +474,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -149,7 +487,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -162,7 +500,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -175,7 +513,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -188,7 +526,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -201,7 +539,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -214,7 +552,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -227,7 +565,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
+    "days": 1
    }
   },
   {
@@ -240,401 +578,7 @@
    "to_date": {
     "ret": 0.0,
     "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "rebound",
-   "rank": 4,
-   "symbol": "FSLR",
-   "score": 75,
-   "close": 169.88,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "rebound",
-   "rank": 3,
-   "symbol": "SKHY",
-   "score": 77,
-   "close": 141.925,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "rebound",
-   "rank": 2,
-   "symbol": "VRT",
-   "score": 87,
-   "close": 200.465,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "rebound",
-   "rank": 1,
-   "symbol": "MU",
-   "score": 87,
-   "close": 910.23,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "quality",
-   "rank": 8,
-   "symbol": "STX",
-   "score": 79,
-   "close": 653.04,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "quality",
-   "rank": 7,
-   "symbol": "WDC",
-   "score": 79,
-   "close": 354.68,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "quality",
-   "rank": 6,
-   "symbol": "LRCX",
-   "score": 80,
-   "close": 240.0075,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "quality",
-   "rank": 5,
-   "symbol": "SKHY",
-   "score": 81,
-   "close": 141.925,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "quality",
-   "rank": 4,
-   "symbol": "SNDK",
-   "score": 82,
-   "close": 1266.755,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "quality",
-   "rank": 3,
-   "symbol": "AVGO",
-   "score": 82,
-   "close": 331.67,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "quality",
-   "rank": 2,
-   "symbol": "RDDT",
-   "score": 88,
-   "close": 136.3764,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-26",
-   "list": "quality",
-   "rank": 1,
-   "symbol": "MU",
-   "score": 91,
-   "close": 910.23,
-   "to_date": {
-    "ret": 0.0,
-    "excess": 0.0,
-    "days": 0
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rule40",
-   "rank": 10,
-   "symbol": "RDDT",
-   "score": 86,
-   "close": 159.36,
-   "1 week": {
-    "ret": -7.61,
-    "excess": -7.19
-   },
-   "to_date": {
-    "ret": -7.61,
-    "excess": -7.19,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rule40",
-   "rank": 9,
-   "symbol": "NVDA",
-   "score": 120,
-   "close": 217.23,
-   "1 week": {
-    "ret": -1.48,
-    "excess": -1.05
-   },
-   "to_date": {
-    "ret": -1.48,
-    "excess": -1.05,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rule40",
-   "rank": 8,
-   "symbol": "AVGO",
-   "score": 120,
-   "close": 344.33,
-   "1 week": {
-    "ret": -2.15,
-    "excess": -1.72
-   },
-   "to_date": {
-    "ret": -2.15,
-    "excess": -1.72,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rule40",
-   "rank": 7,
-   "symbol": "PLTR",
-   "score": 128,
-   "close": 200.5,
-   "1 week": {
-    "ret": 5.76,
-    "excess": 6.19
-   },
-   "to_date": {
-    "ret": 5.76,
-    "excess": 6.19,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rule40",
-   "rank": 6,
-   "symbol": "BE",
-   "score": 183,
-   "close": 236.3,
-   "1 week": {
-    "ret": -12.66,
-    "excess": -12.23
-   },
-   "to_date": {
-    "ret": -12.66,
-    "excess": -12.23,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rule40",
-   "rank": 5,
-   "symbol": "IONQ",
-   "score": 251,
-   "close": 34.35,
-   "1 week": {
-    "ret": -0.03,
-    "excess": 0.4
-   },
-   "to_date": {
-    "ret": -0.03,
-    "excess": 0.4,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rule40",
-   "rank": 4,
-   "symbol": "LUNR",
-   "score": 293,
-   "close": 11.57,
-   "1 week": {
-    "ret": -2.41,
-    "excess": -1.98
-   },
-   "to_date": {
-    "ret": -2.41,
-    "excess": -1.98,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rule40",
-   "rank": 3,
-   "symbol": "RGTI",
-   "score": 383,
-   "close": 12.63,
-   "1 week": {
-    "ret": -2.37,
-    "excess": -1.94
-   },
-   "to_date": {
-    "ret": -2.37,
-    "excess": -1.94,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rule40",
-   "rank": 2,
-   "symbol": "MU",
-   "score": 401,
-   "close": 931.24,
-   "1 week": {
-    "ret": -0.15,
-    "excess": 0.28
-   },
-   "to_date": {
-    "ret": -0.15,
-    "excess": 0.28,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rule40",
-   "rank": 1,
-   "symbol": "ASTS",
-   "score": 1066,
-   "close": 44.46,
-   "1 week": {
-    "ret": -2.14,
-    "excess": -1.71
-   },
-   "to_date": {
-    "ret": -2.14,
-    "excess": -1.71,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rebound",
-   "rank": 8,
-   "symbol": "RMBS",
-   "score": 58,
-   "close": 92.87,
-   "1 week": {
-    "ret": -1.83,
-    "excess": -1.4
-   },
-   "to_date": {
-    "ret": -1.83,
-    "excess": -1.4,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rebound",
-   "rank": 7,
-   "symbol": "ON",
-   "score": 59,
-   "close": 73.7,
-   "1 week": {
-    "ret": 0.32,
-    "excess": 0.75
-   },
-   "to_date": {
-    "ret": 0.32,
-    "excess": 0.75,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rebound",
-   "rank": 6,
-   "symbol": "PL",
-   "score": 60,
-   "close": 14.54,
-   "1 week": {
-    "ret": -1.11,
-    "excess": -0.68
-   },
-   "to_date": {
-    "ret": -1.11,
-    "excess": -0.68,
-    "days": 6
-   }
-  },
-  {
-   "date": "2026-10-16",
-   "list": "rebound",
-   "rank": 5,
-   "symbol": "MRVL",
-   "score": 60,
-   "close": 241.24,
-   "1 week": {
-    "ret": 0.3,
-    "excess": 0.73
-   },
-   "to_date": {
-    "ret": 0.3,
-    "excess": 0.73,
-    "days": 6
+    "days": 1
    }
   }
  ]
