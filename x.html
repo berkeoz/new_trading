@@ -28,6 +28,11 @@ section{background:var(--card);border:1px solid var(--line);border-radius:10px;p
 </div>
 <p><select id="pick" aria-label="Choose a day"></select></p>
 <section class="md" id="digest"><div class="empty">Loading…</div></section>
+<section id="prints"><h2 style="font-size:17px;margin:0 0 6px">Large prints (Volume Leaders)</h2>
+  <div class="sub">Big block / dark-pool trades as posted by <a href="https://x.com/VolumeLeaders" target="_blank" rel="noopener">@VolumeLeaders</a>, logged by the Twitter analysis (rank = how the trade ranks in that ticker's history, e.g. #1 = largest). Only what the posts state; open the post for details.</div>
+  <div style="margin:8px 0"><input id="pq" placeholder="Filter: ticker" size="12" style="background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:5px 8px">
+  <label class="sub"><input type="checkbox" id="ptop"> only rank #1–#3</label> <span class="sub" id="pcount"></span></div>
+  <div class="wrap" id="ptable"><div class="empty">Appears after the next Twitter analysis run.</div></div></section>
 <section class="md" id="accounts"><h2>Accounts</h2><div class="sub">Loading…</div></section>
 </main>
 <script>
@@ -41,6 +46,21 @@ function show(el, md) {
   el.querySelectorAll('table').forEach(t => { const w = document.createElement('div'); w.className = 'wrap'; t.replaceWith(w); w.appendChild(t); });
   el.querySelectorAll('a').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
 }
+// large prints log (one JSON object per line)
+get('volume_leaders.jsonl', 'text').then(t => {
+  const rows = (t || '').split('\n').filter(l => l.trim()).map(l => { try { return JSON.parse(l); } catch (e) { return null; } }).filter(Boolean).reverse();
+  if (!rows.length) return;
+  const rk = r => { const m = String(r.rank || '').match(/#\s*(\d+)/); return m ? +m[1] : 99; };
+  const draw = () => {
+    const q = $('#pq').value.trim().toUpperCase(), top = $('#ptop').checked;
+    const R = rows.filter(r => (!q || String(r.ticker).toUpperCase().includes(q)) && (!top || rk(r) <= 3));
+    $('#pcount').textContent = `${R.length} of ${rows.length}`;
+    $('#ptable').innerHTML = `<table class="md"><tr><th>Date</th><th>Ticker</th><th>Rank</th><th>Value</th><th>Shares</th><th>Price</th><th>Type</th><th>Note</th></tr>` +
+      R.slice(0, 200).map(r => `<tr><td>${esc(r.date)}</td><td><b>${esc(r.ticker)}</b></td><td>${rk(r) <= 3 ? '<b>' + esc(r.rank) + '</b>' : esc(r.rank)}</td><td>${esc(r.value_usd)}</td><td>${esc(r.shares)}</td><td>${esc(r.price)}</td><td>${esc(r.type)}</td>
+        <td>${esc(r.note)}${r.post ? ` <a href="${esc(r.post)}" target="_blank" rel="noopener">post</a>` : ''}</td></tr>`).join('') + '</table>';
+  };
+  $('#pq').oninput = draw; $('#ptop').onchange = draw; draw();
+});
 get('index.json', 'json').then(async ix => {
   const list = (ix && ix.digests) || [];
   if (!list.length) { $('#digest').innerHTML = '<div class="empty">No digest yet. The first one appears after the next daily run.</div>'; }
