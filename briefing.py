@@ -623,6 +623,12 @@ def main():
         print(sentiment.summary(sentiment.refresh()))
     except Exception as e:
         print(f"\nSENTIMENT: ERROR {e}")
+    try:   # bear market watch (context/bear.json)
+        import bearwatch
+        print()
+        print(bearwatch.summary(bearwatch.refresh()))
+    except Exception as e:
+        print(f"\nBEAR WATCH: ERROR {e}")
     print()
     print(context_status(now))
     try:   # 6-12 month outlook portfolio (thesis/): trades on current prices, says when the weekly review is due

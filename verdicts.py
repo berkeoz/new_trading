@@ -32,6 +32,8 @@ OUT = os.path.join(ROOT, "verdicts", "backtest.json")
 LOG = os.path.join(ROOT, "briefs", "verdict_log.jsonl")
 START = "2026-01-02"
 LONG = {"Buy", "Buy on dip", "Hold"}
+# also tracked (the calibration ETFs), so the rarer verdicts (Sell, Wait, Take profit) have a record
+EXTRA = ["IWM", "DIA", "SMH", "XLK", "XLF", "XLE", "XLV", "XLY", "XLI"]
 LABELS = P.VERDICTS
 HORIZONS = {"1 week": 5, "1 month": 21}
 
@@ -113,9 +115,12 @@ def score(days, full, spy):
                 b.append((r, ex))
     stats = {}
     for v, hs in by.items():
+        # "right": a Buy / Buy on dip / Hold that beat SPY afterwards, or a Wait / Warning / Take profit / Sell
+        # that lagged SPY afterwards (stepping aside was the better choice)
         stats[v] = {name: {"n": len(x), "avg": round(float(np.mean([a for a, _ in x])) * 100, 2),
                            "vs_spy": round(float(np.mean([e for _, e in x])) * 100, 2),
-                           "up_pct": round(100 * sum(a > 0 for a, _ in x) / len(x))} for name, x in hs.items()}
+                           "up_pct": round(100 * sum(a > 0 for a, _ in x) / len(x)),
+                           "right_pct": round(100 * sum((e > 0) if v in LONG else (e < 0) for _, e in x) / len(x))} for name, x in hs.items()}
     # follow the verdicts: decide at the close, trade at the next open
     pos = {d[0]: (d[2] in LONG) for d in days}
     eq, bh, curve, trades, inpos = 1.0, 1.0, [], 0, False
@@ -174,7 +179,7 @@ def score_log(spy):
 
 def run(extra=()):
     st = _load()
-    syms = list(dict.fromkeys(list(P.DEFAULT_SYMBOLS) + [s.upper() for s in extra]))
+    syms = list(dict.fromkeys(list(P.DEFAULT_SYMBOLS) + EXTRA + [s.upper() for s in extra]))
     spy = P.load_prices("SPY", "5y")["Close"]
     allv = {}
     for sym in syms:
@@ -188,16 +193,18 @@ def run(extra=()):
         st["tickers"][sym] = {"days": days, "stats": stats, "strategy": strat}
         for v, hs in stats.items():
             for name, s_ in hs.items():
-                a = allv.setdefault(v, {}).setdefault(name, {"n": 0, "sum": 0.0, "sum_ex": 0.0, "up": 0.0})
+                a = allv.setdefault(v, {}).setdefault(name, {"n": 0, "sum": 0.0, "sum_ex": 0.0, "up": 0.0, "right": 0.0})
                 a["n"] += s_["n"]; a["sum"] += s_["avg"] * s_["n"]; a["sum_ex"] += s_["vs_spy"] * s_["n"]; a["up"] += s_["up_pct"] * s_["n"]
+                a["right"] += s_["right_pct"] * s_["n"]
         print(f"{sym}: {len(days)} days · follow verdicts {strat['return_pct']:+.1f}% vs buy & hold {strat['buy_hold_pct']:+.1f}% "
               f"({strat['entries']} entries, in the market {strat['in_market_pct']}% of days, max drawdown {strat['max_drawdown_pct']}%)")
     st["by_verdict"] = {v: {name: {"n": a["n"], "avg": round(a["sum"] / a["n"], 2), "vs_spy": round(a["sum_ex"] / a["n"], 2),
-                                   "up_pct": round(a["up"] / a["n"])} for name, a in hs.items()}
+                                   "up_pct": round(a["up"] / a["n"]), "right_pct": round(a["right"] / a["n"])} for name, a in hs.items()}
                         for v, hs in allv.items()}
     st["live"] = score_log(spy)
     st["updated"] = datetime.now().strftime("%Y-%m-%d %H:%M")
     st["labels"] = LABELS
+    st["watchlist"] = list(P.DEFAULT_SYMBOLS)
     st["params"] = P.PARAMS
     for t in st["tickers"].values():                      # keep the published file small: no features
         t["days"] = [d[:6] for d in t["days"]]

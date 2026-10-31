@@ -63,8 +63,15 @@ def evaluate():
     for e in es:
         if e["symbol"] not in px.columns:
             continue
-        pos = px.index.searchsorted(pd.Timestamp(e["date"]))          # first trading day on/after the pick date
-        if pos >= len(px):
+        # the bar the pick was made on: the last trading day on/before its date whose close matches the
+        # recorded close (older entries were stamped with the next UTC day)
+        pos = int(px.index.searchsorted(pd.Timestamp(e["date"]), side="right")) - 1
+        for back in range(0, 4):
+            k = pos - back
+            if k >= 0 and abs(px[e["symbol"]].iloc[k] / e["close"] - 1) < 0.003:
+                pos = k
+                break
+        if pos < 0 or pos >= len(px):
             continue
         p0, s0 = px[e["symbol"]].iloc[pos], px["SPY"].iloc[pos]
         if np.isnan(p0) or np.isnan(s0):
@@ -91,7 +98,15 @@ def evaluate():
                                "avg_excess": round(float(np.mean(xs)), 2), "median_excess": round(float(np.median(xs)), 2)}
         lists[lst] = {"name": LIST_NAMES[lst], "picks": len(rs), "days": len({r["date"] for r in rs}), "stats": stats}
     recent = sorted(rows, key=lambda r: (r["date"], r["list"], r["rank"]), reverse=True)[:40]
-    out = {"first_date": first, "asof": str(px.index[-1].date()), "lists": lists, "recent": recent}
+    # one row per list + symbol: first time picked, how often, and the result since that first pick
+    groups = {}
+    for r in sorted(rows, key=lambda r: r["date"]):
+        g = groups.setdefault((r["list"], r["symbol"]), {"list": r["list"], "symbol": r["symbol"], "first": r["date"], "close": r["close"],
+                                                        "times": 0, "last": r["date"], "to_date": r["to_date"], "score": r["score"]})
+        g["times"] += 1
+        g["last"] = r["date"]
+    out = {"first_date": first, "asof": str(px.index[-1].date()), "lists": lists, "recent": recent,
+           "by_symbol": sorted(groups.values(), key=lambda g: (g["first"], g["list"]))}
     _save(out)
     return out
 
@@ -116,13 +131,17 @@ def render(s):
                 f"<span style='color:var(--muted)'>beat SPY {st['hit_rate']}% of {st['n']}</span></td>")
     body = "".join(f"<tr><td><b>{v['name']}</b><br><span style='color:var(--muted)'>{v['picks']} picks over {v['days']} days</span></td>"
                    + "".join(cell(v["stats"].get(c)) for c in cols) + "</tr>" for v in s["lists"].values())
-    rec = "".join(f"<tr><td>{r['date']}</td><td>{SHORT.get(r['list'], r['list'])}</td><td><b>{r['symbol']}</b></td>"
-                  f"<td>{r['score']}</td><td>{r['close']:.2f}</td>"
-                  f"<td style='color:{'var(--green)' if r['to_date']['excess'] > 0 else 'var(--red)'}'>{r['to_date']['ret']:+.1f}% "
-                  f"({r['to_date']['excess']:+.1f}% vs SPY, {r['to_date']['days']}d)</td></tr>" for r in s["recent"][:20])
+    rows_ = s.get("by_symbol") or []
+    rec = "".join(f"<tr data-text=\"{g['symbol']} {SHORT.get(g['list'], g['list'])}\"><td>{g['first']}</td><td>{SHORT.get(g['list'], g['list'])}</td><td><b>{g['symbol']}</b></td>"
+                  f"<td>{g['times']}×{' (still on the list)' if g['last'] == s['recent'][0]['date'] else ''}</td><td>{g['close']:.2f}</td>"
+                  f"<td style='color:{'var(--green)' if g['to_date']['excess'] > 0 else 'var(--red)' if g['to_date']['excess'] < 0 else 'var(--muted)'}'>{g['to_date']['ret']:+.1f}% "
+                  f"({g['to_date']['excess']:+.1f}% vs SPY, {g['to_date']['days']}d)</td></tr>" for g in rows_) if s.get("recent") else ""
+    flt = ("<div style='margin:10px 0 4px'><input placeholder='Filter: symbol or list' oninput=\"const q=this.value.toUpperCase();"
+           "this.closest('.bd-section').querySelectorAll('tr[data-text]').forEach(t=>t.style.display=t.dataset.text.toUpperCase().includes(q)?'':'none')\" "
+           "style='background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 8px'></div>")
     return f"""<div class="bd-section"><div class="bd-sec-hdr" style="border-bottom-color:#94a3b8"><div class="bd-icon" style="background:#94a3b822">📒</div>
   <div><div class="bd-sec-title">Track record (hit ledger)</div></div>
   <div class="bd-sec-sub">Lists frozen daily since {s['first_date']}; returns vs SPY after each pick · as of {s['asof']}</div></div>
   <div style="overflow-x:auto"><table class="bd-ledger"><tr><th>List</th>{head}</tr>{body}</table></div>
-  <div style="overflow-x:auto;margin-top:10px"><table class="bd-ledger"><tr><th>Picked</th><th>List</th><th>Symbol</th><th>Score</th><th>Price then</th><th>Since then</th></tr>{rec}</table></div>
+  {flt}<div style="overflow-x:auto;max-height:420px;overflow-y:auto"><table class="bd-ledger"><tr><th>First picked</th><th>List</th><th>Symbol</th><th>Days on the list</th><th>Price then</th><th>Since the first pick</th></tr>{rec}</table></div>
   <p class="bd-note">Forward-only: each day's lists are appended once and never edited. "Beat SPY" = the pick's price return exceeded SPY's over the same window. Past results do not predict future ones; not investment advice.</p></div>"""

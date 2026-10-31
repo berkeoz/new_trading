@@ -37,7 +37,7 @@ TRAIN_END, TEST_START = "2021-12-31", "2022-01-01"
 H = 21
 SECTORS = ["XLK", "XLF", "XLE", "XLV", "XLY", "XLP", "XLI", "XLB", "XLU", "XLRE", "XLC"]
 TICKERS = ["SPY", "^VIX", "^VIX3M", "^SKEW", "^MOVE", "RSP", "IWM", "SMH", "IYT", "SPHB", "SPLV",
-           "HG=F", "GC=F", "HYG", "IEF", "BTC-USD"] + SECTORS
+           "HG=F", "GC=F", "HYG", "IEF", "BTC-USD", "VUG", "VTV"] + SECTORS
 
 # key, label, group, how to read it
 IND = [
@@ -53,6 +53,7 @@ IND = [
     ("iyt_spy", "Transports vs S&P (IYT/SPY)", "Leaders", "Dow-theory confirmation"),
     ("xly_xlp", "Discretionary vs staples (XLY/XLP)", "Leaders", "offense vs defense"),
     ("sphb_splv", "High beta vs low volatility (SPHB/SPLV)", "Leaders", "risk appetite inside equities"),
+    ("vug_vtv", "Growth vs value (VUG/VTV)", "Leaders", "growth leading = risk appetite and lower-rate expectations; value leading = defensive / late cycle"),
     ("cu_au", "Copper vs gold", "Intermarket", "growth expectations vs safety"),
     ("hyg_ief", "Junk bonds vs Treasuries (HYG/IEF)", "Intermarket", "credit risk appetite; often leads stocks"),
     ("btc", "Bitcoin", "Intermarket", "speculative risk appetite"),
@@ -96,7 +97,7 @@ def signals(px):
     sig["breadth50"], raw["breadth50"] = (above50 - 0.5) * 2, above50 * 100
     sig["breadth200"], raw["breadth200"] = (above200 - 0.5) * 2, above200 * 100
     for k, a, b in (("rsp_spy", "RSP", "SPY"), ("iwm_spy", "IWM", "SPY"), ("smh_spy", "SMH", "SPY"), ("iyt_spy", "IYT", "SPY"),
-                    ("xly_xlp", "XLY", "XLP"), ("sphb_splv", "SPHB", "SPLV"), ("cu_au", "HG=F", "GC=F"), ("hyg_ief", "HYG", "IEF")):
+                    ("xly_xlp", "XLY", "XLP"), ("sphb_splv", "SPHB", "SPLV"), ("vug_vtv", "VUG", "VTV"), ("cu_au", "HG=F", "GC=F"), ("hyg_ief", "HYG", "IEF")):
         if a in px and b in px:
             r = px[a] / px[b]
             sig[k], raw[k] = _vs_ma(r), r
@@ -179,7 +180,7 @@ def refresh(refit=False):
     model = None
     if not refit and os.path.exists(MODEL):
         model = json.load(open(MODEL, encoding="utf-8"))
-        if datetime.now() - datetime.strptime(model["fitted"], "%Y-%m-%d %H:%M") > timedelta(days=7):
+        if datetime.now() - datetime.strptime(model["fitted"], "%Y-%m-%d %H:%M") > timedelta(days=7)                 or set(sig.columns) - set(model["indicators"]):          # refit when an indicator was added
             model = None
     if model is None:
         model = fit(px, sig)

@@ -8305,6 +8305,9 @@ Model rules for discipline, not investment advice.</div>
 <div class="cl-card"><h3 style="margin-top:0">Current trends <span class="mu" id="cl-asof"></span></h3>
   <div id="cl-trends" class="mu">Loading…</div></div>
 
+<div class="cl-card"><h3 style="margin-top:0">Bear market watch <span class="mu" id="cl-bear-asof"></span></h3>
+  <div id="cl-bear" class="mu">Loading…</div></div>
+
 <div class="cl-card"><h3 style="margin-top:0">Sentiment &amp; leadership <span class="mu" id="cl-sent-asof"></span></h3>
   <div id="cl-sent" class="mu">Loading…</div></div>
 
@@ -8385,10 +8388,12 @@ Model rules for discipline, not investment advice.</div>
     document.getElementById('cl-bt-asof').textContent = `· technical checklist replayed every day since ${bt.start} (no look-ahead) · updated ${bt.updated}`;
     const sg = x => x == null ? '—' : `<span class="${x >= 0 ? 'ok' : 'no'}">${x >= 0 ? '+' : ''}${x.toFixed(1)}%</span>`;
     const L = bt.labels || Object.keys(bt.by_verdict || {});
-    let h = `<div class="mu">What happened after each verdict (all tickers): average return 1 week and 1 month later, vs SPY, and how often it was up.</div>
-      <div class="wrapx"><table><tr><th>Verdict</th><th>Days</th><th>1 week later</th><th>1 month later</th><th>1 month vs SPY</th><th>Up after 1 month</th></tr>` +
-      L.filter(v => bt.by_verdict[v]).map(v => { const w = bt.by_verdict[v]['1 week'] || {}, m = bt.by_verdict[v]['1 month'] || {};
-        return `<tr><td><span class="pill" style="background:${VC[v] || '#8a93a5'}">${esc(v)}</span></td><td>${w.n ?? m.n ?? ''}</td><td>${sg(w.avg)}</td><td>${sg(m.avg)}</td><td>${sg(m.vs_spy)}</td><td>${m.up_pct != null ? m.up_pct + '%' : '—'}</td></tr>`; }).join('') + `</table></div>`;
+    const syms = Object.keys(bt.tickers), wl = bt.watchlist || syms.slice(0, 3);
+    let h = `<div class="mu">What happened after each verdict. For every day a ticker got a verdict, the ticker's return over the next 5 / 21 trading days is
+      compared with SPY's return over the <b>same</b> days ("vs SPY" = ticker minus SPY). <b>Right</b> = a Buy / Buy on dip / Hold that beat SPY afterwards,
+      or a Wait / Warning / Take profit / Sell that lagged SPY afterwards (stepping aside was better).</div>
+      <div class="fbar"><select id="bt-scope"><option value="all">All ${syms.length} tickers</option><option value="wl">Watchlist (${wl.join(', ')})</option>
+      ${syms.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join('')}</select></div><div id="bt-verdicts"></div>`;
     h += `<div class="mu" style="margin-top:10px">Following the verdicts: in the market while the verdict is Buy, Buy on dip or Hold, in cash otherwise (switching at the next day's open), vs buying and holding.</div>
       <div class="wrapx"><table><tr><th>Ticker</th><th>Follow verdicts</th><th>Buy &amp; hold</th><th>Entries</th><th>In the market</th><th>Max drawdown</th><th>Verdicts since ${esc(bt.start)}</th></tr>` +
       Object.entries(bt.tickers).map(([s, t]) => { const g = t.strategy, d = t.days;
@@ -8400,6 +8405,22 @@ Model rules for discipline, not investment advice.</div>
       lv.rows.slice().reverse().map(r => `<tr data-text="${esc(r.symbol)}" data-v="${esc(r.verdict)}"><td class="mu">${esc(r.time)}</td><td><b>${esc(r.symbol)}</b></td><td><span class="pill" style="background:${VC[r.verdict] || '#8a93a5'}">${esc(r.verdict)}</span></td><td>${r.price ?? '—'}</td><td>${sg(r.since_pct)}</td><td>${sg(r.since_vs_spy)}</td><td>${sg(r['1 week'])}</td><td>${sg(r['1 month'])}</td></tr>`).join('') + `</table></div></div>`;
     el.innerHTML = h; el.classList.remove('mu');
     const lg = document.getElementById('cl-log'); if (lg) wireFilter(lg);
+    // per-verdict table for the chosen tickers (pooled, weighted by the number of days)
+    const drawV = () => {
+      const sc = document.getElementById('bt-scope').value;
+      const pick = sc == 'all' ? syms : sc == 'wl' ? wl.filter(x => bt.tickers[x]) : [sc];
+      const agg = {};
+      pick.forEach(x => Object.entries(bt.tickers[x].stats || {}).forEach(([v, hs]) => Object.entries(hs).forEach(([hn, st]) => {
+        const a = ((agg[v] = agg[v] || {})[hn] = agg[v][hn] || {n: 0, avg: 0, vs: 0, up: 0, right: 0});
+        a.n += st.n; a.avg += st.avg * st.n; a.vs += st.vs_spy * st.n; a.up += st.up_pct * st.n; a.right += (st.right_pct ?? 0) * st.n; })));
+      const g = (v, hn) => { const a = (agg[v] || {})[hn]; return a && a.n ? {n: a.n, avg: a.avg / a.n, vs: a.vs / a.n, up: a.up / a.n, right: a.right / a.n} : null; };
+      document.getElementById('bt-verdicts').innerHTML = `<div class="wrapx"><table><tr><th>Verdict</th><th>Days</th><th>1 week later</th><th>1 week vs SPY</th><th>1 month later</th><th>1 month vs SPY</th><th>Up after 1 month</th><th>Right after 1 month</th></tr>` +
+        L.map(v => { const w = g(v, '1 week'), m = g(v, '1 month');
+          if (!w && !m) return `<tr><td><span class="pill" style="background:${VC[v] || '#8a93a5'}">${esc(v)}</span></td><td colspan="7" class="mu">did not occur for ${pick.length == 1 ? esc(pick[0]) : 'these tickers'} since ${esc(bt.start)}</td></tr>`;
+          return `<tr><td><span class="pill" style="background:${VC[v] || '#8a93a5'}">${esc(v)}</span></td><td>${(w || m).n}</td><td>${sg(w && w.avg)}</td><td>${sg(w && w.vs)}</td><td>${sg(m && m.avg)}</td><td>${sg(m && m.vs)}</td>
+            <td>${m ? Math.round(m.up) + '%' : '—'}</td><td>${m ? `<b class="${m.right >= 55 ? 'ok' : m.right < 45 ? 'no' : ''}">${Math.round(m.right)}%</b>` : '—'}</td></tr>`; }).join('') + `</table></div>`;
+    };
+    document.getElementById('bt-scope').onchange = drawV; drawV();
     get('verdicts/calibration.json').then(cal => {
       if (!cal) return;
       const row = (name, e) => `<tr><td>${name}</td><td>${e.avg_sharpe.toFixed(2)}</td><td>${sg(e.avg_return_pct)}</td><td class="no">${e.avg_max_dd_pct}%</td><td>${e.avg_in_market_pct}%</td></tr>`;
@@ -8420,6 +8441,7 @@ Model rules for discipline, not investment advice.</div>
         <div class="mu">Calibrated ${esc(cal.updated)}. In both periods the verdict labels rank 1-month returns only weakly (dips in these ETFs mostly recovered), so treat the verdicts as trend and risk control, not as a forecast.</div>`);
     });
   });
+  const sg = x => x == null ? '—' : `<span class="${x >= 0 ? 'ok' : 'no'}">${x >= 0 ? '+' : ''}${(+x).toFixed(1)}%</span>`;
   const VL = ['Buy', 'Buy on dip', 'Hold', 'Wait', 'Warning', 'Take profit', 'Sell'];
   // filter bar for long tables: rows carry data-sym / data-v / data-text
   const filterBar = (opts = {}) => `<div class="fbar"><input class="f-q" placeholder="${opts.placeholder || 'Ticker'}" size="12">` +
@@ -8442,6 +8464,28 @@ Model rules for discipline, not investment advice.</div>
     run();
   };
   window.__clFilter = wireFilter;
+
+  // bear market watch
+  get('context/bear.json').then(d => {
+    const el = document.getElementById('cl-bear');
+    if (!d) { el.textContent = 'Appears after the next market brief run.'; return; }
+    document.getElementById('cl-bear-asof').textContent = `· as of ${d.asof}`;
+    const SC = {'Bull': 'var(--green)', 'Caution': '#f5b041', 'Bear-market warning': '#ff9800', 'Bear market': 'var(--red)'};
+    const t = d.test, sh = d.state_history || [];
+    const strip = `<svg viewBox="0 0 ${sh.length} 10" preserveAspectRatio="none" style="width:100%;max-width:640px;height:14px;display:block">${sh.map((x, i) => `<rect x="${i}" y="0" width="1" height="10" fill="${SC[x[1]] || '#888'}"><title>${x[0]} ${x[1]}</title></rect>`).join('')}</svg>`;
+    let h = `<div style="font-size:18px;margin-bottom:4px"><b style="color:${SC[d.state]}">${esc(d.state)}</b> — ${d.signs_on} of ${d.signs_total} warning signs on · SPY ${d.drawdown_pct}% from its 52-week high</div>
+      <div class="mu">Last 2 years:</div>${strip}
+      <div class="wrapx" style="margin-top:6px"><table>${d.signs.map(s => `<tr><td class="${s.on ? 'no' : 'ok'}">${s.on ? '⚠ on' : '✓ off'}</td><td>${esc(s.label)}</td><td class="mu">${esc(s.detail)}</td></tr>`).join('')}</table></div>
+      <h4 style="margin:12px 0 4px">How reliable is it? (SPY since ${esc(t.since)})</h4>
+      <div class="cols"><div><div class="wrapx"><table><tr><th>State</th><th>Share of days</th><th>SPY next 6 months</th><th>Up after 6 months</th><th>Avg worst drop within 6 months</th></tr>` +
+      Object.entries(t.by_state).map(([k, v]) => `<tr><td><b style="color:${SC[k]}">${esc(k)}</b></td><td>${v.days_pct}%</td><td>${sg(v.fwd6_avg)}</td><td>${v.fwd6_up_pct}%</td><td class="no">${v.worst6_avg}%</td></tr>`).join('') + `</table></div></div>
+      <div><div class="wrapx"><table><tr><th>Bear market</th><th>First warning</th><th>SPY vs the peak then</th><th>Full drop</th></tr>` +
+      t.bears.map(b => `<tr><td>${esc(b.name)}<div class="mu">peak ${esc(b.peak)}</div></td><td>${esc(b.first_warning)}<div class="mu">${b.days_after_peak} days after the peak</div></td><td class="no">${b.spy_vs_peak_then}%</td><td class="no">${b.max_drawdown}%</td></tr>`).join('') + `</table></div></div></div>
+      <div style="margin-top:6px">Stepping out of SPY while the state is a warning or a bear market: <b>${t.step_aside.cagr}% a year, worst drop ${t.step_aside.max_dd}%</b> vs buy &amp; hold ${t.buy_hold.cagr}% a year, worst drop ${t.buy_hold.max_dd}%.
+        ${t.warning_episodes} warnings, ${t.false_alarms} of them false alarms (no further 10% fall within 6 months).</div>
+      <div class="mu">It is a confirmation tool: it never caught the top (warnings came 3 weeks to 7 months after the peak, with SPY already 11–19% down) but it kept investors out of the deepest part of each bear market. A warning means "reduce risk", not "sell everything".</div>`;
+    el.innerHTML = h; el.classList.remove('mu');
+  });
 
   // sentiment & leadership
   Promise.all([get('context/sentiment.json'), get('context/sentiment_ext.json')]).then(([d, ext]) => {

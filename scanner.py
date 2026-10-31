@@ -2175,7 +2175,8 @@ def main():
     try:   # freeze today's value lists and show their track record
         import ledger
         if VALUE_PICKS:
-            ledger.record(VALUE_PICKS)
+            dates = [r.get("date") for r in results if r.get("date")]
+            ledger.record(VALUE_PICKS, max(set(dates), key=dates.count) if dates else None)   # the bar's date, not today's UTC date
         html = html.replace("<!--LEDGER-->", ledger.render(ledger.evaluate()))
     except Exception as e:
         print(f"ledger: ERROR {e}")

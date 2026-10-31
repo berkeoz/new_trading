@@ -1588,7 +1588,7 @@ function fillVerdict(s, r) {
       h += `<b>${vesc(rv.headline || '')}</b> <span class="sub">market brief ${vesc(v.updated || '')}${rv.confidence ? ' · confidence ' + vesc(rv.confidence) : ''}</span>
         <div class="vsum">${vesc(rv.summary || '')}</div>
         ${(rv.reasons || []).length ? `<ul>${rv.reasons.map(x => `<li>${vesc(x)}</li>`).join('')}</ul>` : ''}
-        ${(rv.risks || []).length ? `<div><b>Risks / upcoming:</b> ${rv.risks.map(vesc).join(' · ')}</div>` : ''}
+        ${(rv.risks || []).length ? `<div><b>Risks to this verdict:</b> ${rv.risks.map(vesc).join(' · ')}</div>` : ''}
         ${(rv.upcoming || []).length ? `<div class="sub">${rv.upcoming.map(u => `${vesc(u.date)} ${vesc(u.event)}`).join(' · ')}</div>` : ''}
         ${rv.levels ? `<div class="sub" style="margin-top:4px">${Object.entries(rv.levels).map(([k, x]) => `${vesc(k.replace(/_/g, ' '))} <b>${vesc(x)}</b>`).join(' · ')}</div>` : ''}
         ${rv.changes_if ? `<div class="sub">Changes if: ${vesc(rv.changes_if)}</div>` : ''}
