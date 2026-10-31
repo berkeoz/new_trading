@@ -626,9 +626,22 @@ def main():
     try:   # bear market watch (context/bear.json)
         import bearwatch
         print()
-        print(bearwatch.summary(bearwatch.refresh()))
+        bw = bearwatch.refresh()
+        print(bearwatch.summary(bw))
     except Exception as e:
+        bw = None
         print(f"\nBEAR WATCH: ERROR {e}")
+    try:   # short-term trend vs bear market (context/trend.json)
+        import mtf
+        rows = mtf.trend_check(TICKERS)
+        os.makedirs(os.path.join(ROOT, "context"), exist_ok=True)
+        json.dump({"updated": now.strftime("%Y-%m-%d %H:%M"), "tickers": rows,
+                   "bear": {k: bw.get(k) for k in ("state", "signs_on", "signs_total", "drawdown_pct")} if bw else None},
+                  open(os.path.join(ROOT, "context", "trend.json"), "w", encoding="utf-8"), indent=1)
+        print()
+        print(mtf.trend_text(rows, bw))
+    except Exception as e:
+        print(f"\nTREND CHECK: ERROR {e}")
     print()
     print(context_status(now))
     # daily second opinion from the local Qwen model: at the closing brief (or the first brief after

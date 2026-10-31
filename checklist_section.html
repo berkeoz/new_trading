@@ -25,6 +25,9 @@ Model rules for discipline, not investment advice.</div>
 <div class="cl-card"><h3 style="margin-top:0">Current trends <span class="mu" id="cl-asof"></span></h3>
   <div id="cl-trends" class="mu">Loading…</div></div>
 
+<div class="cl-card"><h3 style="margin-top:0">Short-term trend vs bear market <span class="mu" id="cl-tc-asof"></span></h3>
+  <div id="cl-tc" class="mu">Loading…</div></div>
+
 <div class="cl-card"><h3 style="margin-top:0">Bear market watch <span class="mu" id="cl-bear-asof"></span></h3>
   <div id="cl-bear" class="mu">Loading…</div></div>
 
@@ -212,6 +215,36 @@ Model rules for discipline, not investment advice.</div>
       <div class="mu" style="margin-top:4px">Buy zone: near the 21-day average / support, where the checklist says Buy in an uptrend (the market brief's zone when it gives one). Breakout: a daily close above the nearest resistance. Warning: the brief's level, else the 50-day average. Sell / stop: below the support that defines the setup. Trailing stop: 3 ATR below the 22-day high, for a position already in profit. Take profit: the next resistance / target. Levels are recalculated at every brief; the same table for any ticker you look up is at the top of <a href="/patterns">Chart formations</a>. Not investment advice.</div>`;
     el.classList.remove('mu');
     wireFilter(el);
+  });
+
+
+  const trendTable = (rows, cls) => {
+    const tfs = ['1H', '2H', '4H', '1D', '1W'];
+    const col = l => l == 'bullish' ? cls.up : l == 'bearish' ? cls.down : cls.mute;
+    return `<div class="${cls.wrap}"><table><tr><th>Ticker</th><th>Short term<div class="${cls.sub}">1H–1D</div></th>${tfs.map(t => `<th>${t}</th>`).join('')}</tr>` +
+      rows.filter(t => !t.error).map(t => `<tr><td><b>${t.symbol}</b><div class="${cls.sub}">${t.price}</div></td>
+        <td><b class="${col(t.short_term)}">${t.short_term}</b></td>` +
+        tfs.map(tf => { const x = t.timeframes[tf]; if (!x) return '<td>–</td>';
+          return `<td><b class="${col(x.label)}">${x.up}/${x.of}</b> <span class="${cls.sub}">up</span><div class="${cls.sub}">Supertrend <span class="${x.st_dir == 'up' ? cls.up : cls.down}">${x.st_dir == 'up' ? '▲' : '▼'}</span> ${x.st_level ?? ''}</div></td>`; }).join('') + `</tr>`).join('') + `</table></div>`;
+  };
+  // short-term trend vs bear market (context/trend.json, written at every brief)
+  get('context/trend.json').then(d => {
+    const el = document.getElementById('cl-tc');
+    if (!d || !(d.tickers || []).length) { el.textContent = 'Appears after the next market brief run.'; return; }
+    document.getElementById('cl-tc-asof').textContent = `· from the market brief ${d.updated}`;
+    const T = d.tickers.filter(t => !t.error), b = d.bear;
+    const word = l => `<b class="${l == 'bullish' ? 'ok' : l == 'bearish' ? 'no' : 'mu'}">${l}</b>`;
+    const own = t => t.levels.from_high_pct <= -20 && t.price < t.levels.sma200 ? '<b class="no">in its own bear market</b> (20%+ below its high and under its 200-day)'
+      : t.levels.from_high_pct <= -10 ? '<b style="color:#ff9800">in a correction</b> (10%+ below its high)' : 'not in a correction';
+    let h = `<div class="cols"><div><b>Short term (hours to weeks)</b><ul style="margin:4px 0 0 18px">` +
+      T.map(t => `<li>${t.symbol}: ${word(t.short_term)} · weekly ${word(t.weekly)} · turns up on a daily close above the daily Supertrend <b>${t.levels.daily_supertrend}</b></li>`).join('') + `</ul></div>
+      <div><b>Bear market (months)</b><ul style="margin:4px 0 0 18px">` +
+      (b ? `<li>Market (SPY) bear market watch: <b>${b.state}</b>, ${b.signs_on} of ${b.signs_total} warning signs</li>` : '') +
+      T.map(t => `<li>${t.symbol}: ${t.levels.from_high_pct}% from its 52-week high · ${own(t)} · watch the 200-day <b>${t.levels.sma200}</b> and weekly Supertrend <b>${t.levels.weekly_supertrend}</b> (−10% line ${t.levels.minus10}, −20% line ${t.levels.minus20})</li>`).join('') + `</ul></div></div>`;
+    h += `<h4 style="margin:12px 0 4px">Short-term table</h4><div class="mu">How many of 13 indicators (price vs EMA21 / SMA50 / SMA200, RSI vs 50 and its average, MACD vs signal and 0, WaveTrend vs WT2 and 0, Stoch RSI, SMI, Supertrend) are above their average or middle line on each timeframe. Bullish ≥ 9, bearish ≤ 4. Short term = the majority of 1H, 2H, 4H and 1D. The full per-indicator detail is the Crosses button on <a href="/patterns">Chart formations</a>.</div>` +
+      trendTable(T, {wrap: 'wrapx', sub: 'mu', up: 'ok', down: 'no', mute: 'mu'});
+    h += `<div class="mu" style="margin-top:6px">A short-term downtrend becomes a bear-market risk when the weekly row turns bearish and price loses the 200-day / weekly Supertrend; the Bear market watch below confirms it for the market as a whole.</div>`;
+    el.innerHTML = h; el.classList.remove('mu');
   });
 
   // bear market watch

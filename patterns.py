@@ -1391,6 +1391,7 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
   <button id="go">Analyze</button>
   <span id="msg" class="sub"></span>
 </form>
+<section id="trendtab" class="lvtab" hidden></section>
 <section id="levels" class="lvtab" hidden></section>
 <div id="root"></div>
 <section id="rrg" hidden></section>
@@ -1640,6 +1641,33 @@ async function toggleCrosses(sym, el) {
     el.querySelector('.xs-q').oninput = flt; el.querySelector('.xs-f').onchange = flt;
   } catch (err) { el.innerHTML = `<div class="flag">${sym}: ${err.message}</div>`; }
 }
+
+// ── Short-term trend table (live): indicators above their average / middle line per timeframe ──
+(async function () {
+  if (location.protocol == 'file:') return;
+  const syms = DATA.map(d => d.symbol), box = document.getElementById('trendtab');
+  const rows = (await Promise.all(syms.map(s => fetch(`/api/router?fn=crosses&symbol=${encodeURIComponent(s)}`).then(r => r.ok ? r.json() : null).catch(() => null)))).filter(Boolean);
+  if (!rows.length) return;
+  const tfs = ['1H', '2H', '4H', '1D', '1W'], lab = (u, n) => u >= 0.65 * n ? 'bullish' : u <= 0.35 * n ? 'bearish' : 'mixed';
+  const T = rows.map(r => { const tf = {};
+    tfs.forEach(t => { const c = r.crosses[t] || {}, up = r.indicators.filter(k => c[k] && (c[k].side == 'above' || c[k].side == 'up')).length, st = c['Supertrend (10, 3)'] || {};
+      tf[t] = {up, of: r.indicators.length, label: lab(up, r.indicators.length), st_dir: st.side, st_level: st.level}; });
+    const sh = ['1H', '2H', '4H', '1D'].map(t => tf[t].label);
+    return {symbol: r.symbol, price: r.price, timeframes: tf, short_term: sh.filter(x => x == 'bearish').length >= 3 ? 'bearish' : sh.filter(x => x == 'bullish').length >= 3 ? 'bullish' : 'mixed'}; });
+
+  const trendTable = (rows, cls) => {
+    const tfs = ['1H', '2H', '4H', '1D', '1W'];
+    const col = l => l == 'bullish' ? cls.up : l == 'bearish' ? cls.down : cls.mute;
+    return `<div class="${cls.wrap}"><table><tr><th>Ticker</th><th>Short term<div class="${cls.sub}">1H–1D</div></th>${tfs.map(t => `<th>${t}</th>`).join('')}</tr>` +
+      rows.filter(t => !t.error).map(t => `<tr><td><b>${t.symbol}</b><div class="${cls.sub}">${t.price}</div></td>
+        <td><b class="${col(t.short_term)}">${t.short_term}</b></td>` +
+        tfs.map(tf => { const x = t.timeframes[tf]; if (!x) return '<td>–</td>';
+          return `<td><b class="${col(x.label)}">${x.up}/${x.of}</b> <span class="${cls.sub}">up</span><div class="${cls.sub}">Supertrend <span class="${x.st_dir == 'up' ? cls.up : cls.down}">${x.st_dir == 'up' ? '▲' : '▼'}</span> ${x.st_level ?? ''}</div></td>`; }).join('') + `</tr>`).join('') + `</table></div>`;
+  };
+  box.hidden = false;
+  box.innerHTML = `<h3>Short-term trend <span class="sub">indicators above their average / middle line, of 13 · bullish ≥ 9, bearish ≤ 4 · live · details: Crosses button · bear-market view: <a href="/#checklist">checklist</a></span></h3>` +
+    trendTable(T, {wrap: 'wrap', sub: 'sub', up: 'bullish', down: 'bearish', mute: 'sub'});
+})();
 
 // ── Levels at a glance: where each ticker is a buy, where it turns into a warning / sell / take profit ──
 const LEVELS = {};

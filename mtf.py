@@ -352,6 +352,58 @@ def crosses(sym):
             "timeframes": [f[0] for f in frames], "indicators": labels, "crosses": out}
 
 
+def _tf_label(n_up, n):
+    return "bullish" if n_up >= 0.65 * n else "bearish" if n_up <= 0.35 * n else "mixed"
+
+
+def trend_check(syms):
+    """Short term vs longer term per ticker: how many of the crosses-table indicators are above their
+    average / middle line on each timeframe, Supertrend per timeframe, and the key levels."""
+    out = []
+    for sym in syms:
+        try:
+            r = crosses(sym)
+        except Exception as e:
+            out.append({"symbol": sym, "error": str(e)})
+            continue
+        c, n = r["crosses"], len(r["indicators"])
+        tfs = {}
+        for tf in r["timeframes"]:
+            up = sum(1 for k in r["indicators"] if c[tf][k] and c[tf][k]["side"] in ("above", "up"))
+            st = c[tf]["Supertrend (10, 3)"]
+            tfs[tf] = {"up": up, "of": n, "label": _tf_label(up, n), "st_dir": st["side"], "st_level": st.get("level"),
+                       "st_flip": st.get("time")}
+        short = [tfs[t]["label"] for t in ("1H", "2H", "4H", "1D")]
+        s_lab = "bearish" if short.count("bearish") >= 3 else "bullish" if short.count("bullish") >= 3 else "mixed"
+        d1 = P._append_today(_load(sym, "1d", "2y", "1D"), sym)
+        cl = d1["Close"]
+        hi52 = float(cl.iloc[-252:].max())
+        sma200 = float(cl.rolling(200).mean().iloc[-1])
+        out.append({"symbol": sym, "price": r["price"], "asof": r["asof"], "timeframes": tfs, "short_term": s_lab,
+                    "weekly": tfs["1W"]["label"],
+                    "levels": {"daily_supertrend": tfs["1D"]["st_level"], "weekly_supertrend": tfs["1W"]["st_level"],
+                               "sma200": round(sma200, 2), "high_52w": round(hi52, 2), "minus10": round(hi52 * 0.9, 2),
+                               "minus20": round(hi52 * 0.8, 2), "from_high_pct": round((float(cl.iloc[-1]) / hi52 - 1) * 100, 1)}})
+    return out
+
+
+def trend_text(rows, bear=None):
+    L = ["SHORT-TERM TREND vs BEAR MARKET (crosses table: indicators above their average / middle line, of 13)"]
+    for t in rows:
+        if "error" in t:
+            L.append(f"  {t['symbol']}: ERROR {t['error']}")
+            continue
+        tf = t["timeframes"]
+        lv = t["levels"]
+        L.append(f"  {t['symbol']} {t['price']}: short term {t['short_term'].upper()}, weekly {t['weekly']} · "
+                 + " · ".join(f"{k} {v['up']}/{v['of']} ST {v['st_dir']} {v['st_level']}" for k, v in tf.items())
+                 + f" · daily Supertrend {lv['daily_supertrend']}, weekly Supertrend {lv['weekly_supertrend']}, 200-day {lv['sma200']}, "
+                   f"52w high {lv['high_52w']} ({lv['from_high_pct']}%), -10% {lv['minus10']}, -20% {lv['minus20']}")
+    if bear:
+        L.append(f"  bear market watch: {bear.get('state')} ({bear.get('signs_on')} of {bear.get('signs_total')} signs)")
+    return "\n".join(L)
+
+
 def text(l):
     L = [f"{l['symbol']} turn ladder"]
     for r in l["timeframes"]:
