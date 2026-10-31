@@ -326,7 +326,20 @@ def analyze_symbol(ticker):
         df.columns = [c[0].lower() if isinstance(c, tuple) else c.lower() for c in df.columns]
         # Yahoo sometimes returns the latest day with no close yet (e.g. right after the close):
         # drop it, otherwise every price, change and screen for the day becomes NaN
+        missing_last = pd.isna(df["close"].iloc[-1])
         df = df.dropna(subset=["close"])
+        if missing_last:      # rebuild that day from today's 5-minute bars, so the page is not a day behind
+            try:
+                h5 = yf.Ticker(ticker).history(period="1d", interval="5m")
+                if not h5.empty:
+                    day = h5.index[-1].tz_localize(None).normalize()
+                    if day > df.index[-1].tz_localize(None).normalize() if df.index.tz is not None else day > df.index[-1].normalize():
+                        df.loc[pd.Timestamp(day).tz_localize(df.index.tz) if df.index.tz is not None else pd.Timestamp(day)] = {
+                            "open": float(h5["Open"].iloc[0]), "high": float(h5["High"].max()), "low": float(h5["Low"].min()),
+                            "close": float(h5["Close"].dropna().iloc[-1]), "volume": float(h5["Volume"].sum())}
+                        df = df.sort_index()
+            except Exception:
+                pass
         if len(df) < 60:
             return {"symbol": ticker, "error": "insufficient data"}
 

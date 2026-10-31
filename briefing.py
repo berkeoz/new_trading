@@ -631,6 +631,11 @@ def main():
         print(f"\nBEAR WATCH: ERROR {e}")
     print()
     print(context_status(now))
+    # daily second opinion from the local Qwen model: at the closing brief (or the first brief after
+    # 16:15 ET that day) when none exists yet for today
+    done = glob.glob(os.path.join(BRIEF_DIR, "qwen", f"{now:%Y-%m-%d}-*.md"))
+    due = not done and now.weekday() < 5 and (session == "close" or (session == "now" and (now.hour, now.minute) >= (16, 15)))
+    print(f"QWEN_CROSSCHECK_DUE={'yes' if due else 'no'}")
     try:   # 6-12 month outlook portfolio (thesis/): trades on current prices, says when the weekly review is due
         import thesis
         print()
