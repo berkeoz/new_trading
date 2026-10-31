@@ -1361,6 +1361,12 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
 .read .ic{display:inline-block;width:16px;text-indent:0;font-weight:700}
 .note{color:var(--neu);font-size:12px}
 .verdict{margin:8px 0}
+.lvtab{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0}
+.lvtab h3{margin:0 0 6px;font-size:15px}
+.lvtab table{border-collapse:collapse;width:100%;font-size:12.5px}
+.lvtab th,.lvtab td{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left;white-space:nowrap}
+.lvtab th{color:var(--mute);font-weight:500}
+.lvtab .wrap{overflow-x:auto}
 .vcard{border:1px solid var(--line);border-left:4px solid var(--vc);border-radius:8px;padding:10px 12px;background:#12151c}
 .vpill{display:inline-block;padding:2px 10px;border-radius:12px;font-weight:600;background:var(--vc);color:#0f1115;margin-right:8px}
 .vcard .vsum{margin:6px 0 2px}
@@ -1385,6 +1391,7 @@ tr.pat{cursor:pointer} tr.pat:hover{background:#1f2430}
   <button id="go">Analyze</button>
   <span id="msg" class="sub"></span>
 </form>
+<section id="levels" class="lvtab" hidden></section>
 <div id="root"></div>
 <section id="rrg" hidden></section>
 <section id="seas" hidden></section></main>
@@ -1574,6 +1581,28 @@ const VERDICTS = location.protocol == 'file:' ? Promise.resolve(null) :
 const BACKTEST = location.protocol == 'file:' ? Promise.resolve(null) :
   fetch('https://raw.githubusercontent.com/berkeoz/new_trading/master/verdicts/backtest.json?t=' + Date.now()).then(x => x.ok ? x.json() : null).catch(() => null);
 const vesc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+// ── Levels at a glance: where each ticker is a buy, where it turns into a warning / sell / take profit ──
+const LEVELS = {};
+function drawLevels() {
+  const box = document.getElementById('levels'), rows = Object.values(LEVELS).sort((x, y) => (x.order < 0 ? 99 : x.order) - (y.order < 0 ? 99 : y.order));
+  if (!rows.length) return;
+  const f = x => x == null || x === '' || isNaN(+x) ? '—' : (+x).toFixed(2);
+  const pct = (x, p) => x == null || isNaN(+x) ? '' : `<div class="sub">${(+x / p - 1) * 100 >= 0 ? '+' : ''}${((+x / p - 1) * 100).toFixed(1)}%</div>`;
+  box.hidden = false;
+  box.innerHTML = `<h3>Levels at a glance <span class="sub">from each ticker's checklist${Object.values(LEVELS).some(x => x.rv) ? ' and the market brief' : ''} · daily closes · not investment advice</span></h3>
+    <div class="wrap"><table><tr><th>Ticker</th><th>Price</th><th>Verdict</th><th>Buy zone (dip)</th><th>Buy on breakout above</th><th>Warning below</th><th>Sell / stop below</th><th>Trailing stop</th><th>Take profit above</th><th>Reward : risk</th></tr>` +
+    rows.map(({r, rv, a}) => {
+      const lv = a.levels, p = lv.price, atr = r.atr_pct / 100 * p, L = (rv && rv.levels) || {};
+      const zone = L.buy_zone && L.buy_zone != 'n/a' ? vesc(L.buy_zone) : `${f(Math.max(lv.ema21 - 1.5 * atr, lv.support ?? 0))} – ${f(lv.ema21 + 0.5 * atr)}`;
+      const warn = L.warning_below ?? lv.sma50, sell = L.sell_below ?? lv.stop, tp = L.take_profit_above ?? lv.target;
+      const v = rv ? rv.verdict : a.verdict;
+      return `<tr><td><b>${vesc(r.symbol)}</b></td><td>${f(p)}</td><td><span class="vpill" style="--vc:${VCOL[v] || '#8a93a5'};background:var(--vc)">${vesc(v)}</span></td>
+        <td>${zone}<div class="sub">around the 21-day ${f(lv.ema21)}</div></td><td>${f(lv.resistance)}${pct(lv.resistance, p)}</td>
+        <td>${f(warn)}${pct(warn, p)}</td><td>${f(sell)}${pct(sell, p)}</td><td>${f(a.trailing_stop)}${pct(a.trailing_stop, p)}</td>
+        <td>${f(tp)}${pct(tp, p)}</td><td>${lv.rr ?? '—'}</td></tr>`;
+    }).join('') + `</table></div>
+    <div class="sub" style="margin-top:4px">Buy zone: near the 21-day average / support, where the checklist says Buy in an uptrend (the market brief's zone when it gives one). Breakout: a daily close above the nearest resistance. Warning: the brief's level, else the 50-day average. Sell / stop: below the support that defines the setup. Trailing stop: 3 ATR below the 22-day high, for a position already in profit. Take profit: the next resistance / target. Levels move every day with the averages.</div>`;
+}
 function fillVerdict(s, r) {
   const el = s.querySelector('.verdict'), a = r.assessment;
   if (!a || a.error) { el.innerHTML = a && a.error ? `<div class="sub">Checklist: ${vesc(a.error)}</div>` : (r.interval && r.interval != '1d' ? '<div class="sub">The buy / sell checklist uses daily bars: open the 1D chart for the verdict.</div>' : ''); return; }
@@ -1602,6 +1631,8 @@ function fillVerdict(s, r) {
       <div class="sub bt-line"></div>
       <div class="sub" style="margin-top:4px">Model assessment from the checklist on the <a href="/#checklist">main page</a>, not investment advice.</div></div>`;
     el.innerHTML = h;
+    LEVELS[r.symbol] = {r, rv, a, order: DATA.findIndex(d => d.symbol == r.symbol)};
+    drawLevels();
     BACKTEST.then(bt => {
       const t = bt && bt.tickers && bt.tickers[r.symbol], line = el.querySelector('.bt-line');
       if (!t || !line) return;

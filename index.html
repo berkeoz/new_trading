@@ -8317,6 +8317,9 @@ Model rules for discipline, not investment advice.</div>
 <div class="cl-card"><h3 style="margin-top:0">Verdicts now</h3>
   <div id="cl-verdicts" class="mu">Loading…</div></div>
 
+<div class="cl-card"><h3 style="margin-top:0">Levels to buy and sell <span class="mu" id="cl-lv-asof"></span></h3>
+  <div id="cl-levels" class="mu">Loading…</div></div>
+
 <div class="cl-card"><h3 style="margin-top:0">Track record <span class="mu" id="cl-bt-asof"></span></h3>
   <div id="cl-bt" class="mu">Loading…</div></div>
 
@@ -8464,6 +8467,32 @@ Model rules for discipline, not investment advice.</div>
     run();
   };
   window.__clFilter = wireFilter;
+
+  // levels to buy / sell: the latest brief's checklist levels per ticker + the brief's own levels
+  get('briefs/index.json').then(async ix => {
+    const el = document.getElementById('cl-levels');
+    const id = ix && (ix.briefs || ix)[0] && ((ix.briefs || ix)[0].id);
+    const [b, v] = await Promise.all([id ? get('briefs/' + id + '.json') : null, get('briefs/verdicts.json')]);
+    const T = ((b && b.tickers) || []).filter(t => t.assessment && t.assessment.levels);
+    if (!T.length) { el.textContent = 'Appears after the next market brief run.'; return; }
+    document.getElementById('cl-lv-asof').textContent = `· from the market brief ${id}`;
+    const f = x => x == null || x === '' || isNaN(+x) ? '—' : (+x).toFixed(2);
+    const pc = (x, p) => x == null || isNaN(+x) ? '' : `<div class="mu">${(+x / p - 1) * 100 >= 0 ? '+' : ''}${((+x / p - 1) * 100).toFixed(1)}%</div>`;
+    el.innerHTML = filterBar() + `<div class="wrapx"><table><tr><th>Ticker</th><th>Price</th><th>Verdict</th><th>Buy zone (dip)</th><th>Buy on breakout above</th><th>Warning below</th><th>Sell / stop below</th><th>Trailing stop</th><th>Take profit above</th><th>Reward : risk</th></tr>` +
+      T.map(t => {
+        const a = t.assessment, lv = a.levels, p = lv.price, ft = a.features || {};
+        const atr = ft.ext ? Math.abs((p - lv.ema21) / ft.ext) : p * 0.015;
+        const rv = v && v.tickers && v.tickers[t.symbol], L = (rv && rv.levels) || {};
+        const zone = L.buy_zone && L.buy_zone != 'n/a' ? esc(L.buy_zone) : `${f(Math.max(lv.ema21 - 1.5 * atr, lv.support ?? 0))} – ${f(lv.ema21 + 0.5 * atr)}`;
+        const warn = L.warning_below ?? lv.sma50, sell = L.sell_below ?? lv.stop, tp = L.take_profit_above ?? lv.target, vd = rv ? rv.verdict : a.verdict;
+        return `<tr data-text="${esc(t.symbol)}" data-v="${esc(vd)}"><td><b><a href="/patterns">${esc(t.symbol)}</a></b></td><td>${f(p)}</td><td><span class="pill" style="background:${VC[vd] || '#8a93a5'}">${esc(vd)}</span></td>
+          <td>${zone}<div class="mu">around the 21-day ${f(lv.ema21)}</div></td><td>${f(lv.resistance)}${pc(lv.resistance, p)}</td><td>${f(warn)}${pc(warn, p)}</td>
+          <td>${f(sell)}${pc(sell, p)}</td><td>${f(a.trailing_stop)}${pc(a.trailing_stop, p)}</td><td>${f(tp)}${pc(tp, p)}</td><td>${lv.rr ?? '—'}</td></tr>`;
+      }).join('') + `</table></div>
+      <div class="mu" style="margin-top:4px">Buy zone: near the 21-day average / support, where the checklist says Buy in an uptrend (the market brief's zone when it gives one). Breakout: a daily close above the nearest resistance. Warning: the brief's level, else the 50-day average. Sell / stop: below the support that defines the setup. Trailing stop: 3 ATR below the 22-day high, for a position already in profit. Take profit: the next resistance / target. Levels are recalculated at every brief; the same table for any ticker you look up is at the top of <a href="/patterns">Chart formations</a>. Not investment advice.</div>`;
+    el.classList.remove('mu');
+    wireFilter(el);
+  });
 
   // bear market watch
   get('context/bear.json').then(d => {
