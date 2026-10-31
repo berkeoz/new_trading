@@ -10,7 +10,7 @@
   },
   "rewrites": [
     {
-      "source": "/api/:fn(patterns|valuation|mtf|scan|ind)",
+      "source": "/api/:fn(patterns|valuation|mtf|scan|ind|crosses)",
       "destination": "/api/router?fn=:fn"
     }
   ],

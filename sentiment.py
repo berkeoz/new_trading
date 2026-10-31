@@ -60,6 +60,21 @@ IND = [
 ]
 
 
+def _with_latest(df):
+    """Yahoo's bulk download sometimes has no close yet for the latest day; add / fill that day
+    from the single-ticker SPY history (which builds it from intraday bars)."""
+    try:
+        import patterns as P
+        spy = P.load_prices("SPY", "1y", fill_today=True)["Close"]
+        d = spy.index[-1]
+        if d not in df.index:
+            df.loc[d] = df.iloc[-1]
+        df.loc[d, "SPY"] = float(spy.iloc[-1])
+    except Exception:
+        pass
+    return df.sort_index()
+
+
 def prices(refresh=False):
     """Daily closes for TICKERS since 2008, cached for the day."""
     if not refresh and os.path.exists(CACHE) and datetime.fromtimestamp(os.path.getmtime(CACHE)).date() == datetime.now().date():
@@ -67,6 +82,7 @@ def prices(refresh=False):
     df = yf.download(TICKERS, start="2008-01-01", interval="1d", auto_adjust=True, progress=False)["Close"]
     df.index = df.index.tz_localize(None) if df.index.tz is not None else df.index
     df = df[df["SPY"].notna()]                      # US trading days; BTC and futures aligned to them
+    df = _with_latest(df)
     df = df.ffill(limit=5)
     os.makedirs(os.path.dirname(CACHE), exist_ok=True)
     df.to_csv(CACHE)
@@ -222,17 +238,20 @@ def refresh(refit=False):
 def divergences(px, sig):
     """Index near its high while the leaders / breadth are not confirming (or the opposite)."""
     spy = px["SPY"]
-    near_high = spy.iloc[-1] >= spy.iloc[-63:].max() * 0.98
-    near_low = spy.iloc[-1] <= spy.iloc[-63:].min() * 1.03
+    hi, lo = spy.iloc[-63:].max(), spy.iloc[-63:].min()
+    pos = (spy.iloc[-1] - lo) / (hi - lo) if hi > lo else 0.5          # where SPY sits in its 3-month range
+    wide = hi / lo - 1 >= 0.06                                          # a narrow range is neither "near the high" nor "near the low"
+    near_high = wide and pos >= 0.8
+    near_low = wide and pos <= 0.2
     out = []
     weak = [k for k in ("rsp_spy", "iwm_spy", "smh_spy", "iyt_spy", "hyg_ief", "breadth50") if k in sig and sig[k].iloc[-1] < -0.25]
     strong = [k for k in ("rsp_spy", "iwm_spy", "smh_spy", "iyt_spy", "hyg_ief", "breadth50") if k in sig and sig[k].iloc[-1] > 0.25]
     names = {k: lab for k, lab, *_ in IND}
     if near_high and len(weak) >= 2:
-        out.append("SPY is within 2% of its 3-month high but these are weakening: " + ", ".join(names[k] for k in weak) +
+        out.append("SPY is in the top fifth of its 3-month range but these are weakening: " + ", ".join(names[k] for k in weak) +
                    " (narrow / unconfirmed rally)")
     if near_low and len(strong) >= 2:
-        out.append("SPY is near its 3-month low but these are improving: " + ", ".join(names[k] for k in strong) +
+        out.append("SPY is in the bottom fifth of its 3-month range but these are improving: " + ", ".join(names[k] for k in strong) +
                    " (positive divergence)")
     if "vix_term" in sig and sig["vix_term"].iloc[-1] < -0.9:
         out.append("VIX is above the 3-month VIX (backwardation): near-term panic, which has often come near short-term lows")

@@ -12,7 +12,7 @@ from urllib.parse import urlparse, parse_qs
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
-NAMES = ("patterns", "valuation", "mtf", "scan", "ind")
+NAMES = ("patterns", "valuation", "mtf", "scan", "ind", "crosses")
 _cache = {}
 
 

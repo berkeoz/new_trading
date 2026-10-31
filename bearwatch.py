@@ -39,12 +39,28 @@ SIGNS = [("below200", "SPY below its 200-day average"), ("ma200_falling", "200-d
          ("credit", "High-yield spread widening"), ("curve", "Yield curve re-steepening after an inversion")]
 
 
+def _with_latest(df):
+    """Yahoo's bulk download sometimes has no close yet for the latest day; add / fill that day
+    from the single-ticker SPY history (which builds it from intraday bars)."""
+    try:
+        import patterns as P
+        spy = P.load_prices("SPY", "1y", fill_today=True)["Close"]
+        d = spy.index[-1]
+        if d not in df.index:
+            df.loc[d] = df.iloc[-1]
+        df.loc[d, "SPY"] = float(spy.iloc[-1])
+    except Exception:
+        pass
+    return df.sort_index()
+
+
 def _prices():
     if os.path.exists(CACHE) and datetime.fromtimestamp(os.path.getmtime(CACHE)).date() == datetime.now().date():
         return pd.read_csv(CACHE, index_col=0, parse_dates=True)
     df = yf.download(["SPY", "^DJI", "^DJT"] + SECTORS, start="1995-01-01", auto_adjust=True, progress=False)["Close"]
     df.index = df.index.tz_localize(None) if df.index.tz is not None else df.index
     df = df[df["SPY"].notna()].ffill(limit=5)
+    df = _with_latest(df)
     os.makedirs(os.path.dirname(CACHE), exist_ok=True)
     df.to_csv(CACHE)
     return df

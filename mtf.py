@@ -255,6 +255,103 @@ def inverse(sym):
     return {"symbol": sym, "price": round(price, 2), "asof": f"{h1.index[-1]:%Y-%m-%d %H:%M}", "timeframes": out}
 
 
+
+# ── Crosses: when did each indicator last cross its average / middle line, per timeframe ───────
+def supertrend(df, n=10, mult=3.0):
+    """TradingView's Supertrend: ATR (Wilder, n) bands around hl2 that only tighten; +1 up / -1 down."""
+    h, l, c = df["High"].values, df["Low"].values, df["Close"].values
+    tr = np.maximum(h[1:] - l[1:], np.maximum(abs(h[1:] - c[:-1]), abs(l[1:] - c[:-1])))
+    tr = np.concatenate([[h[0] - l[0]], tr])
+    atr = pd.Series(tr).ewm(alpha=1 / n, adjust=False).mean().values
+    hl2 = (h + l) / 2
+    up, dn = hl2 - mult * atr, hl2 + mult * atr
+    trend = np.ones(len(c), dtype=int)
+    line = np.full(len(c), np.nan)
+    for i in range(1, len(c)):
+        if c[i - 1] > up[i - 1]:
+            up[i] = max(up[i], up[i - 1])
+        if c[i - 1] < dn[i - 1]:
+            dn[i] = min(dn[i], dn[i - 1])
+        if trend[i - 1] == -1 and c[i] > dn[i - 1]:
+            trend[i] = 1
+        elif trend[i - 1] == 1 and c[i] < up[i - 1]:
+            trend[i] = -1
+        else:
+            trend[i] = trend[i - 1]
+        line[i] = up[i] if trend[i] == 1 else dn[i]
+    return pd.Series(line, index=df.index), pd.Series(trend, index=df.index)
+
+
+def _cross_series(df):
+    """(label, a, b, note-function) pairs: a crossing b is the event."""
+    c = df["Close"]
+    rsi = _rsi(c)
+    m = _ema(c, 12) - _ema(c, 26)
+    sig = _ema(m, 9)
+    ap = (df["High"] + df["Low"] + c) / 3
+    esa = ap.ewm(span=10, adjust=False).mean()
+    d = (ap - esa).abs().ewm(span=10, adjust=False).mean()
+    wt1 = ((ap - esa) / (0.015 * d)).ewm(span=21, adjust=False).mean()
+    wt2 = wt1.rolling(4).mean()
+    rmin, rmax = rsi.rolling(14).min(), rsi.rolling(14).max()
+    k = ((rsi - rmin) / (rmax - rmin) * 100).rolling(3).mean()
+    kd = k.rolling(3).mean()
+    hh, ll = df["High"].rolling(10).max(), df["Low"].rolling(10).min()
+    smi = 200 * _ema(_ema(c - (hh + ll) / 2, 3), 3) / _ema(_ema(hh - ll, 3), 3)
+    smis = _ema(smi, 10)
+    st_line, st_dir = supertrend(df)
+    zero = pd.Series(0.0, index=df.index)
+    wt_zone = lambda i: "in the overbought zone" if wt2.iloc[i] >= 53 else "in the oversold zone" if wt2.iloc[i] <= -53 else ""
+    return [
+        ("Price vs 21-day EMA", c, _ema(c, 21), None),
+        ("Price vs 50 SMA", c, c.rolling(50).mean(), None),
+        ("Price vs 200 SMA", c, c.rolling(200).mean(), None),
+        ("RSI vs 50 (middle)", rsi, pd.Series(50.0, index=df.index), None),
+        ("RSI vs its average (SMA14)", rsi, rsi.rolling(14).mean(), None),
+        ("MACD vs signal", m, sig, None),
+        ("MACD vs 0", m, zero, None),
+        ("WaveTrend WT1 vs WT2", wt1, wt2, wt_zone),
+        ("WaveTrend vs 0 (middle)", wt1, zero, None),
+        ("Stoch RSI %K vs %D", k, kd, None),
+        ("Stoch RSI vs 50 (middle)", k, pd.Series(50.0, index=df.index), None),
+        ("SMI vs signal", smi, smis, None),
+        ("Supertrend (10, 3)", st_dir.astype(float), zero, None),
+    ], st_line, st_dir
+
+
+def _last_cross(a, b, idx, note):
+    x = (a - b).values
+    ok = ~np.isnan(x)
+    if ok.sum() < 3:
+        return None
+    side = "above" if x[-1] > 0 else "below"
+    for i in range(len(x) - 1, 0, -1):
+        if not (ok[i] and ok[i - 1]):
+            continue
+        if (x[i - 1] <= 0 < x[i]) or (x[i - 1] >= 0 > x[i]):
+            t = idx[i]
+            return {"side": side, "dir": "up" if x[i] > 0 else "down", "bars_ago": int(len(x) - 1 - i),
+                    "time": f"{t:%Y-%m-%d}" if (t.hour, t.minute) == (0, 0) else f"{t:%Y-%m-%d %H:%M}",
+                    "note": note(i) if note else ""}
+    return {"side": side, "dir": None, "bars_ago": None, "time": None, "note": ""}
+
+
+def crosses(sym):
+    """Last cross of each indicator on 1H, 2H, 4H, 1D and 1W bars."""
+    h1 = _load(sym, "60m", "1y", "1h")
+    d1 = P._append_today(_load(sym, "1d", "5y", "1D"), sym)
+    frames = [("1H", h1), ("2H", P._session_bars(h1, 2)), ("4H", P._session_bars(h1, 4)), ("1D", d1), ("1W", _period_bars(d1, "W-FRI"))]
+    out, labels = {}, None
+    for tf, df in frames:
+        series, st_line, st_dir = _cross_series(df)
+        labels = [s[0] for s in series]
+        out[tf] = {lab: _last_cross(a, b, df.index, note) for lab, a, b, note in series}
+        out[tf]["Supertrend (10, 3)"]["level"] = None if np.isnan(st_line.iloc[-1]) else round(float(st_line.iloc[-1]), 2)
+        out[tf]["Supertrend (10, 3)"]["side"] = "up" if st_dir.iloc[-1] == 1 else "down"
+    return {"symbol": sym, "price": round(float(h1["Close"].iloc[-1]), 2), "asof": f"{h1.index[-1]:%Y-%m-%d %H:%M}",
+            "timeframes": [f[0] for f in frames], "indicators": labels, "crosses": out}
+
+
 def text(l):
     L = [f"{l['symbol']} turn ladder"]
     for r in l["timeframes"]:

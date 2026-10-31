@@ -1406,13 +1406,14 @@ const root = document.getElementById('root');
 let seq = 0;
 
 // ── Moving averages (computed in the browser so they are configurable) ──
-const MA_DEFAULT = 'EMA9, EMA21, SMA50, SMA200, WMA20, HMA55, AVWAP swing, RSI14, MACD12/26/9, WT10/21';
+const MA_DEFAULT = 'EMA9, EMA21, SMA50, SMA200, WMA20, HMA55, AVWAP swing, RSI14, MACD12/26/9, WT10/21, ST10/3';
 const MA_COLORS = ['#ffd54f','#4fc3f7','#ba68c8','#ff8a65','#e0e0e0','#81c784'];
 let maCfg = MA_DEFAULT;
 try { maCfg = localStorage.getItem('maCfg') || MA_DEFAULT; } catch (e) {}
 if (['EMA9,EMA21,SMA50,SMA200', 'EMA9,EMA21,SMA50,SMA200,RSI14,MACD12/26/9'].includes(maCfg.replace(/\s/g, '')))
   maCfg = MA_DEFAULT;   // upgrade old saved defaults
 try {   // WaveTrend was added later: switch it on once for configs saved before it existed
+  if (!localStorage.getItem('stAdded')) { if (!/\bST\s*\d/i.test(maCfg)) { maCfg += ', ST10/3'; localStorage.setItem('maCfg', maCfg); } localStorage.setItem('stAdded', '1'); }
   if (!localStorage.getItem('wtAdded')) { if (!/\bWT/i.test(maCfg)) { maCfg += ', WT10/21'; localStorage.setItem('maCfg', maCfg); } localStorage.setItem('wtAdded', '1'); }
 } catch (e) {}
 // Dated AVWAPs ("AVWAP 2026-07-29") belong to one ticker: they are kept per symbol, the rest of the box is shared.
@@ -1449,7 +1450,8 @@ function parseOsc(txt) {
   const w = txt.match(/\bWT\s*(\d+)?\s*(?:\/\s*(\d+))?/i);
   return {rsi: r ? Math.min(Math.max(+r[1], 2), 100) : null,
           macd: m && +m[1] < +m[2] ? [+m[1], +m[2], +m[3]] : null,
-          wt: w ? [Math.max(+(w[1] || 10), 2), Math.max(+(w[2] || 21), 2)] : null};
+          wt: w ? [Math.max(+(w[1] || 10), 2), Math.max(+(w[2] || 21), 2)] : null,
+          st: (st => st ? [Math.max(+(st[1] || 10), 2), Math.max(+(st[2] || 3), 0.5)] : null)(txt.match(/\bST\s*(\d+)?\s*(?:\/\s*([\d.]+))?/i))};
 }
 function sma(c, n) {
   const out = Array(c.length).fill(null); let sum = 0;
@@ -1472,6 +1474,25 @@ function emaN(a, n) {
   v /= n; out[s0 + n - 1] = v;
   for (let i = s0 + n; i < a.length; i++) { if (a[i] != null) v = a[i] * k + v * (1 - k); out[i] = v; }
   return out;
+}
+// Supertrend (TradingView): ATR (Wilder) bands around hl2 that only tighten; dir +1 up / -1 down
+function supertrend(h, l, c, n, mult) {
+  const N = c.length, line = Array(N).fill(null), dir = Array(N).fill(1);
+  let atr = null, up = null, dn = null;
+  for (let i = 0; i < N; i++) {
+    const tr = i == 0 ? h[i] - l[i] : Math.max(h[i] - l[i], Math.abs(h[i] - c[i - 1]), Math.abs(l[i] - c[i - 1]));
+    atr = atr == null ? tr : atr + (tr - atr) / n;
+    const hl2 = (h[i] + l[i]) / 2;
+    let u = hl2 - mult * atr, d = hl2 + mult * atr;
+    if (i > 0) {
+      if (c[i - 1] > up) u = Math.max(u, up);
+      if (c[i - 1] < dn) d = Math.min(d, dn);
+      dir[i] = dir[i - 1] == -1 && c[i] > dn ? 1 : dir[i - 1] == 1 && c[i] < up ? -1 : dir[i - 1];
+    }
+    up = u; dn = d;
+    if (i >= n) line[i] = dir[i] == 1 ? up : dn;
+  }
+  return {line, dir};
 }
 // WaveTrend oscillator (LazyBear's WT_CROSS_LB): ap = hlc3, esa = EMA(ap, n1), d = EMA(|ap - esa|, n1),
 // ci = (ap - esa) / (0.015 d), WT1 = EMA(ci, n2), WT2 = SMA(WT1, 4). Overbought 60 / 53, oversold -60 / -53.
@@ -1581,6 +1602,45 @@ const VERDICTS = location.protocol == 'file:' ? Promise.resolve(null) :
 const BACKTEST = location.protocol == 'file:' ? Promise.resolve(null) :
   fetch('https://raw.githubusercontent.com/berkeoz/new_trading/master/verdicts/backtest.json?t=' + Date.now()).then(x => x.ok ? x.json() : null).catch(() => null);
 const vesc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+// ── Crosses: last cross of each indicator's average / middle line per timeframe ──
+async function toggleCrosses(sym, el) {
+  if (!el.hidden) { el.hidden = true; return; }
+  el.hidden = false;
+  if (location.protocol == 'file:') { el.innerHTML = '<div class="sub">Runs on the website.</div>'; return; }
+  el.innerHTML = `<div class="sub">Loading 1H / 2H / 4H / 1D / 1W for ${sym}…</div>`;
+  try {
+    const res = await fetch(`/api/router?fn=crosses&symbol=${encodeURIComponent(sym)}`);
+    const d = await res.json();
+    if (!res.ok || d.error) throw new Error(d.error || res.statusText);
+    const cell = x => {
+      if (!x) return '<td class="sub">–</td>';
+      const now = x.side == 'above' || x.side == 'up' ? '<span class="bullish">▲ above</span>' : '<span class="bearish">▼ below</span>';
+      if (!x.dir) return `<td>${now}<div class="sub">no cross in range</div></td>`;
+      const fresh = x.bars_ago <= 3 ? 'font-weight:700' : '';
+      return `<td style="${fresh}"><span class="${x.dir == 'up' ? 'bullish' : 'bearish'}">${x.dir == 'up' ? '↑ crossed up' : '↓ crossed down'}</span>
+        <div class="sub">${x.bars_ago == 0 ? 'this bar' : x.bars_ago + ' bar' + (x.bars_ago == 1 ? '' : 's') + ' ago'} · ${vesc(x.time)}${x.note ? ' · ' + vesc(x.note) : ''}${x.level ? ' · line ' + x.level : ''}</div></td>`;
+    };
+    const tfs = d.timeframes;
+    const up = tfs.map(tf => d.indicators.filter(k => { const x = d.crosses[tf][k]; return x && (x.side == 'above' || x.side == 'up'); }).length);
+    el.innerHTML = `<h3>${vesc(d.symbol)} — last crosses <span class="sub">price ${d.price} at ${vesc(d.asof)} ET</span></h3>
+      <div class="sub" style="margin:2px 0 6px">Filter: <input class="xs-q" placeholder="indicator" size="14" style="background:#12151c;color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:2px 6px">
+        <select class="xs-f" style="background:#12151c;color:var(--fg);border:1px solid var(--line);border-radius:5px"><option value="">all</option><option value="3">crossed in the last 3 bars</option><option value="up">crossed up</option><option value="down">crossed down</option></select></div>
+      <div class="wrap"><table><tr><th>Indicator</th>${tfs.map(tf => `<th>${tf}</th>`).join('')}</tr>` +
+      d.indicators.map(k => `<tr data-k="${vesc(k)}"><td><b>${vesc(k)}</b></td>${tfs.map(tf => cell(d.crosses[tf][k])).join('')}</tr>`).join('') +
+      `<tr><td class="sub">Above / up now</td>${up.map(n => `<td class="sub"><b>${n} of ${d.indicators.length}</b></td>`).join('')}</tr></table></div>
+      <div class="sub" style="margin-top:6px">Each cell: the last time the indicator crossed its average or middle line on that timeframe, which way, and how many bars ago (bold = in the last 3 bars), plus where it is now. Middle = RSI 50, MACD 0, WaveTrend 0, Stoch RSI 50; averages = the indicator's signal line or the price's moving average. Supertrend (ATR 10 × 3) shows its last flip and the current line. Intraday data can lag ~15 min. Not investment advice.</div>`;
+    const flt = () => {
+      const q = el.querySelector('.xs-q').value.toLowerCase(), f = el.querySelector('.xs-f').value;
+      el.querySelectorAll('tr[data-k]').forEach(tr => {
+        const k = tr.dataset.k, xs = tfs.map(tf => d.crosses[tf][k]).filter(Boolean);
+        const okF = !f || (f == '3' ? xs.some(x => x.bars_ago != null && x.bars_ago <= 3) : xs.some(x => x.dir == f && x.bars_ago != null && x.bars_ago <= 10));
+        tr.style.display = (!q || k.toLowerCase().includes(q)) && okF ? '' : 'none';
+      });
+    };
+    el.querySelector('.xs-q').oninput = flt; el.querySelector('.xs-f').onchange = flt;
+  } catch (err) { el.innerHTML = `<div class="flag">${sym}: ${err.message}</div>`; }
+}
+
 // ── Levels at a glance: where each ticker is a buy, where it turns into a warning / sell / take profit ──
 const LEVELS = {};
 function drawLevels() {
@@ -1858,18 +1918,19 @@ function render(r, prepend, replace) {
   const IV = r.interval || '1d', daily = IV == '1d';
   const unit = daily ? 'trading days' : 'bars', bu = daily ? 'd' : ' bars';
   s.innerHTML = `<div class="head"><h2>${r.symbol} <span class="sub">${r.price} · ${r.asof} · ${IV.toUpperCase()} · ${r.period} · ATR ${r.atr_pct}%/bar · swing ${r.swing_pct}% · ${r.patterns.length} patterns (${open} open)</span>
-      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button><button class="vbtn tbtn" title="Has a turn been confirmed on 5m, 15m, 1h, 4h and daily?">Timeframes</button><button class="vbtn ibtn" title="Which closing price would put RSI / MACD / Stoch RSI / SMI at a given value on 1H, 2H, 4H, 8H = 1D, weekly and monthly?">Indicator prices</button></h2>
+      <span class="ivs">${['1d','4h','2h','1h'].map(v => `<button data-iv="${v}" class="${v == IV ? 'on' : ''}" title="Open ${r.symbol} on ${v.toUpperCase()} bars">${v.toUpperCase()}</button>`).join('')}</span><button class="vbtn" title="Intrinsic value estimate">Valuation</button><button class="vbtn tbtn" title="Has a turn been confirmed on 5m, 15m, 1h, 4h and daily?">Timeframes</button><button class="vbtn xbtn" title="When did each indicator last cross its average or middle line (up or down), on 1H, 2H, 4H, 1D and 1W?">Crosses</button><button class="vbtn ibtn" title="Which closing price would put RSI / MACD / Stoch RSI / SMI at a given value on 1H, 2H, 4H, 8H = 1D, weekly and monthly?">Indicator prices</button></h2>
       ${prepend ? '<button class="x" title="Remove">&times;</button>' : ''}</div>
     ${r.note ? `<div class="note">${r.note}</div>` : ''}
     <div class="verdict"></div>
     <div class="val" hidden></div>
     <div class="val mtf" hidden></div>
     <div class="val ind" hidden></div>
+    <div class="val xs" hidden></div>
     <div>${r.levels.map(l => `<span class="lv ${l.role=='support'?'bullish':'bearish'}">${l.role} ${l.price} ×${l.touches}</span>`).join('')}</div>
     <div class="filters">${CATS.map(([k,t]) => `<label><input type="checkbox" data-cat="${k}" checked> ${t} </label>`).join('')}
       <label><input type="checkbox" data-opt="levels" checked> S/R levels</label>
       <label>Show <select data-opt="show"><option value="recent">open + last 6 months</option><option value="open">open / active only</option><option value="all">all</option></select></label></div>
-    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated. Up to 6 of EMA9 / SMA50 (scored) / WMA20 / HMA55 (shown, not scored), plus VWAP (session, intraday), AVWAP swing (from the last swing low and high), AVWAP 2025-04-07 (anchored, saved for this ticker only; or Shift+click the chart), RSI14, MACD12/26/9, WT10/21 (WaveTrend, LazyBear WT_CROSS_LB: panel under the chart)">
+    <div class="ma-bar">Moving averages <input type="text" class="ma-cfg" spellcheck="false" title="Comma-separated. Up to 6 of EMA9 / SMA50 (scored) / WMA20 / HMA55 (shown, not scored), plus VWAP (session, intraday), AVWAP swing (from the last swing low and high), AVWAP 2025-04-07 (anchored, saved for this ticker only; or Shift+click the chart), RSI14, MACD12/26/9, ST10/3 (Supertrend: ATR 10 x 3, drawn on the chart), WT10/21 (WaveTrend, LazyBear WT_CROSS_LB: panel under the chart)">
       <label><input type="checkbox" class="ma-show" checked> lines</label>
       <label><input type="checkbox" class="ma-strip" checked> trend strip</label>
       <label><input type="checkbox" class="ma-vol" checked> volume</label>
@@ -1905,6 +1966,7 @@ function render(r, prepend, replace) {
   s.querySelector('.vbtn').onclick = () => toggleValuation(r.symbol, s.querySelector('.val'));
   s.querySelector('.tbtn').onclick = () => toggleLadder(r.symbol, s.querySelector('.mtf'));
   s.querySelector('.ibtn').onclick = () => toggleInverse(r.symbol, s.querySelector('.ind'));
+  s.querySelector('.xbtn').onclick = () => toggleCrosses(r.symbol, s.querySelector('.xs'));
 
   const C = r.ohlc.close, D = r.ohlc.x, last = C.length - 1;
   const TS = D.map(parseTs);
@@ -1999,6 +2061,12 @@ function render(r, prepend, replace) {
         if (x0 >= 0 && x1 < 0) osc.macd.ev.push({i, up: false});
       }
     }
+    if (cfg.st) {
+      const ok = (r.warm_high || []).length == W.length && (r.warm_low || []).length == W.length, off = ok ? W.length : 0;
+      const t = supertrend((ok ? r.warm_high : []).concat(r.ohlc.high), (ok ? r.warm_low : []).concat(r.ohlc.low), (ok ? W : []).concat(C), ...cfg.st);
+      osc.st = {line: t.line.slice(off), dir: t.dir.slice(off), ev: []};
+      for (let i = 1; i < C.length; i++) if (osc.st.dir[i] != osc.st.dir[i - 1] && osc.st.line[i] != null) osc.st.ev.push({i, up: osc.st.dir[i] == 1});
+    }
     if (cfg.wt) {
       const ok = (r.warm_high || []).length == W.length && (r.warm_low || []).length == W.length, off = ok ? W.length : 0;
       const w = wavetrend((ok ? r.warm_high : []).concat(r.ohlc.high), (ok ? r.warm_low : []).concat(r.ohlc.low),
@@ -2047,6 +2115,11 @@ function render(r, prepend, replace) {
           `${line[i] > 0 ? b('bullish', 'above zero') : b('bearish', 'below zero')} · ${mom}` +
           (e ? `<br>&nbsp;&nbsp;last MACD ${e.up ? b('bullish', 'bullish cross') : b('bearish', 'bearish cross')} ${D[e.i]} (${i - e.i} ${unit} before)` : ''));
       }
+    }
+    if (osc.st && osc.st.line[i] != null) {
+      const {line, dir, ev} = osc.st, e = ev.filter(x => x.i <= i).pop(), [sn, sm] = osc.cfg.st;
+      out.push(`Supertrend ${sn}/${sm} <b>${line[i].toFixed(2)}</b> · ${dir[i] == 1 ? b('bullish', 'up (line below price = trailing support)') : b('bearish', 'down (line above price = resistance)')} · price ${((C[i] / line[i] - 1) * 100).toFixed(1)}% from it` +
+        (e ? `<br>&nbsp;&nbsp;flipped ${e.up ? b('bullish', 'up') : b('bearish', 'down')} ${D[e.i]} (${i - e.i} ${unit} before)` : ''));
     }
     if (osc.wt) {
       const {wt1, wt2, ev} = osc.wt, [n1, n2] = osc.cfg.wt;
@@ -2141,6 +2214,15 @@ function render(r, prepend, replace) {
     if (strip) traces.push({type:'bar', x:D, y:D.map((_, i) => score[i] == null ? 0 : 1), yaxis:'y2',
       marker:{color:score.map(stripColor)}, hovertext:score.map((sc, i) => verdict(sc, score[i - SLOPE_BARS])[0]),
       hoverinfo:'text+x', showlegend:false});
+    if (osc.st && s.querySelector('.ma-show').checked) {
+      const {line, dir, ev} = osc.st;
+      [[1, '#26a69a', 'up'], [-1, '#ef5350', 'down']].forEach(([d, col, nm]) => traces.push({type:'scatter', mode:'lines', x:D,
+        y:line.map((v, i) => dir[i] == d || (i + 1 < dir.length && dir[i + 1] == d && dir[i] != d) ? v : null),
+        line:{color:col, width:1.6}, connectgaps:false, name:'Supertrend ' + nm, hovertemplate:'Supertrend %{y:.2f}<extra></extra>', showlegend:false}));
+      traces.push({type:'scatter', mode:'markers', x:ev.map(e => D[e.i]), y:ev.map(e => line[e.i]),
+        marker:{symbol:ev.map(e => e.up ? 'triangle-up' : 'triangle-down'), size:9, color:ev.map(e => e.up ? '#26a69a' : '#ef5350')},
+        hovertemplate:'Supertrend flip %{x}<extra></extra>', showlegend:false});
+    }
     const shapes = [], ann = [];
     const wtOn = !!osc.wt, base = wtOn ? 0.21 : 0;
     if (wtOn) {
