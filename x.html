@@ -33,6 +33,12 @@ section{background:var(--card);border:1px solid var(--line);border-radius:10px;p
   <div style="margin:8px 0"><input id="pq" placeholder="Filter: ticker" size="12" style="background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:5px 8px">
   <label class="sub"><input type="checkbox" id="ptop"> only rank #1–#3</label> <span class="sub" id="pcount"></span></div>
   <div class="wrap" id="ptable"><div class="empty">Appears after the next Twitter analysis run.</div></div></section>
+<section id="flows"><h2 style="font-size:17px;margin:0 0 6px">Unusual flows (FL0WG0D)</h2>
+  <div class="sub">Outsized, out-of-the-ordinary options flow as posted by <a href="https://x.com/FL0WG0D" target="_blank" rel="noopener">@FL0WG0D</a>, logged by the Twitter analysis. Only what the posts state; open the post for details.</div>
+  <div style="margin:8px 0"><input id="fq" placeholder="Filter: ticker" size="12" style="background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:5px 8px">
+  <select id="fside" aria-label="Side"><option value="">calls and puts</option><option value="call">calls</option><option value="put">puts</option></select>
+  <span class="sub" id="fcount"></span></div>
+  <div class="wrap" id="ftable"><div class="empty">Appears after the next Twitter analysis run.</div></div></section>
 <section class="md" id="accounts"><h2>Accounts</h2><div class="sub">Loading…</div></section>
 </main>
 <script>
@@ -60,6 +66,21 @@ get('volume_leaders.jsonl', 'text').then(t => {
         <td>${esc(r.note)}${r.post ? ` <a href="${esc(r.post)}" target="_blank" rel="noopener">post</a>` : ''}</td></tr>`).join('') + '</table>';
   };
   $('#pq').oninput = draw; $('#ptop').onchange = draw; draw();
+});
+// unusual options flow log (one JSON object per line)
+get('flows.jsonl', 'text').then(t => {
+  const rows = (t || '').split('\n').filter(l => l.trim()).map(l => { try { return JSON.parse(l); } catch (e) { return null; } }).filter(Boolean).reverse();
+  if (!rows.length) return;
+  const tone = s => /bear/i.test(s) ? 'var(--bear)' : /bull/i.test(s) ? 'var(--bull)' : 'var(--fg)';
+  const draw = () => {
+    const q = $('#fq').value.trim().toUpperCase(), side = $('#fside').value;
+    const R = rows.filter(r => (!q || String(r.ticker).toUpperCase().includes(q)) && (!side || String(r.side).toLowerCase().includes(side)));
+    $('#fcount').textContent = `${R.length} of ${rows.length}`;
+    $('#ftable').innerHTML = `<table class="md"><tr><th>Date</th><th>Ticker</th><th>Side</th><th>Contract</th><th>Premium</th><th>Size</th><th>Price</th><th>OI</th><th>OTM</th><th>Type</th><th>Note</th></tr>` +
+      R.slice(0, 200).map(r => `<tr><td>${esc(r.date)}</td><td><b>${esc(r.ticker)}</b></td><td style="color:${tone(r.sentiment || r.side)}">${esc(r.side)}</td><td>${esc(r.contract)}</td><td><b>${esc(r.premium)}</b></td><td>${esc(r.size)}</td><td>${esc(r.price)}</td><td>${esc(r.oi)}</td><td>${esc(r.otm)}</td><td>${esc(r.type)}</td>
+        <td>${esc(r.note)}${r.post ? ` <a href="${esc(r.post)}" target="_blank" rel="noopener">post</a>` : ''}</td></tr>`).join('') + '</table>';
+  };
+  $('#fq').oninput = draw; $('#fside').onchange = draw; draw();
 });
 get('index.json', 'json').then(async ix => {
   const list = (ix && ix.digests) || [];
