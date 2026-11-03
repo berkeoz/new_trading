@@ -1,13 +1,13 @@
 {
- "updated": "2026-11-03 13:00",
+ "updated": "2026-11-03 15:45",
  "tickers": [
   {
    "symbol": "QQQ",
-   "price": 687.13,
-   "asof": "2026-11-03 12:30",
+   "price": 686.37,
+   "asof": "2026-11-03 15:30",
    "timeframes": {
     "1H": {
-     "up": 6,
+     "up": 5,
      "of": 13,
      "label": "mixed",
      "st_dir": "down",
@@ -15,7 +15,7 @@
      "st_flip": "2026-10-29 12:30"
     },
     "2H": {
-     "up": 2,
+     "up": 4,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
@@ -27,7 +27,7 @@
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 713.37,
+     "st_level": 712.16,
      "st_flip": "2026-10-13 09:30"
     },
     "1D": {
@@ -56,24 +56,24 @@
     "high_52w": 759.66,
     "minus10": 683.69,
     "minus20": 607.73,
-    "from_high_pct": -9.5
+    "from_high_pct": -9.6
    }
   },
   {
    "symbol": "SPY",
-   "price": 755.8,
-   "asof": "2026-11-03 12:30",
+   "price": 754.64,
+   "asof": "2026-11-03 15:30",
    "timeframes": {
     "1H": {
-     "up": 6,
+     "up": 3,
      "of": 13,
-     "label": "mixed",
+     "label": "bearish",
      "st_dir": "up",
      "st_level": 750.38,
      "st_flip": "2026-11-02 09:30"
     },
     "2H": {
-     "up": 2,
+     "up": 3,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
@@ -93,7 +93,7 @@
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 778.64,
+     "st_level": 779.1,
      "st_flip": "2026-10-30"
     },
     "1W": {
@@ -108,22 +108,22 @@
    "short_term": "bearish",
    "weekly": "mixed",
    "levels": {
-    "daily_supertrend": 778.64,
+    "daily_supertrend": 779.1,
     "weekly_supertrend": 726.9,
-    "sma200": 726.66,
+    "sma200": 726.65,
     "high_52w": 779.09,
     "minus10": 701.18,
     "minus20": 623.27,
-    "from_high_pct": -3.0
+    "from_high_pct": -3.1
    }
   },
   {
    "symbol": "SOXX",
-   "price": 467.72,
-   "asof": "2026-11-03 12:30",
+   "price": 467.09,
+   "asof": "2026-11-03 15:30",
    "timeframes": {
     "1H": {
-     "up": 6,
+     "up": 5,
      "of": 13,
      "label": "mixed",
      "st_dir": "down",
@@ -131,7 +131,7 @@
      "st_flip": "2026-10-30 09:30"
     },
     "2H": {
-     "up": 2,
+     "up": 4,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
@@ -139,7 +139,7 @@
      "st_flip": "2026-10-30 09:30"
     },
     "4H": {
-     "up": 0,
+     "up": 1,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
@@ -172,7 +172,7 @@
     "high_52w": 654.58,
     "minus10": 589.12,
     "minus20": 523.67,
-    "from_high_pct": -28.5
+    "from_high_pct": -28.6
    }
   }
  ],
