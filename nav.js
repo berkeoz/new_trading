@@ -2,7 +2,7 @@
 (function () {
   const MENU = [
     ['Overview', [['Today\'s signals', '/#signals'], ['Signal timeline', '/#timeline'], ['Market breakdown', '/#breakdown'], ['Buy & sell checklist', '/#checklist']]],
-    ['Analysis', [['Chart formations', '/patterns'], ['Market brief', '/brief'], ['Twitter analysis', '/x']]],
+    ['Analysis', [['Chart formations', '/patterns'], ['Market brief', '/brief'], ['Twitter analysis', '/x'], ['Ask NT (chat) ↗', 'https://claude.ai/artifact/1LiRMTe1TRy8LT6sTStgZY']]],
     ['Personal', [['Finances', '/finance']]],
   ];
   const SECTIONS = {signals: 'p-today', timeline: 'p-timeline', breakdown: 'p-breakdown', checklist: 'p-checklist'};
@@ -36,6 +36,7 @@ body.nt-main .tabs{display:none}`;
   const open = on => { drawer.classList.toggle('open', on); shade.classList.toggle('open', on); };
   shade.onclick = () => open(false);
   drawer.addEventListener('click', e => { if (e.target.tagName == 'A') open(false); });
+  drawer.querySelectorAll('a[href^="https://"]').forEach(x => { x.target = '_blank'; x.rel = 'noopener'; });
   const title = (MENU.flatMap(m => m[1]).find(([, h]) => !onMain && h == path) || [document.title])[0];
   const bar = document.createElement('div'); bar.id = 'nt-bar';
   bar.innerHTML = `<button aria-label="Menu" title="Menu">☰ Menu</button><span class="nt-title">${onMain ? 'Dashboard' : title}</span>` +
