@@ -1,5 +1,6 @@
-{"updated": "2026-11-03 09:15",
+{"updated": "2026-11-04 09:45",
  "gauges": [
-  {"name": "AAII sentiment survey", "value": "Bullish 37.8% / Neutral 20.7% / Bearish 41.4%", "date": "2026-10-28", "reading": "mild fear: bearish ~10pp above its ~31.5% long-run average (down from 45.8% a week earlier), bullish near its ~37.5% average; neutral still low (avg ~31%); next survey Nov 5", "source": "https://www.aaii.com/sentimentsurvey"},
-  {"name": "CBOE equity put/call ratio", "value": "0.66 (total 0.90)", "date": "2026-10-30", "reading": "neutral: equity ratio in its usual 0.55-0.85 band despite Friday's selloff; no capitulation-level put buying (a Nov 2 page query showed 0.67 / 0.87 but the page carries no date, so it is not used)", "source": "https://www.cboe.com/us/options/market_statistics/daily/?dt=2026-10-30"}
+  {"name": "CNN Fear & Greed index", "value": "19 (prior 19)", "date": "2026-11-03", "reading": "extreme fear (0-25 band), from 23 on Nov 2 and 26 the session before; a contrarian-bullish zone historically; Nov 4 intraday readings of 23-24 are reported by third-party trackers but are not used", "source": "https://www.benzinga.com/markets/market-summary/26/11/62852873/nasdaq-jumps-over-200-points-as-chip-stocks-gain-fear-greed-index-remains-in-extreme-fear-zone"},
+  {"name": "AAII sentiment survey", "value": "Bullish 37.8% / Neutral 20.7% / Bearish 41.4%", "date": "2026-10-28", "reading": "mild fear: bearish ~10pp above its ~31.5% long-run average, bullish near its ~37.5% average; next survey Nov 5", "source": "https://www.aaii.com/sentimentsurvey"},
+  {"name": "CBOE equity put/call ratio", "value": "0.66 (total 0.90)", "date": "2026-10-30", "reading": "neutral: equity ratio in its usual 0.55-0.85 band; no capitulation-level put buying (no newer dated value found)", "source": "https://www.cboe.com/us/options/market_statistics/daily/?dt=2026-10-30"}
  ]}
