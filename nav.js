@@ -31,12 +31,11 @@ body.nt-main .tabs{display:none}`;
   const drawer = document.createElement('nav'); drawer.id = 'nt-drawer';
   const shade = document.createElement('div'); shade.id = 'nt-shade';
   const draw = () => drawer.innerHTML = '<div style="padding:4px 18px 8px;font-weight:600">New Trading</div>' + MENU.map(([g, ls]) =>
-    `<div class="g">${g}</div>` + ls.map(([t, h]) => `<a href="${h}" class="${cur(h) ? 'cur' : ''}">${t}</a>`).join('')).join('');
+    `<div class="g">${g}</div>` + ls.map(([t, h]) => `<a href="${h}" class="${cur(h) ? 'cur' : ''}"${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${t}</a>`).join('')).join('');
   draw();
   const open = on => { drawer.classList.toggle('open', on); shade.classList.toggle('open', on); };
   shade.onclick = () => open(false);
   drawer.addEventListener('click', e => { if (e.target.tagName == 'A') open(false); });
-  drawer.querySelectorAll('a[href^="https://"]').forEach(x => { x.target = '_blank'; x.rel = 'noopener'; });
   const title = (MENU.flatMap(m => m[1]).find(([, h]) => !onMain && h == path) || [document.title])[0];
   const bar = document.createElement('div'); bar.id = 'nt-bar';
   bar.innerHTML = `<button aria-label="Menu" title="Menu">☰ Menu</button><span class="nt-title">${onMain ? 'Dashboard' : title}</span>` +
