@@ -3,7 +3,7 @@
   const MENU = [
     ['Overview', [['Today\'s signals', '/#signals'], ['Signal timeline', '/#timeline'], ['Market breakdown', '/#breakdown'], ['Buy & sell checklist', '/#checklist']]],
     ['Analysis', [['Chart formations', '/patterns'], ['Market brief', '/brief'], ['Twitter analysis', '/x'], ['Ask NT (chat) ↗', 'https://claude.ai/artifact/1LiRMTe1TRy8LT6sTStgZY']]],
-    ['Personal', [['Finances', '/finance']]],
+    ['Personal', [['Finances', '/finance'], ['Discord digests', '/discord']]],
   ];
   const SECTIONS = {signals: 'p-today', timeline: 'p-timeline', breakdown: 'p-breakdown', checklist: 'p-checklist'};
   const path = location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
