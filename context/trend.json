@@ -1,9 +1,9 @@
 {
- "updated": "2026-11-04 15:45",
+ "updated": "2026-11-05 07:50",
  "tickers": [
   {
    "symbol": "QQQ",
-   "price": 691.6,
+   "price": 691.82,
    "asof": "2026-11-04 15:30",
    "timeframes": {
     "1H": {
@@ -56,12 +56,12 @@
     "high_52w": 759.66,
     "minus10": 683.69,
     "minus20": 607.73,
-    "from_high_pct": -9.0
+    "from_high_pct": -8.9
    }
   },
   {
    "symbol": "SPY",
-   "price": 767.18,
+   "price": 766.73,
    "asof": "2026-11-04 15:30",
    "timeframes": {
     "1H": {
@@ -69,7 +69,7 @@
      "of": 13,
      "label": "bullish",
      "st_dir": "up",
-     "st_level": 757.32,
+     "st_level": 756.56,
      "st_flip": "2026-11-02 09:30"
     },
     "2H": {
@@ -77,7 +77,7 @@
      "of": 13,
      "label": "bullish",
      "st_dir": "up",
-     "st_level": 753.58,
+     "st_level": 752.73,
      "st_flip": "2026-11-04 11:30"
     },
     "4H": {
@@ -89,7 +89,7 @@
      "st_flip": "2026-10-16 09:30"
     },
     "1D": {
-     "up": 6,
+     "up": 7,
      "of": 13,
      "label": "mixed",
      "st_dir": "down",
@@ -114,12 +114,12 @@
     "high_52w": 779.09,
     "minus10": 701.18,
     "minus20": 623.27,
-    "from_high_pct": -1.5
+    "from_high_pct": -1.6
    }
   },
   {
    "symbol": "SOXX",
-   "price": 446.48,
+   "price": 451.05,
    "asof": "2026-11-04 15:30",
    "timeframes": {
     "1H": {
@@ -127,15 +127,15 @@
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 467.51,
+     "st_level": 468.88,
      "st_flip": "2026-10-30 09:30"
     },
     "2H": {
-     "up": 1,
+     "up": 3,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 475.18,
+     "st_level": 476.54,
      "st_flip": "2026-10-30 09:30"
     },
     "4H": {
@@ -155,7 +155,7 @@
      "st_flip": "2026-10-12"
     },
     "1W": {
-     "up": 2,
+     "up": 3,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
@@ -168,11 +168,11 @@
    "levels": {
     "daily_supertrend": 523.34,
     "weekly_supertrend": 602.66,
-    "sma200": 477.72,
+    "sma200": 477.74,
     "high_52w": 654.58,
     "minus10": 589.12,
     "minus20": 523.67,
-    "from_high_pct": -31.8
+    "from_high_pct": -31.2
    }
   }
  ],
@@ -180,6 +180,6 @@
   "state": "Bull",
   "signs_on": 0,
   "signs_total": 10,
-  "drawdown_pct": -1.5
+  "drawdown_pct": -1.6
  }
 }
