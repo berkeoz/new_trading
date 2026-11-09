@@ -1,8 +1,8 @@
 {
  "asof": "2026-11-06",
- "updated": "2026-11-06 20:59",
+ "updated": "2026-11-09 09:17",
  "composite": {
-  "score": 38.6,
+  "score": 37.5,
   "percentile_10y": 89,
   "score_1w_ago": 26.3,
   "score_1m_ago": -17.3,
@@ -1046,7 +1046,7 @@
    ],
    [
     "2026-11-06",
-    38.6
+    37.5
    ]
   ]
  },
@@ -1265,7 +1265,7 @@
    "group": "Intermarket",
    "how": "growth expectations vs safety",
    "value": 0.0015,
-   "signal": -0.33,
+   "signal": -0.51,
    "signal_1m_ago": 1.0,
    "reading": "risk-off",
    "note": "",
@@ -1281,8 +1281,8 @@
    "group": "Intermarket",
    "how": "credit risk appetite; often leads stocks",
    "value": 0.8407,
-   "signal": -0.65,
-   "signal_1m_ago": 0.13,
+   "signal": -0.64,
+   "signal_1m_ago": 0.16,
    "reading": "risk-off",
    "note": "",
    "used": false,
@@ -1296,8 +1296,8 @@
    "label": "Bitcoin",
    "group": "Intermarket",
    "how": "speculative risk appetite",
-   "value": 75942.12,
-   "signal": -0.4,
+   "value": 75746.93,
+   "signal": -0.41,
    "signal_1m_ago": 0.53,
    "reading": "risk-off",
    "note": "",
