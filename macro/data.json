@@ -1,5 +1,5 @@
 {
- "generated_et": "2026-11-09 13:12",
+ "generated_et": "2026-11-09 15:46",
  "pillars": [
   "Inflation",
   "Labor",
@@ -9434,13 +9434,13 @@
    "kind": "level",
    "tier1": false,
    "unit": "pp",
-   "latest_obs": "2026-11-05",
-   "latest_raw": 3.48,
-   "value": 3.48,
+   "latest_obs": "2026-11-06",
+   "latest_raw": 3.42,
+   "value": 3.42,
    "value_date": "2026-11-30",
    "prev": 3.44,
    "trend": "rising",
-   "pct_rank_10y": 86.0,
+   "pct_rank_10y": 84.0,
    "range_10y": [
     2.63,
     3.94
@@ -9492,7 +9492,7 @@
     },
     {
      "date": "2026-11",
-     "value": 3.48
+     "value": 3.42
     }
    ],
    "hist": {
@@ -9572,7 +9572,7 @@
      2.63,
      3.12,
      3.44,
-     3.48
+     3.42
     ]
    },
    "daily_or_weekly": true
@@ -13213,7 +13213,7 @@
   "Labor": "solid (unemployment 4.1%, payrolls 3-month avg +137k)",
   "Growth": "solid (real GDP 3.4% annualized, retail sales +6.3% y/y)",
   "Fed & rates": "mildly restrictive (real policy rate ~+0.9pp = fed funds 4.00% minus core PCE 3.1%)",
-  "Financial conditions": "loose (NFCI -0.46, high-yield spread 3.48pp)",
+  "Financial conditions": "loose (NFCI -0.46, high-yield spread 3.42pp)",
   "Recession signals": "none flashing (Sahm 0.00, 10Y-2Y +0.35pp, NY Fed 12-month odds 17%, CFNAI +0.03)",
   "Valuation": "extreme (stock market value 249% of GDP, 95th percentile of 10 years; dot-com peak 163% in 2000-01, same measure)",
   "Oil": "WTI $100 (+70% y/y), price trend rising, oil volatility 60 (92th percentile)"
@@ -13229,7 +13229,7 @@
    {
     "month": "2026-12",
     "symbol": "ZQZ26.CBT",
-    "implied": 4.025
+    "implied": 4.02
    },
    {
     "month": "2027-01",
@@ -13239,7 +13239,7 @@
    {
     "month": "2027-02",
     "symbol": "ZQG27.CBT",
-    "implied": 4.15
+    "implied": 4.145
    },
    {
     "month": "2027-03",
@@ -13254,17 +13254,17 @@
    {
     "month": "2027-05",
     "symbol": "ZQK27.CBT",
-    "implied": 4.31
+    "implied": 4.305
    },
    {
     "month": "2027-06",
     "symbol": "ZQM27.CBT",
-    "implied": 4.355
+    "implied": 4.35
    },
    {
     "month": "2027-07",
     "symbol": "ZQN27.CBT",
-    "implied": 4.375
+    "implied": 4.37
    }
   ],
   "meetings": [
