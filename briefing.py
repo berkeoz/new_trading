@@ -642,6 +642,14 @@ def main():
         print(mtf.trend_text(rows, bw))
     except Exception as e:
         print(f"\nTREND CHECK: ERROR {e}")
+    try:   # rotation watch (rotation/watch.json, written daily by the GitHub Action)
+        import rotwatch
+        rw = json.load(open(os.path.join(ROOT, "rotation", "watch.json"), encoding="utf-8"))
+        print()
+        print(rotwatch.summary(rw))
+    except Exception as e:
+        print(f"
+ROTATION WATCH: unavailable ({e})")
     print()
     print(context_status(now))
     # daily second opinion from the local Qwen model: at the closing brief (or the first brief after

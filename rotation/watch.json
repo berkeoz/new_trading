@@ -1,0 +1,878 @@
+{
+ "updated": "2026-11-10 13:21",
+ "asof": "2026-11-10",
+ "spy_ytd_pct": 10.0,
+ "regime": {
+  "regime": "RISK-ON",
+  "spy": 745.88,
+  "sma200": 728.28,
+  "distance_pct": 2.4,
+  "sma200_rising": true
+ },
+ "rows": [
+  {
+   "symbol": "XLK",
+   "label": "Technology",
+   "group": "sector",
+   "class": "No signal",
+   "quadrant": "Lagging",
+   "ex12": 4.19,
+   "ex6": -5.96,
+   "ex3": -8.22,
+   "ex1": -10.77,
+   "rs": -8.7,
+   "rm": -13.46,
+   "from_high": -17.29,
+   "range30_atr": 6.81,
+   "price": 167.08,
+   "check": {
+    "verdict": "Warning",
+    "why": "trend is breaking: below the 50-day average",
+    "ema21": 179.55,
+    "sma50": 187.7,
+    "sma200": 170.15,
+    "buy_zone": [
+     174.72,
+     181.16
+    ],
+    "stop": 160.58,
+    "target": 171.42,
+    "rr": 0.68,
+    "sell_alerts": 4
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "XLC",
+   "label": "Communication services",
+   "group": "sector",
+   "class": "No signal",
+   "quadrant": "Leading",
+   "ex12": -15.77,
+   "ex6": -8.68,
+   "ex3": 0.53,
+   "ex1": 0.12,
+   "rs": 1.54,
+   "rm": 2.88,
+   "from_high": -10.11,
+   "range30_atr": 5.58,
+   "price": 106.97,
+   "check": {
+    "verdict": "Sell",
+    "why": "downtrend: price below falling averages",
+    "ema21": 105.99,
+    "sma50": 109.51,
+    "sma200": 111.98,
+    "buy_zone": [
+     104.22,
+     106.72
+    ],
+    "stop": 103.49,
+    "target": 111.32,
+    "rr": 1.26,
+    "sell_alerts": 5
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "XLY",
+   "label": "Consumer discretionary",
+   "group": "sector",
+   "class": "Next group candidate",
+   "quadrant": "Leading",
+   "ex12": -9.26,
+   "ex6": 0.82,
+   "ex3": 5.72,
+   "ex1": 11.56,
+   "rs": 8.28,
+   "rm": 14.01,
+   "from_high": -2.55,
+   "range30_atr": 5.17,
+   "price": 120.6,
+   "check": {
+    "verdict": "Wait",
+    "why": "mixed trend: wait for the averages to line up",
+    "ema21": 116.53,
+    "sma50": 113.44,
+    "sma200": 115.09,
+    "buy_zone": [
+     120.27,
+     117.53
+    ],
+    "stop": 119.27,
+    "target": 123.26,
+    "rr": 2.04,
+    "sell_alerts": 1
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "XLP",
+   "label": "Consumer staples",
+   "group": "sector",
+   "class": "Previous leader, still leading",
+   "quadrant": "Leading",
+   "ex12": 9.77,
+   "ex6": 7.9,
+   "ex3": 11.09,
+   "ex1": 12.17,
+   "rs": 10.14,
+   "rm": 12.33,
+   "from_high": -0.82,
+   "range30_atr": 6.4,
+   "price": 91.19,
+   "check": {
+    "verdict": "Hold",
+    "why": "uptrend, but little room to the next resistance",
+    "ema21": 88.52,
+    "sma50": 85.13,
+    "sma200": 83.92,
+    "buy_zone": [
+     88.47,
+     89.06
+    ],
+    "stop": 87.93,
+    "target": 94.42,
+    "rr": 0.99,
+    "sell_alerts": 1
+   },
+   "entry": "Not the rotation target"
+  },
+  {
+   "symbol": "XLE",
+   "label": "Energy",
+   "group": "sector",
+   "class": "Previous leader, fading",
+   "quadrant": "Lagging",
+   "ex12": 30.23,
+   "ex6": 7.68,
+   "ex3": 5.51,
+   "ex1": -1.83,
+   "rs": -0.42,
+   "rm": -1.71,
+   "from_high": -11.36,
+   "range30_atr": 4.55,
+   "price": 62.07,
+   "check": {
+    "verdict": "Buy on dip",
+    "why": "uptrend; a better entry is nearer EMA21 65.24 / support 60.66",
+    "ema21": 65.24,
+    "sma50": 64.92,
+    "sma200": 58.71,
+    "buy_zone": [
+     63.45,
+     65.84
+    ],
+    "stop": 60.06,
+    "target": 65.61,
+    "rr": 1.81,
+    "sell_alerts": 3
+   },
+   "entry": "Not the rotation target"
+  },
+  {
+   "symbol": "XLF",
+   "label": "Financials",
+   "group": "sector",
+   "class": "Next group candidate",
+   "quadrant": "Leading",
+   "ex12": -0.29,
+   "ex6": 12.14,
+   "ex3": 4.1,
+   "ex1": 9.93,
+   "rs": 6.78,
+   "rm": 15.49,
+   "from_high": -1.63,
+   "range30_atr": 5.75,
+   "price": 58.24,
+   "check": {
+    "verdict": "Hold",
+    "why": "uptrend, but little room to the next resistance",
+    "ema21": 56.74,
+    "sma50": 55.87,
+    "sma200": 53.57,
+    "buy_zone": [
+     55.62,
+     57.11
+    ],
+    "stop": 56.72,
+    "target": 60.48,
+    "rr": 1.5,
+    "sell_alerts": 1
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "XLV",
+   "label": "Health care",
+   "group": "sector",
+   "class": "Previous leader, still leading",
+   "quadrant": "Leading",
+   "ex12": 18.5,
+   "ex6": 28.48,
+   "ex3": 15.3,
+   "ex1": 13.51,
+   "rs": 12.01,
+   "rm": 11.16,
+   "from_high": -0.82,
+   "range30_atr": 6.27,
+   "price": 188.1,
+   "check": {
+    "verdict": "Buy on dip",
+    "why": "uptrend; a better entry is nearer EMA21 181.58 / support 164.51",
+    "ema21": 181.58,
+    "sma50": 173.91,
+    "sma200": 158.76,
+    "buy_zone": [
+     177.75,
+     182.86
+    ],
+    "stop": 182.94,
+    "target": 195.73,
+    "rr": 1.5,
+    "sell_alerts": 3
+   },
+   "entry": "Not the rotation target"
+  },
+  {
+   "symbol": "XLI",
+   "label": "Industrials",
+   "group": "sector",
+   "class": "No signal",
+   "quadrant": "Improving",
+   "ex12": -1.65,
+   "ex6": -4.79,
+   "ex3": -6.26,
+   "ex1": 3.37,
+   "rs": -0.38,
+   "rm": 7.03,
+   "from_high": -9.77,
+   "range30_atr": 2.61,
+   "price": 167.84,
+   "check": {
+    "verdict": "Sell",
+    "why": "downtrend: price below falling averages",
+    "ema21": 167.79,
+    "sma50": 169.04,
+    "sma200": 172.7,
+    "buy_zone": [
+     165.94,
+     169.19
+    ],
+    "stop": 164.77,
+    "target": 174.88,
+    "rr": 2.3,
+    "sell_alerts": 4
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "XLB",
+   "label": "Materials",
+   "group": "sector",
+   "class": "Previous leader, still leading",
+   "quadrant": "Leading",
+   "ex12": 12.74,
+   "ex6": 0.42,
+   "ex3": 3.95,
+   "ex1": 10.8,
+   "rs": 6.86,
+   "rm": 15.37,
+   "from_high": -2.17,
+   "range30_atr": 5.19,
+   "price": 52.73,
+   "check": {
+    "verdict": "Buy",
+    "why": "uptrend, near the 21-day average, reward/risk 2.1:1",
+    "ema21": 51.93,
+    "sma50": 50.86,
+    "sma200": 50.87,
+    "buy_zone": [
+     52.03,
+     52.32
+    ],
+    "stop": 51.64,
+    "target": 55.05,
+    "rr": 2.15,
+    "sell_alerts": 1
+   },
+   "entry": "Not the rotation target"
+  },
+  {
+   "symbol": "XLRE",
+   "label": "Real estate",
+   "group": "sector",
+   "class": "Next group candidate",
+   "quadrant": "Leading",
+   "ex12": -0.49,
+   "ex6": 0.2,
+   "ex3": 4.28,
+   "ex1": 10.52,
+   "rs": 7.19,
+   "rm": 15.22,
+   "from_high": -2.26,
+   "range30_atr": 6.07,
+   "price": 44.6,
+   "check": {
+    "verdict": "Buy on dip",
+    "why": "uptrend; a better entry is nearer EMA21 43.27 / support 44.00",
+    "ema21": 43.27,
+    "sma50": 42.47,
+    "sma200": 42.9,
+    "buy_zone": [
+     44.0,
+     43.57
+    ],
+    "stop": 43.7,
+    "target": 46.41,
+    "rr": 2.03,
+    "sell_alerts": 0
+   },
+   "entry": "Wait for the buy zone"
+  },
+  {
+   "symbol": "XLU",
+   "label": "Utilities",
+   "group": "sector",
+   "class": "Next group candidate",
+   "quadrant": "Leading",
+   "ex12": -12.03,
+   "ex6": -3.42,
+   "ex3": 3.72,
+   "ex1": 9.22,
+   "rs": 6.1,
+   "rm": 12.35,
+   "from_high": -6.44,
+   "range30_atr": 6.73,
+   "price": 43.74,
+   "check": {
+    "verdict": "Wait",
+    "why": "mixed trend: wait for the averages to line up",
+    "ema21": 42.79,
+    "sma50": 41.74,
+    "sma200": 43.85,
+    "buy_zone": [
+     42.6,
+     43.11
+    ],
+    "stop": 42.28,
+    "target": 45.65,
+    "rr": 1.32,
+    "sell_alerts": 2
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "SMH",
+   "label": "Semiconductors",
+   "group": "theme",
+   "class": "Previous leader, fading",
+   "quadrant": "Lagging",
+   "ex12": 25.2,
+   "ex6": -16.49,
+   "ex3": -15.16,
+   "ex1": -15.08,
+   "rs": -13.45,
+   "rm": -16.97,
+   "from_high": -28.63,
+   "range30_atr": 7.22,
+   "price": 477.41,
+   "check": {
+    "verdict": "Warning",
+    "why": "trend is breaking: below the 50-day average",
+    "ema21": 524.12,
+    "sma50": 562.74,
+    "sma200": 522.58,
+    "buy_zone": [
+     504.64,
+     530.61
+    ],
+    "stop": 451.38,
+    "target": 532.6,
+    "rr": 2.13,
+    "sell_alerts": 5
+   },
+   "entry": "Not the rotation target"
+  },
+  {
+   "symbol": "IGV",
+   "label": "Software",
+   "group": "theme",
+   "class": "No signal",
+   "quadrant": "Lagging",
+   "ex12": -22.01,
+   "ex6": 9.04,
+   "ex3": -0.85,
+   "ex1": -6.98,
+   "rs": -4.26,
+   "rm": -14.54,
+   "from_high": -12.22,
+   "range30_atr": 4.48,
+   "price": 98.9,
+   "check": {
+    "verdict": "Buy on dip",
+    "why": "uptrend; a better entry is nearer EMA21 104.70 / support 97.00",
+    "ema21": 104.7,
+    "sma50": 106.32,
+    "sma200": 94.07,
+    "buy_zone": [
+     101.17,
+     105.88
+    ],
+    "stop": 95.82,
+    "target": 105.96,
+    "rr": 2.29,
+    "sell_alerts": 5
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "HACK",
+   "label": "Cybersecurity",
+   "group": "theme",
+   "class": "Previous leader, fading",
+   "quadrant": "Lagging",
+   "ex12": 21.12,
+   "ex6": 33.87,
+   "ex3": -0.76,
+   "ex1": -6.15,
+   "rs": -4.02,
+   "rm": -19.87,
+   "from_high": -14.51,
+   "range30_atr": 4.7,
+   "price": 114.15,
+   "check": {
+    "verdict": "Hold",
+    "why": "uptrend, but little room to the next resistance",
+    "ema21": 120.36,
+    "sma50": 120.36,
+    "sma200": 98.5,
+    "buy_zone": [
+     116.59,
+     121.62
+    ],
+    "stop": 105.29,
+    "target": 121.68,
+    "rr": 0.85,
+    "sell_alerts": 3
+   },
+   "entry": "Not the rotation target"
+  },
+  {
+   "symbol": "SKYY",
+   "label": "Cloud computing",
+   "group": "theme",
+   "class": "No signal",
+   "quadrant": "Lagging",
+   "ex12": -4.54,
+   "ex6": 16.1,
+   "ex3": -5.9,
+   "ex1": -10.21,
+   "rs": -7.7,
+   "rm": -17.01,
+   "from_high": -15.51,
+   "range30_atr": 5.46,
+   "price": 147.76,
+   "check": {
+    "verdict": "Buy on dip",
+    "why": "uptrend; a better entry is nearer EMA21 158.89 / support 144.20",
+    "ema21": 158.89,
+    "sma50": 163.28,
+    "sma200": 137.49,
+    "buy_zone": [
+     153.89,
+     160.56
+    ],
+    "stop": 142.53,
+    "target": 157.11,
+    "rr": 1.6,
+    "sell_alerts": 4
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "KRE",
+   "label": "Regional banks",
+   "group": "theme",
+   "class": "Previous leader, still leading",
+   "quadrant": "Leading",
+   "ex12": 10.31,
+   "ex6": 6.82,
+   "ex3": -1.79,
+   "ex1": 9.23,
+   "rs": 4.36,
+   "rm": 16.63,
+   "from_high": -5.66,
+   "range30_atr": 3.35,
+   "price": 73.1,
+   "check": {
+    "verdict": "Buy",
+    "why": "uptrend, near the 21-day average, reward/risk 4.5:1",
+    "ema21": 72.18,
+    "sma50": 71.68,
+    "sma200": 70.55,
+    "buy_zone": [
+     72.82,
+     72.91
+    ],
+    "stop": 72.1,
+    "target": 77.4,
+    "rr": 4.51,
+    "sell_alerts": 0
+   },
+   "entry": "Not the rotation target"
+  },
+  {
+   "symbol": "ITB",
+   "label": "Homebuilders",
+   "group": "theme",
+   "class": "Next group candidate",
+   "quadrant": "Leading",
+   "ex12": -13.11,
+   "ex6": 6.46,
+   "ex3": 2.46,
+   "ex1": 19.18,
+   "rs": 11.21,
+   "rm": 26.64,
+   "from_high": -13.9,
+   "range30_atr": 4.67,
+   "price": 96.62,
+   "check": {
+    "verdict": "Wait",
+    "why": "mixed trend: wait for the averages to line up",
+    "ema21": 93.03,
+    "sma50": 89.64,
+    "sma200": 94.98,
+    "buy_zone": [
+     92.88,
+     94.23
+    ],
+    "stop": 91.68,
+    "target": 103.77,
+    "rr": 1.47,
+    "sell_alerts": 3
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "IYT",
+   "label": "Transportation",
+   "group": "theme",
+   "class": "Next group candidate",
+   "quadrant": "Leading",
+   "ex12": 4.54,
+   "ex6": 3.79,
+   "ex3": -0.65,
+   "ex1": 8.4,
+   "rs": 4.41,
+   "rm": 12.85,
+   "from_high": -7.12,
+   "range30_atr": 3.47,
+   "price": 83.41,
+   "check": {
+    "verdict": "Buy",
+    "why": "uptrend, near the 21-day average, reward/risk 2.5:1",
+    "ema21": 81.82,
+    "sma50": 80.98,
+    "sma200": 81.63,
+    "buy_zone": [
+     82.39,
+     82.53
+    ],
+    "stop": 81.68,
+    "target": 87.69,
+    "rr": 2.47,
+    "sell_alerts": 2
+   },
+   "entry": "Good point"
+  },
+  {
+   "symbol": "XBI",
+   "label": "Biotech",
+   "group": "theme",
+   "class": "Previous leader, still leading",
+   "quadrant": "Leading",
+   "ex12": 30.52,
+   "ex6": 13.46,
+   "ex3": 0.46,
+   "ex1": 6.53,
+   "rs": 3.64,
+   "rm": 11.66,
+   "from_high": -8.57,
+   "range30_atr": 2.74,
+   "price": 155.02,
+   "check": {
+    "verdict": "Hold",
+    "why": "uptrend, but little room to the next resistance",
+    "ema21": 153.72,
+    "sma50": 154.96,
+    "sma200": 142.52,
+    "buy_zone": [
+     147.98,
+     155.63
+    ],
+    "stop": 147.34,
+    "target": 160.3,
+    "rr": 0.69,
+    "sell_alerts": 1
+   },
+   "entry": "Not the rotation target"
+  },
+  {
+   "symbol": "XOP",
+   "label": "Oil & gas producers",
+   "group": "theme",
+   "class": "Previous leader, fading",
+   "quadrant": "Lagging",
+   "ex12": 25.62,
+   "ex6": 2.52,
+   "ex3": 1.65,
+   "ex1": -5.74,
+   "rs": -3.86,
+   "rm": -3.34,
+   "from_high": -14.53,
+   "range30_atr": 4.88,
+   "price": 175.1,
+   "check": {
+    "verdict": "Hold",
+    "why": "uptrend, but little room to the next resistance",
+    "ema21": 188.22,
+    "sma50": 190.65,
+    "sma200": 171.29,
+    "buy_zone": [
+     181.71,
+     190.39
+    ],
+    "stop": 160.26,
+    "target": 188.05,
+    "rr": 0.88,
+    "sell_alerts": 3
+   },
+   "entry": "Not the rotation target"
+  },
+  {
+   "symbol": "ITA",
+   "label": "Aerospace & defense",
+   "group": "theme",
+   "class": "Next group candidate",
+   "quadrant": "Leading",
+   "ex12": -8.8,
+   "ex6": -5.57,
+   "ex3": -10.88,
+   "ex1": 8.95,
+   "rs": 1.42,
+   "rm": 16.83,
+   "from_high": -14.62,
+   "range30_atr": 2.23,
+   "price": 71.98,
+   "check": {
+    "verdict": "Sell",
+    "why": "downtrend: price below falling averages",
+    "ema21": 70.11,
+    "sma50": 70.55,
+    "sma200": 75.9,
+    "buy_zone": [
+     70.19,
+     70.77
+    ],
+    "stop": 69.53,
+    "target": 75.93,
+    "rr": 1.59,
+    "sell_alerts": 3
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "URA",
+   "label": "Uranium & nuclear",
+   "group": "theme",
+   "class": "No signal",
+   "quadrant": "Improving",
+   "ex12": -40.24,
+   "ex6": -40.98,
+   "ex3": -23.96,
+   "ex1": -8.58,
+   "rs": -11.34,
+   "rm": 6.82,
+   "from_high": -46.74,
+   "range30_atr": 6.81,
+   "price": 32.92,
+   "check": {
+    "verdict": "Wait",
+    "why": "downtrend, but oversold / capitulation: watch for a turn, no buy yet",
+    "ema21": 34.79,
+    "sma50": 38.87,
+    "sma200": 46.32,
+    "buy_zone": [
+     32.87,
+     35.43
+    ],
+    "stop": 29.94,
+    "target": 34.65,
+    "rr": 0.59,
+    "sell_alerts": 5
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "TAN",
+   "label": "Solar",
+   "group": "theme",
+   "class": "No signal",
+   "quadrant": "Improving",
+   "ex12": -26.2,
+   "ex6": -31.13,
+   "ex3": -13.82,
+   "ex1": 4.0,
+   "rs": -1.88,
+   "rm": 13.85,
+   "from_high": -41.27,
+   "range30_atr": 2.88,
+   "price": 43.42,
+   "check": {
+    "verdict": "Sell",
+    "why": "downtrend: price below falling averages",
+    "ema21": 43.28,
+    "sma50": 44.17,
+    "sma200": 53.77,
+    "buy_zone": [
+     41.15,
+     43.99
+    ],
+    "stop": 40.65,
+    "target": 47.55,
+    "rr": 1.5,
+    "sell_alerts": 3
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "ARKK",
+   "label": "Innovation (ARKK)",
+   "group": "theme",
+   "class": "No signal",
+   "quadrant": "Lagging",
+   "ex12": -17.87,
+   "ex6": -3.99,
+   "ex3": -3.02,
+   "ex1": -9.17,
+   "rs": -6.27,
+   "rm": -12.42,
+   "from_high": -17.76,
+   "range30_atr": 5.69,
+   "price": 76.31,
+   "check": {
+    "verdict": "Warning",
+    "why": "trend is breaking: below the 50-day average",
+    "ema21": 81.28,
+    "sma50": 85.16,
+    "sma200": 78.18,
+    "buy_zone": [
+     77.53,
+     82.53
+    ],
+    "stop": 69.82,
+    "target": 83.78,
+    "rr": 1.16,
+    "sell_alerts": 4
+   },
+   "entry": "No setup yet"
+  },
+  {
+   "symbol": "IWM",
+   "label": "Small caps",
+   "group": "theme",
+   "class": "No signal",
+   "quadrant": "Leading",
+   "ex12": 4.52,
+   "ex6": -2.12,
+   "ex3": -4.2,
+   "ex1": 4.74,
+   "rs": 1.32,
+   "rm": 10.35,
+   "from_high": -8.13,
+   "range30_atr": 2.61,
+   "price": 279.57,
+   "check": {
+    "verdict": "Hold",
+    "why": "uptrend, but little room to the next resistance",
+    "ema21": 278.7,
+    "sma50": 281.42,
+    "sma200": 278.21,
+    "buy_zone": [
+     272.02,
+     280.93
+    ],
+    "stop": 267.02,
+    "target": 285.8,
+    "rr": 0.5,
+    "sell_alerts": 2
+   },
+   "entry": "No setup yet"
+  }
+ ],
+ "test": {
+  "Next group candidate": {
+   "n": 741,
+   "avg_vs_spy": -0.52,
+   "beat_spy_pct": 48,
+   "median_vs_spy": -0.28
+  },
+  "No signal": {
+   "n": 1894,
+   "avg_vs_spy": -0.33,
+   "beat_spy_pct": 47,
+   "median_vs_spy": -0.59
+  },
+  "Previous leader, consolidating": {
+   "n": 334,
+   "avg_vs_spy": 0.84,
+   "beat_spy_pct": 51,
+   "median_vs_spy": 0.13
+  },
+  "Previous leader, fading": {
+   "n": 578,
+   "avg_vs_spy": 0.52,
+   "beat_spy_pct": 51,
+   "median_vs_spy": 0.12
+  },
+  "Previous leader, still leading": {
+   "n": 609,
+   "avg_vs_spy": -0.35,
+   "beat_spy_pct": 49,
+   "median_vs_spy": -0.18
+  }
+ },
+ "test_year_end": {
+  "Next group candidate": {
+   "n": 162,
+   "avg_vs_spy": -0.28,
+   "beat_spy_pct": 51,
+   "median_vs_spy": 0.03
+  },
+  "No signal": {
+   "n": 304,
+   "avg_vs_spy": 0.31,
+   "beat_spy_pct": 50,
+   "median_vs_spy": 0.08
+  },
+  "Previous leader, consolidating": {
+   "n": 46,
+   "avg_vs_spy": 2.15,
+   "beat_spy_pct": 57,
+   "median_vs_spy": 1.33
+  },
+  "Previous leader, fading": {
+   "n": 119,
+   "avg_vs_spy": 0.97,
+   "beat_spy_pct": 52,
+   "median_vs_spy": 0.25
+  },
+  "Previous leader, still leading": {
+   "n": 105,
+   "avg_vs_spy": 0.7,
+   "beat_spy_pct": 53,
+   "median_vs_spy": 0.28
+  }
+ }
+}
