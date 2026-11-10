@@ -1,13 +1,86 @@
 {
- "updated": "2026-11-10 13:21",
+ "updated": "2026-11-10 13:29",
  "asof": "2026-11-10",
- "spy_ytd_pct": 10.0,
+ "spy_ytd_pct": 10.1,
  "regime": {
   "regime": "RISK-ON",
-  "spy": 745.88,
+  "spy": 746.28,
   "sma200": 728.28,
-  "distance_pct": 2.4,
+  "distance_pct": 2.5,
   "sma200_rising": true
+ },
+ "macro": {
+  "regime": "Overheat (growth up, inflation up)",
+  "borderline": true,
+  "growth_score": 6,
+  "growth_signals": [
+   "+ real GDP 3.4% annualized",
+   "+ Chicago Fed activity 0.03",
+   "+ payrolls +165.0k",
+   "+ industrial production 3.9% 3-month pace vs 2.245% y/y",
+   "+ retail sales 6.78% 3-month pace vs 6.288% y/y",
+   "+ jobless claims 189.0k, falling"
+  ],
+  "inflation_score": 0,
+  "inflation_signals": [
+   "+ core CPI 3.41% 3-month pace vs 2.566% y/y",
+   "\u2212 core PCE 2.9% 3-month pace vs 3.121% y/y",
+   "+ WTI $99.64, rising",
+   "\u2212 5-year inflation expectations 2.25%, stable"
+  ],
+  "rates": "hikes",
+  "rates_text": "futures price fed funds 4.61% by 2027-07 vs 3.88% now (+73 bp)",
+  "as_of": "2026-11-10 13:10",
+  "pillars": {
+   "Inflation": "elevated, re-accelerating (core CPI 2.6% y/y, 3.4% 3-month annualized)",
+   "Labor": "solid (unemployment 4.1%, payrolls 3-month avg +137k)",
+   "Growth": "solid (real GDP 3.4% annualized, retail sales +6.3% y/y)",
+   "Fed & rates": "mildly restrictive (real policy rate ~+0.9pp = fed funds 4.00% minus core PCE 3.1%)",
+   "Financial conditions": "loose (NFCI -0.46, high-yield spread 3.42pp)",
+   "Recession signals": "none flashing (Sahm 0.00, 10Y-2Y +0.32pp, NY Fed 12-month odds 17%, CFNAI +0.03)",
+   "Valuation": "extreme (stock market value 255% of GDP, 97th percentile of 10 years; dot-com peak 163% in 2000-01, same measure)",
+   "Oil": "WTI $100 (+70% y/y), price trend rising, oil volatility 58 (91th percentile)"
+  }
+ },
+ "outlook": {
+  "regime": "Energy-led stagflation-lite with a diplomacy wildcard: oil still ~$100, core inflation sticky above 3% (core PCE), hiring near zero and a Fed priced to hike in December; AI capex being de-rated",
+  "themes": [
+   {
+    "name": "Energy supply squeeze",
+    "symbols": [
+     "SLB",
+     "WMB",
+     "EOG"
+    ]
+   },
+   {
+    "name": "Quality health care",
+    "symbols": [
+     "LLY",
+     "JNJ"
+    ]
+   },
+   {
+    "name": "Higher-for-longer financials",
+    "symbols": [
+     "PGR"
+    ]
+   },
+   {
+    "name": "Defense and geopolitics",
+    "symbols": [
+     "LMT"
+    ]
+   },
+   {
+    "name": "Defensive consumer compounder",
+    "symbols": [
+     "COST",
+     "WMT"
+    ]
+   }
+  ],
+  "id": "2026-11-02"
  },
  "rows": [
   {
@@ -16,15 +89,15 @@
    "group": "sector",
    "class": "No signal",
    "quadrant": "Lagging",
-   "ex12": 4.19,
-   "ex6": -5.96,
-   "ex3": -8.22,
-   "ex1": -10.77,
-   "rs": -8.7,
-   "rm": -13.46,
-   "from_high": -17.29,
+   "ex12": 4.23,
+   "ex6": -5.94,
+   "ex3": -8.2,
+   "ex1": -10.75,
+   "rs": -8.67,
+   "rm": -13.44,
+   "from_high": -17.22,
    "range30_atr": 6.81,
-   "price": 167.08,
+   "price": 167.22,
    "check": {
     "verdict": "Warning",
     "why": "trend is breaking: below the 50-day average",
@@ -40,7 +113,15 @@
     "rr": 0.68,
     "sell_alerts": 4
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "neutral",
+   "fit_why": "",
+   "turn_missing": [
+    "rotation map Improving or Leading with rising momentum",
+    "beating SPY over the last month",
+    "above its 50-day average"
+   ],
+   "follow": "Neutral for the regime"
   },
   {
    "symbol": "XLC",
@@ -48,15 +129,15 @@
    "group": "sector",
    "class": "No signal",
    "quadrant": "Leading",
-   "ex12": -15.77,
+   "ex12": -15.76,
    "ex6": -8.68,
-   "ex3": 0.53,
-   "ex1": 0.12,
-   "rs": 1.54,
-   "rm": 2.88,
-   "from_high": -10.11,
+   "ex3": 0.54,
+   "ex1": 0.13,
+   "rs": 1.55,
+   "rm": 2.89,
+   "from_high": -10.05,
    "range30_atr": 5.58,
-   "price": 106.97,
+   "price": 107.04,
    "check": {
     "verdict": "Sell",
     "why": "downtrend: price below falling averages",
@@ -72,7 +153,13 @@
     "rr": 1.26,
     "sell_alerts": 5
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "neutral",
+   "fit_why": "",
+   "turn_missing": [
+    "above its 50-day average"
+   ],
+   "follow": "Neutral for the regime"
   },
   {
    "symbol": "XLY",
@@ -80,15 +167,15 @@
    "group": "sector",
    "class": "Next group candidate",
    "quadrant": "Leading",
-   "ex12": -9.26,
-   "ex6": 0.82,
-   "ex3": 5.72,
-   "ex1": 11.56,
-   "rs": 8.28,
-   "rm": 14.01,
-   "from_high": -2.55,
+   "ex12": -9.2,
+   "ex6": 0.89,
+   "ex3": 5.8,
+   "ex1": 11.63,
+   "rs": 8.35,
+   "rm": 14.09,
+   "from_high": -2.43,
    "range30_atr": 5.17,
-   "price": 120.6,
+   "price": 120.74,
    "check": {
     "verdict": "Wait",
     "why": "mixed trend: wait for the averages to line up",
@@ -104,7 +191,11 @@
     "rr": 2.04,
     "sell_alerts": 1
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "neutral",
+   "fit_why": "",
+   "turn_missing": [],
+   "follow": "Neutral for the regime"
   },
   {
    "symbol": "XLP",
@@ -118,9 +209,9 @@
    "ex1": 12.17,
    "rs": 10.14,
    "rm": 12.33,
-   "from_high": -0.82,
+   "from_high": -0.77,
    "range30_atr": 6.4,
-   "price": 91.19,
+   "price": 91.23,
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
@@ -136,7 +227,11 @@
     "rr": 0.99,
     "sell_alerts": 1
    },
-   "entry": "Not the rotation target"
+   "entry": "Not the rotation target",
+   "fit": "neutral",
+   "fit_why": "",
+   "turn_missing": [],
+   "follow": "Neutral for the regime"
   },
   {
    "symbol": "XLE",
@@ -144,15 +239,15 @@
    "group": "sector",
    "class": "Previous leader, fading",
    "quadrant": "Lagging",
-   "ex12": 30.23,
-   "ex6": 7.68,
-   "ex3": 5.51,
-   "ex1": -1.83,
-   "rs": -0.42,
-   "rm": -1.71,
-   "from_high": -11.36,
+   "ex12": 30.11,
+   "ex6": 7.59,
+   "ex3": 5.42,
+   "ex1": -1.92,
+   "rs": -0.51,
+   "rm": -1.8,
+   "from_high": -11.39,
    "range30_atr": 4.55,
-   "price": 62.07,
+   "price": 62.04,
    "check": {
     "verdict": "Buy on dip",
     "why": "uptrend; a better entry is nearer EMA21 65.24 / support 60.66",
@@ -168,7 +263,15 @@
     "rr": 1.81,
     "sell_alerts": 3
    },
-   "entry": "Not the rotation target"
+   "entry": "Not the rotation target",
+   "fit": "favored",
+   "fit_why": "overheat favors it",
+   "turn_missing": [
+    "rotation map Improving or Leading with rising momentum",
+    "beating SPY over the last month",
+    "above its 50-day average"
+   ],
+   "follow": "Favored, not turned yet"
   },
   {
    "symbol": "XLF",
@@ -177,14 +280,14 @@
    "class": "Next group candidate",
    "quadrant": "Leading",
    "ex12": -0.29,
-   "ex6": 12.14,
+   "ex6": 12.15,
    "ex3": 4.1,
    "ex1": 9.93,
-   "rs": 6.78,
+   "rs": 6.79,
    "rm": 15.49,
-   "from_high": -1.63,
+   "from_high": -1.58,
    "range30_atr": 5.75,
-   "price": 58.24,
+   "price": 58.26,
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
@@ -200,7 +303,11 @@
     "rr": 1.5,
     "sell_alerts": 1
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "favored",
+   "fit_why": "overheat favors it; rate hikes help it",
+   "turn_missing": [],
+   "follow": "Favored and turning now"
   },
   {
    "symbol": "XLV",
@@ -208,15 +315,15 @@
    "group": "sector",
    "class": "Previous leader, still leading",
    "quadrant": "Leading",
-   "ex12": 18.5,
-   "ex6": 28.48,
-   "ex3": 15.3,
-   "ex1": 13.51,
-   "rs": 12.01,
-   "rm": 11.16,
-   "from_high": -0.82,
+   "ex12": 18.53,
+   "ex6": 28.51,
+   "ex3": 15.33,
+   "ex1": 13.53,
+   "rs": 12.04,
+   "rm": 11.18,
+   "from_high": -0.75,
    "range30_atr": 6.27,
-   "price": 188.1,
+   "price": 188.23,
    "check": {
     "verdict": "Buy on dip",
     "why": "uptrend; a better entry is nearer EMA21 181.58 / support 164.51",
@@ -232,7 +339,11 @@
     "rr": 1.5,
     "sell_alerts": 3
    },
-   "entry": "Not the rotation target"
+   "entry": "Not the rotation target",
+   "fit": "neutral",
+   "fit_why": "",
+   "turn_missing": [],
+   "follow": "Neutral for the regime"
   },
   {
    "symbol": "XLI",
@@ -240,15 +351,15 @@
    "group": "sector",
    "class": "No signal",
    "quadrant": "Improving",
-   "ex12": -1.65,
-   "ex6": -4.79,
-   "ex3": -6.26,
-   "ex1": 3.37,
-   "rs": -0.38,
-   "rm": 7.03,
-   "from_high": -9.77,
+   "ex12": -1.69,
+   "ex6": -4.83,
+   "ex3": -6.29,
+   "ex1": 3.33,
+   "rs": -0.41,
+   "rm": 7.0,
+   "from_high": -9.75,
    "range30_atr": 2.61,
-   "price": 167.84,
+   "price": 167.87,
    "check": {
     "verdict": "Sell",
     "why": "downtrend: price below falling averages",
@@ -264,7 +375,13 @@
     "rr": 2.3,
     "sell_alerts": 4
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "favored",
+   "fit_why": "overheat favors it",
+   "turn_missing": [
+    "above its 50-day average"
+   ],
+   "follow": "Favored, not turned yet"
   },
   {
    "symbol": "XLB",
@@ -275,12 +392,12 @@
    "ex12": 12.74,
    "ex6": 0.42,
    "ex3": 3.95,
-   "ex1": 10.8,
+   "ex1": 10.79,
    "rs": 6.86,
    "rm": 15.37,
-   "from_high": -2.17,
+   "from_high": -2.12,
    "range30_atr": 5.19,
-   "price": 52.73,
+   "price": 52.76,
    "check": {
     "verdict": "Buy",
     "why": "uptrend, near the 21-day average, reward/risk 2.1:1",
@@ -296,7 +413,11 @@
     "rr": 2.15,
     "sell_alerts": 1
    },
-   "entry": "Not the rotation target"
+   "entry": "Not the rotation target",
+   "fit": "favored",
+   "fit_why": "overheat favors it",
+   "turn_missing": [],
+   "follow": "Favored and already leading"
   },
   {
    "symbol": "XLRE",
@@ -304,15 +425,15 @@
    "group": "sector",
    "class": "Next group candidate",
    "quadrant": "Leading",
-   "ex12": -0.49,
-   "ex6": 0.2,
-   "ex3": 4.28,
-   "ex1": 10.52,
-   "rs": 7.19,
-   "rm": 15.22,
+   "ex12": -0.56,
+   "ex6": 0.14,
+   "ex3": 4.23,
+   "ex1": 10.47,
+   "rs": 7.14,
+   "rm": 15.17,
    "from_high": -2.26,
    "range30_atr": 6.07,
-   "price": 44.6,
+   "price": 44.59,
    "check": {
     "verdict": "Buy on dip",
     "why": "uptrend; a better entry is nearer EMA21 43.27 / support 44.00",
@@ -328,7 +449,11 @@
     "rr": 2.03,
     "sell_alerts": 0
    },
-   "entry": "Wait for the buy zone"
+   "entry": "Wait for the buy zone",
+   "fit": "unfavored",
+   "fit_why": "overheat works against it; rate hikes hurt it",
+   "turn_missing": [],
+   "follow": "Against the regime"
   },
   {
    "symbol": "XLU",
@@ -336,15 +461,15 @@
    "group": "sector",
    "class": "Next group candidate",
    "quadrant": "Leading",
-   "ex12": -12.03,
-   "ex6": -3.42,
-   "ex3": 3.72,
-   "ex1": 9.22,
-   "rs": 6.1,
-   "rm": 12.35,
-   "from_high": -6.44,
+   "ex12": -12.13,
+   "ex6": -3.51,
+   "ex3": 3.64,
+   "ex1": 9.13,
+   "rs": 6.01,
+   "rm": 12.26,
+   "from_high": -6.47,
    "range30_atr": 6.73,
-   "price": 43.74,
+   "price": 43.73,
    "check": {
     "verdict": "Wait",
     "why": "mixed trend: wait for the averages to line up",
@@ -360,7 +485,11 @@
     "rr": 1.32,
     "sell_alerts": 2
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "unfavored",
+   "fit_why": "overheat works against it",
+   "turn_missing": [],
+   "follow": "Against the regime"
   },
   {
    "symbol": "SMH",
@@ -368,15 +497,15 @@
    "group": "theme",
    "class": "Previous leader, fading",
    "quadrant": "Lagging",
-   "ex12": 25.2,
-   "ex6": -16.49,
-   "ex3": -15.16,
-   "ex1": -15.08,
-   "rs": -13.45,
-   "rm": -16.97,
-   "from_high": -28.63,
+   "ex12": 25.16,
+   "ex6": -16.54,
+   "ex3": -15.21,
+   "ex1": -15.12,
+   "rs": -13.49,
+   "rm": -17.01,
+   "from_high": -28.62,
    "range30_atr": 7.22,
-   "price": 477.41,
+   "price": 477.46,
    "check": {
     "verdict": "Warning",
     "why": "trend is breaking: below the 50-day average",
@@ -392,7 +521,15 @@
     "rr": 2.13,
     "sell_alerts": 5
    },
-   "entry": "Not the rotation target"
+   "entry": "Not the rotation target",
+   "fit": "neutral",
+   "fit_why": "",
+   "turn_missing": [
+    "rotation map Improving or Leading with rising momentum",
+    "beating SPY over the last month",
+    "above its 50-day average"
+   ],
+   "follow": "Neutral for the regime"
   },
   {
    "symbol": "IGV",
@@ -400,15 +537,15 @@
    "group": "theme",
    "class": "No signal",
    "quadrant": "Lagging",
-   "ex12": -22.01,
-   "ex6": 9.04,
-   "ex3": -0.85,
-   "ex1": -6.98,
-   "rs": -4.26,
-   "rm": -14.54,
-   "from_high": -12.22,
+   "ex12": -21.98,
+   "ex6": 9.1,
+   "ex3": -0.81,
+   "ex1": -6.95,
+   "rs": -4.21,
+   "rm": -14.5,
+   "from_high": -12.13,
    "range30_atr": 4.48,
-   "price": 98.9,
+   "price": 99.0,
    "check": {
     "verdict": "Buy on dip",
     "why": "uptrend; a better entry is nearer EMA21 104.70 / support 97.00",
@@ -424,7 +561,15 @@
     "rr": 2.29,
     "sell_alerts": 5
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "neutral",
+   "fit_why": "",
+   "turn_missing": [
+    "rotation map Improving or Leading with rising momentum",
+    "beating SPY over the last month",
+    "above its 50-day average"
+   ],
+   "follow": "Neutral for the regime"
   },
   {
    "symbol": "HACK",
@@ -432,15 +577,15 @@
    "group": "theme",
    "class": "Previous leader, fading",
    "quadrant": "Lagging",
-   "ex12": 21.12,
-   "ex6": 33.87,
-   "ex3": -0.76,
-   "ex1": -6.15,
-   "rs": -4.02,
-   "rm": -19.87,
-   "from_high": -14.51,
+   "ex12": 20.94,
+   "ex6": 33.7,
+   "ex3": -0.89,
+   "ex1": -6.28,
+   "rs": -4.16,
+   "rm": -20.0,
+   "from_high": -14.58,
    "range30_atr": 4.7,
-   "price": 114.15,
+   "price": 114.05,
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
@@ -456,7 +601,15 @@
     "rr": 0.85,
     "sell_alerts": 3
    },
-   "entry": "Not the rotation target"
+   "entry": "Not the rotation target",
+   "fit": "neutral",
+   "fit_why": "",
+   "turn_missing": [
+    "rotation map Improving or Leading with rising momentum",
+    "beating SPY over the last month",
+    "above its 50-day average"
+   ],
+   "follow": "Neutral for the regime"
   },
   {
    "symbol": "SKYY",
@@ -464,15 +617,15 @@
    "group": "theme",
    "class": "No signal",
    "quadrant": "Lagging",
-   "ex12": -4.54,
+   "ex12": -4.55,
    "ex6": 16.1,
-   "ex3": -5.9,
-   "ex1": -10.21,
-   "rs": -7.7,
-   "rm": -17.01,
-   "from_high": -15.51,
+   "ex3": -5.91,
+   "ex1": -10.22,
+   "rs": -7.71,
+   "rm": -17.02,
+   "from_high": -15.47,
    "range30_atr": 5.46,
-   "price": 147.76,
+   "price": 147.83,
    "check": {
     "verdict": "Buy on dip",
     "why": "uptrend; a better entry is nearer EMA21 158.89 / support 144.20",
@@ -488,7 +641,15 @@
     "rr": 1.6,
     "sell_alerts": 4
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "neutral",
+   "fit_why": "",
+   "turn_missing": [
+    "rotation map Improving or Leading with rising momentum",
+    "beating SPY over the last month",
+    "above its 50-day average"
+   ],
+   "follow": "Neutral for the regime"
   },
   {
    "symbol": "KRE",
@@ -496,15 +657,15 @@
    "group": "theme",
    "class": "Previous leader, still leading",
    "quadrant": "Leading",
-   "ex12": 10.31,
-   "ex6": 6.82,
-   "ex3": -1.79,
-   "ex1": 9.23,
-   "rs": 4.36,
-   "rm": 16.63,
-   "from_high": -5.66,
+   "ex12": 10.3,
+   "ex6": 6.81,
+   "ex3": -1.8,
+   "ex1": 9.22,
+   "rs": 4.35,
+   "rm": 16.62,
+   "from_high": -5.62,
    "range30_atr": 3.35,
-   "price": 73.1,
+   "price": 73.13,
    "check": {
     "verdict": "Buy",
     "why": "uptrend, near the 21-day average, reward/risk 4.5:1",
@@ -520,7 +681,11 @@
     "rr": 4.51,
     "sell_alerts": 0
    },
-   "entry": "Not the rotation target"
+   "entry": "Not the rotation target",
+   "fit": "favored",
+   "fit_why": "overheat favors it",
+   "turn_missing": [],
+   "follow": "Favored and already leading"
   },
   {
    "symbol": "ITB",
@@ -528,15 +693,15 @@
    "group": "theme",
    "class": "Next group candidate",
    "quadrant": "Leading",
-   "ex12": -13.11,
+   "ex12": -13.13,
    "ex6": 6.46,
-   "ex3": 2.46,
-   "ex1": 19.18,
+   "ex3": 2.45,
+   "ex1": 19.17,
    "rs": 11.21,
    "rm": 26.64,
-   "from_high": -13.9,
+   "from_high": -13.87,
    "range30_atr": 4.67,
-   "price": 96.62,
+   "price": 96.66,
    "check": {
     "verdict": "Wait",
     "why": "mixed trend: wait for the averages to line up",
@@ -552,7 +717,11 @@
     "rr": 1.47,
     "sell_alerts": 3
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "unfavored",
+   "fit_why": "overheat works against it; rate hikes hurt it",
+   "turn_missing": [],
+   "follow": "Against the regime"
   },
   {
    "symbol": "IYT",
@@ -560,15 +729,15 @@
    "group": "theme",
    "class": "Next group candidate",
    "quadrant": "Leading",
-   "ex12": 4.54,
-   "ex6": 3.79,
-   "ex3": -0.65,
-   "ex1": 8.4,
-   "rs": 4.41,
-   "rm": 12.85,
-   "from_high": -7.12,
+   "ex12": 4.59,
+   "ex6": 3.83,
+   "ex3": -0.61,
+   "ex1": 8.45,
+   "rs": 4.45,
+   "rm": 12.9,
+   "from_high": -7.03,
    "range30_atr": 3.47,
-   "price": 83.41,
+   "price": 83.49,
    "check": {
     "verdict": "Buy",
     "why": "uptrend, near the 21-day average, reward/risk 2.5:1",
@@ -584,7 +753,11 @@
     "rr": 2.47,
     "sell_alerts": 2
    },
-   "entry": "Good point"
+   "entry": "Good point",
+   "fit": "neutral",
+   "fit_why": "",
+   "turn_missing": [],
+   "follow": "Neutral for the regime"
   },
   {
    "symbol": "XBI",
@@ -592,15 +765,15 @@
    "group": "theme",
    "class": "Previous leader, still leading",
    "quadrant": "Leading",
-   "ex12": 30.52,
-   "ex6": 13.46,
-   "ex3": 0.46,
-   "ex1": 6.53,
-   "rs": 3.64,
-   "rm": 11.66,
-   "from_high": -8.57,
+   "ex12": 30.37,
+   "ex6": 13.34,
+   "ex3": 0.35,
+   "ex1": 6.41,
+   "rs": 3.52,
+   "rm": 11.55,
+   "from_high": -8.63,
    "range30_atr": 2.74,
-   "price": 155.02,
+   "price": 154.92,
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
@@ -616,7 +789,13 @@
     "rr": 0.69,
     "sell_alerts": 1
    },
-   "entry": "Not the rotation target"
+   "entry": "Not the rotation target",
+   "fit": "unfavored",
+   "fit_why": "rate hikes hurt it",
+   "turn_missing": [
+    "above its 50-day average"
+   ],
+   "follow": "Against the regime"
   },
   {
    "symbol": "XOP",
@@ -624,15 +803,15 @@
    "group": "theme",
    "class": "Previous leader, fading",
    "quadrant": "Lagging",
-   "ex12": 25.62,
-   "ex6": 2.52,
-   "ex3": 1.65,
-   "ex1": -5.74,
-   "rs": -3.86,
-   "rm": -3.34,
-   "from_high": -14.53,
+   "ex12": 25.41,
+   "ex6": 2.35,
+   "ex3": 1.49,
+   "ex1": -5.89,
+   "rs": -4.02,
+   "rm": -3.49,
+   "from_high": -14.62,
    "range30_atr": 4.88,
-   "price": 175.1,
+   "price": 174.91,
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
@@ -648,7 +827,15 @@
     "rr": 0.88,
     "sell_alerts": 3
    },
-   "entry": "Not the rotation target"
+   "entry": "Not the rotation target",
+   "fit": "favored",
+   "fit_why": "overheat favors it",
+   "turn_missing": [
+    "rotation map Improving or Leading with rising momentum",
+    "beating SPY over the last month",
+    "above its 50-day average"
+   ],
+   "follow": "Favored, not turned yet"
   },
   {
    "symbol": "ITA",
@@ -656,12 +843,12 @@
    "group": "theme",
    "class": "Next group candidate",
    "quadrant": "Leading",
-   "ex12": -8.8,
-   "ex6": -5.57,
-   "ex3": -10.88,
-   "ex1": 8.95,
-   "rs": 1.42,
-   "rm": 16.83,
+   "ex12": -8.86,
+   "ex6": -5.62,
+   "ex3": -10.93,
+   "ex1": 8.9,
+   "rs": 1.36,
+   "rm": 16.78,
    "from_high": -14.62,
    "range30_atr": 2.23,
    "price": 71.98,
@@ -680,7 +867,11 @@
     "rr": 1.59,
     "sell_alerts": 3
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "favored",
+   "fit_why": "overheat favors it",
+   "turn_missing": [],
+   "follow": "Favored and turning now"
   },
   {
    "symbol": "URA",
@@ -688,15 +879,15 @@
    "group": "theme",
    "class": "No signal",
    "quadrant": "Improving",
-   "ex12": -40.24,
-   "ex6": -40.98,
-   "ex3": -23.96,
-   "ex1": -8.58,
-   "rs": -11.34,
-   "rm": 6.82,
-   "from_high": -46.74,
+   "ex12": -40.32,
+   "ex6": -41.06,
+   "ex3": -24.04,
+   "ex1": -8.66,
+   "rs": -11.41,
+   "rm": 6.74,
+   "from_high": -46.76,
    "range30_atr": 6.81,
-   "price": 32.92,
+   "price": 32.91,
    "check": {
     "verdict": "Wait",
     "why": "downtrend, but oversold / capitulation: watch for a turn, no buy yet",
@@ -712,7 +903,14 @@
     "rr": 0.59,
     "sell_alerts": 5
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "favored",
+   "fit_why": "overheat favors it",
+   "turn_missing": [
+    "beating SPY over the last month",
+    "above its 50-day average"
+   ],
+   "follow": "Favored, not turned yet"
   },
   {
    "symbol": "TAN",
@@ -720,15 +918,15 @@
    "group": "theme",
    "class": "No signal",
    "quadrant": "Improving",
-   "ex12": -26.2,
-   "ex6": -31.13,
-   "ex3": -13.82,
+   "ex12": -26.22,
+   "ex6": -31.15,
+   "ex3": -13.84,
    "ex1": 4.0,
-   "rs": -1.88,
-   "rm": 13.85,
-   "from_high": -41.27,
+   "rs": -1.89,
+   "rm": 13.84,
+   "from_high": -41.24,
    "range30_atr": 2.88,
-   "price": 43.42,
+   "price": 43.44,
    "check": {
     "verdict": "Sell",
     "why": "downtrend: price below falling averages",
@@ -744,7 +942,13 @@
     "rr": 1.5,
     "sell_alerts": 3
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "unfavored",
+   "fit_why": "overheat works against it; rate hikes hurt it",
+   "turn_missing": [
+    "above its 50-day average"
+   ],
+   "follow": "Against the regime"
   },
   {
    "symbol": "ARKK",
@@ -752,15 +956,15 @@
    "group": "theme",
    "class": "No signal",
    "quadrant": "Lagging",
-   "ex12": -17.87,
-   "ex6": -3.99,
-   "ex3": -3.02,
-   "ex1": -9.17,
-   "rs": -6.27,
-   "rm": -12.42,
-   "from_high": -17.76,
+   "ex12": -17.95,
+   "ex6": -4.06,
+   "ex3": -3.09,
+   "ex1": -9.24,
+   "rs": -6.34,
+   "rm": -12.49,
+   "from_high": -17.77,
    "range30_atr": 5.69,
-   "price": 76.31,
+   "price": 76.29,
    "check": {
     "verdict": "Warning",
     "why": "trend is breaking: below the 50-day average",
@@ -776,7 +980,15 @@
     "rr": 1.16,
     "sell_alerts": 4
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "unfavored",
+   "fit_why": "overheat works against it; rate hikes hurt it",
+   "turn_missing": [
+    "rotation map Improving or Leading with rising momentum",
+    "beating SPY over the last month",
+    "above its 50-day average"
+   ],
+   "follow": "Against the regime"
   },
   {
    "symbol": "IWM",
@@ -784,15 +996,15 @@
    "group": "theme",
    "class": "No signal",
    "quadrant": "Leading",
-   "ex12": 4.52,
-   "ex6": -2.12,
-   "ex3": -4.2,
-   "ex1": 4.74,
-   "rs": 1.32,
-   "rm": 10.35,
+   "ex12": 4.45,
+   "ex6": -2.18,
+   "ex3": -4.26,
+   "ex1": 4.68,
+   "rs": 1.26,
+   "rm": 10.3,
    "from_high": -8.13,
    "range30_atr": 2.61,
-   "price": 279.57,
+   "price": 279.55,
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
@@ -808,7 +1020,13 @@
     "rr": 0.5,
     "sell_alerts": 2
    },
-   "entry": "No setup yet"
+   "entry": "No setup yet",
+   "fit": "unfavored",
+   "fit_why": "rate hikes hurt it",
+   "turn_missing": [
+    "above its 50-day average"
+   ],
+   "follow": "Against the regime"
   }
  ],
  "test": {

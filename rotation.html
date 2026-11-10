@@ -6,11 +6,10 @@
 body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 system-ui,Segoe UI,sans-serif}
 main{max-width:1200px;margin:auto;padding:16px}
 a{color:var(--acc)}
-h1{font-size:21px;margin:4px 0} h2{font-size:17px;margin:0 0 8px}
+h1{font-size:21px;margin:4px 0} h2{font-size:17px;margin:0 0 8px} h3{font-size:15px;margin:0 0 6px}
 .sub{color:var(--mute);font-size:12.5px}
 section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:16px 0}
-blockquote{margin:10px 0 0;padding:10px 14px;border-left:3px solid var(--acc);font-size:16px;line-height:1.5}
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
 .cols>div{min-width:0}
 table{border-collapse:collapse;font-size:13px;width:100%;font-variant-numeric:tabular-nums}
 th,td{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
@@ -18,67 +17,95 @@ th{color:var(--mute);font-weight:500;white-space:nowrap}
 .wrap{overflow-x:auto}
 .pos{color:var(--bull)} .neg{color:var(--bear)}
 .pill{display:inline-block;border-radius:10px;padding:1px 8px;font-size:12px;font-weight:600;white-space:nowrap}
-.c-lead{background:rgba(245,176,65,.16);color:var(--neu)} .c-next{background:rgba(38,166,154,.16);color:#5fd3c6}
-.c-still{background:rgba(92,141,255,.16);color:var(--acc)} .c-fade{background:rgba(239,83,80,.14);color:#ff8a87} .c-none{background:#ffffff10;color:var(--mute)}
-.e-good{color:var(--bull);font-weight:600} .e-wait{color:var(--neu)} .e-no{color:var(--mute)}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-.chip{border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px}
-.chip b{display:block}
+.f-fav{background:rgba(38,166,154,.16);color:#5fd3c6} .f-unf{background:rgba(239,83,80,.14);color:#ff8a87} .f-neu{background:#ffffff10;color:var(--mute)}
+.chips{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.chip{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}
+.chip b.t{font-size:14px}
+.regime{font-size:19px;font-weight:600}
+ul{margin:4px 0 0 18px;padding:0} li{margin:2px 0}
 select{background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font:inherit;font-size:13px}
+.e-good{color:var(--bull);font-weight:600} .e-wait{color:var(--neu)} .e-no{color:var(--mute)}
 </style></head><body><main>
 <h1>Rotation watch</h1>
 <div class="sub" id="asof">Loading…</div>
-<section>
-  <blockquote>"The only thing I know for sure is that if $SPY moves higher into year end, retail will buy the previous cycle leaders as they consolidate, completely missing the rotation into the next group of winners."</blockquote>
-  <div class="sub" style="margin-top:8px">This page tracks both sides of that claim every day across the sector and theme ETFs of the rotation map: the <b>previous cycle leaders</b> (top third by 12-month return vs SPY), whether they are <b>consolidating</b> (near their high in a tight 30-day range while their 1-month relative strength stalls), and the <b>next group</b> (not previous leaders, now gaining relative strength: rotation map Improving or Leading, rising momentum, beating SPY over the last month, above the 50-day average). Each ETF also gets the buy &amp; sell checklist, so you can see whether it is at a good entry now.</div>
+
+<section><h2>Economic conditions</h2>
+  <div class="cols"><div><div class="regime" id="regime">—</div><div class="sub" id="rates"></div><div id="outlook" class="sub" style="margin-top:8px"></div></div>
+    <div><h3>Growth <span id="gscore" class="sub"></span></h3><ul id="gsig" class="sub"></ul></div>
+    <div><h3>Inflation <span id="iscore" class="sub"></span></h3><ul id="isig" class="sub"></ul></div></div>
+  <div class="sub" style="margin-top:8px">When the market turns, leadership usually moves to the groups the economy favors next. The regime comes from the macro data (growth and inflation direction) and the Fed path priced in futures; which groups each regime favors follows the classic economic-cycle map (a textbook guide, not a tested model).</div>
 </section>
 
-<section><h2>Right now</h2><div class="cols" id="now"></div></section>
+<section><h2>What to follow</h2><div class="cols" id="follow"></div></section>
 
-<section><h2>Does it work? <span class="sub">monthly since 2012: the ETF's return vs SPY over the next 3 months, by class</span></h2>
-  <div class="cols"><div><b>All months</b><div class="wrap" id="t-all"></div></div><div><b>The quote's case</b> <span class="sub">Oct–Dec, SPY above its 50-day</span><div class="wrap" id="t-ye"></div></div></div>
+<section><h2>Previous cycle leaders</h2><div class="sub" style="margin-bottom:6px">The strongest groups of the last 12 months: still leading, consolidating near their highs, or fading.</div><div class="cols" id="leaders"></div></section>
+
+<section><h2>Does the "next group" signal work? <span class="sub">monthly since 2012: return vs SPY over the following 3 months</span></h2>
+  <div class="cols"><div><b>All months</b><div class="wrap" id="t-all"></div></div><div><b>Rallies into year end</b> <span class="sub">Oct–Dec, SPY above its 50-day</span><div class="wrap" id="t-ye"></div></div></div>
   <div class="sub" id="verdict" style="margin-top:8px"></div>
 </section>
 
 <section><h2>All sectors and themes</h2>
-  <div style="margin-bottom:8px"><select id="flt" aria-label="Filter by class"><option value="">All classes</option></select></div>
+  <div style="margin-bottom:8px"><select id="flt" aria-label="Filter"><option value="">All</option></select></div>
   <div class="wrap" id="tbl"></div>
-  <div class="sub" style="margin-top:8px">Returns are price returns vs SPY (percentage points). "Range" = the 30-day high-low range in daily ATRs (≤ 4.5 counts as a tight consolidation). Buy zone, stop and reward/risk come from the same checklist as the Chart formations verdict cards. Updated daily after the close. Not investment advice.</div>
+  <div class="sub" style="margin-top:8px">Returns are price returns vs SPY (percentage points). "Range" = the 30-day high-low range in daily ATRs (≤ 4.5 = tight consolidation). Buy zone, stop and reward/risk come from the same checklist as the Chart formations verdict cards. Updated daily after the close. Not investment advice.</div>
 </section>
 </main>
 <script>
 const $ = s => document.querySelector(s);
 const RAW = 'https://raw.githubusercontent.com/berkeoz/new_trading/master/rotation/watch.json';
 const get = () => fetch(RAW + '?t=' + Date.now()).then(r => r.ok ? r.json() : Promise.reject()).catch(() => fetch('rotation/watch.json').then(r => r.json()));
-const CLS = {'Previous leader, consolidating': 'c-lead', 'Next group candidate': 'c-next', 'Previous leader, still leading': 'c-still', 'Previous leader, fading': 'c-fade', 'No signal': 'c-none'};
-const ORDER = ['Previous leader, consolidating', 'Next group candidate', 'Previous leader, still leading', 'Previous leader, fading', 'No signal'];
+const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
 const pp = x => x == null ? '—' : `<span class="${x >= 0 ? 'pos' : 'neg'}">${x >= 0 ? '+' : ''}${(+x).toFixed(1)}</span>`;
-const pill = c => `<span class="pill ${CLS[c] || 'c-none'}">${c}</span>`;
-const ent = e => `<span class="${e == 'Good point' ? 'e-good' : e.startsWith('Wait') ? 'e-wait' : 'e-no'}">${e}</span>`;
+const fit = f => `<span class="pill ${f == 'favored' ? 'f-fav' : f == 'unfavored' ? 'f-unf' : 'f-neu'}">${f}</span>`;
+const ent = r => { const v = r.check && r.check.verdict; const c = v == 'Buy' ? 'e-good' : v == 'Buy on dip' ? 'e-wait' : 'e-no';
+  const t = v == 'Buy' ? 'entry: Buy now' : v == 'Buy on dip' ? 'entry: wait for the buy zone' : v ? 'entry: no buy setup (' + v + ')' : ''; return `<span class="${c}">${t}</span>`; };
+const ORDER = ['Previous leader, consolidating', 'Next group candidate', 'Previous leader, still leading', 'Previous leader, fading', 'No signal'];
+function chip(r, extra) {
+  const c = r.check || {};
+  return `<div class="chip"><b class="t">${esc(r.symbol)} · ${esc(r.label)}</b> ${fit(r.fit)}<div class="sub">${esc(r.fit_why)}</div>
+    12m ${pp(r.ex12)} · 3m ${pp(r.ex3)} · 1m ${pp(r.ex1)} vs SPY · ${esc(r.quadrant)}<br>${ent(r)}${c.buy_zone ? ` <span class="sub">· buy zone ${c.buy_zone[0]}–${c.buy_zone[1]} · stop ${c.stop}</span>` : ''}${extra || ''}</div>`;
+}
 function testTable(t) {
-  return `<table><tr><th>Class</th><th>Cases</th><th>Avg vs SPY</th><th>Median</th><th>Beat SPY</th></tr>` +
-    ORDER.filter(c => t[c]).map(c => `<tr><td>${pill(c)}</td><td>${t[c].n}</td><td>${pp(t[c].avg_vs_spy)} pp</td><td>${pp(t[c].median_vs_spy)} pp</td><td>${t[c].beat_spy_pct}%</td></tr>`).join('') + `</table>`;
+  return `<table><tr><th>Class</th><th>Cases</th><th>Avg vs SPY</th><th>Beat SPY</th></tr>` +
+    ORDER.filter(c => t[c]).map(c => `<tr><td>${c}</td><td>${t[c].n}</td><td>${pp(t[c].avg_vs_spy)} pp</td><td>${t[c].beat_spy_pct}%</td></tr>`).join('') + `</table>`;
 }
 get().then(d => {
   $('#asof').textContent = `As of ${d.asof} · SPY ${d.spy_ytd_pct >= 0 ? '+' : ''}${d.spy_ytd_pct}% this year · market regime ${d.regime ? d.regime.regime : '—'} · updated ${d.updated}`;
-  const by = c => d.rows.filter(r => r.class == c);
-  const card = (title, c, note) => `<div><b>${title}</b> ${pill(c)}<div class="sub">${note}</div><div class="chips">` +
-    (by(c).map(r => `<div class="chip"><b>${r.symbol} · ${r.label}</b>12m ${pp(r.ex12)} · 1m ${pp(r.ex1)} vs SPY · ${r.quadrant}<br>checklist <b style="display:inline">${r.check ? r.check.verdict : '?'}</b> → ${ent(r.entry)}${r.check && r.check.buy_zone ? `<br><span class="sub">buy zone ${r.check.buy_zone[0]}–${r.check.buy_zone[1]} · stop ${r.check.stop}</span>` : ''}</div>`).join('') || '<span class="sub">None today.</span>') + `</div></div>`;
-  $('#now').innerHTML = card('What retail would buy', 'Previous leader, consolidating', 'Previous cycle leaders pausing near their highs.')
-    + card('The next group', 'Next group candidate', 'Gaining relative strength from a weaker 12-month base; "Good point" = the checklist says Buy now, "Wait for the buy zone" = Buy on dip.');
+  const m = d.macro;
+  if (m) {
+    $('#regime').textContent = m.regime + (m.borderline ? ' — borderline' : '');
+    $('#rates').textContent = 'Rates: ' + m.rates_text;
+    $('#gscore').textContent = `(score ${m.growth_score >= 0 ? '+' : ''}${m.growth_score})`;
+    $('#iscore').textContent = `(score ${m.inflation_score >= 0 ? '+' : ''}${m.inflation_score}${m.inflation_score == 0 ? ', a tie counts as rising' : ''})`;
+    $('#gsig').innerHTML = m.growth_signals.map(x => `<li>${esc(x)}</li>`).join('');
+    $('#isig').innerHTML = m.inflation_signals.map(x => `<li>${esc(x)}</li>`).join('');
+  }
+  if (d.outlook && d.outlook.themes) $('#outlook').innerHTML = `<b>The 6–12 month outlook</b> (market brief, ${esc(d.outlook.id)}): ${esc(d.outlook.regime || '')}<br>Themes: ${d.outlook.themes.map(t => esc(t.name) + (t.symbols ? ' (' + esc(t.symbols.join(', ')) + ')' : '')).join(' · ')} — <a href="/#breakdown">portfolio</a>`;
+  const F = k => d.rows.filter(r => r.follow == k);
+  const col = (title, key, note, extra) => `<div><h3>${title} <span class="sub">(${F(key).length})</span></h3><div class="sub">${note}</div><div class="chips">` +
+    (F(key).map(r => chip(r, extra ? extra(r) : '')).join('') || '<span class="sub">None today.</span>') + `</div></div>`;
+  $('#follow').innerHTML =
+    col('Turning now', 'Favored and turning now', 'The economy favors them and they have started to beat SPY.')
+    + col('Favored, not turned yet', 'Favored, not turned yet', 'The economy favors them, but they have not turned. Watch for what is missing.',
+          r => `<div class="sub" style="margin-top:4px">Still missing: ${r.turn_missing.map(esc).join('; ')}</div>`)
+    + col('Favored and already leading', 'Favored and already leading', 'The economy favors them and they are leading already.');
+  const L = c => d.rows.filter(r => r.class == c);
+  const lcol = (t, c, note) => `<div><h3>${t} <span class="sub">(${L(c).length})</span></h3><div class="sub">${note}</div><div class="chips">` + (L(c).map(r => chip(r)).join('') || '<span class="sub">None.</span>') + `</div></div>`;
+  $('#leaders').innerHTML = lcol('Consolidating', 'Previous leader, consolidating', 'Near their highs in a tight range.')
+    + lcol('Still leading', 'Previous leader, still leading', 'Still beating SPY.') + lcol('Fading', 'Previous leader, fading', 'Losing relative strength.');
   $('#t-all').innerHTML = testTable(d.test);
   $('#t-ye').innerHTML = testTable(d.test_year_end || {});
-  const a = d.test, y = d.test_year_end || {}, n = a['Next group candidate'], l = a['Previous leader, consolidating'], ny = y['Next group candidate'], ly = y['Previous leader, consolidating'];
-  if (n && l) $('#verdict').innerHTML = `<b>What the history says:</b> as defined here, the "next group" ${n.avg_vs_spy >= l.avg_vs_spy ? 'beat' : 'did <b>not</b> beat'} the consolidating previous leaders over the following 3 months (${pp(n.avg_vs_spy)} vs ${pp(l.avg_vs_spy)} pp)` +
-    (ny && ly ? `, and in the quote's own case (rallies into year end) ${ny.avg_vs_spy >= ly.avg_vs_spy ? 'it did' : 'it did not either'} (${pp(ny.avg_vs_spy)} vs ${pp(ly.avg_vs_spy)} pp; small samples).` : '.') +
-    ` Leadership has tended to persist more often than it rotated, so use the next-group list as candidates to watch and the checklist for timing, not as a forecast.`;
-  ORDER.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; $('#flt').appendChild(o); });
+  const a = d.test, n = a['Next group candidate'], l = a['Previous leader, consolidating'];
+  if (n && l) $('#verdict').innerHTML = `So far the "next group" signal on its own ${n.avg_vs_spy >= l.avg_vs_spy ? 'beat' : 'did <b>not</b> beat'} the consolidating previous leaders (${pp(n.avg_vs_spy)} vs ${pp(l.avg_vs_spy)} pp): leadership has tended to persist. That is why the follow list also needs the economy to favor a group, and the checklist to show an entry.`;
+  ['Favored and turning now', 'Favored, not turned yet', 'Favored and already leading', 'Neutral for the regime', 'Against the regime'].forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; $('#flt').appendChild(o); });
+  const FO = ['Favored and turning now', 'Favored, not turned yet', 'Favored and already leading', 'Neutral for the regime', 'Against the regime'];
   const draw = () => {
-    const f = $('#flt').value, R = d.rows.filter(r => !f || r.class == f).sort((x, y) => ORDER.indexOf(x.class) - ORDER.indexOf(y.class) || y.ex1 - x.ex1);
-    $('#tbl').innerHTML = `<table><tr><th>ETF</th><th>Class</th><th>Rotation map</th><th>12m</th><th>6m</th><th>3m</th><th>1m</th><th>From high</th><th>Range</th><th>Checklist</th><th>Buy zone</th><th>Stop</th><th>R:R</th><th>Entry</th></tr>` +
-      R.map(r => { const c = r.check || {}; return `<tr><td><b>${r.symbol}</b><div class="sub">${r.label}</div></td><td>${pill(r.class)}</td><td>${r.quadrant}</td>
-        <td>${pp(r.ex12)}</td><td>${pp(r.ex6)}</td><td>${pp(r.ex3)}</td><td>${pp(r.ex1)}</td><td>${pp(r.from_high)}%</td><td>${(+r.range30_atr).toFixed(1)}</td>
-        <td>${c.verdict || '—'}</td><td>${c.buy_zone ? c.buy_zone[0] + '–' + c.buy_zone[1] : '—'}</td><td>${c.stop ?? '—'}</td><td>${c.rr ?? '—'}</td><td>${ent(r.entry)}</td></tr>`; }).join('') + `</table>`;
+    const f = $('#flt').value, R = d.rows.filter(r => !f || r.follow == f).sort((x, y) => FO.indexOf(x.follow) - FO.indexOf(y.follow) || y.ex1 - x.ex1);
+    $('#tbl').innerHTML = `<table><tr><th>ETF</th><th>Economy</th><th>Status</th><th>Rotation map</th><th>12m</th><th>3m</th><th>1m</th><th>From high</th><th>Range</th><th>Checklist</th><th>Buy zone</th><th>Stop</th><th>R:R</th></tr>` +
+      R.map(r => { const c = r.check || {}; return `<tr><td><b>${esc(r.symbol)}</b><div class="sub">${esc(r.label)}</div></td><td>${fit(r.fit)}</td><td>${esc(r.follow)}<div class="sub">${esc(r.class)}</div></td><td>${esc(r.quadrant)}</td>
+        <td>${pp(r.ex12)}</td><td>${pp(r.ex3)}</td><td>${pp(r.ex1)}</td><td>${pp(r.from_high)}%</td><td>${(+r.range30_atr).toFixed(1)}</td>
+        <td>${esc(c.verdict || '—')}</td><td>${c.buy_zone ? c.buy_zone[0] + '–' + c.buy_zone[1] : '—'}</td><td>${c.stop ?? '—'}</td><td>${c.rr ?? '—'}</td></tr>`; }).join('') + `</table>`;
   };
   $('#flt').onchange = draw; draw();
 }).catch(() => { $('#asof').textContent = 'The data has not been published yet.'; });
