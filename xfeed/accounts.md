@@ -12,6 +12,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** discretionary trader and educator. **Focus:** mega-cap tech, BTC, risk-management tips.
 - **Style:** short motivational and lifestyle posts, occasional breakout callouts. **Signal-to-noise:** medium-low.
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 10 posts, 14:18–19:45 ET): NET "top swing trading idea" (no level/stop); CRWV attractive into Tue earnings (no position); MU bounced at the $660 support; QQQ "failed breakdown" setup; Nasdaq +3.5% intraday; CRWV/NBIS earnings test the AI-infra trade. Outcome: open (QQQ closed 680.98, SMA200 680.1).
   - 2026-11-09 (Mon mid, 9 posts, 09:09–12:18 ET): QQQ "mega pop" with NVDA -5%; breadth 4:1; AMZN "mega breakout, new highs" (kpak82 says it later failed back into its 3-day range); AMD +17% off the 200-day SMA; SOXL add +18%; QQQ still inside Thursday's -6.5% candle, needs ~5 green days; VIX ~23 at the open, still below resistance; warns about speculative AI/memory/nuclear names. Outcome: "futures yawned" held; the AMZN breakout is mixed.
   - 2026-11-08 (Sun pm, 3 posts): weekly outlook (subscriber-locked); "futures yawned" (CFDs flat at 18:05 ET, US500 7,375.9); mocks the expected Jensen sell-off. No new call.
   - 2026-11-08 (Sun mid, 2 posts): AMD -33% from highs, on watch at the monthly 10-SMA (long-term buy zone, no stop); XYZ held ~$50 through a 4.5-yr base, +31% YTD, possible Stage 1→2 on a breakout that holds. Outcome: open.
@@ -110,6 +111,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** swing trader using Bookmap/order-flow levels. **Focus:** momentum names (NBIS, AEHR).
 - **Style:** setups with liquidity levels, defined entries and stops; posts stop-outs openly. **Signal-to-noise:** medium-high.
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 1 post, 19:34 ET): SOXL trade management: entry 47.91, initial risk 47.35; 50% trimmed at 54 (+12.71%), remaining half +20.1% unrealized. Outcome: worked (SOXX +8.18% at the close).
   - 2026-11-09 (Mon mid, 6 posts, 09:54–10:39 ET): SOXL long with 100% of the account; trimmed 50% at 54 (+12.5%), stop to break-even, locking a 6%+ account gain; APP +75% in 5 days after it was coiled into earnings; swing rules (3–5+ days OR an 8–20% move). Outcome: the morning SOXX idea worked the same day (SOXX +6.8% by 13:12 ET).
   - 2026-11-09 (Mon am, 5 posts, Sun 23:27–23:50 ET): back from travel; SOXX (via SOXL) inside day outside the lower Bollinger band, "could be a 50%+ trade, let it set up" (no levels); LITE punished despite a 1,100+ MRVL offer (market pricing a failed deal). Outcome: open; SOXX 136.53 Fri, our Sell holds below 140.21.
   - 2026-10-31 (Sat pm, 2 posts, 17:41–17:50 ET): did not trade SOXL Friday (entry levels didn't align); 1-minute chart shows 3+ bounces >4% during the slide; his all-season setup is the oversold bounce, not MA-based; counter-trend shorts not his strength. Outcome: n/a; GOOG 279 / MRVL 219.78 status still not posted.
@@ -194,6 +196,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** options-flow tracker (Bullflow). **Focus:** large single-name and SPX call/put buys.
 - **Style:** flow and P&L screenshots posted after they win (survivorship bias), plus referral promotion for funded accounts. **Signal-to-noise:** medium for sentiment only.
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 10 posts, 13:42–15:49 ET): INTC Dec-11 75C $1.4M candle/$1.9M card (opening, 25.3% OTM); PCG Jan-27 18C $825K; GLD bull spread $29M BTO (locked); APP and CVS weeklies (locked); teasers: MSFT 547.50 first target and both PLTR targets hit; heatmaps "757" and "752 king". Logged in flows.jsonl. Outcome: open; the QQQ Jan-27 650P bear is ~4.5% OTM with QQQ at 680.98.
   - 2026-11-09 (Mon mid, 19 posts, 09:16–12:31 ET): logged NBIS Nov-13 140C $4.8M, MRNA Mar-27 370C $2.1M, CCJ Dec 85C $1.8M, GLD Nov-16 365C $1.5M; follow-ups: the 11/5 NVDA Nov-13 165P +618% ("wonder if they knew something"), the 11/6 MRNA 280/297.5C spread revealed ("legendary run"); locked heatmap teasers (PLTR 160 and MSFT 540 levels to hold, 740–741 the bulls' level, "almost got to 752"; SPY high 752.96). Note: the profile's first screen showed only 6 of the 19 posts; scroll it. Outcome: NVDA put follow-up worked; the new calls are open.
   - 2026-11-09 (Mon am, 1 post, 08:57 ET): "Morning OI Update", subscriber-locked; nothing logged to flows.jsonl.
   - 2026-11-06 (Fri pm, 28 posts, Thu 13:16–Fri 19:22 ET): SPY Nov-20 740P EXIT Fri 15:00 ET ("out of the $50M for ~100%", 77.6K at the bid, $93.5M candle), then a locked "insane" new position; Thu after close: still holding $52M of 740P and the QQQ Jan-27 650P ($32.21, +171%); cards logged: KWEB Jan-27 27C $7.0–7.5M and Feb-27 27C $3.0M (opening, at the ask), U Dec 55C $1.1M, CRDO Nov-27 110P $1.0M, IGV May-27 111C $1.0M; locked: SOXL $3.5M+ bear, MRNA bull spread, TTMI $455K calls, AMZN 260/MSTR 131 heatmap levels, SPY "7400 target hit". Outcome: SPY bear a documented ~+100% win; U calls worked (U hit $57); CRDO puts +214% on day 1; KWEB/IGV open.
@@ -245,6 +248,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** subscriber day-trading room. **Focus:** intraday index and options trades.
 - **Style:** most posts locked to subscribers (daily "Weekly Open" article); occasional public trading-psychology posts and custom indicators. **Signal-to-noise:** low publicly.
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 0 posts). "New lows this week" looks wrong after the close: SPY +2.6% to 754.38.
   - 2026-11-09 (Mon mid, 0 posts). "New lows this week" is not happening so far: SPY +2.4% to 752.67 at 13:12 ET.
   - 2026-11-09 (Mon am, 2 posts): locked "Weekly Open" article; preview: markets green despite NVDA -5%. Sunday's "new lows this week" not borne out at Monday's open (futures +0.7%); still open for the week.
   - 2026-11-08 (Sun pm, 2 posts): Sunday report "Time to buy the dip?" (locked); preview: markets likely make new lows again this week. Outcome: testable this week (SPY 727.65 / QQQ 647.27).
@@ -292,6 +296,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** charting-platform brand account; chart technician plus marketing. **Focus:** pattern setups, earnings, insider buys.
 - **Style:** clean annotated charts with Fibonacci and analyst-target lines; memes; product promotion; no stops. **Signal-to-noise:** medium. **Bias:** bullish on breakouts.
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 18 posts, 1 ad): AVGO at its 100-week EMA, a rare visit (weekly log chart); COHR "déjà vu"; NVDA "doesn't feel right"; earnings boards: TTD beat (+25% AH, $731M buyback), HIMS miss and lower Q4 guide, RKLB/LCID/ASTS -6% AH, ZETA +4%, OXY/TTWO beat. Outcome: open (AVGO nearly +9% today per our brief).
   - 2026-11-09 (Mon mid, 4 posts, 1 ad): NVDA opened down nearly 10% from Friday's close; TTD broke its downtrend into an unfilled gap (reports tonight); AMD vs NVDA intraday chart ("AMD brought a spoon"). No levels.
   - 2026-11-09 (Mon am, 5 posts, 3 ads): TSLA monthly log chart, three multi-year bases each followed by a breakout ("seen this story before"), implies another breakout; a watchlist image; ads (Trading IQ, Winvest, subscription). No levels.
   - 2026-11-08 (Sun pm, 2 posts, 1 ad): futures board at the 18:00 ET reopen (NQ -0.88%, ES -0.37%, BTC -1.61%, CL 90.40); IREN indicator ad. No call.
@@ -355,6 +360,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** daily and weekly pattern calls (engulfing, channel tops, wedges, EMAs); names triggers but few price targets; argues with followers. **Signal-to-noise:** medium-high.
 - **Bias:** tends to call tops (says AMD top worked "after 20 tries"). Admits misses publicly (TSLA, 10/11).
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 5 posts, 13:22–15:23 ET): QQQ "right at 200ema and 9ema resistance"; buyers near today's highs are hoping CPI pushes charts over resistance; NVDA's drop looks "reasonable and technical"; INTC +15% in 2 days, 5 EMA still lagging; SPCX. Outcome: pending CPI (QQQ 678.57 after hours, under the 200-day).
   - 2026-11-09 (Mon mid, 12 posts, 09:52–13:08 ET): AMZN pushed above last week's bearish engulfing (09:52 ET), then "failed back into 3 day range" (10:36); TSLA puts back to break-even; META bounced into the 200 EMA; GOOGL at the 9 EMA, "chart still looks like shit"; SPY: take cost off above +100%; SPCX +19% off the lows "into resistance"; MU "we are so back" (sarcastic); a new private swing alert. Outcome: open.
   - 2026-11-09 (Mon am, 1 post, Sun 19:42 ET): ES 5-minute whipsaw chart ("why most people stop trading futures"); no call. IBIT puts from Sunday still held as far as posted.
   - 2026-11-08 (Sun pm, 4 posts): BTC "fell off the bed", holding IBIT puts; follows Friday's "first weekly close below the 20 EMA could be important". Outcome: Friday BTC call working (BTC futures -1.6% Sunday).
@@ -419,6 +425,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** news, insider trades, congressional trades, flow tools. **Focus:** insider trades, Fed and macro headlines, product.
 - **Style:** "BREAKING" headlines plus heavy self-promotion (about a third of posts). **Signal-to-noise:** medium.
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 18 posts): NVDA class action; $25.19M NVDA Jan-2029 110C bought at the ask (vol 3,004 vs OI 130); $4M NBIS weekly calls; NVDA -18% in two weeks (-$940B); Anthropic targeting Nov 19–20 Nasdaq debut (ANT) and 2x ETFs; Boebert lost; mostly news. No own calls.
   - 2026-11-09 (Mon mid, 16 posts): NYT on Nvidia and the halted Megaspeed probe; NYSE to use Avalanche for tokenized-stock settlement; Qatar mediation (Hormuz for $8B); Trump calls the midterms "not honest"; AAPL saved $2.7B in tax via Singapore (FT); mostly politics. No calls.
   - 2026-11-09 (Mon am, 9 posts, Sun 21:31–Mon 08:57 ET): Trump backs Huang staying NVDA CEO; professional/business services +70K in October vs 15K avg; $1M starter homes in a record 242 cities; California rejects billionaire tax; rest politics. No calls.
   - 2026-11-08 (Sun pm, 4 posts): Anthropic roadshow expected week of Nov 9 (CNBC); OpenAI CFO: IPO plans unchanged; 1 of 45 data-center ballot measures passed; Trump/Rubio Iran split. No calls.
@@ -479,6 +486,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** exact levels and targets; polls. **Signal-to-noise:** high.
 - **Bias:** leans bullish and buys dips.
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 12 posts, 14:19–18:51 ET): QQQ since 2018: 5 convincing 200dma breaks, avg 81 days below, avg -17.8% drawdown; now -4.9% after 3 days; QQQ kissed and slightly cleared the 200dma then slipped back; QQQ/SPY HOD with VIX at 19; VIX 16.50 → 28.50 → 19.50 in three days; HIMS $20.63 after-hours low (9 of 10 negative reactions); TTD +30% after hours then red; quotes Wilson (MS) SPX 7,100–7,300 one more leg. Outcome: QQQ closed 680.98, 0.9 above the 200-day, then 678.57 after hours.
   - 2026-11-09 (Mon mid, 17 posts, 09:34–12:56 ET): QQQ $680 (200-day) the key near-term level (matches our 680.08 Hold trigger); QQQ +3%, then +4% off the $648 overnight low; VIX back to 21; AMD +9%, SOXL +15%, KORU +6.5%; LITE $498 → $616.66; NVDA cheaper than JPM/XOM, likely 3 straight red months ("Santa rally bounce?"); Huang-exit odds 16% "sus", his own estimate ~5%; MSFT near NVDA's market cap. Outcome: 680 pending at the close (QQQ 677.15 at 13:12 ET). The $177.69 NVDA gap fill is not verified.
   - 2026-11-09 (Mon am, 14 posts, Sun 20:03–Mon 08:56 ET): NVDA gap fill at $177.69 "very likely" (Sun 20:33 ET) — check today; NVDA drawdown -27% vs -42% Covid / -43% Liberation Day / -69% 2022; AMD +3.5% vs NVDA -5% pre; Goldman $300 dip-buy; TTD reports after the close, implied ±16.4%, fell after 7 of last 8. Rest memes.
   - 2026-11-08 (Sun pm, 2 posts): jokes (James Bond release gap, a video). No data.
@@ -670,6 +678,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** very high volume (40+ posts a day hit the cap); many political and culture posts. **Signal-to-noise:** medium-low (market posts useful).
 - **Bias:** bearish and alarmist framing.
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 30 posts, 13:50–18:10 ET): "Huang-Over" wrap (stocks up, oil down); Nvidia intervened in the Megaspeed probe; Trump: FBI looking into Huang "in terms of something else"; Goldman "stop bingo" ($3T in two days); natgas shorts squeezed; JPM discount for software debt; Anthropic IPO roadshow. About half politics. No calls.
   - 2026-11-09 (Mon mid, 31 posts, 09:20–13:00 ET): NY Fed survey (1Y 3.91% vs 3.8% exp, 3Y 3.29%, 5Y 3.00%), layoff fears highest since the Covid crash; chip CDS wider than hyperscalers (Goldman: "index hiding the damage"); Goldman says the bond rout is exhausted but yields haven't peaked; NVDA/Megaspeed (NYT); Huang-exit odds 13% (from 33% overnight); East-West pipeline fire; UNH $28 bid for Surgery Partners; Brent's worst week since Covid. About half politics.
   - 2026-11-09 (Mon am, 34 posts, Sun 22:10–Mon 09:05 ET): futures rise as dip buyers shrug off the NVDA scandal, oil slides on Iran hopes; Mag 7 higher except NVDA; 10Y/30Y at day's lows with oil; Goldman "line in the sand" level (article, level not in post); Goldman on AI off-balance-sheet financing; Iraq gas-field drone strike; Qatar largest US LNG buyer. About half politics.
   - 2026-11-08 (Sun pm, ~18 posts): MS record 70% tech-momentum crash, "deep fear"; Goldman panic index biggest surprise in 19 years; AI spending +0.9pt to Q3 GDP (MS); SpaceX ~$10B passive bid (GS); Pentagon "Iron Gate" vs Iran; Nvidia probe; about half politics. No levels.
@@ -818,6 +827,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** one chart plus one table per post; specific and testable; small samples. **Signal-to-noise:** medium-high. **Bias:** leans on bull-market base rates.
 - **2026-11-03 (Tue pm, 1 post, 13:36 ET):** VIX closed above 21 while the S&P stayed near its highs; SPX higher 4 weeks later in 15 of 17 cases, "good omen" for a post-midterm November rally. Outcome: open (check ~Dec 1; SPY 754.41 at the Nov 3 close).
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 1 post, 16:13 ET): equal-weight S&P +2%, best day in 7+ months; since 2023 SPY was higher 3 weeks later in all 12 prior cases (median +3.1%). Outcome: check ~Nov 30 (SPY 754.38 at the close).
   - 2026-11-09 (Mon mid, 1 post, 12:46 ET): QQQ up more than 1% while NVDA falls more than 1% has happened only 3 times since 2023 (Jul 2 and Jul 5, 2024, and Dec 16, 2024); hard to see new highs without NVDA. Outcome: the morning's CPI-eve pattern (S&P down the day before CPI) is failing so far (SPY +2.4%).
   - 2026-11-09 (Mon am, 1 post, 07:50 ET): every 2026 CPI release saw SPX fall the day before or on the day; table of SPX returns around CPI since late 2023 (positive ~61% prior day, ~55% same day, ~61% 5-day, ~73% 10-day); "stocks look good" today, hopes Tuesday breaks the streak. Outcome: check Mon Nov 9 / Tue Nov 10 closes.
   - 2026-11-08 (Sun pm, 2 posts): Staples has led the S&P for 6 weeks (last seen in the 2025 near-bear); "bottom is near" but wants tech to retake leadership; SNDK best in H1, worst in H2 (11 of H1's top 15 now among H2's worst). Outcome: open.
@@ -874,6 +884,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** clean sourced charts, high volume (~12 posts/day), viral framing. **Signal-to-noise:** medium-high for macro data.
 - **Reliability:** trade claims are self-reported after the fact (WTI long).
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 3 posts): NVDA class action; Trump sees "positive momentum" on Iran; Big Tech AI obligations $4.49T. Outcome: SPX closed 7,549.94, so the Friday 7,450 call played out.
   - 2026-11-09 (Mon mid, 7 posts, 09:23–13:15 ET): S&P +100 pts, +$1T, then +$1.5T at 11:19 ET (S&P +2.1%, NDX +3.0%, WTI -3.5%, gold +1.5%); NDX +3.2% with NVDA -6.5%; VIX -20%+ as the "short squeeze" builds; claims its Friday premium alert called an SPX rebound above 7,450 (played out by our SPY ~752); COPX down 11 straight weeks (record, -24.7%); Trump questions the midterms. Outcome: the 7,400+ open call played out (SPY opened 741.95).
   - 2026-11-09 (Mon am, 5 posts, Sun 22:41–Mon 07:12 ET): futures at 07:12 ET S&P +0.7%, NDX +0.5%, Dow +1.1%, WTI -2.9%, Brent -3.0%, gold +1.1%, "S&P set to open above 7,400"; NVDA -5% at pre-market open, -$225B; China denies; Trump/DOJ "AI leader" jail anecdote; 221 trucking bankruptcies YTD. Outcome of the 7,400 open: check at 09:30.
   - 2026-11-08 (Sun pm, 3 posts): S&P/NQ futures dipped at the 18:00 ET reopen and turned green by 18:07 ("$650B swing" in implied cap); data-center construction +90% y/y to a record $96.5B annualized. No calls.
@@ -936,6 +947,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Reliability:** returns are self-reported (+75.7% for 2026 claimed on 10/28); levels are specific but stops are not given.
 - **2026-11-03 (Tue pm, 1 post, 14:02 ET, Turkish):** about +5% intraday, YTD shown as 50.94% (down from the +75.7% claimed 10/28); details promised tomorrow. Outcome: n/a (self-reported).
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 1 post, Turkish, 15:19 ET): portfolio +10.7% on the day, +35.1% YTD (self-reported); expects some relief this week. No level.
   - 2026-11-09 (Mon mid, 1 post, Turkish, 12:04 ET): volumes are still low, "don't get too excited". Caution on the rally; no level.
   - 2026-11-08 (Sun pm, 4 posts, Turkish): Rubio on Iran (video); Democrats checking Trump good for an early Iran resolution; NVDA affair a private matter; hopes no single company can drag the index. No calls.
   - 2026-11-07 (Sat mid, 2 posts, 03:13–13:05 ET, Turkish): portfolio as of 11/06: MU, BE, DELL, AVGO, ALAB, SITM, COHR, CRDO, VRT, SIMO, CLS (all AI hardware/infrastructure); says he will cut back sharply on social media and continue in a private group, so expect fewer posts.
@@ -978,6 +990,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** "Portföy Güncellemesi" (portfolio update) posts with entry/exit prices and reasoning, plus technical scenario notes. **Signal-to-noise:** medium-high; a few posts a day.
 - **Reliability:** entries are self-reported with prices; no stops shown so far.
 - **Calls log:**
+  - 2026-11-09 (Mon pm, 1 post, Turkish, 16:33 ET): wheel recap: RKLB assigned at $64, Nov 20 $62 covered call (RKLB -6% AH); SOFI $16 put expiring Friday; NFLX Nov 27 $65 covered call; closed MSFL after earnings; new MOD ($129) and JBL ($269), both underwater. Outcome: open.
   - 2026-11-09 (Mon mid, 4 posts, Turkish): last week's VIX spike (16.6 → 28, Nasdaq -5.5% in a day) blamed on data-center spending limits after the midterms; recommends the ESPO gaming ETF (an early holder) with its holdings; U cup and handle flagged a month ago, +20% since. Outcome: U call worked (+20% per the account).
   - 2026-11-09 (Mon am, 1 post, Turkish, 00:33 ET): long bullish IREN earnings recap ("the real thing"), reviews a year of non-stop execution; no level.
   - 2026-11-08 (Sun pm, 1 post, Turkish): Huang's affair is private; it matters only if company secrets reached China. No call.
