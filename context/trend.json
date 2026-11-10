@@ -1,15 +1,15 @@
 {
- "updated": "2026-11-10 09:46",
+ "updated": "2026-11-10 13:10",
  "tickers": [
   {
    "symbol": "QQQ",
-   "price": 674.35,
-   "asof": "2026-11-10 09:30",
+   "price": 669.38,
+   "asof": "2026-11-10 12:30",
    "timeframes": {
     "1H": {
-     "up": 9,
+     "up": 4,
      "of": 13,
-     "label": "bullish",
+     "label": "bearish",
      "st_dir": "up",
      "st_level": 662.88,
      "st_flip": "2026-11-09 09:30"
@@ -23,7 +23,7 @@
      "st_flip": "2026-11-09 13:30"
     },
     "4H": {
-     "up": 6,
+     "up": 5,
      "of": 13,
      "label": "mixed",
      "st_dir": "down",
@@ -52,22 +52,22 @@
    "levels": {
     "daily_supertrend": 709.99,
     "weekly_supertrend": 764.87,
-    "sma200": 680.34,
+    "sma200": 680.32,
     "high_52w": 759.66,
     "minus10": 683.69,
     "minus20": 607.73,
-    "from_high_pct": -11.2
+    "from_high_pct": -11.9
    }
   },
   {
    "symbol": "SPY",
-   "price": 748.36,
-   "asof": "2026-11-10 09:30",
+   "price": 746.28,
+   "asof": "2026-11-10 12:30",
    "timeframes": {
     "1H": {
-     "up": 8,
+     "up": 4,
      "of": 13,
-     "label": "mixed",
+     "label": "bearish",
      "st_dir": "up",
      "st_level": 741.0,
      "st_flip": "2026-11-09 11:30"
@@ -110,28 +110,28 @@
    "levels": {
     "daily_supertrend": 773.3,
     "weekly_supertrend": 726.9,
-    "sma200": 728.3,
+    "sma200": 728.28,
     "high_52w": 779.09,
     "minus10": 701.18,
     "minus20": 623.27,
-    "from_high_pct": -3.9
+    "from_high_pct": -4.2
    }
   },
   {
    "symbol": "SOXX",
-   "price": 146.1,
-   "asof": "2026-11-10 09:30",
+   "price": 144.58,
+   "asof": "2026-11-10 12:30",
    "timeframes": {
     "1H": {
-     "up": 9,
+     "up": 8,
      "of": 13,
-     "label": "bullish",
+     "label": "mixed",
      "st_dir": "up",
      "st_level": 138.79,
      "st_flip": "2026-11-09 09:30"
     },
     "2H": {
-     "up": 7,
+     "up": 6,
      "of": 13,
      "label": "mixed",
      "st_dir": "up",
@@ -139,7 +139,7 @@
      "st_flip": "2026-11-09 11:30"
     },
     "4H": {
-     "up": 6,
+     "up": 5,
      "of": 13,
      "label": "mixed",
      "st_dir": "down",
@@ -159,7 +159,7 @@
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 193.44,
+     "st_level": 194.83,
      "st_flip": "2026-10-26"
     }
    },
@@ -167,12 +167,12 @@
    "weekly": "bearish",
    "levels": {
     "daily_supertrend": 163.06,
-    "weekly_supertrend": 193.44,
-    "sma200": 159.75,
+    "weekly_supertrend": 194.83,
+    "sma200": 159.74,
     "high_52w": 218.19,
     "minus10": 196.37,
     "minus20": 174.56,
-    "from_high_pct": -33.1
+    "from_high_pct": -33.7
    }
   }
  ],
