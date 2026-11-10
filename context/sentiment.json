@@ -1,6 +1,6 @@
 {
  "asof": "2026-11-09",
- "updated": "2026-11-10 09:10",
+ "updated": "2026-11-10 09:16",
  "composite": {
   "score": 18.1,
   "percentile_10y": 79,
@@ -1065,7 +1065,7 @@
    "direction": "contrarian",
    "weight": -0.1806,
    "ic_train": -0.244,
-   "ic_test": -0.054
+   "ic_test": -0.058
   },
   {
    "key": "vix_term",
@@ -1081,7 +1081,7 @@
    "direction": "contrarian",
    "weight": -0.1827,
    "ic_train": -0.246,
-   "ic_test": -0.197
+   "ic_test": -0.2
   },
   {
    "key": "skew",
@@ -1113,7 +1113,7 @@
    "direction": null,
    "weight": null,
    "ic_train": -0.034,
-   "ic_test": -0.071
+   "ic_test": -0.072
   },
   {
    "key": "breadth50",
@@ -1129,7 +1129,7 @@
    "direction": "contrarian",
    "weight": -0.1233,
    "ic_train": -0.166,
-   "ic_test": -0.19
+   "ic_test": -0.184
   },
   {
    "key": "breadth200",
@@ -1145,7 +1145,7 @@
    "direction": "contrarian",
    "weight": -0.0806,
    "ic_train": -0.109,
-   "ic_test": -0.163
+   "ic_test": -0.156
   },
   {
    "key": "rsp_spy",
@@ -1161,7 +1161,7 @@
    "direction": "trend",
    "weight": 0.1149,
    "ic_train": 0.155,
-   "ic_test": -0.178
+   "ic_test": -0.17
   },
   {
    "key": "iwm_spy",
@@ -1177,7 +1177,7 @@
    "direction": null,
    "weight": null,
    "ic_train": 0.087,
-   "ic_test": -0.007
+   "ic_test": 0.001
   },
   {
    "key": "smh_spy",
@@ -1193,7 +1193,7 @@
    "direction": "trend",
    "weight": 0.0275,
    "ic_train": 0.037,
-   "ic_test": 0.016
+   "ic_test": 0.011
   },
   {
    "key": "iyt_spy",
@@ -1209,7 +1209,7 @@
    "direction": null,
    "weight": null,
    "ic_train": 0.09,
-   "ic_test": -0.136
+   "ic_test": -0.127
   },
   {
    "key": "xly_xlp",
@@ -1225,7 +1225,7 @@
    "direction": "contrarian",
    "weight": -0.0796,
    "ic_train": -0.107,
-   "ic_test": -0.054
+   "ic_test": -0.053
   },
   {
    "key": "sphb_splv",
@@ -1241,7 +1241,7 @@
    "direction": null,
    "weight": null,
    "ic_train": 0.022,
-   "ic_test": -0.066
+   "ic_test": -0.07
   },
   {
    "key": "vug_vtv",
@@ -1257,7 +1257,7 @@
    "direction": "contrarian",
    "weight": -0.0683,
    "ic_train": -0.092,
-   "ic_test": 0.144
+   "ic_test": 0.137
   },
   {
    "key": "cu_au",
@@ -1273,7 +1273,7 @@
    "direction": "trend",
    "weight": 0.0593,
    "ic_train": 0.08,
-   "ic_test": -0.151
+   "ic_test": -0.156
   },
   {
    "key": "hyg_ief",
@@ -1305,7 +1305,7 @@
    "direction": null,
    "weight": null,
    "ic_train": -0.0,
-   "ic_test": 0.162
+   "ic_test": 0.156
   }
  ],
  "alerts": [],
@@ -1315,16 +1315,16 @@
   "test": "2022 onwards",
   "composite": {
    "ic_train": 0.363,
-   "ic_test": 0.062,
+   "ic_test": 0.061,
    "test_quintiles": {
-    "q1": 1.11,
-    "q2": 1.12,
-    "q3": 1.15,
-    "q4": 0.4,
-    "q5": 1.9
+    "q1": 1.13,
+    "q2": 1.11,
+    "q3": 1.06,
+    "q4": 0.44,
+    "q5": 1.85
    },
-   "spy_avg_month": 1.14
+   "spy_avg_month": 1.12
   },
-  "fitted": "2026-11-03 09:16"
+  "fitted": "2026-11-10 09:16"
  }
 }
