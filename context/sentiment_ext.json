@@ -1,7 +1,7 @@
-{"updated": "2026-11-10 09:09",
- "note": "Nov 10 check: no newer dated Fear & Greed, AAII (next survey Nov 11-12), put/call or NAAIM (subscription-only since Aug 2026) values found; the latest dated readings are kept.",
+{"updated": "2026-11-12 10:14",
+ "note": "Nov 12 check: NAAIM is subscription-only since Aug 2026 (no current public value); the put/call date comes from the Cboe URL (the fetched page does not print it).",
  "gauges": [
-  {"name": "CNN Fear & Greed index", "value": "20 (prior 34)", "date": "2026-11-05", "reading": "extreme fear (0-25 band) after the Nov 5 Nasdaq -5.5% day; a contrarian-bullish zone historically; no later dated reading found", "source": "https://www.benzinga.com/markets/market-summary/26/11/62967148/nasdaq-tumbles-5-5-as-ai-stocks-crater-investor-sentiment-weakens-fear-greed-index-moves-to-extreme-fear-zone"},
-  {"name": "AAII sentiment survey", "value": "Bullish 34.1% / Neutral 17.5% / Bearish 48.4% (spread -14.7)", "date": "2026-11-04", "reading": "fear: bearish ~17pp above its ~31.5% long-run average; contrarian-bullish at extremes; next survey Nov 11-12", "source": "https://investrade.com/morning-preview-november-05-2026/"},
-  {"name": "CBOE equity put/call ratio", "value": "0.89 (total 1.06)", "date": "2026-11-05", "reading": "fear: equity ratio near the top of its usual 0.55-0.85 band, up from 0.66 on Oct 30 (page date not shown in the fetch, taken from the URL)", "source": "https://www.cboe.com/us/options/market_statistics/daily/?dt=2026-11-05"}
+  {"name": "CNN Fear & Greed index", "value": "33 (prior 32)", "date": "2026-11-10", "reading": "fear, up from extreme fear (20) on Nov 5; still in the lower third of its range, where forward returns have tended to be better than average", "source": "https://benzinga.com/markets/market-summary/26/11/63130061/dow-falls-over-150-points-following-inflation-report-greed-index-remains-in-fear-zone"},
+  {"name": "AAII sentiment survey", "value": "Bullish 30.8% / Neutral 17.8% / Bearish 51.4% (spread -20.6)", "date": "2026-11-11", "reading": "fear: bears about 20pp above their ~31.5% long-run average and up from 48.4% a week earlier; a contrarian-bullish extreme", "source": "https://www.aaii.com/sentimentsurvey"},
+  {"name": "CBOE equity put/call ratio", "value": "0.59 (total 0.92)", "date": "2026-11-11", "reading": "neutral to complacent: equity ratio back near the low end of its usual 0.55-0.85 band after 0.89 on Nov 5, as the rebound lifted call buying", "source": "https://www.cboe.com/us/options/market_statistics/daily/?dt=2026-11-11"}
  ]}
