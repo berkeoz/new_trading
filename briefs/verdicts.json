@@ -1,23 +1,23 @@
 {
-  "updated": "2026-11-12 15:46 ET",
-  "brief_id": "2026-11-12-1546-preclose",
+  "updated": "2026-11-12 16:15 ET",
+  "brief_id": "2026-11-12-1615-close",
   "trends": [
-    {"area": "Market trend", "now": "SPY 756.85 (-0.39%) faded from 763.04 after the 30Y auction; below VWAP 759.98, EMA21 758.39 and SMA50 764.42; +3.8% above a rising 200-day; daily turn up still needs a close above 763.03", "implication": "Uptrend intact but the bounce stalled; dips toward 747-754 are the better area, a close below 744.86 would break the bounce"},
-    {"area": "Rates & Fed", "now": "10Y 5.10% (+10.5bp), 5Y 4.95% (+11.8bp), 30Y 5.43%; 30Y auction tailed 0.4bp at 5.441%, bid-to-cover 2.36; Dec 9 hike priced 100% (implied 4.19%); PPI Nov 13", "implication": "Weak long-end demand keeps yields as the main cap on multiples (S&P equity risk premium -0.95pp); growth and rate-sensitive groups suffer on further back-ups"},
-    {"area": "Inflation & oil", "now": "Core CPI 3 straight +0.3% m/m; PPI 6.3% y/y (Sept); WTI 88.93 (+2.8%), Brent 96.08 (+3.6%) after Trump's 'no Iran deal' post, still -6 to -9% over 1 month", "implication": "Oil is the swing factor; Brent back above $100 and a hot PPI would raise 50bp hike odds"},
-    {"area": "Dollar", "now": "DXY 103.17 (+0.25%), 3-month high, +3.5% over 3 months; gold 3,886 (-2.9%) and Bitcoin 71,454 (-3.4%) at 3-month lows", "implication": "Headwind for multinational tech earnings and for gold/crypto"},
-    {"area": "Leading / lagging sectors", "now": "Today energy +1.66% leads; homebuilders -1.70%, small caps -1.60%, semis -1.37% lag; 1 month: homebuilders, health care, discretionary, financials lead, semis -9.8pp and tech -7.4pp lag", "implication": "Rotation from mega-cap AI into cyclicals/defensives; overheat regime favours financials, materials, energy"},
-    {"area": "AI & tech", "now": "Nvidia CEO Huang resigned (Kress interim); Bernstein PT $400 -> $200; reported chip export-control review; AMAT/CSCO after today's close, NVDA Q3 Nov 17", "implication": "Headline risk stays high for QQQ/SOXX until Nov 17; AMAT guidance sets tomorrow's tone for semis"},
-    {"area": "Sentiment & leadership", "now": "Risk-appetite score +12 (76th pct; +42 a week ago); AAII bears 51.4%; CNN Fear & Greed 33 (Nov 10); semis/SPY and growth/value -1.00 (risk-off), equal-weight and transports risk-on", "implication": "Contrarian-bullish positioning supports dips; leadership is broadening away from tech"},
+    {"area": "Market trend", "now": "SPY closed 756.85 (-0.39%) after fading from 763.04; below VWAP 759.89, EMA21 758.39 and SMA50 764.42; +3.8% above a rising 200-day; daily turn up still needs a close above 763.03", "implication": "Uptrend intact but the bounce stalled; dips toward 747-754 are the better area, a close below 744.86 would break the bounce"},
+    {"area": "Rates & Fed", "now": "10Y 5.10% (+10.5bp), 5Y 4.95% (+11.8bp), 30Y 5.43%; 30Y auction tailed (5.441%, 2.36x); Dec 9 hike priced 100% (implied 4.19%); Daly: more hikes likely; Hammack: gradual, no 50bp needed for now; PPI Nov 13 08:30", "implication": "Yields are the main cap on multiples (S&P equity risk premium -0.95pp); rate-sensitive groups and long-duration tech suffer on further back-ups"},
+    {"area": "Inflation & oil", "now": "Core CPI 3 straight +0.3% m/m; PPI 6.3% y/y (Sept); WTI 89.06 (+2.9%), Brent 96.22 (+3.7%) after Trump's 'no Iran deal' post, still -6 to -9% over 1 month", "implication": "A hot PPI or Brent back above $100 would raise 50bp hike odds"},
+    {"area": "Dollar", "now": "DXY 103.18 (+0.26%), 3-month high, +3.5% over 3 months; gold 3,879.5 (-3.0%) and Bitcoin 71,452 (-3.4%) at 3-month lows", "implication": "Headwind for multinational tech earnings and for gold/crypto"},
+    {"area": "Leading / lagging sectors", "now": "Today energy +1.51% led; homebuilders -1.76%, small caps -1.64%, semis -1.03% lagged; 1 month vs SPY: homebuilders +14.1pp, discretionary, health care, financials lead; semis -9.5pp, tech -7.1pp lag", "implication": "Rotation from mega-cap AI into cyclicals/defensives; overheat regime favours financials, materials, energy"},
+    {"area": "AI & tech", "now": "Nvidia CEO Huang resigned (Kress interim), NVDA closed about -4.3% after a -14% open; Cisco beat and raised FY27 (AI infra ~$9B); AMAT beat and guided above consensus but slipped after hours; NVDA Q3 Nov 17", "implication": "Headline risk stays high for QQQ/SOXX until Nov 17; Cisco offsets some of the AI-demand worry"},
+    {"area": "Sentiment & leadership", "now": "Risk-appetite score +12 (76th pct; +42 a week ago); AAII bears 51.4%; CNN Fear & Greed 33 (Nov 10); #1 all-time SOXS trade at today's open then -10%; semis/SPY and growth/value risk-off, equal-weight and transports risk-on", "implication": "Contrarian-bullish positioning supports dips; leadership is broadening away from tech"},
     {"area": "Bear market watch", "now": "Bull, 0 of 10 signs; SPY -2.9% from its 52-week high, +3.8% above its 200-day", "implication": "Next sign would be SPY below its 200-day (729) or high-yield spreads widening (HY spread 3.30pp)"},
     {"area": "Political risk", "now": "Fed hiking path (rising), Nvidia/China chip policy (rising), US-Iran Hormuz stalemate (rising after Trump's no-deal post), Dec 11 funding deadline", "implication": "Export-control or Iran escalation headlines are the main downside catalysts; a funding deal or Iran de-escalation would be upside"}
   ],
   "tickers": {
     "SPY": {
       "verdict": "Buy on dip", "technical": "Buy", "confidence": "medium",
-      "headline": "Bounce stalled at 763 after a weak 30Y auction; 754 test likely",
-      "summary": "SPY recovered its -0.77% gap to 763.04 but faded after the 13:00 auction tail and sits below VWAP and EMA21. The checklist says Buy (8/0, 3.1:1), but 5.1% yields and PPI tomorrow argue for entries nearer 747-754 rather than chasing.",
-      "reasons": ["Checklist Buy, 8/0 checks, Stage 2, rising 200-day", "Nov 5 failed breakdown back inside the range; more volume on up days", "Faded below VWAP 759.98 and EMA21 758.39; 15m/1h about to turn down", "Equity risk premium -0.95pp with the 10Y at 5.10%", "Contrarian-bullish sentiment (AAII bears 51.4%)"],
+      "headline": "Bounce stalled at 763 after a weak 30Y auction; 754 test likely on a hot PPI",
+      "summary": "SPY recovered its -0.77% gap to 763.04 but faded after the 13:00 auction tail and closed below VWAP and EMA21. The checklist says Buy (8/0, 3.1:1), but 5.1% yields and PPI tomorrow argue for entries nearer 747-754 rather than chasing.",
+      "reasons": ["Checklist Buy, 8/0 checks, Stage 2, rising 200-day", "Nov 5 failed breakdown back inside the range; more volume on up days", "Closed below VWAP 759.89 and EMA21 758.39; 15m/1h about to turn down", "Equity risk premium -0.95pp with the 10Y at 5.10%", "Contrarian-bullish sentiment (AAII bears 51.4%)"],
       "risks": ["Hot PPI (Nov 13) pushing the 10Y toward 5.31%", "Fresh NVDA / chip export-control headlines", "Iran escalation lifting Brent above $100", "A close below 744.86 would break the bounce structure"],
       "upcoming": [{"date": "2026-11-13", "event": "October PPI 08:30 ET"}, {"date": "2026-11-17", "event": "Nvidia Q3 results"}, {"date": "2026-12-09", "event": "FOMC decision"}, {"date": "2026-12-11", "event": "Government funding deadline"}],
       "levels": {"buy_zone": "747-754", "warning_below": 744.86, "sell_below": 728.99, "take_profit_above": 778.23},
@@ -25,22 +25,22 @@
     },
     "QQQ": {
       "verdict": "Hold", "technical": "Buy on dip", "confidence": "medium",
-      "headline": "Slipped back under the 690.5-691.7 print cluster; 200-day 680.9 is the line",
-      "summary": "QQQ reversed a -1.47% gap off the 200-day to 694.56 but fell back below VWAP 690.19 after the auction. The checklist says Buy on dip, but 3 sell alerts, 1.5:1 reward/risk, the most rate exposure here and the NVDA leadership vacuum before Nov 17 keep it at Hold.",
+      "headline": "Closed under the 690.5-691.7 print cluster; 200-day 680.9 is the line",
+      "summary": "QQQ reversed a -1.47% gap off the 200-day to 694.56 but closed at 687.29, below VWAP 690.17, after the auction. The checklist says Buy on dip, but 3 sell alerts, 1.5:1 reward/risk, the most rate exposure here and the NVDA leadership vacuum before Nov 17 keep it at Hold; Cisco's raise after hours is a modest offset.",
       "reasons": ["Checklist Buy on dip, 6/0, but 3 sell alerts (below EMA21 and SMA50, trailing stop)", "200-day held today (low 679.84); capitulation and morning star confirmed Nov 11", "Below the VolumeLeaders 690.50/691.70 cluster", "Earnings yield 1.57pp below the 10Y", "NVDA CEO exit before Nov 17 results"],
-      "risks": ["Close below 680.93 (200-day) opens 668.9", "Weak AMAT/CSCO guidance tonight", "Export controls on Nvidia chips", "Hot PPI lifting yields"],
-      "upcoming": [{"date": "2026-11-12", "event": "AMAT and CSCO results after the close"}, {"date": "2026-11-13", "event": "October PPI 08:30 ET"}, {"date": "2026-11-17", "event": "Nvidia Q3 results"}, {"date": "2026-12-09", "event": "FOMC decision"}],
+      "risks": ["Close below 680.93 (200-day) opens 668.9", "Hot PPI lifting yields", "Export controls on Nvidia chips", "AMAT after-hours weakness spreading to chips"],
+      "upcoming": [{"date": "2026-11-13", "event": "October PPI 08:30 ET"}, {"date": "2026-11-17", "event": "Nvidia Q3 results"}, {"date": "2026-12-09", "event": "FOMC decision"}],
       "levels": {"buy_zone": "n/a", "warning_below": 680.93, "sell_below": 647.05, "take_profit_above": 718.44},
       "changes_if": "A daily close above 695.57 and EMA21 696.23 would lift it to Buy on dip; a close below 680.93 makes it Warning"
     },
     "SOXX": {
       "verdict": "Warning", "technical": "Warning", "confidence": "medium",
       "headline": "Recovered a -3.3% gap but capped at the 157 trendline; below all key averages",
-      "summary": "SOXX bounced from 150.04 to 157.63, was rejected at the falling channel top and resistance trendline, and sits near VWAP and the VolumeLeaders 155.00 level. It remains below EMA21, SMA50 and SMA200 with 5 sell alerts; the daily MACD crossed bullish today, and AMAT tonight and NVDA on Nov 17 are the catalysts.",
+      "summary": "SOXX bounced from 150.04 to 157.63, was rejected at the falling channel top and resistance trendline, and closed at 154.47 near the VolumeLeaders 155.00 level. It remains below EMA21, SMA50 and SMA200 with 5 sell alerts; the daily MACD crossed bullish and a record SOXS trade at the open looked like bear covering. AMAT beat but slipped after hours; NVDA on Nov 17 is the next catalyst.",
       "reasons": ["Checklist Warning, 5 sell alerts, Minervini 3/7, reward/risk 0.5", "Rejected at 156.82-157.86 resistance cluster", "5m turned down; 15m/1h turn down below 153.82", "Nvidia CEO exit with a China angle raises export-control risk", "Daily MACD bullish cross and unfilled 146.59 gap support limit near-term downside"],
-      "risks": ["Upside: strong AMAT guidance or calm NVDA results could lift it through 157.9 and the 200-day 160.12", "Upside: AAII bearish extreme and confirmed capitulation can fuel a squeeze", "Upside: no new export controls or a delay of chip tariffs"],
-      "upcoming": [{"date": "2026-11-12", "event": "Applied Materials FQ4 after the close"}, {"date": "2026-11-17", "event": "Nvidia Q3 results"}, {"date": "2026-12-09", "event": "FOMC decision"}],
-      "levels": {"buy_zone": "n/a", "warning_below": 160.12, "sell_below": 143.14, "take_profit_above": 172.23},
+      "risks": ["Upside: calm NVDA results or strong AI demand signals (Cisco raise) could lift it through 157.9 and the 200-day 160.12", "Upside: AAII bearish extreme, confirmed capitulation and the record SOXS cover can fuel a squeeze", "Upside: no new export controls or a delay of chip tariffs"],
+      "upcoming": [{"date": "2026-11-13", "event": "October PPI 08:30 ET"}, {"date": "2026-11-17", "event": "Nvidia Q3 results"}, {"date": "2026-12-09", "event": "FOMC decision"}],
+      "levels": {"buy_zone": "n/a", "warning_below": 150.26, "sell_below": 143.14, "take_profit_above": 172.23},
       "changes_if": "A close above the 200-day 160.12 would make it Hold; a close below 143.14 makes it Sell"
     }
   }
