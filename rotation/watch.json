@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12 02:41",
+ "updated": "2026-11-13 02:24",
  "asof": "2026-11-11",
  "spy_ytd_pct": 12.1,
  "regime": {
@@ -19,37 +19,36 @@
    "+ payrolls +165.0k",
    "+ industrial production 3.9% 3-month pace vs 2.245% y/y",
    "+ retail sales 6.78% 3-month pace vs 6.288% y/y",
-   "+ jobless claims 189.0k, falling"
+   "+ jobless claims 200.0k, stable"
   ],
   "inflation_score": 0,
   "inflation_signals": [
-   "+ core CPI 3.41% 3-month pace vs 2.566% y/y",
+   "+ core CPI 3.75% 3-month pace vs 2.566% y/y",
    "\u2212 core PCE 2.9% 3-month pace vs 3.121% y/y",
    "+ WTI $99.64, rising",
    "\u2212 5-year inflation expectations 2.25%, stable"
   ],
   "rates": "hikes",
-  "rates_text": "futures price fed funds 4.61% by 2027-07 vs 3.88% now (+73 bp)",
-  "as_of": "2026-11-10 13:10",
+  "rates_text": "futures price fed funds 4.73% by 2027-07 vs 3.88% now (+85 bp)",
+  "as_of": "2026-11-12 16:16",
   "pillars": {
-   "Inflation": "elevated, re-accelerating (core CPI 2.6% y/y, 3.4% 3-month annualized)",
+   "Inflation": "elevated, re-accelerating (core CPI 2.6% y/y, 3.8% 3-month annualized)",
    "Labor": "solid (unemployment 4.1%, payrolls 3-month avg +137k)",
    "Growth": "solid (real GDP 3.4% annualized, retail sales +6.3% y/y)",
    "Fed & rates": "mildly restrictive (real policy rate ~+0.9pp = fed funds 4.00% minus core PCE 3.1%)",
-   "Financial conditions": "loose (NFCI -0.46, high-yield spread 3.42pp)",
-   "Recession signals": "none flashing (Sahm 0.00, 10Y-2Y +0.32pp, NY Fed 12-month odds 17%, CFNAI +0.03)",
-   "Valuation": "extreme (stock market value 255% of GDP, 97th percentile of 10 years; dot-com peak 163% in 2000-01, same measure)",
-   "Oil": "WTI $100 (+70% y/y), price trend rising, oil volatility 58 (91th percentile)"
+   "Financial conditions": "loose (NFCI -0.46, high-yield spread 3.30pp)",
+   "Recession signals": "none flashing (Sahm 0.00, 10Y-2Y +0.25pp, NY Fed 12-month odds 17%, CFNAI +0.03)",
+   "Valuation": "extreme (stock market value 258% of GDP, 97th percentile of 10 years; dot-com peak 163% in 2000-01, same measure)",
+   "Oil": "WTI $100 (+70% y/y), price trend rising, oil volatility 51 (81th percentile)"
   }
  },
  "outlook": {
-  "regime": "Energy-led stagflation-lite with a diplomacy wildcard: oil still ~$100, core inflation sticky above 3% (core PCE), hiring near zero and a Fed priced to hike in December; AI capex being de-rated",
+  "regime": "Overheat: strong growth (Q3 GDP 3.4%), firm labor (payrolls +165k, claims 200k) and sticky inflation (core CPI +0.3% m/m three months running) with the Fed hiking into 2027, a 5% 10Y and the AI trade being de-rated",
   "themes": [
    {
     "name": "Energy supply squeeze",
     "symbols": [
      "SLB",
-     "WMB",
      "EOG"
     ]
    },
@@ -63,7 +62,8 @@
    {
     "name": "Higher-for-longer financials",
     "symbols": [
-     "PGR"
+     "PGR",
+     "JPM"
     ]
    },
    {
@@ -80,7 +80,7 @@
     ]
    }
   ],
-  "id": "2026-11-02"
+  "id": "2026-11-12"
  },
  "rows": [
   {
@@ -101,16 +101,16 @@
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
-    "ema21": 179.24,
-    "sma50": 187.56,
-    "sma200": 170.29,
+    "ema21": 178.74,
+    "sma50": 187.37,
+    "sma200": 170.42,
     "buy_zone": [
-     174.19,
-     180.92
+     173.71,
+     180.42
     ],
     "stop": 169.67,
     "target": 178.89,
-    "rr": 0.97,
+    "rr": 1.27,
     "sell_alerts": 3
    },
    "entry": "No setup yet",
@@ -141,17 +141,17 @@
    "check": {
     "verdict": "Sell",
     "why": "downtrend: price below falling averages",
-    "ema21": 106.29,
-    "sma50": 109.49,
-    "sma200": 111.95,
+    "ema21": 106.41,
+    "sma50": 109.4,
+    "sma200": 111.91,
     "buy_zone": [
-     107.77,
-     107.03
+     104.22,
+     107.14
     ],
-    "stop": 107.03,
-    "target": 111.2,
-    "rr": 1.66,
-    "sell_alerts": 3
+    "stop": 103.49,
+    "target": 111.98,
+    "rr": 1.07,
+    "sell_alerts": 4
    },
    "entry": "No setup yet",
    "fit": "neutral",
@@ -180,17 +180,17 @@
    "check": {
     "verdict": "Wait",
     "why": "mixed trend: wait for the averages to line up",
-    "ema21": 116.98,
-    "sma50": 113.59,
+    "ema21": 117.29,
+    "sma50": 113.7,
     "sma200": 115.09,
     "buy_zone": [
-     120.27,
-     117.98
+     120.1,
+     118.29
     ],
-    "stop": 119.27,
-    "target": 123.26,
-    "rr": 1.32,
-    "sell_alerts": 1
+    "stop": 119.1,
+    "target": 123.0,
+    "rr": 1.91,
+    "sell_alerts": 2
    },
    "entry": "No setup yet",
    "fit": "neutral",
@@ -216,16 +216,16 @@
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
-    "ema21": 88.77,
-    "sma50": 85.26,
-    "sma200": 83.97,
+    "ema21": 88.98,
+    "sma50": 85.39,
+    "sma200": 84.02,
     "buy_zone": [
      88.47,
-     89.31
+     89.52
     ],
     "stop": 87.93,
-    "target": 94.69,
-    "rr": 0.92,
+    "target": 94.29,
+    "rr": 1.03,
     "sell_alerts": 1
    },
    "entry": "Not the rotation target",
@@ -252,16 +252,16 @@
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
-    "ema21": 65.08,
-    "sma50": 64.9,
-    "sma200": 58.79,
+    "ema21": 65.01,
+    "sma50": 64.89,
+    "sma200": 58.86,
     "buy_zone": [
-     63.26,
-     65.69
+     63.17,
+     65.62
     ],
-    "stop": 60.05,
-    "target": 67.02,
-    "rr": 1.1,
+    "stop": 60.04,
+    "target": 68.01,
+    "rr": 0.87,
     "sell_alerts": 3
    },
    "entry": "Not the rotation target",
@@ -291,18 +291,18 @@
    "price": 58.63,
    "check": {
     "verdict": "Buy on dip",
-    "why": "uptrend; a better entry is nearer EMA21 56.92 / support 52.58",
-    "ema21": 56.92,
-    "sma50": 55.9,
-    "sma200": 53.61,
+    "why": "uptrend; a better entry is nearer EMA21 57.03 / support 52.58",
+    "ema21": 57.03,
+    "sma50": 55.92,
+    "sma200": 53.64,
     "buy_zone": [
-     55.79,
-     57.3
+     55.9,
+     57.41
     ],
-    "stop": 57.12,
-    "target": 60.9,
+    "stop": 56.7,
+    "target": 60.45,
     "rr": 1.5,
-    "sell_alerts": 2
+    "sell_alerts": 1
    },
    "entry": "Wait for the buy zone",
    "fit": "favored",
@@ -327,18 +327,18 @@
    "price": 188.95,
    "check": {
     "verdict": "Buy on dip",
-    "why": "uptrend; a better entry is nearer EMA21 182.31 / support 164.51",
-    "ema21": 182.31,
-    "sma50": 174.28,
-    "sma200": 158.94,
+    "why": "uptrend; a better entry is nearer EMA21 182.82 / support 164.51",
+    "ema21": 182.82,
+    "sma50": 174.59,
+    "sma200": 159.12,
     "buy_zone": [
-     178.45,
-     183.6
+     178.96,
+     184.11
     ],
-    "stop": 183.81,
-    "target": 196.66,
+    "stop": 182.68,
+    "target": 195.55,
     "rr": 1.5,
-    "sell_alerts": 2
+    "sell_alerts": 3
    },
    "entry": "Not the rotation target",
    "fit": "neutral",
@@ -364,17 +364,17 @@
    "check": {
     "verdict": "Wait",
     "why": "mixed trend: wait for the averages to line up",
-    "ema21": 168.16,
-    "sma50": 169.03,
-    "sma200": 172.74,
+    "ema21": 168.27,
+    "sma50": 168.97,
+    "sma200": 172.77,
     "buy_zone": [
      165.94,
-     169.36
+     169.46
     ],
-    "stop": 164.74,
-    "target": 178.15,
-    "rr": 1.15,
-    "sell_alerts": 3
+    "stop": 164.75,
+    "target": 176.58,
+    "rr": 1.54,
+    "sell_alerts": 2
    },
    "entry": "No setup yet",
    "fit": "favored",
@@ -399,18 +399,18 @@
    "price": 53.02,
    "check": {
     "verdict": "Buy on dip",
-    "why": "uptrend; a better entry is nearer EMA21 52.04 / support 52.03",
-    "ema21": 52.04,
-    "sma50": 50.89,
-    "sma200": 50.89,
+    "why": "uptrend; a better entry is nearer EMA21 52.07 / support 52.03",
+    "ema21": 52.07,
+    "sma50": 50.88,
+    "sma200": 50.91,
     "buy_zone": [
      52.03,
-     52.43
+     52.45
     ],
-    "stop": 51.64,
-    "target": 55.36,
-    "rr": 1.69,
-    "sell_alerts": 1
+    "stop": 51.65,
+    "target": 53.42,
+    "rr": 1.63,
+    "sell_alerts": 2
    },
    "entry": "Not the rotation target",
    "fit": "favored",
@@ -434,21 +434,21 @@
    "range30_atr": 6.25,
    "price": 44.59,
    "check": {
-    "verdict": "Buy on dip",
-    "why": "uptrend; a better entry is nearer EMA21 43.39 / support 44.00",
-    "ema21": 43.39,
-    "sma50": 42.49,
-    "sma200": 42.92,
+    "verdict": "Buy",
+    "why": "uptrend, near the 21-day average, reward/risk 2.8:1",
+    "ema21": 43.47,
+    "sma50": 42.51,
+    "sma200": 42.95,
     "buy_zone": [
      44.0,
-     43.69
+     43.77
     ],
     "stop": 43.7,
-    "target": 46.41,
-    "rr": 2.04,
+    "target": 46.16,
+    "rr": 2.76,
     "sell_alerts": 1
    },
-   "entry": "Wait for the buy zone",
+   "entry": "Good point",
    "fit": "unfavored",
    "fit_why": "overheat works against it; rate hikes hurt it",
    "turn_missing": [],
@@ -472,16 +472,16 @@
    "check": {
     "verdict": "Wait",
     "why": "mixed trend: wait for the averages to line up",
-    "ema21": 42.88,
-    "sma50": 41.78,
-    "sma200": 43.86,
+    "ema21": 42.97,
+    "sma50": 41.81,
+    "sma200": 43.87,
     "buy_zone": [
      42.6,
-     43.2
+     43.29
     ],
     "stop": 42.28,
-    "target": 45.74,
-    "rr": 1.25,
+    "target": 45.75,
+    "rr": 1.24,
     "sell_alerts": 2
    },
    "entry": "No setup yet",
@@ -508,17 +508,17 @@
    "check": {
     "verdict": "Warning",
     "why": "trend is breaking: below the 50-day average",
-    "ema21": 523.08,
-    "sma50": 562.1,
-    "sma200": 523.11,
+    "ema21": 521.16,
+    "sma50": 561.13,
+    "sma200": 523.54,
     "buy_zone": [
-     502.39,
-     529.98
+     500.68,
+     527.99
     ],
-    "stop": 479.38,
-    "target": 548.33,
+    "stop": 474.71,
+    "target": 542.99,
     "rr": 1.5,
-    "sell_alerts": 6
+    "sell_alerts": 5
    },
    "entry": "Not the rotation target",
    "fit": "neutral",
@@ -546,18 +546,18 @@
    "range30_atr": 4.39,
    "price": 102.23,
    "check": {
-    "verdict": "Buy on dip",
-    "why": "uptrend; a better entry is nearer EMA21 104.60 / support 100.04",
-    "ema21": 104.6,
-    "sma50": 106.27,
-    "sma200": 94.1,
+    "verdict": "Buy",
+    "why": "uptrend, near the 21-day average, reward/risk 2.3:1",
+    "ema21": 104.31,
+    "sma50": 106.23,
+    "sma200": 94.12,
     "buy_zone": [
-     100.93,
-     105.82
+     100.67,
+     105.52
     ],
-    "stop": 98.82,
+    "stop": 98.83,
     "target": 107.54,
-    "rr": 1.56,
+    "rr": 2.3,
     "sell_alerts": 4
    },
    "entry": "No setup yet",
@@ -587,17 +587,17 @@
    "price": 117.51,
    "check": {
     "verdict": "Buy",
-    "why": "uptrend, near the 21-day average, reward/risk 2.6:1",
-    "ema21": 120.2,
-    "sma50": 120.5,
-    "sma200": 98.69,
+    "why": "uptrend, near the 21-day average, reward/risk 3.1:1",
+    "ema21": 119.91,
+    "sma50": 120.65,
+    "sma200": 98.87,
     "buy_zone": [
-     116.32,
-     121.49
+     116.02,
+     121.21
     ],
-    "stop": 114.51,
-    "target": 125.27,
-    "rr": 2.58,
+    "stop": 114.5,
+    "target": 124.78,
+    "rr": 3.14,
     "sell_alerts": 3
    },
    "entry": "Not the rotation target",
@@ -628,16 +628,16 @@
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
-    "ema21": 158.62,
-    "sma50": 163.19,
-    "sma200": 137.64,
+    "ema21": 158.22,
+    "sma50": 163.08,
+    "sma200": 137.77,
     "buy_zone": [
-     153.39,
-     160.36
+     152.97,
+     159.97
     ],
-    "stop": 142.46,
-    "target": 164.76,
-    "rr": 0.88,
+    "stop": 142.45,
+    "target": 164.69,
+    "rr": 0.89,
     "sell_alerts": 4
    },
    "entry": "No setup yet",
@@ -666,19 +666,19 @@
    "range30_atr": 3.6,
    "price": 72.95,
    "check": {
-    "verdict": "Buy",
-    "why": "uptrend, near the 21-day average, reward/risk 5.1:1",
-    "ema21": 72.26,
-    "sma50": 71.7,
-    "sma200": 70.58,
+    "verdict": "Hold",
+    "why": "uptrend, but little room to the next resistance",
+    "ema21": 72.28,
+    "sma50": 71.67,
+    "sma200": 70.61,
     "buy_zone": [
-     72.82,
-     72.98
+     70.13,
+     73.0
     ],
-    "stop": 72.1,
-    "target": 77.28,
-    "rr": 5.08,
-    "sell_alerts": 0
+    "stop": 69.41,
+    "target": 76.83,
+    "rr": 1.39,
+    "sell_alerts": 1
    },
    "entry": "Not the rotation target",
    "fit": "favored",
@@ -704,17 +704,17 @@
    "check": {
     "verdict": "Wait",
     "why": "mixed trend: wait for the averages to line up",
-    "ema21": 93.22,
-    "sma50": 89.71,
-    "sma200": 94.95,
+    "ema21": 93.27,
+    "sma50": 89.74,
+    "sma200": 94.91,
     "buy_zone": [
-     93.0,
-     94.4
+     92.95,
+     94.44
     ],
-    "stop": 91.82,
+    "stop": 91.78,
     "target": 99.05,
-    "rr": 0.99,
-    "sell_alerts": 2
+    "rr": 2.62,
+    "sell_alerts": 4
    },
    "entry": "No setup yet",
    "fit": "unfavored",
@@ -738,21 +738,21 @@
    "range30_atr": 3.47,
    "price": 84.49,
    "check": {
-    "verdict": "Buy on dip",
-    "why": "uptrend; a better entry is nearer EMA21 82.09 / support 82.39",
-    "ema21": 82.09,
+    "verdict": "Buy",
+    "why": "uptrend, near the 21-day average, reward/risk 2.3:1",
+    "ema21": 82.22,
     "sma50": 81.03,
-    "sma200": 81.68,
+    "sma200": 81.72,
     "buy_zone": [
      82.39,
-     82.81
+     82.94
     ],
-    "stop": 81.67,
-    "target": 88.82,
-    "rr": 1.54,
-    "sell_alerts": 2
+    "stop": 81.68,
+    "target": 87.83,
+    "rr": 2.3,
+    "sell_alerts": 1
    },
-   "entry": "Wait for the buy zone",
+   "entry": "Good point",
    "fit": "neutral",
    "fit_why": "",
    "turn_missing": [],
@@ -776,17 +776,17 @@
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
-    "ema21": 153.96,
-    "sma50": 154.82,
-    "sma200": 142.66,
+    "ema21": 153.71,
+    "sma50": 154.54,
+    "sma200": 142.79,
     "buy_zone": [
-     148.17,
-     155.89
+     148.1,
+     155.58
     ],
-    "stop": 148.59,
+    "stop": 136.21,
     "target": 160.3,
-    "rr": 0.52,
-    "sell_alerts": 1
+    "rr": 0.61,
+    "sell_alerts": 3
    },
    "entry": "Not the rotation target",
    "fit": "unfavored",
@@ -811,17 +811,17 @@
    "price": 180.14,
    "check": {
     "verdict": "Buy on dip",
-    "why": "uptrend; a better entry is nearer EMA21 187.53 / support 178.62",
-    "ema21": 187.53,
-    "sma50": 190.42,
-    "sma200": 171.52,
+    "why": "uptrend; a better entry is nearer EMA21 187.13 / support 178.29",
+    "ema21": 187.13,
+    "sma50": 190.24,
+    "sma200": 171.76,
     "buy_zone": [
-     180.8,
-     189.77
+     180.29,
+     189.41
     ],
-    "stop": 176.38,
-    "target": 193.6,
-    "rr": 3.58,
+    "stop": 176.01,
+    "target": 196.83,
+    "rr": 1.92,
     "sell_alerts": 3
    },
    "entry": "Not the rotation target",
@@ -852,16 +852,16 @@
    "check": {
     "verdict": "Sell",
     "why": "downtrend: price below falling averages",
-    "ema21": 70.43,
-    "sma50": 70.52,
-    "sma200": 75.88,
+    "ema21": 70.54,
+    "sma50": 70.47,
+    "sma200": 75.85,
     "buy_zone": [
-     72.69,
-     71.1
+     70.19,
+     71.2
     ],
-    "stop": 72.02,
-    "target": 75.07,
-    "rr": 1.5,
+    "stop": 69.53,
+    "target": 75.65,
+    "rr": 1.81,
     "sell_alerts": 1
    },
    "entry": "No setup yet",
@@ -888,16 +888,16 @@
    "check": {
     "verdict": "Wait",
     "why": "downtrend, but oversold / capitulation: watch for a turn, no buy yet",
-    "ema21": 34.7,
-    "sma50": 38.67,
-    "sma200": 46.2,
+    "ema21": 34.49,
+    "sma50": 38.43,
+    "sma200": 46.06,
     "buy_zone": [
-     32.75,
-     35.35
+     32.6,
+     35.12
     ],
-    "stop": 29.93,
-    "target": 37.56,
-    "rr": 1.05,
+    "stop": 29.95,
+    "target": 34.65,
+    "rr": 0.96,
     "sell_alerts": 5
    },
    "entry": "No setup yet",
@@ -927,17 +927,17 @@
    "check": {
     "verdict": "Sell",
     "why": "downtrend: price below falling averages",
-    "ema21": 43.35,
-    "sma50": 44.12,
-    "sma200": 53.71,
+    "ema21": 43.26,
+    "sma50": 44.02,
+    "sma200": 53.64,
     "buy_zone": [
-     41.24,
-     44.05
+     41.22,
+     43.94
     ],
-    "stop": 41.15,
-    "target": 48.16,
-    "rr": 1.5,
-    "sell_alerts": 2
+    "stop": 39.63,
+    "target": 44.7,
+    "rr": 0.87,
+    "sell_alerts": 4
    },
    "entry": "No setup yet",
    "fit": "unfavored",
@@ -963,18 +963,18 @@
    "range30_atr": 5.88,
    "price": 78.47,
    "check": {
-    "verdict": "Hold",
-    "why": "uptrend, but little room to the next resistance",
-    "ema21": 81.1,
-    "sma50": 85.09,
-    "sma200": 78.17,
+    "verdict": "Warning",
+    "why": "trend is breaking: below the 50-day average",
+    "ema21": 80.68,
+    "sma50": 84.95,
+    "sma200": 78.16,
     "buy_zone": [
-     77.23,
-     82.39
+     76.91,
+     81.94
     ],
-    "stop": 69.78,
-    "target": 86.19,
-    "rr": 0.89,
+    "stop": 69.82,
+    "target": 84.03,
+    "rr": 1.13,
     "sell_alerts": 4
    },
    "entry": "No setup yet",
@@ -1005,17 +1005,17 @@
    "check": {
     "verdict": "Hold",
     "why": "uptrend, but little room to the next resistance",
-    "ema21": 279.18,
-    "sma50": 281.31,
-    "sma200": 278.31,
+    "ema21": 279.12,
+    "sma50": 281.01,
+    "sma200": 278.4,
     "buy_zone": [
-     272.38,
-     281.45
+     272.41,
+     281.36
     ],
-    "stop": 267.0,
-    "target": 296.68,
-    "rr": 0.84,
-    "sell_alerts": 1
+    "stop": 267.03,
+    "target": 285.8,
+    "rr": 0.64,
+    "sell_alerts": 3
    },
    "entry": "No setup yet",
    "fit": "unfavored",
