@@ -1,6 +1,6 @@
 {
- "asof": "2026-11-12",
- "updated": "2026-11-12 16:16",
+ "asof": "2026-11-13",
+ "updated": "2026-11-13 10:34",
  "state": "Bull",
  "signs_on": 0,
  "signs_total": 10,
@@ -9,7 +9,7 @@
    "key": "below200",
    "label": "SPY below its 200-day average",
    "on": false,
-   "detail": "SPY 756.70 vs 200-day 728.98"
+   "detail": "SPY 750.73 vs 200-day 729.30"
   },
   {
    "key": "ma200_falling",
@@ -33,13 +33,13 @@
    "key": "mom12",
    "label": "12-month return negative",
    "on": false,
-   "detail": "12-month return +12.0%"
+   "detail": "12-month return +11.0%"
   },
   {
    "key": "dd10",
    "label": "10%+ below the 52-week high",
    "on": false,
-   "detail": "-2.9% from the 52-week high"
+   "detail": "-3.6% from the 52-week high"
   },
   {
    "key": "breadth",
@@ -66,12 +66,8 @@
    "detail": ""
   }
  ],
- "drawdown_pct": -2.9,
+ "drawdown_pct": -3.6,
  "history": [
-  [
-   "2024-10-17",
-   1
-  ],
   [
    "2024-10-18",
    1
@@ -2147,13 +2143,13 @@
   [
    "2026-11-12",
    0
+  ],
+  [
+   "2026-11-13",
+   0
   ]
  ],
  "state_history": [
-  [
-   "2024-10-17",
-   "Bull"
-  ],
   [
    "2024-10-18",
    "Bull"
@@ -4229,6 +4225,10 @@
   [
    "2026-11-12",
    "Bull"
+  ],
+  [
+   "2026-11-13",
+   "Bull"
   ]
  ],
  "test": {
@@ -4300,7 +4300,7 @@
    "sharpe": 0.73
   },
   "buy_hold": {
-   "cagr": 10.0,
+   "cagr": 9.9,
    "max_dd": -55.2,
    "sharpe": 0.59
   },

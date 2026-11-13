@@ -1,5 +1,5 @@
-{"updated": "2026-11-12 10:14",
- "note": "Nov 12 check: NAAIM is subscription-only since Aug 2026 (no current public value); the put/call date comes from the Cboe URL (the fetched page does not print it).",
+{"updated": "2026-11-13 10:34",
+ "note": "Nov 13 check: no newer CNN Fear & Greed, AAII (weekly, next Nov 18-19) or put/call value found in search, so the readings below are still the latest; NAAIM is subscription-only since Aug 2026 (no current public value); the put/call date comes from the Cboe URL.",
  "gauges": [
   {"name": "CNN Fear & Greed index", "value": "33 (prior 32)", "date": "2026-11-10", "reading": "fear, up from extreme fear (20) on Nov 5; still in the lower third of its range, where forward returns have tended to be better than average", "source": "https://benzinga.com/markets/market-summary/26/11/63130061/dow-falls-over-150-points-following-inflation-report-greed-index-remains-in-fear-zone"},
   {"name": "AAII sentiment survey", "value": "Bullish 30.8% / Neutral 17.8% / Bearish 51.4% (spread -20.6)", "date": "2026-11-11", "reading": "fear: bears about 20pp above their ~31.5% long-run average and up from 48.4% a week earlier; a contrarian-bullish extreme", "source": "https://www.aaii.com/sentimentsurvey"},

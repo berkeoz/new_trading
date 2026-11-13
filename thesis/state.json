@@ -1,13 +1,13 @@
 {
  "start": "2026-10-19",
- "cash": 77298.1039390564,
+ "cash": 82825.25420761108,
  "positions": {
   "SLB": {
    "shares": 163,
    "entry_price": 49.06,
    "entry_date": "2026-10-19 13:58",
    "spy_entry": 767.4600219726562,
-   "last": 50.94,
+   "last": 51.22,
    "theme": "Energy supply squeeze",
    "thesis": "Oilfield services lag crude and benefit from international and offshore spending while Hormuz stays impaired; the position holds above the 47.72 support (5 touches) near its 200-day average 51.24. Momentum has faded (Stage 3, Minervini 4/7), so conviction is cut to 1.",
    "conviction": 2,
@@ -25,34 +25,12 @@
     "high": 49.5
    }
   },
-  "COST": {
-   "shares": 5,
-   "entry_price": 996.5101,
-   "entry_date": "2026-10-19 13:58",
-   "spy_entry": 767.4600219726562,
-   "last": 1092.37,
-   "theme": "Defensive consumer compounder",
-   "thesis": "Membership retail gains share with sentiment near record lows; up 10% on the position and at a 52-week high (RSI 75), just under the 1100 target. The forward P/E of 43.8 is stretched, so the stop is raised to just below the 1017.98 support (4 touches) to lock in most of the gain.",
-   "conviction": 1,
-   "stop": 1015,
-   "target": 1100,
-   "invalidation": "A daily close below 1015 (loses the 1017.98 support) or slowing renewal rates.",
-   "catalysts": [
-    "November sales report early December (date n/a)",
-    "Q1 FY27 results in December (date n/a)"
-   ],
-   "entry": {
-    "type": "zone",
-    "low": 965,
-    "high": 1000
-   }
-  },
   "EOG": {
    "shares": 33,
    "entry_price": 150.66,
    "entry_date": "2026-11-04 09:45",
    "spy_entry": 767.0499877929688,
-   "last": 155.63,
+   "last": 157.795,
    "theme": "Energy supply squeeze",
    "thesis": "Low-cost US producer at a forward P/E of 9.3 with strong free cash flow; Minervini 7/7, Stage 2, above its 50-day average 149.19 with supports at 153.75 and 147.84. Stop raised slightly to just below the 142.53 support (6 touches).",
    "conviction": 1,
@@ -75,7 +53,7 @@
    "entry_price": 594.905,
    "entry_date": "2026-11-04 13:51",
    "spy_entry": 767.6900024414062,
-   "last": 604.15,
+   "last": 596.75,
    "theme": "Defense and geopolitics",
    "thesis": "Record backlog and multi-year munitions demand; holding above the 586.98 breakout level and both moving averages (SMA50 552.34, SMA200 564.56). Stop raised to 566, about 1 ATR below the breakout, to protect the position.",
    "conviction": 1,
@@ -112,7 +90,7 @@
     "Drug-pricing oversight from the new Democratic Congress (January)"
    ],
    "added": "2026-10-19",
-   "last": 1430.13
+   "last": 1434.355
   },
   "JNJ": {
    "theme": "Quality health care",
@@ -131,7 +109,7 @@
     "Drug-pricing policy"
    ],
    "added": "2026-10-19",
-   "last": 283.57
+   "last": 287.255
   },
   "PGR": {
    "theme": "Higher-for-longer financials",
@@ -150,7 +128,7 @@
     "FOMC Dec 9"
    ],
    "added": "2026-10-19",
-   "last": 235.49
+   "last": 236.955
   },
   "WMT": {
    "theme": "Defensive consumer compounder",
@@ -169,7 +147,7 @@
     "Holiday sales commentary"
    ],
    "added": "2026-11-02",
-   "last": 126.16
+   "last": 127.81
   },
   "JPM": {
    "theme": "Higher-for-longer financials",
@@ -188,7 +166,7 @@
     "Q4 results mid-January (date n/a)"
    ],
    "added": "2026-11-12",
-   "last": 342.82
+   "last": 344.745
   }
  },
  "closed": [
@@ -229,6 +207,19 @@
    "pnl": -441.27,
    "ret_pct": -8.84,
    "reason": "stop 65.5 hit",
+   "spy_entry": 767.4600219726562
+  },
+  {
+   "symbol": "COST",
+   "theme": "Defensive consumer compounder",
+   "shares": 5,
+   "entry_price": 996.5101,
+   "entry_date": "2026-10-19 13:58",
+   "exit_price": 1105.4301,
+   "exit_date": "2026-11-13 10:31",
+   "pnl": 544.6,
+   "ret_pct": 10.93,
+   "reason": "target 1100 reached",
    "spy_entry": 767.4600219726562
   }
  ],
@@ -317,6 +308,11 @@
    "date": "2026-11-12",
    "equity": 101032.16,
    "spy": 757.2
+  },
+  {
+   "date": "2026-11-13",
+   "equity": 101155.35,
+   "spy": 750.67
   }
  ],
  "events": [
@@ -451,12 +447,18 @@
    "kind": "watch",
    "symbol": "JPM",
    "text": "added to the watch list (Higher-for-longer financials): buy zone 330-338, stop 318, target 370, conviction 1"
+  },
+  {
+   "time": "2026-11-13 10:31",
+   "kind": "sell",
+   "symbol": "COST",
+   "text": "sold 5 at 1105.43 (target 1100 reached); P&L +545 (+10.9%)"
   }
  ],
  "outlook_id": "2026-11-12",
  "outlook_applied": "2026-11-12T10:22-05:00",
- "updated": "2026-11-12T16:15-05:00",
- "spy_last": 757.2000122070312,
+ "updated": "2026-11-13T10:31-05:00",
+ "spy_last": 750.6699829101562,
  "outlook": {
   "id": "2026-11-12",
   "horizon": "6-12 months",
