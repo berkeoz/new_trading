@@ -124,6 +124,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** swing trader using Bookmap/order-flow levels. **Focus:** momentum names (NBIS, AEHR).
 - **Style:** setups with liquidity levels, defined entries and stops; posts stop-outs openly. **Signal-to-noise:** medium-high.
 - **Calls log:**
+  - 2026-11-13 (Fri mid, 5 posts): SOXX lesson: 130→~160 run into gap-fill resistance, no higher low, so closed early. SOXL "fastest horse" over 5 days. Asks whether Jensen's return means a 25% NVDA pop. Outcome: the exit timing was strong (SOXX about -5% Fri).
   - 2026-11-13 (Fri am, 2 posts): weekly P&L: NBIS pre-earnings -1.4%; SOXX trade closed Fri for +30.7% account gain; ~+29% week; all cash, "not fighting the tape". Outcome: SOXX dip-buy (Nov 5-ish) worked; exited before Friday's selloff.
   - 2026-11-12 (Thu pm, 3 posts): NVDA monthly head-and-shoulders "without right shoulder" (bearish); endorsed a reply naming $150 as the key weekly level. Outcome: open.
   - 2026-11-12 (Thu mid, 2 posts): AMD ~+50% in 5 days, "shining star in semis"; "dips are still being bought" (% off low screen: COHR, CLS, AXTI, SOXL, NVDA +10%+). Outcome: open; matches SOXX bounce 150→157.
@@ -276,6 +277,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** subscriber day-trading room. **Focus:** intraday index and options trades.
 - **Style:** most posts locked to subscribers (daily "Weekly Open" article); occasional public trading-psychology posts and custom indicators. **Signal-to-noise:** low publicly.
 - **Calls log:**
+  - 2026-11-13 (Fri mid, 1 post): QQQ correction-analogue chart: the last two corrections ran further down and longer than his model, so he expects the same now. Outcome: open; the morning "final push lower" played out (NDX -2.4% low).
   - 2026-11-13 (Fri am, 1 post, 09:06 ET, X article mostly locked): "The Friday Close": stocks higher to start after mild overnight weakness, but expects "one final push lower over the next few days" before the broader move higher. Outcome: open (morning reversal lower fits the first half).
   - 2026-11-12 (Thu am, 5 posts): "most important post": growth/momentum names marked up Apr–May, distributed Jun–Sep, now in Wyckoff markdown (Nov 11); image-only posts. Outcome: open; fits the neocloud/NVDA selloff.
   - 2026-11-10 (Tue pm, 1 post): psychology post, "one of the toughest markets in recent memory". No call.
@@ -397,6 +399,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** daily and weekly pattern calls (engulfing, channel tops, wedges, EMAs); names triggers but few price targets; argues with followers. **Signal-to-noise:** medium-high.
 - **Bias:** tends to call tops (says AMD top worked "after 20 tries"). Admits misses publicly (TSLA, 10/11).
 - **Calls log:**
+  - 2026-11-13 (Fri mid, 8 posts): TSLA bear flag; PLTR H&S → bear-flag breakdown; GOOGL "nasty reversal candle"; SPCX below its 3-day range; IBIT "all out at +360%"; DXY weekly. Outcome: open (IBIT/BTC bear call paid).
   - 2026-11-13 (Fri am, 2 posts): VIX +10%; claims a private-feed ES "resistance at the highs" alert, short banked 130 pts (sub promo). Outcome for Thu pm batch: index/VIX follow-through so far (S&P -0.67%, VIX >20); AAPL "failed breakout" wrong (new ATH).
   - 2026-11-12 (Thu pm, 25 posts): post-close bearish reversal batch — XLF dark cloud cover, IYT bearish engulfing, IBB double-inside breakdown, IWM evening star below 50 EMA, SMH failed reclaim of box range, MSFT ugly weekly reversal (bearish next week if Fri holds at/below), AAPL failed breakout, GOOGL breakout "likely bull trap", AVGO into 200-SMA resistance after +26%, HYG "big breakdown", VIX bullish reversal; "PPI tomorrow". Outcome: open (test Fri 11/13; HYG 76.98 vs 76.41 low).
   - 2026-11-12 (Thu mid, 1 post): AAPL another ATH, then green to red. Outcome: right — failed back below prior ATH by the close.
@@ -535,6 +538,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** exact levels and targets; polls. **Signal-to-noise:** high.
 - **Bias:** leans bullish and buys dips.
 - **Calls log:**
+  - 2026-11-13 (Fri mid, 9 posts): QQQ lost the 200dma (matches our data); MSTR nearing $100–105 support (Jun–Aug base), -37% in 1.5 months; NVDA Nov 17 the "most important" report; AAPL another ATH; "non-zero" chance of a US stake in NVDA. Outcome: MSTR level open.
   - 2026-11-13 (Fri am, 2 posts): VIX +10% back over 20; a joke. No level.
   - 2026-11-12 (Thu mid, 1 post): SPX since Covid: long trendline from 2020 and a steeper one from the 2025 low, both "respected". No level.
   - 2026-11-12 (Thu am, 30 posts cap): NVDA $148s→$161s off the lows, paring half the loss; "-40% from ATH"; forward P/E "single digits" (unverified, looks wrong); QQQ above its 200dma pre-open; AAPL ATHs; VIX 5 red days round-tripping last week's 70% pop; SPY 3.5% from ATH; GLD near a 52-week low. Outcome: dip-bounce call ("wait for the bounce") played out intraday.
@@ -1106,6 +1110,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Bias:** bullish; contrarian to "late bears".
 - **Reliability:** too early to score; calls are specific enough to track.
 - **Calls log:**
+  - 2026-11-13 (Fri mid, 4 posts): "hit my weekly target", trimmed longs, expects cheaper exposure soon; teases a market update. Outcome: the QQQ 710–715 roadmap is off for now (QQQ below its 681 200-day).
   - 2026-11-13 (Fri am, 2 posts): BTC long +35% in 20 min on Liquid (referral promo); video poll. No QQQ update. Outcome for the 710–715 call: under pressure (Nasdaq -1% at 10:05 ET after the PPI pump faded).
   - 2026-11-12 (Thu pm, 6 posts): weekly QQQ target 685–700 "tagged the midpoint" (took profits, runners left); bull target 710–715 next week, "before the Anthropic IPO", then a possible "generational short" to the 660s; no break below last Thursday's low until 2027; "$700+ is calling". Outcome: 685–700 target right (QQQ high 694.56, close 687.29); 710 open.
   - 2026-11-12 (Thu am, 27 posts since Tue): NVDA 2027 calls idea for Thu morning (equal lows at 164 swept overnight, discount zone of the Mar-2025→Oct-2026 range, FVG tag), "Huang out, Gabe in"; overnight NQ plan: dip into the 0.5 of the 4h range / bullish FVG stack will be bought; "path 1 playing out" by 10:57 ET; trimmed calls Wed; BTC "trades like hell for 5 weeks" then a generational setup. Outcome: NQ plan right (QQQ held the 200-day and turned green); NVDA fell to the $148s before recovering above $163 — entry-dependent.
