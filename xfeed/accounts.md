@@ -336,6 +336,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** charting-platform brand account; chart technician plus marketing. **Focus:** pattern setups, earnings, insider buys.
 - **Style:** clean annotated charts with Fibonacci and analyst-target lines; memes; product promotion; no stops. **Signal-to-noise:** medium. **Bias:** bullish on breakouts.
 - **Calls log:**
+  - 2026-11-14 (Sat mid, ~13 posts): SPY weekly "strikingly similar to April" (pullback to an anchored VWAP, squeeze, oversold oscillator); MU weekly "giant bull flag" (falling channel after the run, near the 50 EMA); NVDA valuation-band "deep discount" indicator; BTC lowest since August; SEEM, ZETA longs; heavy promo. Outcome: open (Monday open; NVDA Nov 17).
   - 2026-11-13 (Fri pm, 5 posts): NVDA weekly log at rising-channel support (~162.8) "don't bury the bulls"; MSFT "another higher low"; SPCX "in a pinch"; FAA; Huang joke. Outcome: open (NVDA support test into Nov 17 earnings).
   - 2026-11-13 (Fri am, 2 posts): AAPL new ATH, most valuable company by >$1T; a meme. No level.
   - 2026-11-12 (Thu mid, 1 post): Huang LinkedIn meme. No call.
@@ -406,6 +407,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** daily and weekly pattern calls (engulfing, channel tops, wedges, EMAs); names triggers but few price targets; argues with followers. **Signal-to-noise:** medium-high.
 - **Bias:** tends to call tops (says AMD top worked "after 20 tries"). Admits misses publicly (TSLA, 10/11).
 - **Calls log:**
+  - 2026-11-14 (Sat mid, ~18 posts): SPY daily 5/9/20/50/100 EMAs converged, "expect" a dump Monday or soon after; QQQ failed back below daily 5/9 EMA and 200 EMA/SMA = bearish; UK/DAX record weekly closes into resistance = bad for US next week; DXY weekly breakout above 200 SMA; NVDA RSI most oversold in 7 yrs, don't short it, don't go long either, Tuesday earnings decide; took profit on BTC short Fri. Outcome: open (SPY 747.8 / QQQ 671.7 Monday).
   - 2026-11-13 (Fri pm, 13 posts): ES daily "moving as anticipated", expects the rally to fail at resistance; ES -40 pts 5 min after the close; AVGO denied at 200 SMA/channel; TSLA bear "back"; AMD chasers; SMH complacency; MRNA monthly vs the 2021 top. Outcome: open (SPY 747.8 Warning line is the test).
   - 2026-11-13 (Fri mid, 8 posts): TSLA bear flag; PLTR H&S → bear-flag breakdown; GOOGL "nasty reversal candle"; SPCX below its 3-day range; IBIT "all out at +360%"; DXY weekly. Outcome: open (IBIT/BTC bear call paid).
   - 2026-11-13 (Fri am, 2 posts): VIX +10%; claims a private-feed ES "resistance at the highs" alert, short banked 130 pts (sub promo). Outcome for Thu pm batch: index/VIX follow-through so far (S&P -0.67%, VIX >20); AAPL "failed breakout" wrong (new ATH).
@@ -547,6 +549,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** exact levels and targets; polls. **Signal-to-noise:** high.
 - **Bias:** leans bullish and buys dips.
 - **Calls log:**
+  - 2026-11-14 (Sat mid, 12 posts): NVDA must hold its blue/purple support lines; if last week's lows hold plus a decent report, a "dead cat bounce" to the ~$190 line is plausible; Mag-7 YTD swing table; BTC/ETH/NVDA daily RSI 24; BTC sliced through major MAs, near a key line. Outcome: open (NVDA Nov 17).
   - 2026-11-13 (Fri mid, 9 posts): QQQ lost the 200dma (matches our data); MSTR nearing $100–105 support (Jun–Aug base), -37% in 1.5 months; NVDA Nov 17 the "most important" report; AAPL another ATH; "non-zero" chance of a US stake in NVDA. Outcome: MSTR level open.
   - 2026-11-13 (Fri am, 2 posts): VIX +10% back over 20; a joke. No level.
   - 2026-11-12 (Thu mid, 1 post): SPX since Covid: long trendline from 2020 and a steeper one from the 2025 low, both "respected". No level.
@@ -721,6 +724,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** trading educator and macro chartist (Jordan Lindsey). **Focus:** TNX/10Y, NQ, BTC/ETH. Low frequency (no posts 10/08–10/15 morning; 2 posts 10/15 midday).
 - **Style:** big-picture chart calls with self-promotion of past hits.
 - **Calls log:**
+  - 2026-11-14 (Sat mid, 2 posts): trend-following is short-side only; buy-side traders stay in cash until momentum returns; BTC macro-cycle/liquidity thread (2019–2020 analogy). Outcome: open.
   - 2026-11-13 (Fri am, 1 post, 23:19 ET Thu): "Something is going down…" — vague. No call.
   - 2026-11-12 (Thu am, 1 post, Nov 11): compute costs will keep rising through 2027, not enough compute. Thematic, no level.
   - 2026-11-10 (Tue mid, 1 post): 10Y "set to sell off again into year end" (livestream). Outcome: 10Y crossed 5% the same day; open.
@@ -917,6 +921,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** one chart plus one table per post; specific and testable; small samples. **Signal-to-noise:** medium-high. **Bias:** leans on bull-market base rates.
 - **2026-11-03 (Tue pm, 1 post, 13:36 ET):** VIX closed above 21 while the S&P stayed near its highs; SPX higher 4 weeks later in 15 of 17 cases, "good omen" for a post-midterm November rally. Outcome: open (check ~Dec 1; SPY 754.41 at the Nov 3 close).
 - **Calls log:**
+  - 2026-11-14 (Sat mid, 1 post): SOXL record weekly outflow ($4.2B) after big inflows = speculators stepping back, "encouraging sign" tech nears a bottom. Outcome: open (SOXX 143.9 level).
   - 2026-11-13 (Fri pm, 2 posts): NDX back below its 200 DMA; since dot-com every such failed recovery saw NDX fall ≥3.8% within 3 months (QQQ toward last week's low); NVDA 6 straight down weeks, >30%, last 7-week streak in 2008. Outcome: open (check by mid-Feb 2027; QQQ 679 at 15:45 Fri).
   - 2026-11-13 (Fri am, 1 post): ANT IPO next week; SPX higher ~90% of the time 3 months after major US IPOs, median +3.4%. Base rate, no level. Outcome: open (check mid-Feb 2027).
   - 2026-11-12 (Thu am, 4 posts): NDX gapped 1.5%+ above its 200-day (Nov 11), only 12 prior times, last 3 marked bottoms, "now or never"; SPX 152 straight days above 200DMA; Anthropic IPO ~$1.4T, big IPOs' median 3-month drawdown 21.2%; Huang tribute. Outcome: NDX held its 200-day on Thu's NVDA shock so far.
@@ -1078,6 +1083,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** one-line post plus chart images with ranked bubbles (#1 = largest since inception) and level labels (price · $ value · rank). Does not say buy or sell. **Signal-to-noise:** high for levels; low volume (a few posts a day).
 - **Reliability:** factual ranks from its own database; treat prints as levels, not direction. Open `/status/<id>/photo/1` to read the full chart. Logged in volume_leaders.jsonl.
 - **Calls log:**
+  - 2026-11-14 (Sat mid, 2 posts, Fri ~01:10 ET): QTEC two large closing-bell prints (#7, #12 on the chart) at the $280.90 level, slide after hours, "not a great look" into the weekend; PAAS #13 printed three times at the $36.50–37.20 pivot ($900M+ traded). Logged. Outcome: open.
   - 2026-11-13 (Fri am, 1 post, Thu 18:41 ET): NVDA Nov 12 = #1 aggregate dollar-volume day since inception (no unusually large single trades; 5 of 6 sessions top-100, 3 top-10); price tapped -4 ATR ribbon on the 4H; "often seen at/near washout lows"; earnings Nov 17, opex Nov 20. Logged. Outcome: open (test vs Nov 12 low / earnings).
   - 2026-11-12 (Thu pm, 1 post): TLH #1 trade since inception, $810M @ $94.09 (dark pool, ~13:15 ET right after the 30Y tail; #16 and #74 earlier). Logged. Outcome: open — if "record print = extreme" holds, a near-term high in long yields (10Y 5.10%).
   - 2026-11-12 (Thu mid, 2 posts): SOXS #1 trade since inception at the open (~$49.80, $130M level) after a 20% run, then -10% by 11am; IAUM #2 since inception (dark pool sweep ~$38.6), "near term longs safe above #2 and #3". Logged. Outcome: SOXS #1 marked the SOXX low (150.04 → 157.63) — right so far; IAUM open.
