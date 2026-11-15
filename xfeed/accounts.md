@@ -340,6 +340,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** charting-platform brand account; chart technician plus marketing. **Focus:** pattern setups, earnings, insider buys.
 - **Style:** clean annotated charts with Fibonacci and analyst-target lines; memes; product promotion; no stops. **Signal-to-noise:** medium. **Bias:** bullish on breakouts.
 - **Calls log:**
+  - 2026-11-15 (Sun mid, 2 posts): NFLX weekly at the lowest valuation band ("1/3rd its fair value"), RSI bullish divergence; BB weekly triangle at its tightest. Outcome: open (no levels).
   - 2026-11-15 (Sun am, 4 posts): SWK weekly cup-and-handle breakout above the rim (~110 area); KEYS attention chart; meme; promo. Outcome: open.
   - 2026-11-14 (Sat mid, ~13 posts): SPY weekly "strikingly similar to April" (pullback to an anchored VWAP, squeeze, oversold oscillator); MU weekly "giant bull flag" (falling channel after the run, near the 50 EMA); NVDA valuation-band "deep discount" indicator; BTC lowest since August; SEEM, ZETA longs; heavy promo. Outcome: open (Monday open; NVDA Nov 17).
   - 2026-11-13 (Fri pm, 5 posts): NVDA weekly log at rising-channel support (~162.8) "don't bury the bulls"; MSFT "another higher low"; SPCX "in a pinch"; FAA; Huang joke. Outcome: open (NVDA support test into Nov 17 earnings).
@@ -412,6 +413,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** daily and weekly pattern calls (engulfing, channel tops, wedges, EMAs); names triggers but few price targets; argues with followers. **Signal-to-noise:** medium-high.
 - **Bias:** tends to call tops (says AMD top worked "after 20 tries"). Admits misses publicly (TSLA, 10/11).
 - **Calls log:**
+  - 2026-11-15 (Sun mid, 1 post): BTC below the 9-yr uptrend from the June 2017 bottom; too extended to short, below support so no long, "no touch". Outcome: open.
   - 2026-11-15 (Sun am, 5 posts): XLF closed back into "the mother of all resistances" incl. the top of a 27-yr channel, "big problem" for the market this week; NVDA failed "monster C&H" (told followers not to chase); BTC in a box at the bottom of its 4-month range, relief bounce possible but not a long. Outcome: open (XLF this week; conflicts with our financials-rotation view).
   - 2026-11-14 (Sat mid, ~18 posts): SPY daily 5/9/20/50/100 EMAs converged, "expect" a dump Monday or soon after; QQQ failed back below daily 5/9 EMA and 200 EMA/SMA = bearish; UK/DAX record weekly closes into resistance = bad for US next week; DXY weekly breakout above 200 SMA; NVDA RSI most oversold in 7 yrs, don't short it, don't go long either, Tuesday earnings decide; took profit on BTC short Fri. Outcome: open (SPY 747.8 / QQQ 671.7 Monday).
   - 2026-11-13 (Fri pm, 13 posts): ES daily "moving as anticipated", expects the rally to fail at resistance; ES -40 pts 5 min after the close; AVGO denied at 200 SMA/channel; TSLA bear "back"; AMD chasers; SMH complacency; MRNA monthly vs the 2021 top. Outcome: open (SPY 747.8 Warning line is the test).
@@ -1067,6 +1069,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Reliability:** returns are self-reported (+75.7% for 2026 claimed on 10/28); levels are specific but stops are not given.
 - **2026-11-03 (Tue pm, 1 post, 14:02 ET, Turkish):** about +5% intraday, YTD shown as 50.94% (down from the +75.7% claimed 10/28); details promised tomorrow. Outcome: n/a (self-reported).
 - **Calls log:**
+  - 2026-11-15 (Sun mid, 1 post, Turkish): AVGO at long-term channel support, ~80% upside from a bounce, but 50/100 and 100/200 SMA bearish crosses mean chop first. Outcome: open (no entry/stop).
   - 2026-11-15 (Sun am, 3 posts, Turkish): calls the Nvidia intervention a state takeover of a monopoly; COHR CEO insider buy = optics upside and cheap; a frustrated meme. Outcome: open (COHR, no level).
   - 2026-11-13 (Fri pm, 3 posts, Turkish): day -4%, 2026 +34% (self-reported); liked the semis buying into the close; one non-market post. No level.
   - 2026-11-13 (Fri am, 2 posts, Thu 19:22–20:40 ET, Turkish): frustrated with Trump's comments and NVDA management's quick decisions; warns of liquidity-crisis risk. No level.
@@ -1149,6 +1152,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Bias:** bullish; contrarian to "late bears".
 - **Reliability:** too early to score; calls are specific enough to track.
 - **Calls log:**
+  - 2026-11-15 (Sun mid, 2 posts): asked followers for QQQ predictions before his own video; live Q&A moved to 5:30 PM ET. Outcome: no call yet.
   - 2026-11-13 (Fri pm, 9 posts): "generational trade" next week if one (unnamed) level holds, details Sun 8:30 PM ET; NBIS "another 17%" lower Monday on the ground stop (joke-ish); CISD video; livestream and community promos. Outcome: open, no level given.
   - 2026-11-13 (Fri mid, 4 posts): "hit my weekly target", trimmed longs, expects cheaper exposure soon; teases a market update. Outcome: the QQQ 710–715 roadmap is off for now (QQQ below its 681 200-day).
   - 2026-11-13 (Fri am, 2 posts): BTC long +35% in 20 min on Liquid (referral promo); video poll. No QQQ update. Outcome for the 710–715 call: under pressure (Nasdaq -1% at 10:05 ET after the PPI pump faded).
