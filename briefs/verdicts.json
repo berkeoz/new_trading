@@ -1,47 +1,47 @@
 {
-  "updated": "2026-11-16 09:45 ET",
-  "brief_id": "2026-11-16-0945-open",
+  "updated": "2026-11-16 13:01 ET",
+  "brief_id": "2026-11-16-1301-midday",
   "trends": [
-    {"area": "Market trend", "now": "SPY opened 749.65 (-0.63%), opening range 746.65-749.82, last 749.09 above VWAP 748.51 and the 748.06 anchored VWAP; +2.7% above a rising 200-day (729.63), below EMA21 757.23 and SMA50 763.70", "implication": "The 748 test held; a close below 746.65 opens 737.8-733.6, holding keeps the uptrend intact"},
-    {"area": "Rates & Fed", "now": "10Y 5.131% (-2.3bp, +26.7bp in 5 days), 5Y 4.953%, 30Y 5.464%; Dec 9 hike priced 100% (implied 4.17%); Warsh 12:00 today, FOMC minutes Wed 14:00", "implication": "Rates cap long-duration tech; any 50bp hint is the main macro downside"},
-    {"area": "Inflation & oil", "now": "WTI 86.74 (-2.06%), Brent 93.50 (-2.44%), about -14.5% over 1 month; Hormuz mine claims unverified; PPI 6.5% y/y", "implication": "Falling oil eases inflation pressure and weighs on energy; verified Hormuz damage would reverse it"},
-    {"area": "Dollar", "now": "DXY 103.49, 3-month high (+3.85% over 3 months); gold 3,884 at a 3-month low", "implication": "Headwind for multinational tech; favours domestic and defensive groups"},
-    {"area": "Leading / lagging sectors", "now": "At the open health care +0.88%, transports +0.69%, utilities +0.67%, staples +0.63% lead; semis -3.01%, tech -1.66%, energy -1.15% lag; 1 month vs SPY health care +9.6pp, staples +7.9pp, semis -10.7pp", "implication": "Rotation out of AI hardware into defensives continues; semis remain the weakest group"},
-    {"area": "AI & tech", "now": "Micron about -6%, Intel and AMD -5.2%, Broadcom -3.8%, NVDA -2 to -3.6% at the open; Commerce interim rule on remote access to advanced AI chips by third countries; Nvidia Q3 Tue after the close; Anthropic IPO expected Thursday", "implication": "QQQ and SOXX stay headline-driven into Tuesday; the report decides whether the Nov 5 lows hold"},
-    {"area": "Sentiment & leadership", "now": "Risk-appetite score +20 (81st pct, +38 a week ago); VIX 20.47, VIX9D 17.82 below VIX; AAII bears 51.4%; CNN Fear & Greed 33 (Nov 10); equal-weight and transports risk-on, semis, growth/value and high-beta risk-off", "implication": "Defensive positioning cushions the broad market; bearish extremes leave room for a squeeze on good Nvidia news"},
-    {"area": "Bear market watch", "now": "Bull, 0 of 10 signs; SPY -3.2% from its 52-week high, above its 200-day; HY ETF 76.93 above its 76.41 3-month low", "implication": "The next sign would be SPY below its 200-day (729.63) or HY spreads widening (HY ETF below 76.41)"},
-    {"area": "Political risk", "now": "Fed hiking path (rising; Warsh today, minutes Wed); AI chip policy (rising: remote-access rule, Nvidia succession); US-Iran Hormuz (rising, unverified mine claims); Dec 11 funding deadline; OPEC+ Nov 29", "implication": "Chip-rule scope and Hormuz escalation are the main downside catalysts; a clean Nvidia report or Iran de-escalation the upside ones"}
+    {"area": "Market trend", "now": "SPY 742.31 (-1.6%), broke the 746.65 opening-range low and VWAP 745.38; +1.7% above a rising 200-day (729.59), below EMA21 756.62 and SMA50 763.57; all intraday timeframes trend down", "implication": "737.8-733.6 support test likely before Nvidia; a close back above 748 would undo the break"},
+    {"area": "Rates & Fed", "now": "10Y 5.135% (-1.9bp, +27bp in 5 days), 5Y 4.951%, 30Y 5.477%; Dec 9 hike priced 100% (implied 4.175%); Warsh's noon remarks on AI/productivity gave no rate guidance; FOMC minutes Wed 14:00", "implication": "No new rate shock today, but 5%+ yields keep the equity risk premium negative and cap tech multiples"},
+    {"area": "Inflation & oil", "now": "WTI 86.14 (-2.7%), Brent 93.05 (-2.9%), -15% over 1 month; Hormuz mine claims unverified; IEA sees Q4 surplus; PPI 6.5% y/y", "implication": "Falling oil eases inflation pressure and weighs on energy; verified Hormuz damage would reverse it"},
+    {"area": "Dollar", "now": "DXY 103.55, fresh 3-month high (+3.9% over 3 months); gold 3,861 at a 3-month low", "implication": "Headwind for multinational tech and gold; favours domestic and defensive groups"},
+    {"area": "Leading / lagging sectors", "now": "Today vs SPY: staples +2.1pp, transports +1.9pp, utilities +1.7pp, health care +1.7pp lead; semis -2.9pp, tech -1.3pp lag; 1 month: homebuilders +11.3pp, health care +9.7pp, semis -11.2pp", "implication": "Rotation out of AI hardware into defensives deepens; semis remain the weakest group"},
+    {"area": "AI & tech", "now": "Nvidia at session lows after CNBC said the board is not considering reinstating Huang; Intel -6% (class action), TSMC about -5.7%; Nvidia Q3 Tue after the close; Anthropic IPO expected Thursday (~$1.4T) may pull money from other AI names", "implication": "QQQ and SOXX stay headline-driven; the report decides whether the Nov 5 lows (647.05 / 130.75) hold"},
+    {"area": "Sentiment & leadership", "now": "Risk-appetite score +20 (81st pct, Nov 13); VIX 21.9 (+13.5%), VIX9D 21.72 caught up with VIX; AAII bears 51.4%; CNN Fear & Greed 33; equal-weight and transports risk-on, semis, growth/value and high-beta risk-off", "implication": "Near-term stress rising, but bearish positioning leaves room for a squeeze on a good Nvidia report"},
+    {"area": "Bear market watch", "now": "Bull, 0 of 10 signs (Nov 13); SPY above its 200-day 729.59; HY ETF 76.82 above its 76.41 3-month low", "implication": "The next sign would be SPY closing below its 200-day (729.59) or HY spreads widening (HY ETF below 76.41)"},
+    {"area": "Political risk", "now": "Fed hiking path (rising; minutes Wed); AI chip policy (rising: remote-compute rule, Nvidia leadership); Trump Asia trip incl. China; US-Iran Hormuz (unverified mine claims); Dec 11 funding deadline; OPEC+ Nov 29", "implication": "Chip-rule scope and China headlines are the main downside catalysts; a clean Nvidia report or a China trade thaw the upside ones"}
   ],
   "tickers": {
     "SPY": {
-      "verdict": "Hold", "technical": "Hold", "confidence": "medium",
-      "headline": "748 test held at 746.65; back above VWAP, range trade into Warsh",
-      "summary": "The checklist reads Hold (5 good / 2 bad, 3 sell alerts): uptrend above a rising 200-day but below EMA21 and SMA50. The gap matched the pre-market and the 748 anchored VWAP held, with defensives and financials cushioning the chip sell-off; Warsh, Nvidia and the minutes are the event risks.",
-      "reasons": ["Checklist Hold, rising 200-day, 0 of 10 bear signs", "Opening-range low 746.65 held above the 745.2 4h pivot; price above VWAP 748.51", "Rotation into defensives offsets tech", "10Y 5.13% and a negative equity risk premium cap upside", "Nvidia Q3 Tue and FOMC minutes Wed are event risk"],
-      "risks": ["A close below 748.06 / 746.65 opens 737.8-733.6", "Warsh or the minutes hinting at 50bp", "Chip-rule scope wider than reported", "Brent back above $100 on verified Hormuz damage"],
-      "upcoming": [{"date": "2026-11-16", "event": "Fed Chair Warsh 12:00 ET"}, {"date": "2026-11-17", "event": "Retail sales 08:30; Nvidia Q3 after the close"}, {"date": "2026-11-18", "event": "FOMC minutes 14:00 ET"}, {"date": "2026-11-19", "event": "Walmart earnings; jobless claims"}, {"date": "2026-11-20", "event": "Monthly options expiration"}, {"date": "2026-12-09", "event": "FOMC decision"}, {"date": "2026-12-11", "event": "Government funding deadline"}],
-      "levels": {"buy_zone": "733.6-748", "warning_below": 748.06, "sell_below": 729.63, "take_profit_above": 775.39},
-      "changes_if": "A close above 754.05 moves it to Buy on dip; a close below 748.06 makes it Warning, below the 200-day 729.63 Sell"
+      "verdict": "Warning", "technical": "Hold", "confidence": "medium",
+      "headline": "Opening range and 748 broke; 742.31 below VWAP, 737.8 next",
+      "summary": "The checklist still reads Hold (4 good / 2 bad, 3 sell alerts) above a rising 200-day, but the intraday structure broke: below the 746.65 opening-range low, VWAP 745.38 and the 748 line set as the Warning trigger, with every timeframe trending down. Reward/risk is 0.5:1 with Nvidia, retail sales and the minutes ahead, so the model sits one step below the checklist until 748 is reclaimed.",
+      "reasons": ["Broke 746.65 and 748.06; below VWAP 745.38", "5m to daily all trend down; MACD histogram falling", "Reward/risk 0.5:1 to 754 resistance", "Defensives cushion the broad index; 0 of 10 bear signs", "Nvidia Q3 Tue and FOMC minutes Wed are event risk"],
+      "risks": ["Upside: a clean Nvidia report and soft retail sales could squeeze back above 748-754", "Upside: AAII bears 51% is a contrarian extreme", "Upside: falling oil and yields easing"],
+      "upcoming": [{"date": "2026-11-17", "event": "Retail sales 08:30; Nvidia Q3 after the close"}, {"date": "2026-11-18", "event": "FOMC minutes 14:00 ET"}, {"date": "2026-11-19", "event": "Walmart earnings; jobless claims; Anthropic IPO expected"}, {"date": "2026-11-20", "event": "Monthly options expiration"}, {"date": "2026-12-09", "event": "FOMC decision"}, {"date": "2026-12-11", "event": "Government funding deadline"}],
+      "levels": {"buy_zone": "729.6-737.8", "warning_below": 748.06, "sell_below": 729.59, "take_profit_above": 775.39},
+      "changes_if": "A close back above 748.06 returns it to Hold; a close below the 200-day 729.59 makes it Sell"
     },
     "QQQ": {
       "verdict": "Warning", "technical": "Warning", "confidence": "medium",
-      "headline": "Opened 671.05 (-1.3%), low 666.6; below the 671.68 engulfing trigger and the 200-day",
-      "summary": "QQQ is below the 200-day 681.46 with 4 sell alerts and Stage 3, and trades under the 671.68 bearish-engulfing trigger as Micron, AMD and Nvidia fall again. It is holding above VWAP 669.9; rates, a 3-month-high dollar and the chip remote-access rule outweigh oversold momentum before Nvidia's report.",
-      "reasons": ["Below the 200-day 681.46, EMA21 692.65 and SMA50 716.77", "Checklist Warning, 4 sell alerts, Stage 3, 0.5:1 reward/risk", "Bearish engulfing confirms on a close below 671.68", "Chip weakness and the remote-access rule before Nvidia Q3", "Earnings yield 1.51pp below the 10Y"],
-      "risks": ["Upside: a clean Nvidia Q3 could squeeze it toward 681-695", "Upside: AAII 51% bears and the confirmed Nov 11 capitulation", "Upside: a softer Warsh tone easing yields"],
-      "upcoming": [{"date": "2026-11-16", "event": "Fed Chair Warsh 12:00 ET"}, {"date": "2026-11-17", "event": "Nvidia Q3 after the close"}, {"date": "2026-11-18", "event": "FOMC minutes 14:00 ET"}, {"date": "2026-12-09", "event": "FOMC decision"}],
-      "levels": {"buy_zone": "n/a", "warning_below": 681.46, "sell_below": 647.05, "take_profit_above": 716.77},
+      "headline": "664.11 (-2.3%), below the opening range and VWAP; 661.5 test likely",
+      "summary": "QQQ broke its 666.6 opening-range low and trades below VWAP 666.59, the 200-day 681.42 and the 671.68 engulfing trigger, with every timeframe trending down and 4 sell alerts. Nvidia's leadership story, TSMC and Intel weakness and a 3-month-high dollar weigh on it into Tuesday's report; the 647.05 capitulation low is the Sell line.",
+      "reasons": ["Below the 200-day 681.42, EMA21 692.02 and SMA50 716.63", "Checklist Warning, 4 sell alerts, Stage 3, 0.8:1 reward/risk", "Bearish engulfing confirming below 671.68", "Chip weakness and the remote-compute rule before Nvidia Q3", "Earnings yield 1.48pp below the 10Y"],
+      "risks": ["Upside: a clean Nvidia Q3 could squeeze it toward 681-695", "Upside: AAII 51% bears and the confirmed Nov 11 capitulation", "Upside: China trade headlines from Trump's Asia trip"],
+      "upcoming": [{"date": "2026-11-17", "event": "Nvidia Q3 after the close"}, {"date": "2026-11-18", "event": "FOMC minutes 14:00 ET"}, {"date": "2026-11-19", "event": "Anthropic IPO expected"}, {"date": "2026-12-09", "event": "FOMC decision"}],
+      "levels": {"buy_zone": "n/a", "warning_below": 681.42, "sell_below": 647.05, "take_profit_above": 716.63},
       "changes_if": "A daily close above 695.57 lifts it to Hold; a close below 647.05 (the Nov 5 low) makes it Sell"
     },
     "SOXX": {
       "verdict": "Warning", "technical": "Warning", "confidence": "medium",
-      "headline": "Gapped -4.2%, low 140.88 held above 140.43; back to 143.9 above VWAP",
-      "summary": "SOXX gapped to 142.98 on the chip sell-off (Micron, AMD, Intel, Nvidia) and the remote-access rule, bottomed at 140.88 and recovered to 143.94 above VWAP 143.07. It stays below EMA21, SMA50 and SMA200 with 5 sell alerts; only the Nov 12 MACD bullish cross and the confirmed capitulation argue against Sell, and a close below 140.88 removes that.",
-      "reasons": ["Checklist Warning, 5 sell alerts, Minervini 3/7, Stage 3", "Opening-range low 140.88 held; back at the 143.90 VolumeLeaders level", "Remote-access chip rule and Nvidia target cuts", "Falling channel and falling resistance 154.27 intact", "Daily MACD bullish cross still holds"],
-      "risks": ["Upside: a clean Nvidia Q3 on Nov 17 with intact guidance", "Upside: the remote-access rule turns out narrow", "Upside: heavy hedging can fuel a squeeze toward 150-155"],
+      "headline": "142.29 (-4.7%) at VWAP; 140.88 low still holding",
+      "summary": "SOXX is pinned inside its 140.88-144.50 opening range at VWAP 142.5, below EMA21, SMA50 and SMA200 with 5 sell alerts and the daily MACD bullish cross fading (+0.04). Intel's lawsuit, TSMC's drop and Nvidia's leadership story add to the remote-compute rule; a close below 140.88 tips it to Sell.",
+      "reasons": ["Checklist Warning, 5 sell alerts, Minervini 3/7, Stage 3", "Opening-range low 140.88 held; below the 143.90 VolumeLeaders level", "Remote-compute chip rule, Intel class action, TSMC -5.7%", "Falling channel and falling resistance 154.27 intact", "MACD bullish cross about to roll over"],
+      "risks": ["Upside: a clean Nvidia Q3 on Nov 17 with intact guidance", "Upside: the remote-compute rule turns out narrow or China trade thaws", "Upside: heavy hedging can fuel a squeeze toward 150-155"],
       "upcoming": [{"date": "2026-11-17", "event": "Nvidia Q3 after the close"}, {"date": "2026-11-18", "event": "FOMC minutes 14:00 ET"}, {"date": "2026-12-09", "event": "FOMC decision"}],
-      "levels": {"buy_zone": "n/a", "warning_below": 145.24, "sell_below": 140.88, "take_profit_above": 171.3},
-      "changes_if": "A close above the 200-day 160.41 makes it Hold; a close below 140.88 makes it Sell"
+      "levels": {"buy_zone": "n/a", "warning_below": 145.11, "sell_below": 140.88, "take_profit_above": 171.26},
+      "changes_if": "A close above the 200-day 160.4 makes it Hold; a close below 140.88 makes it Sell"
     }
   }
 }
