@@ -1,17 +1,17 @@
 {
- "updated": "2026-11-17 09:46",
+ "updated": "2026-11-17 13:01",
  "tickers": [
   {
    "symbol": "QQQ",
-   "price": 660.63,
-   "asof": "2026-11-17 09:30",
+   "price": 653.52,
+   "asof": "2026-11-17 12:30",
    "timeframes": {
     "1H": {
-     "up": 0,
+     "up": 2,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 676.05,
+     "st_level": 669.63,
      "st_flip": "2026-11-13 09:30"
     },
     "2H": {
@@ -19,23 +19,23 @@
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 681.4,
+     "st_level": 677.31,
      "st_flip": "2026-11-16 11:30"
     },
     "4H": {
-     "up": 1,
+     "up": 0,
      "of": 13,
      "label": "bearish",
-     "st_dir": "up",
-     "st_level": 656.32,
-     "st_flip": "2026-11-11 09:30"
+     "st_dir": "down",
+     "st_level": 690.35,
+     "st_flip": "2026-11-17 09:30"
     },
     "1D": {
      "up": 2,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 709.99,
+     "st_level": 707.66,
      "st_flip": "2026-10-14"
     },
     "1W": {
@@ -43,41 +43,41 @@
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 758.89,
+     "st_level": 756.26,
      "st_flip": "2026-11-02"
     }
    },
    "short_term": "bearish",
    "weekly": "bearish",
    "levels": {
-    "daily_supertrend": 709.99,
-    "weekly_supertrend": 758.89,
-    "sma200": 681.59,
+    "daily_supertrend": 707.66,
+    "weekly_supertrend": 756.26,
+    "sma200": 681.56,
     "high_52w": 759.66,
     "minus10": 683.69,
     "minus20": 607.73,
-    "from_high_pct": -13.0
+    "from_high_pct": -14.0
    }
   },
   {
    "symbol": "SPY",
-   "price": 738.32,
-   "asof": "2026-11-17 09:30",
+   "price": 731.04,
+   "asof": "2026-11-17 12:30",
    "timeframes": {
     "1H": {
      "up": 1,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 749.14,
+     "st_level": 744.67,
      "st_flip": "2026-11-13 09:30"
     },
     "2H": {
-     "up": 1,
+     "up": 0,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 753.16,
+     "st_level": 749.19,
      "st_flip": "2026-11-16 11:30"
     },
     "4H": {
@@ -85,7 +85,7 @@
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 761.65,
+     "st_level": 759.59,
      "st_flip": "2026-10-16 09:30"
     },
     "1D": {
@@ -93,7 +93,7 @@
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 772.52,
+     "st_level": 770.46,
      "st_flip": "2026-10-30"
     },
     "1W": {
@@ -108,34 +108,34 @@
    "short_term": "bearish",
    "weekly": "mixed",
    "levels": {
-    "daily_supertrend": 772.52,
+    "daily_supertrend": 770.46,
     "weekly_supertrend": 726.9,
-    "sma200": 729.82,
+    "sma200": 729.79,
     "high_52w": 779.09,
     "minus10": 701.18,
     "minus20": 623.27,
-    "from_high_pct": -5.2
+    "from_high_pct": -6.2
    }
   },
   {
    "symbol": "SOXX",
-   "price": 141.4,
-   "asof": "2026-11-17 09:30",
+   "price": 139.39,
+   "asof": "2026-11-17 12:30",
    "timeframes": {
     "1H": {
      "up": 1,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 148.68,
+     "st_level": 146.61,
      "st_flip": "2026-11-13 09:30"
     },
     "2H": {
-     "up": 1,
+     "up": 0,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 151.67,
+     "st_level": 150.9,
      "st_flip": "2026-11-16 09:30"
     },
     "4H": {
@@ -147,7 +147,7 @@
      "st_flip": "2026-11-11 09:30"
     },
     "1D": {
-     "up": 3,
+     "up": 2,
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
@@ -159,7 +159,7 @@
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 193.47,
+     "st_level": 192.53,
      "st_flip": "2026-10-26"
     }
    },
@@ -167,12 +167,12 @@
    "weekly": "bearish",
    "levels": {
     "daily_supertrend": 163.06,
-    "weekly_supertrend": 193.47,
-    "sma200": 160.52,
+    "weekly_supertrend": 192.53,
+    "sma200": 160.51,
     "high_52w": 218.19,
     "minus10": 196.37,
     "minus20": 174.56,
-    "from_high_pct": -35.2
+    "from_high_pct": -36.1
    }
   }
  ],
