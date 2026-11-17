@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-16 17:12",
+ "updated": "2026-11-17 09:16",
  "tickers": [
   {
    "symbol": "QQQ",
@@ -43,7 +43,7 @@
      "of": 13,
      "label": "bearish",
      "st_dir": "down",
-     "st_level": 759.02,
+     "st_level": 759.03,
      "st_flip": "2026-11-02"
     }
    },
@@ -51,7 +51,7 @@
    "weekly": "bearish",
    "levels": {
     "daily_supertrend": 709.99,
-    "weekly_supertrend": 759.02,
+    "weekly_supertrend": 759.03,
     "sma200": 681.41,
     "high_52w": 759.66,
     "minus10": 683.69,
@@ -180,6 +180,6 @@
   "state": "Bull",
   "signs_on": 0,
   "signs_total": 10,
-  "drawdown_pct": -3.2
+  "drawdown_pct": -5.0
  }
 }

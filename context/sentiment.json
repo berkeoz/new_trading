@@ -1,17 +1,13 @@
 {
- "asof": "2026-11-13",
- "updated": "2026-11-16 17:13",
+ "asof": "2026-11-16",
+ "updated": "2026-11-17 09:16",
  "composite": {
-  "score": 20.2,
-  "percentile_10y": 81,
-  "score_1w_ago": 37.5,
-  "score_1m_ago": -0.7,
+  "score": 39.5,
+  "percentile_10y": 90,
+  "score_1w_ago": 18.1,
+  "score_1m_ago": 30.4,
   "label": "risk-on",
   "history": [
-   [
-    "2025-11-03",
-    -36.9
-   ],
    [
     "2025-11-04",
     -24.5
@@ -1047,6 +1043,10 @@
    [
     "2026-11-13",
     20.2
+   ],
+   [
+    "2026-11-16",
+    39.5
    ]
   ]
  },
@@ -1056,72 +1056,72 @@
    "label": "VIX (fear gauge)",
    "group": "Fear & complacency",
    "how": "percentile of the VIX vs 10 years; high = fear",
-   "value": 19.3,
-   "signal": -0.3,
-   "signal_1m_ago": 0.07,
+   "value": 22.91,
+   "signal": -0.6,
+   "signal_1m_ago": -0.38,
    "reading": "risk-off",
-   "note": "",
+   "note": "extreme fear: historically bullish (contrarian)",
    "used": true,
    "direction": "contrarian",
    "weight": -0.1806,
    "ic_train": -0.244,
-   "ic_test": -0.058
+   "ic_test": -0.059
   },
   {
    "key": "vix_term",
    "label": "VIX vs 3-month VIX",
    "group": "Fear & complacency",
    "how": "above 1 = near-term panic (backwardation)",
-   "value": 0.936,
-   "signal": -0.36,
-   "signal_1m_ago": 0.1,
+   "value": 0.9952,
+   "signal": -0.95,
+   "signal_1m_ago": -0.75,
    "reading": "risk-off",
-   "note": "",
+   "note": "extreme fear: historically bullish (contrarian)",
    "used": true,
    "direction": "contrarian",
    "weight": -0.1827,
    "ic_train": -0.246,
-   "ic_test": -0.2
+   "ic_test": -0.199
   },
   {
    "key": "skew",
    "label": "SKEW (tail-risk demand)",
    "group": "Fear & complacency",
    "how": "percentile; high = investors paying up for crash protection",
-   "value": 147.14,
-   "signal": -0.61,
-   "signal_1m_ago": -0.94,
+   "value": 146.33,
+   "signal": -0.57,
+   "signal_1m_ago": -0.98,
    "reading": "risk-off",
    "note": "",
    "used": true,
    "direction": "trend",
    "weight": 0.0832,
    "ic_train": 0.112,
-   "ic_test": 0.054
+   "ic_test": 0.059
   },
   {
    "key": "move",
    "label": "MOVE (bond volatility)",
    "group": "Fear & complacency",
    "how": "percentile; high = stress in rates",
-   "value": 98.79,
-   "signal": -0.44,
-   "signal_1m_ago": -0.5,
+   "value": 101.28,
+   "signal": -0.48,
+   "signal_1m_ago": -0.48,
    "reading": "risk-off",
    "note": "",
    "used": false,
    "direction": null,
    "weight": null,
    "ic_train": -0.034,
-   "ic_test": -0.072
+   "ic_test": -0.073
   },
   {
    "key": "breadth50",
    "label": "Sectors above their 50-day",
    "group": "Breadth",
    "how": "share of the 11 sector ETFs above their 50-day average",
-   "value": 72.73,
-   "signal": 0.45,
+   "value": 63.64,
+   "signal": 0.27,
    "signal_1m_ago": -0.27,
    "reading": "risk-on",
    "note": "",
@@ -1129,7 +1129,7 @@
    "direction": "contrarian",
    "weight": -0.1233,
    "ic_train": -0.166,
-   "ic_test": -0.184
+   "ic_test": -0.179
   },
   {
    "key": "breadth200",
@@ -1145,31 +1145,31 @@
    "direction": "contrarian",
    "weight": -0.0806,
    "ic_train": -0.109,
-   "ic_test": -0.156
+   "ic_test": -0.15
   },
   {
    "key": "rsp_spy",
    "label": "Equal-weight vs cap-weight S&P (RSP/SPY)",
    "group": "Breadth",
    "how": "rising = broad participation, falling = narrow leadership",
-   "value": 0.2932,
+   "value": 0.2959,
    "signal": 1.0,
-   "signal_1m_ago": -0.25,
+   "signal_1m_ago": -0.02,
    "reading": "risk-on",
    "note": "",
    "used": true,
    "direction": "trend",
    "weight": 0.1149,
    "ic_train": 0.155,
-   "ic_test": -0.17
+   "ic_test": -0.166
   },
   {
    "key": "iwm_spy",
    "label": "Small caps vs S&P (IWM/SPY)",
    "group": "Leaders",
    "how": "small caps leading = risk appetite",
-   "value": 0.3679,
-   "signal": 0.05,
+   "value": 0.3689,
+   "signal": 0.16,
    "signal_1m_ago": -1.0,
    "reading": "neutral",
    "note": "",
@@ -1177,14 +1177,14 @@
    "direction": null,
    "weight": null,
    "ic_train": 0.087,
-   "ic_test": 0.001
+   "ic_test": 0.008
   },
   {
    "key": "smh_spy",
    "label": "Semis vs S&P (SMH/SPY)",
    "group": "Leaders",
    "how": "semis often lead the market",
-   "value": 0.6452,
+   "value": 0.6242,
    "signal": -1.0,
    "signal_1m_ago": -1.0,
    "reading": "risk-off",
@@ -1193,31 +1193,31 @@
    "direction": "trend",
    "weight": 0.0275,
    "ic_train": 0.037,
-   "ic_test": 0.011
+   "ic_test": 0.016
   },
   {
    "key": "iyt_spy",
    "label": "Transports vs S&P (IYT/SPY)",
    "group": "Leaders",
    "how": "Dow-theory confirmation",
-   "value": 0.111,
+   "value": 0.1135,
    "signal": 1.0,
-   "signal_1m_ago": -0.94,
+   "signal_1m_ago": -0.89,
    "reading": "risk-on",
    "note": "",
    "used": false,
    "direction": null,
    "weight": null,
    "ic_train": 0.09,
-   "ic_test": -0.127
+   "ic_test": -0.121
   },
   {
    "key": "xly_xlp",
    "label": "Discretionary vs staples (XLY/XLP)",
    "group": "Leaders",
    "how": "offense vs defense",
-   "value": 1.2992,
-   "signal": -0.8,
+   "value": 1.2759,
+   "signal": -1.0,
    "signal_1m_ago": -1.0,
    "reading": "risk-off",
    "note": "extreme fear: historically bullish (contrarian)",
@@ -1225,14 +1225,14 @@
    "direction": "contrarian",
    "weight": -0.0796,
    "ic_train": -0.107,
-   "ic_test": -0.053
+   "ic_test": -0.047
   },
   {
    "key": "sphb_splv",
    "label": "High beta vs low volatility (SPHB/SPLV)",
    "group": "Leaders",
    "how": "risk appetite inside equities",
-   "value": 1.7024,
+   "value": 1.6416,
    "signal": -1.0,
    "signal_1m_ago": -1.0,
    "reading": "risk-off",
@@ -1241,23 +1241,23 @@
    "direction": null,
    "weight": null,
    "ic_train": 0.022,
-   "ic_test": -0.07
+   "ic_test": -0.067
   },
   {
    "key": "vug_vtv",
    "label": "Growth vs value (VUG/VTV)",
    "group": "Leaders",
    "how": "growth leading = risk appetite and lower-rate expectations; value leading = defensive / late cycle",
-   "value": 0.367,
+   "value": 0.3617,
    "signal": -1.0,
-   "signal_1m_ago": 0.1,
+   "signal_1m_ago": -0.65,
    "reading": "risk-off",
    "note": "extreme fear: historically bullish (contrarian)",
    "used": true,
    "direction": "contrarian",
    "weight": -0.0683,
    "ic_train": -0.092,
-   "ic_test": 0.137
+   "ic_test": 0.135
   },
   {
    "key": "cu_au",
@@ -1265,7 +1265,7 @@
    "group": "Intermarket",
    "how": "growth expectations vs safety",
    "value": 0.0016,
-   "signal": 0.11,
+   "signal": -0.1,
    "signal_1m_ago": 1.0,
    "reading": "neutral",
    "note": "",
@@ -1273,58 +1273,61 @@
    "direction": "trend",
    "weight": 0.0593,
    "ic_train": 0.08,
-   "ic_test": -0.156
+   "ic_test": -0.161
   },
   {
    "key": "hyg_ief",
    "label": "Junk bonds vs Treasuries (HYG/IEF)",
    "group": "Intermarket",
    "how": "credit risk appetite; often leads stocks",
-   "value": 0.8545,
-   "signal": -0.03,
-   "signal_1m_ago": -0.21,
+   "value": 0.8503,
+   "signal": -0.19,
+   "signal_1m_ago": -0.35,
    "reading": "neutral",
    "note": "",
    "used": false,
    "direction": null,
    "weight": null,
    "ic_train": -0.068,
-   "ic_test": -0.176
+   "ic_test": -0.172
   },
   {
    "key": "btc",
    "label": "Bitcoin",
    "group": "Intermarket",
    "how": "speculative risk appetite",
-   "value": 68249.27,
-   "signal": -0.99,
-   "signal_1m_ago": 0.4,
+   "value": 64855.84,
+   "signal": -1.0,
+   "signal_1m_ago": 0.31,
    "reading": "risk-off",
    "note": "",
    "used": false,
    "direction": null,
    "weight": null,
    "ic_train": -0.0,
-   "ic_test": 0.156
+   "ic_test": 0.154
   }
  ],
- "alerts": [],
+ "alerts": [
+  "SPY is in the bottom fifth of its 3-month range but these are improving: Equal-weight vs cap-weight S&P (RSP/SPY), Transports vs S&P (IYT/SPY), Sectors above their 50-day (positive divergence)",
+  "VIX is above the 3-month VIX (backwardation): near-term panic, which has often come near short-term lows"
+ ],
  "model": {
   "horizon_days": 21,
   "train": "2012 to 2021",
   "test": "2022 onwards",
   "composite": {
    "ic_train": 0.363,
-   "ic_test": 0.061,
+   "ic_test": 0.058,
    "test_quintiles": {
-    "q1": 1.13,
-    "q2": 1.11,
-    "q3": 1.06,
-    "q4": 0.44,
-    "q5": 1.85
+    "q1": 1.11,
+    "q2": 1.13,
+    "q3": 1.0,
+    "q4": 0.43,
+    "q5": 1.83
    },
-   "spy_avg_month": 1.12
+   "spy_avg_month": 1.1
   },
-  "fitted": "2026-11-10 09:16"
+  "fitted": "2026-11-17 09:16"
  }
 }
