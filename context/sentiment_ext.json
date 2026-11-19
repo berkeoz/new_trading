@@ -1,7 +1,7 @@
-{"updated": "2026-11-18 18:12",
- "note": "Nov 18 check: Benzinga reports CNN Fear & Greed at 25 (extreme fear) on Nov 17, down from 31 (MacroMicro shows 23.7 for the same day). The Nov 11 AAII week is still the latest (next release Nov 19). No newer Cboe put/call value was found, so the Nov 11 reading is kept. NAAIM is still subscription-only (no public value).",
+{"updated": "2026-11-19 15:45",
+ "note": "Nov 19 check: AAII released the week ending Nov 18 (bears eased to 42.2% from 51.4%). No CNN Fear & Greed value from a reliable source newer than Benzinga's 25 for Nov 17 was found; MacroMicro pages list conflicting Nov 19 values (21.7 and 28.9), so they are not used. No newer Cboe put/call value was found, so the Nov 11 reading is kept. NAAIM is still subscription-only (no public value).",
  "gauges": [
   {"name": "CNN Fear & Greed index", "value": "25 (prior 31)", "date": "2026-11-17", "reading": "extreme fear, the lowest since Nov 5 (20); readings this low have tended to precede better-than-average forward returns", "source": "https://benzinga.com/markets/market-summary/26/11/63384433/dow-tumbles-over-800-points-ahead-of-anthropic-ipo-investor-sentiment-weakens-further-fear-greed-index-moves-to-extreme-fear-zone"},
-  {"name": "AAII sentiment survey", "value": "Bullish 30.8% / Neutral 17.8% / Bearish 51.4% (spread -20.6)", "date": "2026-11-11", "reading": "fear: bears about 20pp above their ~31.5% long-run average; a contrarian-bullish extreme", "source": "https://www.aaii.com/sentimentsurvey"},
+  {"name": "AAII sentiment survey", "value": "Bullish 33.3% / Neutral 24.4% / Bearish 42.2% (spread -8.9)", "date": "2026-11-18", "reading": "fear, but easing: bears about 11pp above their 31.5% long-run average, down from 51.4% a week earlier", "source": "https://www.aaii.com/sentimentsurvey"},
   {"name": "CBOE equity put/call ratio", "value": "0.59 (total 0.92)", "date": "2026-11-11", "reading": "neutral to complacent: equity ratio near the low end of its usual 0.55-0.85 band", "source": "https://www.cboe.com/us/options/market_statistics/daily/?dt=2026-11-11"}
  ]}
