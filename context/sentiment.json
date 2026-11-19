@@ -1,9 +1,9 @@
 {
  "asof": "2026-11-18",
- "updated": "2026-11-18 18:12",
+ "updated": "2026-11-19 08:53",
  "composite": {
-  "score": 40.0,
-  "percentile_10y": 90,
+  "score": 39.1,
+  "percentile_10y": 89,
   "score_1w_ago": 7.3,
   "score_1m_ago": 6.6,
   "label": "risk-on",
@@ -1046,7 +1046,7 @@
    ],
    [
     "2026-11-18",
-    40.0
+    39.1
    ]
   ]
  },
@@ -1105,7 +1105,7 @@
    "group": "Fear & complacency",
    "how": "percentile; high = stress in rates",
    "value": 98.15,
-   "signal": -0.43,
+   "signal": -0.42,
    "signal_1m_ago": -0.49,
    "reading": "risk-off",
    "note": "",
@@ -1265,7 +1265,7 @@
    "group": "Intermarket",
    "how": "growth expectations vs safety",
    "value": 0.0015,
-   "signal": -0.86,
+   "signal": -1.0,
    "signal_1m_ago": 1.0,
    "reading": "risk-off",
    "note": "",
@@ -1296,7 +1296,7 @@
    "label": "Bitcoin",
    "group": "Intermarket",
    "how": "speculative risk appetite",
-   "value": 62518.8,
+   "value": 62987.27,
    "signal": -1.0,
    "signal_1m_ago": 0.37,
    "reading": "risk-off",
