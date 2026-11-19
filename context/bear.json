@@ -1,15 +1,15 @@
 {
- "asof": "2026-11-16",
- "updated": "2026-11-17 16:16",
+ "asof": "2026-11-18",
+ "updated": "2026-11-18 18:12",
  "state": "Bull",
- "signs_on": 0,
+ "signs_on": 1,
  "signs_total": 10,
  "signs": [
   {
    "key": "below200",
    "label": "SPY below its 200-day average",
    "on": false,
-   "detail": "SPY 739.95 vs 200-day 729.58"
+   "detail": "SPY 730.20 vs 200-day 730.02"
   },
   {
    "key": "ma200_falling",
@@ -33,13 +33,13 @@
    "key": "mom12",
    "label": "12-month return negative",
    "on": false,
-   "detail": "12-month return +11.3%"
+   "detail": "12-month return +10.9%"
   },
   {
    "key": "dd10",
    "label": "10%+ below the 52-week high",
    "on": false,
-   "detail": "-5.0% from the 52-week high"
+   "detail": "-6.3% from the 52-week high"
   },
   {
    "key": "breadth",
@@ -50,7 +50,7 @@
   {
    "key": "dow",
    "label": "Dow Industrials and Transports both below 200-day",
-   "on": false,
+   "on": true,
    "detail": ""
   },
   {
@@ -66,16 +66,8 @@
    "detail": ""
   }
  ],
- "drawdown_pct": -5.0,
+ "drawdown_pct": -6.3,
  "history": [
-  [
-   "2024-10-21",
-   1
-  ],
-  [
-   "2024-10-22",
-   1
-  ],
   [
    "2024-10-23",
    1
@@ -2147,17 +2139,17 @@
   [
    "2026-11-16",
    0
+  ],
+  [
+   "2026-11-17",
+   1
+  ],
+  [
+   "2026-11-18",
+   1
   ]
  ],
  "state_history": [
-  [
-   "2024-10-21",
-   "Bull"
-  ],
-  [
-   "2024-10-22",
-   "Bull"
-  ],
   [
    "2024-10-23",
    "Bull"
@@ -4229,6 +4221,14 @@
   [
    "2026-11-16",
    "Bull"
+  ],
+  [
+   "2026-11-17",
+   "Bull"
+  ],
+  [
+   "2026-11-18",
+   "Bull"
   ]
  ],
  "test": {
@@ -4297,10 +4297,10 @@
   "step_aside": {
    "cagr": 9.3,
    "max_dd": -22.0,
-   "sharpe": 0.73
+   "sharpe": 0.72
   },
   "buy_hold": {
-   "cagr": 9.9,
+   "cagr": 9.8,
    "max_dd": -55.2,
    "sharpe": 0.58
   },
