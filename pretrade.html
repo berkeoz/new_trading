@@ -287,7 +287,9 @@ function checks() {
   const stTxt = t => `${t} ${F[t].st.dir} at ${fx(F[t].st.v)}${F[t].st.flip_time ? ' since ' + F[t].st.flip_time : ''}`;
   const z = lvInfo(d), R = pz.entry && pz.stop ? pz.entry - pz.stop : null;
   const ent = pz.entry || p, rAbove = z.L.resistances.find(l => l.major && l.price > ent);
-  const room = rAbove && R ? (rAbove.price - ent) / R : null;
+  // measured against at least one daily ATR, so a very tight stop cannot make a wall 1% away look like room
+  const room = rAbove && R ? (rAbove.price - ent) / Math.max(R, D.atr) : null;
+  const volx = D.atr_avg63 ? D.atr / D.atr_avg63 : null;
   const twoR = R ? ent + 2 * R : null;
   const ext = (p - D.ma.ema20.v) / D.atr;
   const pctl = CTX.sent && CTX.sent.composite ? CTX.sent.composite.percentile_10y : null;
@@ -302,14 +304,17 @@ function checks() {
     ['Good location: within 1 daily ATR above a support, or a major resistance was just reclaimed (daily close above it in the last 5 days)', !!(z.nearSup || z.reclaimed),
       z.reclaimed ? `Reclaimed ${fx(z.reclaimed.price)}` : z.nearSup ? `Support ${fx(z.nearSup.price)} is ${fx((p - z.nearSup.price) / z.atr, 1)} ATR below` : z.s1 ? `Nearest support ${fx(z.s1.price)} is ${fx((p - z.s1.price) / z.atr, 1)} ATR below: you would be buying in the middle of nowhere` : ''],
     ['No major support was lost in the last 5 days (a fresh breakdown is not a dip)', !z.lost, z.lost ? `Lost ${fx(z.lost.price)}, now resistance` : 'None lost'],
-    ['Room overhead: the next major resistance is at least 2× the stop distance away', room == null ? null : room >= 1.995,
+    ['Room overhead: the next major resistance is at least 2× the stop distance (and at least 2 daily ATRs) away', room == null ? null : room >= 1.995,
       rAbove ? `Next major resistance ${fx(rAbove.price)}${room != null ? ` = ${fx(room, 1)}× the risk` : ''}` : 'No major resistance nearby'],
+    ['Volatility is not spiking: daily ATR under 1.3× its 3-month average (if it is, halve the risk %)', volx == null ? null : volx < 1.3,
+      volx != null ? `Daily ATR ${fx(D.atr)} = ${fx(volx, 2)}× its 3-month average of ${fx(D.atr_avg63)}` : ''],
     ['Not chasing: daily RSI under 70 and price no more than 1.5 daily ATRs above the daily EMA 20', D.osc.rsi.v < 70 && ext < 1.5, `Daily RSI ${fx(D.osc.rsi.v, 1)} · ${ext >= 0 ? fx(ext, 1) + ' ATRs above' : fx(-ext, 1) + ' ATRs below'} the EMA 20`],
     ['Sentiment is not euphoric (composite below its 90th percentile, mood not "everyone long")', pctl == null && !mood ? null : (pctl == null || pctl < 90) && !/Euphoric/.test(mood), pctl != null ? `Composite at the ${pctl}th percentile` : ''],
     ['I read today\'s Twitter and Discord digests and nothing contradicts the trade', null, 'Section 1 above'],
     ['No CPI, FOMC, jobs report or big earnings (NVDA etc. for SOXX) in the next 2 days, or I sized down for it', null, 'Check the market brief\'s calendar'],
     ['Stop is at a level that proves me wrong, and reward is at least 2× the risk', pz.rr != null ? pz.rr >= 1.995 && pz.stopOk : null, pz.rr != null ? `R:R ${fx(pz.rr, 1)} · stop ${fx(pz.stopAtr, 2)} daily ATRs away${pz.stopAtr < 1 ? ' (needs at least 1, or normal daily noise can hit it)' : ''}` : 'Fill in section 4'],
     ['Size comes from the calculator, and total open risk on SPY/QQQ/SOXX stays under 3% of the account', pz.total != null ? pz.total <= 3 : null, pz.total != null ? `Open risk after this trade: ${fx(pz.total, 2)}%` : ''],
+    ['Gap risk accepted: I can live with the price opening below my stop (overnight news, NVDA earnings), and I enter with a limit order, not a market order', null, 'A stop does not protect against a gap; the loss can be bigger than planned'],
     ['I wrote down why I am buying and what would make me exit', null, 'The "Copy trade plan" button gives you the text'],
   ];
   return [
@@ -399,6 +404,7 @@ function sizer(reset) {
   if (stopAtr > 4) W += `<div class="warn">The stop is ${fx(stopAtr, 1)} daily ATRs away, a wide stop. That is fine for a long-term position, but the share count is small.</div>`;
   if (rr != null && rr < 2) W += `<div class="warn">Reward:risk is ${fx(rr, 1)}, below 2. At a 50% hit rate, under 1 loses money after costs.</div>`;
   if (total > 3) W += `<div class="warn bad">Open risk on SPY / QQQ / SOXX would be ${fx(total, 2)}% of the account. These three move together (correlation around 0.85–0.95), so a market drop hits all of them at once. Treat them as one trade.</div>`;
+  if (D.atr_avg63 && D.atr / D.atr_avg63 >= 1.3) W += `<div class="warn">Volatility is high: the daily ATR is ${fx(D.atr / D.atr_avg63, 1)}× its 3-month average. Swings are bigger than usual, so consider cutting the risk % (for example to ${fx(rp / 2, 2)}%).</div>`;
   if (rp > 2) W += `<div class="warn">${rp}% risk per trade is aggressive: ten losers in a row (it happens) would cost about ${fx(100 - 100 * Math.pow(1 - rp / 100, 10), 0)}% of the account.</div>`;
   $('#warns').innerHTML = W;
   CTX.plan = {entry, stop, tgt, rr, stopOk: stopAtr >= 1, stopAtr, total, sh, pos, realRisk};

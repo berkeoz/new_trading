@@ -486,7 +486,7 @@ def _pt_frame(df):
     for n, s in emas.items():
         ma[f"ema{n}"] = {"v": f(s), "prev": _num(s.iloc[-4], 2), "bars": len(s), "settled": len(s) >= 2 * n}
     return {"close": round(price, 2), "bar": f"{df.index[-1]:%Y-%m-%d %H:%M}".replace(" 00:00", ""),
-            "osc": osc, "ma": ma, "atr": f(atr), "atr_pct": _num(atr.iloc[-1] / price * 100, 2),
+            "osc": osc, "ma": ma, "atr": f(atr), "atr_pct": _num(atr.iloc[-1] / price * 100, 2), "atr_avg63": _num(atr.iloc[-64:-1].mean(), 2),
             "st": {"v": _num(st_line.iloc[-1], 2), "dir": "up" if st_dir.iloc[-1] == 1 else "down", "flip": _flip_ago(st_dir.values),
                    "flip_time": _flip_time(st_dir, df.index)},
             "low10": round(float(lo.iloc[-10:].min()), 2), "high20": round(float(h.iloc[-20:].max()), 2)}
