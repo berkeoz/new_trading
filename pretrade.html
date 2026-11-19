@@ -76,6 +76,11 @@ input[type=number]{width:110px}
   <h3>Trend: KAMA and EMAs</h3>
   <div class="wrap"><table id="mas"></table></div>
   <div class="sub">Each cell: the average's level, how far price is above (green) or below (red) it, and its slope over the last 3 bars. KAMA = Kaufman adaptive MA (10, 2, 30).</div>
+  <h3>Key support and resistance</h3>
+  <div id="lvl-watch" class="sum"></div>
+  <div class="wrap"><table id="lvl"></table></div>
+  <div class="sub">Levels are price zones where the market turned before: daily swing highs and lows (last 2 years) and weekly ones (last 6 years), grouped when within half a daily ATR, plus the 52-week and last week's / month's highs and lows.
+    Strength = daily touches + 2 × weekly touches + 1 per reference level; <span class="tag t-x">MAJOR</span> = 4 or more. A level counts as broken on a daily <i>close</i> through it, not an intraday poke. Old support that breaks becomes resistance, and the reverse.</div>
 </section>
 
 <section><h2>3 · Checklist</h2>
@@ -96,6 +101,8 @@ input[type=number]{width:110px}
     <label>Buy in how many tranches<select id="tr"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
     <label>Risk already open on SPY / QQQ / SOXX (% of account)<input type="number" id="open" value="0" min="0" step="0.25"></label>
   </div>
+  <div class="sub" style="margin-top:6px">The idea: decide first how much you are willing to <i>lose</i> if the trade is wrong, then let the distance to your stop decide how many shares to buy. A wide stop means fewer shares and a tight stop more, so a loss always costs the same.</div>
+  <ol id="explain" style="font-size:13.5px;margin:8px 0 0 18px;padding:0"></ol>
   <div class="kpis" id="kpis"></div>
   <div id="warns"></div>
   <h3>Equal-risk sizing across the three</h3>
@@ -237,8 +244,35 @@ function show() {
     $('#read').innerHTML = `Trend: weekly ${word(W.trend)}, daily ${word(D.trend)}, 4H ${word(H4.trend)}, 2H ${word(H2.trend)} · Momentum: weekly ${word(W.momS)}, daily ${word(D.momS)}, 4H ${word(H4.momS)}, 2H ${word(H2.momS)}` +
       ` · Supertrend: weekly ${stw('1W')}, daily ${stw('1D')}, 4H ${stw('4H')}, 2H ${stw('2H')}<br><b>${setup}</b>`;
     CTX.S = S;
+    drawLevels(d);
     sizer(true); drawChecklist(); eqTable();
   }).catch(e => { $('#asof').textContent = CUR + ': ' + e.message; });
+}
+
+// ── key levels ───────────────────────────────────────────────────────────────
+function lvInfo(d) {
+  const L = d.levels || {supports: [], resistances: []}, atr = d.frames['1D'].atr, p = d.price;
+  const r1 = L.resistances[0], s1 = L.supports[0];
+  const rM = L.resistances.find(l => l.major), sM = L.supports.find(l => l.major);
+  const lost = L.resistances.find(l => l.major && l.recent && l.recent.dir == 'lost');
+  const reclaimed = L.supports.find(l => l.major && l.recent && l.recent.dir == 'reclaimed');
+  const nearSup = L.supports.find(l => (p - l.price) <= atr);
+  const atRes = L.resistances.find(l => l.major && (l.price - p) <= 0.5 * atr);
+  return {L, r1, s1, rM, sM, lost, reclaimed, nearSup, atRes, atr};
+}
+function drawLevels(d) {
+  const z = lvInfo(d), p = d.price;
+  const row = l => { const rec = l.recent ? `<span class="${l.recent.dir == 'lost' ? 'bear' : 'bull'}">${l.recent.dir} ${l.recent.bars_ago == 0 ? 'today' : l.recent.bars_ago + ' days ago'}</span>` : '';
+    return `<tr><td><b>${fx(l.price)}</b>${l.major ? '<span class="tag t-x">MAJOR</span>' : ''}</td><td class="${l.role == 'support' ? 'bull' : 'bear'}">${l.role}</td>` +
+      `<td>${l.dist_pct > 0 ? '+' : ''}${fx(l.dist_pct, 1)}% · ${fx(Math.abs(l.dist_atr), 1)} ATR</td><td>${l.score}</td><td class="mu">${esc(l.sources.join(', '))}</td><td class="mu">${esc(l.last || '')}</td><td>${rec}</td></tr>`; };
+  $('#lvl').innerHTML = '<tr><th>Level</th><th>Role</th><th>Distance</th><th>Strength</th><th>Built from</th><th>Last turn</th><th>Last 5 days</th></tr>' +
+    [...z.L.resistances].reverse().map(row).join('') + `<tr><td colspan="7" style="background:#1b2130"><b>Price ${fx(p)}</b></td></tr>` + z.L.supports.map(row).join('');
+  let w = [];
+  if (z.rM) w.push(`<span class="bull">Turns bullish</span> on a daily close above <b>${fx(z.rM.price)}</b> (first major resistance, ${fx(z.rM.dist_pct, 1)}% away)`);
+  if (z.sM) w.push(`<span class="bear">turns bearish / exit</span> on a daily close below <b>${fx(z.sM.price)}</b> (first major support, ${fx(z.sM.dist_pct, 1)}% away)`);
+  if (z.lost) w.push(`<span class="bear">Major level ${fx(z.lost.price)} was lost ${z.lost.recent.bars_ago == 0 ? 'today' : z.lost.recent.bars_ago + ' days ago'}</span>: it is now resistance`);
+  if (z.reclaimed) w.push(`<span class="bull">Major level ${fx(z.reclaimed.price)} was reclaimed ${z.reclaimed.recent.bars_ago == 0 ? 'today' : z.reclaimed.recent.bars_ago + ' days ago'}</span>: it is now support`);
+  $('#lvl-watch').innerHTML = w.join(' · ') || 'No major levels within 30% of price.';
 }
 
 // ── 3. checklist ─────────────────────────────────────────────────────────────
@@ -251,6 +285,8 @@ function checks() {
   const stFlipUp = ['2H', '4H'].filter(t => F[t].st.dir == 'up' && F[t].st.flip != null && F[t].st.flip <= 3);
   const turned = [...os4, ...os2].some(o => o.crossUp && o.cross != null && o.cross <= 3) || stFlipUp.length > 0;
   const stTxt = t => `${t} ${F[t].st.dir} at ${fx(F[t].st.v)}${F[t].st.flip_time ? ' since ' + F[t].st.flip_time : ''}`;
+  const z = lvInfo(d), R = pz.entry && pz.stop ? pz.entry - pz.stop : null;
+  const room = z.rM && R ? (z.rM.price - (pz.entry || p)) / R : null;
   const ext = (p - D.ma.ema20.v) / D.atr;
   const pctl = CTX.sent && CTX.sent.composite ? CTX.sent.composite.percentile_10y : null;
   const wOB = oscState('rsi', W.osc.rsi).v >= 70 || W.osc.wt.wt2 >= 53, dOB = D.osc.rsi.v >= 70 || D.osc.wt.wt2 >= 53;
@@ -261,6 +297,11 @@ function checks() {
     ['Supertrend is up on the daily and the weekly', D.st.dir == 'up' && W.st.dir == 'up', `${stTxt('1D')} · ${stTxt('1W')}`],
     ['Entry timing: 2H or 4H momentum just turned up (Stoch RSI, WaveTrend or MACD crossed up, or Supertrend flipped up, in the last 3 bars)', turned,
       stFlipUp.length ? `Supertrend flipped up on ${stFlipUp.join(' and ')}` : 'Buy when the dip turns, not while it is still falling'],
+    ['Good location: within 1 daily ATR above a support, or a major resistance was just reclaimed (daily close above it in the last 5 days)', !!(z.nearSup || z.reclaimed),
+      z.reclaimed ? `Reclaimed ${fx(z.reclaimed.price)}` : z.nearSup ? `Support ${fx(z.nearSup.price)} is ${fx((p - z.nearSup.price) / z.atr, 1)} ATR below` : z.s1 ? `Nearest support ${fx(z.s1.price)} is ${fx((p - z.s1.price) / z.atr, 1)} ATR below: you would be buying in the middle of nowhere` : ''],
+    ['No major support was lost in the last 5 days (a fresh breakdown is not a dip)', !z.lost, z.lost ? `Lost ${fx(z.lost.price)}, now resistance` : 'None lost'],
+    ['Room overhead: the next major resistance is at least 2× the stop distance away', room == null ? null : room >= 1.995,
+      z.rM ? `Next major resistance ${fx(z.rM.price)}${room != null ? ` = ${fx(room, 1)}× the risk` : ''}` : 'No major resistance nearby'],
     ['Not chasing: daily RSI under 70 and price within 1.5 daily ATRs of the daily EMA 20', D.osc.rsi.v < 70 && ext < 1.5, `Daily RSI ${fx(D.osc.rsi.v, 1)} · ${fx(ext, 1)} ATRs from the EMA 20`],
     ['Sentiment is not euphoric (composite below its 90th percentile, mood not "everyone long")', pctl == null && !mood ? null : (pctl == null || pctl < 90) && !/Euphoric/.test(mood), pctl != null ? `Composite at the ${pctl}th percentile` : ''],
     ['I read today\'s Twitter and Discord digests and nothing contradicts the trade', null, 'Section 1 above'],
@@ -273,6 +314,8 @@ function checks() {
     ['Stop level hit: exit, no debate', pz.stop ? p <= pz.stop : null, pz.stop ? `Stop ${fx(pz.stop)} vs price ${fx(p)}` : 'Set a stop in section 4'],
     ['Target or 2R reached: take part off and move the stop to break-even', pz.tgt ? p >= pz.tgt : null, pz.tgt ? `Target ${fx(pz.tgt)}` : ''],
     ['Daily close below the daily EMA 50, or KAMA turned down with price under it', p < D.ma.ema50.v || (p < D.ma.kama.v && D.ma.kama.v < D.ma.kama.prev), `EMA 50 ${fx(D.ma.ema50.v)} · KAMA ${fx(D.ma.kama.v)}`],
+    ['A major support broke: daily close below it in the last 5 days (exit or cut size; it is now resistance)', !!z.lost, z.lost ? `Lost ${fx(z.lost.price)}` : z.sM ? `First major support ${fx(z.sM.price)} still holds` : ''],
+    ['Price is at a major resistance (within half a daily ATR): trim or tighten the stop unless it closes above', !!z.atRes, z.atRes ? `Resistance ${fx(z.atRes.price)}` : z.rM ? `Next major resistance ${fx(z.rM.price)} (${fx(z.rM.dist_pct, 1)}% away)` : ''],
     ['4H Supertrend flipped down: early warning, tighten the stop', F['4H'].st.dir == 'down', stTxt('4H')],
     ['Daily Supertrend flipped down: trend exit for swing trades', D.st.dir == 'down', stTxt('1D')],
     ['Weekly Supertrend flipped down: trend exit for long-term holdings', W.st.dir == 'down', stTxt('1W')],
@@ -298,7 +341,9 @@ document.querySelectorAll('[data-side]').forEach(b => b.onclick = () => { SIDE =
 ['acct', 'riskp', 'maxpos', 'open'].forEach(id => { const v = ls.get('pt_' + id, null); if (v != null) $('#' + id).value = v; });
 function stopOptions(d) {
   const p = d.price, F = d.frames, D = F['1D'], H4 = F['4H'];
-  const o = [['2 daily ATRs below entry', p - 2 * D.atr], ['1.5 daily ATRs below entry', p - 1.5 * D.atr], ['Last 10 days\' low', D.low10],
+  const z = lvInfo(d);
+  const o = [['Under the nearest support', z.s1 ? z.s1.price - 0.25 * D.atr : null], ['Under the first major support', z.sM ? z.sM.price - 0.25 * D.atr : null],
+             ['2 daily ATRs below entry', p - 2 * D.atr], ['1.5 daily ATRs below entry', p - 1.5 * D.atr], ['Last 10 days\' low', D.low10],
              ['2 × 4H ATR below entry', p - 2 * H4.atr], ['4H Supertrend', H4.st.dir == 'up' ? H4.st.v : null], ['Daily Supertrend', D.st.dir == 'up' ? D.st.v : null], ['Weekly Supertrend', F['1W'].st.dir == 'up' ? F['1W'].st.v : null],
              ['Daily EMA 50', D.ma.ema50.v < p ? D.ma.ema50.v * 0.99 : null], ['Daily EMA 200', D.ma.ema200.v < p ? D.ma.ema200.v * 0.99 : null]];
   return o.filter(x => x[1] != null && x[1] < p);
@@ -315,7 +360,9 @@ function sizer(reset) {
   const entry = +$('#entry').value, stop = +$('#stop').value;
   const R = entry - stop;
   if (reset || !$('#tgt').value) {
-    const to = [['2R (twice the risk)', entry + 2 * R], ['3R', entry + 3 * R], ['20-day high', D.high20], ['Daily EMA 50', D.ma.ema50.v], ['Daily EMA 200', D.ma.ema200.v]].filter(x => x[1] > entry);
+    const zl = lvInfo(d), nr = zl.L.resistances.find(l => l.price > entry), nm = zl.L.resistances.find(l => l.major && l.price > entry);
+    const to = [['2R (twice the risk)', entry + 2 * R], ['3R', entry + 3 * R], ['Just under the next resistance', nr ? nr.price - 0.1 * D.atr : null],
+                ['Just under the next major resistance', nm ? nm.price - 0.1 * D.atr : null], ['20-day high', D.high20], ['Daily EMA 50', D.ma.ema50.v], ['Daily EMA 200', D.ma.ema200.v]].filter(x => x[1] > entry);
     $('#tgtsel').innerHTML = to.map(([l, v]) => `<option value="${v.toFixed(2)}">${l}: ${fx(v)}</option>`).join('') + '<option value="">Custom</option>';
     $('#tgt').value = to.length ? to[0][1].toFixed(2) : '';
   }
@@ -335,6 +382,15 @@ function sizer(reset) {
   K += `<div class="kpi"><div class="l">Gain at target</div><div class="v bull">${rr != null ? '+$' + Math.round(sh * (tgt - entry)).toLocaleString() : '—'}</div><div class="l">reward:risk ${rr != null ? fx(rr, 1) : '—'}</div></div>`;
   K += `<div class="kpi"><div class="l">Tranches</div><div class="v">${n} × ${per.toLocaleString()}</div><div class="l">add only while the stop still holds</div></div>`;
   $('#kpis').innerHTML = K;
+  const $f = v => '$' + Math.round(v).toLocaleString();
+  $('#explain').innerHTML = [
+    `<b>Your risk budget:</b> ${rp}% of ${$f(acct)} = <b>${$f(riskD)}</b>. This is the most you lose if the stop is hit.`,
+    `<b>Risk per share:</b> entry ${fx(entry)} − stop ${fx(stop)} = <b>$${fx(R)}</b> lost on each share if stopped (${fx(R / entry * 100, 1)}%).`,
+    `<b>Shares:</b> ${$f(riskD)} ÷ $${fx(R)} = <b>${Math.floor(riskD / R).toLocaleString()} shares</b>` + (capped ? `, capped at <b>${sh.toLocaleString()}</b> by the ${maxp}% max-position limit.` : '.'),
+    `<b>Position:</b> ${sh.toLocaleString()} × ${fx(entry)} = <b>${$f(pos)}</b> (${fx(pos / acct * 100, 1)}% of the account). The rest stays in cash or other holdings.`,
+    rr != null ? `<b>If it works:</b> at the target ${fx(tgt)} you make ${$f(sh * (tgt - entry))}, ${fx(rr, 1)}× what you risked. With 2× or better you can be wrong more than half the time and still come out ahead.` : '',
+    n > 1 ? `<b>Tranches:</b> buy ${per.toLocaleString()} shares now and add the rest in ${n - 1} more step${n > 2 ? 's' : ''} only while the stop still holds. Keep the same stop, so the total loss never exceeds the budget.` : ''
+  ].filter(Boolean).map(x => `<li>${x}</li>`).join('');
   if (capped) W += `<div class="warn">Capped by the ${maxp}% max position: the risk budget alone would allow ${Math.floor(riskD / R).toLocaleString()} shares. The stop is tight relative to the position.</div>`;
   if (stopAtr < 1) W += `<div class="warn bad">The stop is only ${fx(stopAtr, 1)} daily ATRs away; normal daily noise (one ATR = ${fx(D.atr)}) can hit it. Widen the stop and buy fewer shares.</div>`;
   if (stopAtr > 4) W += `<div class="warn">The stop is ${fx(stopAtr, 1)} daily ATRs away, a wide stop. That is fine for a long-term position, but the share count is small.</div>`;

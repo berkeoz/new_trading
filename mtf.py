@@ -492,6 +492,57 @@ def _pt_frame(df):
             "low10": round(float(lo.iloc[-10:].min()), 2), "high20": round(float(h.iloc[-20:].max()), 2)}
 
 
+def key_levels(d1, price, atr):
+    """Major support / resistance: swing pivots from daily (2 years) and weekly (6 years) bars, clustered
+    within half a daily ATR, plus the 52-week and prior week / month highs and lows. Score = daily touches
+    + 2 x weekly touches + 1 per reference level; 4 or more = major."""
+    d = d1.iloc[-504:]
+    w = _period_bars(d1.iloc[-1512:], "W-FRI")
+    apct = max(P.atr_pct(d), 0.005)
+    cands = []
+    for df, pct, wt, tf in ((d, max(2.0 * apct, 0.03), 1, "daily"), (w, max(5.0 * apct, 0.07), 2, "weekly")):
+        for p in P.zigzag(df, pct):
+            if p["confirmed"]:
+                cands.append({"price": p["price"], "w": wt, "src": f"{tf} swing {'high' if p['kind'] == 'H' else 'low'}",
+                              "date": f"{df.index[p['i']]:%Y-%m-%d}"})
+    last_w = _period_bars(d1.iloc[-60:], "W-FRI").iloc[-2]
+    last_m = _period_bars(d1.iloc[-70:], "M").iloc[-2]
+    y = d1.iloc[-252:]
+    for lab, v in (("52-week high", y["High"].max()), ("52-week low", y["Low"].min()), ("last week's high", last_w["High"]),
+                   ("last week's low", last_w["Low"]), ("last month's high", last_m["High"]), ("last month's low", last_m["Low"])):
+        cands.append({"price": float(v), "w": 1, "src": lab, "date": ""})
+    cands.sort(key=lambda c: c["price"])
+    groups, cur = [], []
+    for c in cands:
+        if cur and (c["price"] - np.mean([x["price"] for x in cur]) > 0.5 * atr or c["price"] - cur[0]["price"] > atr):
+            groups.append(cur); cur = []
+        cur.append(c)
+    if cur:
+        groups.append(cur)
+    c = d1["Close"].values
+    out = []
+    for g in groups:
+        lv = float(np.average([x["price"] for x in g], weights=[x["w"] for x in g]))
+        if abs(lv / price - 1) > 0.30:
+            continue
+        score = sum(x["w"] for x in g)
+        srcs = sorted({x["src"] for x in g})
+        dates = sorted(x["date"] for x in g if x["date"])
+        # did a daily close cross this level in the last 5 sessions?
+        recent = None
+        for k in range(len(c) - 1, len(c) - 6, -1):
+            if c[k - 1] < lv <= c[k]:
+                recent = {"dir": "reclaimed", "bars_ago": len(c) - 1 - k}; break
+            if c[k - 1] > lv >= c[k]:
+                recent = {"dir": "lost", "bars_ago": len(c) - 1 - k}; break
+        out.append({"price": round(lv, 2), "score": score, "major": score >= 4, "sources": srcs, "touches": len(g),
+                    "last": dates[-1] if dates else None, "role": "support" if lv < price else "resistance",
+                    "dist_pct": round((lv / price - 1) * 100, 2), "dist_atr": round((lv - price) / atr, 2), "recent": recent})
+    sup = sorted([l for l in out if l["role"] == "support"], key=lambda l: -l["price"])[:6]
+    res = sorted([l for l in out if l["role"] == "resistance"], key=lambda l: l["price"])[:6]
+    return {"supports": sup, "resistances": res}
+
+
 def pretrade(sym):
     """2H / 4H / 1D / 1W: RSI, MACD, Stoch RSI, SMI, WaveTrend, KAMA and the 20/50/100/200 EMAs."""
     try:
@@ -501,8 +552,9 @@ def pretrade(sym):
     d1 = P._append_today(_load(sym, "1d", "max", "1D"), sym)
     frames = [("2H", P._session_bars(h1, 2)), ("4H", P._session_bars(h1, 4)), ("1D", d1), ("1W", _period_bars(d1, "W-FRI"))]
     out = {tf: _pt_frame(df) for tf, df in frames}
-    return {"symbol": sym, "price": round(float(h1["Close"].iloc[-1]), 2), "asof": f"{h1.index[-1]:%Y-%m-%d %H:%M}",
-            "timeframes": [f[0] for f in frames], "frames": out}
+    price = round(float(h1["Close"].iloc[-1]), 2)
+    return {"symbol": sym, "price": price, "asof": f"{h1.index[-1]:%Y-%m-%d %H:%M}",
+            "timeframes": [f[0] for f in frames], "frames": out, "levels": key_levels(d1, price, out["1D"]["atr"])}
 
 
 def text(l):
