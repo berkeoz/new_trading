@@ -1,0 +1,365 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pre-trade Checklist</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--fg:#e6e6e6;--mute:#8a93a5;--bull:#26a69a;--bear:#ef5350;--neu:#f5b041;--line:#2a2f3a;--acc:#5c8dff;--in:#0f1115}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 system-ui,Segoe UI,sans-serif}
+main{max-width:1200px;margin:auto;padding:16px}
+a{color:var(--acc)}
+h1{font-size:21px;margin:4px 0} h2{font-size:17px;margin:0 0 8px} h3{font-size:15px;margin:10px 0 6px}
+.sub{color:var(--mute);font-size:12.5px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:16px 0}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.cols>div{min-width:0}
+table{border-collapse:collapse;font-size:13px;width:100%;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{color:var(--mute);font-weight:500;white-space:nowrap}
+.wrap{overflow-x:auto}
+.bull{color:var(--bull)} .bear{color:var(--bear)} .mix{color:var(--neu)} .mu{color:var(--mute)}
+.cell b{font-size:13.5px} .cell div{font-size:12px;color:var(--mute)}
+td.c-bull{background:rgba(38,166,154,.10)} td.c-bear{background:rgba(239,83,80,.09)} td.c-mix{background:rgba(245,176,65,.07)}
+.tag{display:inline-block;border-radius:9px;padding:0 7px;font-size:11px;font-weight:600;margin-left:4px}
+.t-ob{background:rgba(239,83,80,.18);color:#ff8a87} .t-os{background:rgba(38,166,154,.2);color:#5fd3c6} .t-x{background:rgba(92,141,255,.2);color:#9ab6ff}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tabs button,.btn{background:#1c2130;color:var(--fg);border:1px solid #2f3546;border-radius:6px;padding:5px 12px;font:inherit;font-size:14px;cursor:pointer}
+.tabs button.on{border-color:var(--acc);color:#9ab6ff;background:#1b2130}
+input,select{background:var(--in);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font:inherit;font-size:13.5px;max-width:100%}
+input[type=number]{width:110px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px 16px}
+.grid2 label{display:flex;flex-direction:column;gap:3px;font-size:12.5px;color:var(--mute)}
+.big{font-size:22px;font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.kpi .l{font-size:12px;color:var(--mute)} .kpi .v{font-size:18px;font-weight:600}
+.warn{border-left:3px solid var(--neu);padding:6px 10px;background:rgba(245,176,65,.07);margin:8px 0;font-size:13px}
+.bad{border-left-color:var(--bear);background:rgba(239,83,80,.08)}
+.cl{list-style:none;margin:0;padding:0}
+.cl li{display:grid;grid-template-columns:26px 22px 1fr;gap:6px;align-items:start;padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.cl li .why{grid-column:3;font-size:12px;color:var(--mute)}
+.cl input{width:17px;height:17px;margin-top:2px}
+.auto{font-weight:700;text-align:center}
+.pill{display:inline-block;border-radius:10px;padding:1px 9px;font-size:12px;font-weight:600}
+.p-bull{background:rgba(38,166,154,.16);color:#5fd3c6} .p-bear{background:rgba(239,83,80,.14);color:#ff8a87} .p-mix{background:rgba(245,176,65,.13);color:#f5c674}
+.sum{font-size:15px;margin:4px 0 10px}
+.dc{font-size:13px;max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px 12px;background:#12151b}
+.dc h2,.dc h3{font-size:14px !important;border:0 !important;margin:8px 0 4px}
+.dc *{color:var(--fg) !important;background:none !important}
+.hidden{display:none}
+@media (max-width:600px){main{padding:10px} section{padding:12px}}
+</style></head><body><main>
+<h1>Pre-trade checklist</h1>
+<div class="sub">Go through this before every buy or sell. Indicator values refresh each time you load the page (live Yahoo data); the market backdrop comes from the latest market brief, Twitter digest and Discord digest. Rules for discipline, not investment advice.</div>
+
+<section><h2>1 · Market backdrop</h2>
+  <div class="cols">
+    <div><h3>Bear-market watch</h3><div id="bear" class="sub">Loading…</div></div>
+    <div><h3>Sentiment gauges</h3><div id="sent" class="sub">Loading…</div></div>
+  </div>
+  <h3>Twitter, latest digest <span class="sub" id="x-when"></span></h3><div id="xbl" class="sub">Loading…</div>
+  <h3>Discord feeling <span class="sub" id="dc-when"></span></h3>
+  <div id="dc-lock"><form id="dc-f" class="tabs"><input type="password" id="dc-pw" placeholder="Discord / finance passphrase" autocomplete="current-password">
+    <button class="btn">Unlock</button><span class="sub" id="dc-err">Decrypted only in this browser, as on the <a href="/discord">Discord page</a>.</span></form></div>
+  <div id="dc-body" class="hidden"></div>
+  <div class="tabs" style="margin-top:8px"><span class="sub">Your read of the mood:</span>
+    <select id="mood"><option value="">— pick —</option><option>Euphoric / everyone long</option><option>Bullish</option><option>Mixed</option><option>Fearful</option><option>Capitulation / everyone bearish</option></select>
+    <span class="sub">Extremes are contrarian: euphoria argues for trimming, capitulation for patiently buying.</span></div>
+</section>
+
+<section><h2>2 · Ticker</h2>
+  <div class="tabs" id="tk"></div>
+  <div class="sub" id="asof" style="margin-top:6px"></div>
+  <div class="sum" id="read"></div>
+  <h3>Momentum: RSI, MACD, Stoch RSI, SMI, WaveTrend</h3>
+  <div class="wrap"><table id="osc"></table></div>
+  <div class="sub">Green = bullish (above its signal line and the midline), red = bearish, amber = mixed. <span class="tag t-x">x↑ 2</span> = crossed up 2 bars ago.
+    OB / OS = overbought / oversold (RSI 70/30, Stoch RSI 80/20, SMI ±40, WaveTrend ±53). These five all measure momentum, so treat agreement between them as <i>one</i> signal, not five.</div>
+  <h3>Trend: KAMA and EMAs</h3>
+  <div class="wrap"><table id="mas"></table></div>
+  <div class="sub">Each cell: the average's level, how far price is above (green) or below (red) it, and its slope over the last 3 bars. KAMA = Kaufman adaptive MA (10, 2, 30).</div>
+</section>
+
+<section><h2>3 · Checklist</h2>
+  <div class="tabs"><button data-side="buy" class="on">Before buying</button><button data-side="sell">Before selling / trimming</button>
+    <span class="sub" style="margin-left:6px" id="cl-score"></span></div>
+  <ul class="cl" id="cl"></ul>
+  <div class="sub" style="margin-top:6px">Left column = your tick (saved in this browser per ticker for today); middle = the page's own check from the data (✔ met, ✖ not met, · you judge).</div>
+</section>
+
+<section><h2>4 · Risk and position size</h2>
+  <div class="grid2">
+    <label>Account size ($)<input type="number" id="acct" value="100000" min="0" step="1000"></label>
+    <label>Risk per trade (% of account)<input type="number" id="riskp" value="1" min="0.1" max="5" step="0.25"></label>
+    <label>Entry price<input type="number" id="entry" step="0.01"></label>
+    <label>Stop<select id="stopsel"></select><input type="number" id="stop" step="0.01"></label>
+    <label>Target<select id="tgtsel"></select><input type="number" id="tgt" step="0.01"></label>
+    <label>Max position (% of account)<input type="number" id="maxpos" value="30" min="1" max="100" step="5"></label>
+    <label>Buy in how many tranches<select id="tr"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
+    <label>Risk already open on SPY / QQQ / SOXX (% of account)<input type="number" id="open" value="0" min="0" step="0.25"></label>
+  </div>
+  <div class="kpis" id="kpis"></div>
+  <div id="warns"></div>
+  <h3>Equal-risk sizing across the three</h3>
+  <div class="wrap"><table id="eq"></table></div>
+  <div class="sub">Same dollar risk on each ticker with a stop 2 daily ATRs away. The more volatile the ticker, the smaller the position for the same risk; that is why SOXX gets far fewer dollars than SPY.</div>
+  <div style="margin-top:10px"><button class="btn" id="copy">Copy trade plan</button> <span class="sub" id="copied"></span></div>
+</section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const RAW = 'https://raw.githubusercontent.com/berkeoz/new_trading/master/';
+const getJ = p => fetch(RAW + p + '?t=' + Date.now()).then(r => r.ok ? r.json() : Promise.reject()).catch(() => fetch('/' + p).then(r => r.ok ? r.json() : null)).catch(() => null);
+const getT = p => fetch(RAW + p + '?t=' + Date.now()).then(r => r.ok ? r.text() : Promise.reject()).catch(() => fetch('/' + p).then(r => r.ok ? r.text() : null)).catch(() => null);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const fx = (v, d = 2) => v == null || isNaN(v) ? '—' : Number(v).toFixed(d);
+const ls = {get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+            set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }};
+const TODAY = new Date().toISOString().slice(0, 10);
+const CORE = ['SOXX', 'SPY', 'QQQ'];
+let TICKERS = ls.get('pt_tickers', CORE), CUR = ls.get('pt_cur', 'SOXX'), SIDE = 'buy';
+const DATA = {}, CTX = {};
+
+// ── 1. backdrop ──────────────────────────────────────────────────────────────
+async function backdrop() {
+  const [bear, sent, ext, xi] = await Promise.all([getJ('context/bear.json'), getJ('context/sentiment.json'), getJ('context/sentiment_ext.json'), getJ('xfeed/index.json')]);
+  CTX.bear = bear; CTX.sent = sent;
+  if (bear) {
+    const cls = /bear/i.test(bear.state) ? 'p-bear' : /bull/i.test(bear.state) ? 'p-bull' : 'p-mix';
+    $('#bear').innerHTML = `<span class="pill ${cls}">${esc(bear.state)}</span> ${bear.signs_on} of ${bear.signs_total} warning signs on <span class="mu">(${esc(bear.asof)})</span>` +
+      '<ul style="margin:6px 0 0 18px;padding:0">' + bear.signs.filter(s => s.on).map(s => `<li>${esc(s.label)}${s.detail ? ' · ' + esc(s.detail) : ''}</li>`).join('') + '</ul>';
+  } else $('#bear').textContent = 'Not available.';
+  let h = '';
+  if (sent && sent.composite) { const c = sent.composite;
+    h += `<div>Composite: <b>${fx(c.score, 1)}</b> (${esc(c.label)}, ${c.percentile_10y}th percentile of 10 years; a week ago ${fx(c.score_1w_ago, 1)})</div>`; }
+  if (ext && ext.gauges) h += '<ul style="margin:6px 0 0 18px;padding:0">' + ext.gauges.slice(0, 4).map(g => `<li><b>${esc(g.name)}</b>: ${esc(g.value)} <span class="mu">(${esc(g.date)})</span></li>`).join('') + '</ul>';
+  $('#sent').innerHTML = h || 'Not available.';
+  if (xi && xi.digests && xi.digests.length) {
+    const d = xi.digests[0]; $('#x-when').textContent = '· ' + d.title.replace(/^Twitter analysis — /, '');
+    const md = await getT('xfeed/' + d.file);
+    const m = md && md.match(/\*\*Bottom line:\*\*([\s\S]*?)(\n\n|$)/);
+    $('#xbl').innerHTML = m ? esc(m[1].trim()).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>') + ` <a href="/x">full digest</a>` : '<a href="/x">Open the Twitter analysis</a>';
+  } else $('#xbl').textContent = 'Not available.';
+  $('#mood').value = ls.get('pt_mood_' + TODAY, '');
+  $('#mood').onchange = () => { ls.set('pt_mood_' + TODAY, $('#mood').value); drawChecklist(); };
+}
+
+// Discord: same ciphertext and passphrase as /discord; decrypted here, never sent anywhere
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function dcDec(blob, pass) {
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({name: 'PBKDF2', hash: 'SHA-256', salt: unb64(blob.salt), iterations: blob.iter}, base, {name: 'AES-GCM', length: 256}, false, ['decrypt']);
+  return new TextDecoder().decode(await crypto.subtle.decrypt({name: 'AES-GCM', iv: unb64(blob.iv)}, key, unb64(blob.ct)));
+}
+async function dcUnlock(pass) {
+  const idx = JSON.parse(await dcDec(await getJ('discord/index.enc.json'), pass));
+  const d = idx.digests[0];
+  const html = await dcDec(await getJ('discord/' + d.file), pass);
+  const doc = new DOMParser().parseFromString(DOMPurify.sanitize(html), 'text/html');
+  const pick = re => { const h = [...doc.querySelectorAll('h2')].find(x => re.test(x.textContent)); if (!h) return '';
+    let out = '', n = h.nextElementSibling; while (n && n.tagName != 'H2') { out += n.outerHTML; n = n.nextElementSibling; } return `<h2>${esc(h.textContent)}</h2>` + out; };
+  $('#dc-body').innerHTML = `<div class="dc">${pick(/TL;DR/i)}${pick(/Index|macro/i)}</div><div class="sub"><a href="/discord">Full digest and ledgers</a></div>`;
+  $('#dc-when').textContent = '· ' + d.when;
+  $('#dc-lock').classList.add('hidden'); $('#dc-body').classList.remove('hidden');
+}
+$('#dc-f').onsubmit = async e => { e.preventDefault(); $('#dc-err').textContent = 'Unlocking…';
+  try { await dcUnlock($('#dc-pw').value); try { sessionStorage.setItem('dc_pw', $('#dc-pw').value); } catch {} $('#dc-pw').value = ''; }
+  catch { $('#dc-err').textContent = 'Wrong passphrase or data not published.'; } };
+try { const s = sessionStorage.getItem('dc_pw'); if (s) dcUnlock(s).catch(() => {}); } catch {}
+
+// ── 2. ticker tables ─────────────────────────────────────────────────────────
+function tabs() {
+  $('#tk').innerHTML = TICKERS.map(t => `<button data-t="${t}" class="${t == CUR ? 'on' : ''}">${t}</button>`).join('') +
+    '<input id="add" placeholder="Add ticker" size="9"> ' + (TICKERS.length > CORE.length ? '<button id="rm" title="Remove the current ticker">✕</button>' : '');
+  document.querySelectorAll('#tk button[data-t]').forEach(b => b.onclick = () => { CUR = b.dataset.t; ls.set('pt_cur', CUR); tabs(); show(); });
+  $('#add').onkeydown = e => { if (e.key == 'Enter') { const t = e.target.value.trim().toUpperCase(); if (/^[A-Z0-9.\-^=]{1,15}$/.test(t)) {
+    if (!TICKERS.includes(t)) TICKERS.push(t); CUR = t; ls.set('pt_tickers', TICKERS); ls.set('pt_cur', CUR); tabs(); show(); } } };
+  if ($('#rm')) $('#rm').onclick = () => { if (CORE.includes(CUR)) return; TICKERS = TICKERS.filter(t => t != CUR); CUR = 'SOXX'; ls.set('pt_tickers', TICKERS); tabs(); show(); };
+}
+const load = s => DATA[s] ? Promise.resolve(DATA[s]) : fetch('/api/pretrade?symbol=' + encodeURIComponent(s)).then(r => r.json()).then(d => { if (d.error) throw new Error(d.error); return DATA[s] = d; });
+
+const OB = {rsi: [70, 30], stoch: [80, 20], smi: [40, -40], wt: [53, -53]};
+function oscState(key, o) {
+  let v, s, crossUp, txt, sub;
+  if (key == 'rsi') { v = o.v; const up = o.v > o.ma; s = o.v > 50 && up ? 1 : o.v < 50 && !up ? -1 : 0; crossUp = up; txt = fx(o.v, 1); sub = 'avg ' + fx(o.ma, 1); }
+  if (key == 'macd') { const up = o.hist > 0; s = up && o.v > 0 ? 1 : !up && o.v < 0 ? -1 : 0; crossUp = up; txt = fx(o.v, 2);
+    sub = `sig ${fx(o.sig, 2)} · hist ${o.hist > o.hist_prev ? 'rising' : 'falling'}`; }
+  if (key == 'stoch') { v = o.k; const up = o.k > o.d; s = up ? 1 : -1; crossUp = up; txt = `${fx(o.k, 0)} / ${fx(o.d, 0)}`; sub = '%K / %D'; }
+  if (key == 'smi') { v = o.v; const up = o.v > o.sig; s = up ? 1 : -1; crossUp = up; txt = fx(o.v, 1); sub = 'sig ' + fx(o.sig, 1); }
+  if (key == 'wt') { v = o.wt1; const up = o.wt1 > o.wt2; s = up && o.wt1 > 0 ? 1 : !up && o.wt1 < 0 ? -1 : up ? 1 : -1; crossUp = up; txt = `${fx(o.wt1, 0)} / ${fx(o.wt2, 0)}`; sub = 'WT1 / WT2'; }
+  let tags = '';
+  if (OB[key] && v != null) { if (v >= OB[key][0]) tags += '<span class="tag t-ob">OB</span>'; if (v <= OB[key][1]) tags += '<span class="tag t-os">OS</span>'; }
+  if (o.cross != null && o.cross <= 3) tags += `<span class="tag t-x">x${crossUp ? '↑' : '↓'} ${o.cross}</span>`;
+  return {s, html: `<b>${txt}</b>${tags}<div>${sub}</div>`, v, crossUp, cross: o.cross};
+}
+const OSC = [['rsi', 'RSI (14)'], ['macd', 'MACD (12, 26, 9)'], ['stoch', 'Stoch RSI (14, 14, 3, 3)'], ['smi', 'SMI (10, 3, 10)'], ['wt', 'WaveTrend (10, 21)']];
+const MAS = [['kama', 'KAMA'], ['ema20', 'EMA 20'], ['ema50', 'EMA 50'], ['ema100', 'EMA 100'], ['ema200', 'EMA 200']];
+const cc = s => s > 0 ? 'c-bull' : s < 0 ? 'c-bear' : 'c-mix';
+
+function tfSummary(F, price) {
+  const os = OSC.map(([k]) => oscState(k, F.osc[k]).s);
+  const mom = os.filter(s => s > 0).length;
+  const above = MAS.filter(([k]) => price > F.ma[k].v).length;
+  const kUp = F.ma.kama.v > F.ma.kama.prev;
+  const stack = F.ma.ema20.v > F.ma.ema50.v && F.ma.ema50.v > F.ma.ema100.v && F.ma.ema100.v > F.ma.ema200.v ? 1
+    : F.ma.ema20.v < F.ma.ema50.v && F.ma.ema50.v < F.ma.ema100.v && F.ma.ema100.v < F.ma.ema200.v ? -1 : 0;
+  const trend = above >= 4 && kUp ? 1 : above <= 1 && !kUp ? -1 : 0;
+  return {mom, momS: mom >= 4 ? 1 : mom <= 1 ? -1 : 0, above, kUp, stack, trend};
+}
+const word = s => s > 0 ? '<span class="bull">up</span>' : s < 0 ? '<span class="bear">down</span>' : '<span class="mix">mixed</span>';
+
+function show() {
+  $('#asof').textContent = 'Loading ' + CUR + '…'; $('#osc').innerHTML = $('#mas').innerHTML = ''; $('#read').innerHTML = '';
+  load(CUR).then(d => {
+    if (d.symbol != CUR) return;
+    const tfs = d.timeframes, price = d.price;
+    $('#asof').innerHTML = `<b>${d.symbol}</b> ${fx(price)} · last hourly bar ${esc(d.asof)} ET · <a href="#" id="rf">refresh</a>`;
+    $('#rf').onclick = e => { e.preventDefault(); delete DATA[CUR]; show(); };
+    let h = '<tr><th></th>' + tfs.map(t => `<th>${t}</th>`).join('') + '</tr>';
+    for (const [k, lab] of OSC) h += `<tr><th>${lab}</th>` + tfs.map(t => { const st = oscState(k, d.frames[t].osc[k]); return `<td class="cell ${cc(st.s)}">${st.html}</td>`; }).join('') + '</tr>';
+    const S = Object.fromEntries(tfs.map(t => [t, tfSummary(d.frames[t], price)]));
+    h += '<tr><th>Bullish count</th>' + tfs.map(t => `<td class="${cc(S[t].momS)}"><b>${S[t].mom} of 5</b></td>`).join('') + '</tr>';
+    $('#osc').innerHTML = h;
+    h = '<tr><th></th>' + tfs.map(t => `<th>${t}</th>`).join('') + '</tr>';
+    for (const [k, lab] of MAS) h += `<tr><th>${lab}</th>` + tfs.map(t => { const m = d.frames[t].ma[k]; const pct = (price / m.v - 1) * 100; const up = m.v > m.prev;
+      return `<td class="cell ${pct >= 0 ? 'c-bull' : 'c-bear'}"><b>${fx(m.v)}</b> <span class="${pct >= 0 ? 'bull' : 'bear'}">${pct >= 0 ? '+' : ''}${fx(pct, 1)}%</span><div>${up ? '↗ rising' : '↘ falling'}${m.settled === false ? ' · short history' : ''}</div></td>`; }).join('') + '</tr>';
+    h += '<tr><th>EMA stack</th>' + tfs.map(t => `<td class="${cc(S[t].stack)}">${S[t].stack > 0 ? '20 > 50 > 100 > 200' : S[t].stack < 0 ? '20 < 50 < 100 < 200' : 'mixed'}</td>`).join('') + '</tr>';
+    h += '<tr><th>Supertrend (10, 3)</th>' + tfs.map(t => { const s = d.frames[t].st; return `<td class="${s.dir == 'up' ? 'c-bull' : 'c-bear'}">${s.dir} · ${fx(s.v)}</td>`; }).join('') + '</tr>';
+    h += '<tr><th>ATR (14)</th>' + tfs.map(t => `<td>${fx(d.frames[t].atr)} <span class="mu">(${fx(d.frames[t].atr_pct, 1)}%)</span></td>`).join('') + '</tr>';
+    $('#mas').innerHTML = h;
+    const W = S['1W'], D = S['1D'], H4 = S['4H'], H2 = S['2H'];
+    let setup;
+    if (W.trend > 0 && D.trend > 0) setup = H4.momS < 0 || H2.momS < 0 ? 'Uptrend with a short-term pullback: the classic buy-the-dip setup, once 2H/4H momentum turns back up.' : 'Uptrend on every timeframe: fine to hold; buying here is chasing unless it pulls back.';
+    else if (W.trend < 0 && D.trend < 0) setup = H4.momS > 0 || H2.momS > 0 ? 'Downtrend with a short-term bounce: a counter-trend trade at best. Selling strength or waiting is the trend-following choice.' : 'Downtrend on the higher timeframes: no buy setup. Wait for the daily trend to repair.';
+    else setup = 'Higher timeframes disagree (transition). Smaller size, tighter plan, and let the daily trend decide.';
+    $('#read').innerHTML = `Trend: weekly ${word(W.trend)}, daily ${word(D.trend)}, 4H ${word(H4.trend)}, 2H ${word(H2.trend)} · Momentum: weekly ${word(W.momS)}, daily ${word(D.momS)}, 4H ${word(H4.momS)}, 2H ${word(H2.momS)}<br><b>${setup}</b>`;
+    CTX.S = S;
+    sizer(true); drawChecklist(); eqTable();
+  }).catch(e => { $('#asof').textContent = CUR + ': ' + e.message; });
+}
+
+// ── 3. checklist ─────────────────────────────────────────────────────────────
+function checks() {
+  const d = DATA[CUR]; if (!d) return [];
+  const p = d.price, F = d.frames, S = CTX.S, D = F['1D'], W = F['1W'];
+  const bear = CTX.bear ? /bear/i.test(CTX.bear.state) : null;
+  const mood = $('#mood').value, pz = CTX.plan || {};
+  const os4 = ['stoch', 'wt', 'macd'].map(k => oscState(k, F['4H'].osc[k])), os2 = ['stoch', 'wt', 'macd'].map(k => oscState(k, F['2H'].osc[k]));
+  const turned = [...os4, ...os2].some(o => o.crossUp && o.cross != null && o.cross <= 3);
+  const ext = (p - D.ma.ema20.v) / D.atr;
+  const pctl = CTX.sent && CTX.sent.composite ? CTX.sent.composite.percentile_10y : null;
+  const wOB = oscState('rsi', W.osc.rsi).v >= 70 || W.osc.wt.wt2 >= 53, dOB = D.osc.rsi.v >= 70 || D.osc.wt.wt2 >= 53;
+  if (SIDE == 'buy') return [
+    ['Market backdrop is not a bear market', bear == null ? null : !bear, CTX.bear ? `Bear watch: ${CTX.bear.state}, ${CTX.bear.signs_on} of ${CTX.bear.signs_total} signs` : ''],
+    ['Weekly trend is up (price above weekly EMA 20, KAMA rising)', p > W.ma.ema20.v && W.ma.kama.v > W.ma.kama.prev, `Weekly EMA 20 ${fx(W.ma.ema20.v)}, KAMA ${W.ma.kama.v > W.ma.kama.prev ? 'rising' : 'falling'}`],
+    ['Daily trend is up (price above daily EMA 50 and 200)', p > D.ma.ema50.v && p > D.ma.ema200.v, `EMA 50 ${fx(D.ma.ema50.v)} · EMA 200 ${fx(D.ma.ema200.v)}`],
+    ['Entry timing: 2H or 4H momentum just turned up (Stoch RSI, WaveTrend or MACD crossed up in the last 3 bars)', turned, 'Buy when the dip turns, not while it is still falling'],
+    ['Not chasing: daily RSI under 70 and price within 1.5 daily ATRs of the daily EMA 20', D.osc.rsi.v < 70 && ext < 1.5, `Daily RSI ${fx(D.osc.rsi.v, 1)} · ${fx(ext, 1)} ATRs from the EMA 20`],
+    ['Sentiment is not euphoric (composite below its 90th percentile, mood not "everyone long")', pctl == null && !mood ? null : (pctl == null || pctl < 90) && !/Euphoric/.test(mood), pctl != null ? `Composite at the ${pctl}th percentile` : ''],
+    ['I read today\'s Twitter and Discord digests and nothing contradicts the trade', null, 'Section 1 above'],
+    ['No CPI, FOMC, jobs report or big earnings (NVDA etc. for SOXX) in the next 2 days, or I sized down for it', null, 'Check the market brief\'s calendar'],
+    ['Stop is at a level that proves me wrong, and reward is at least 2× the risk', pz.rr != null ? pz.rr >= 2 && pz.stopOk : null, pz.rr != null ? `R:R ${fx(pz.rr, 1)} · stop ${fx(pz.stopAtr, 1)} daily ATRs away` : 'Fill in section 4'],
+    ['Size comes from the calculator, and total open risk on SPY/QQQ/SOXX stays under 3% of the account', pz.total != null ? pz.total <= 3 : null, pz.total != null ? `Open risk after this trade: ${fx(pz.total, 2)}%` : ''],
+    ['I wrote down why I am buying and what would make me exit', null, 'The "Copy trade plan" button gives you the text'],
+  ];
+  return [
+    ['Stop level hit: exit, no debate', pz.stop ? p <= pz.stop : null, pz.stop ? `Stop ${fx(pz.stop)} vs price ${fx(p)}` : 'Set a stop in section 4'],
+    ['Target or 2R reached: take part off and move the stop to break-even', pz.tgt ? p >= pz.tgt : null, pz.tgt ? `Target ${fx(pz.tgt)}` : ''],
+    ['Daily close below the daily EMA 50, or KAMA turned down with price under it', p < D.ma.ema50.v || (p < D.ma.kama.v && D.ma.kama.v < D.ma.kama.prev), `EMA 50 ${fx(D.ma.ema50.v)} · KAMA ${fx(D.ma.kama.v)}`],
+    ['Daily Supertrend flipped down', D.st.dir == 'down', `Supertrend ${D.st.dir} at ${fx(D.st.v)}`],
+    ['Weekly momentum rolling over from overbought (WaveTrend or RSI crossing down from the top)', (W.osc.wt.wt1 < W.osc.wt.wt2 && W.osc.wt.wt2 >= 40) || (W.osc.rsi.v < W.osc.rsi.ma && W.osc.rsi.ma >= 65), `Weekly WT ${fx(W.osc.wt.wt1, 0)}/${fx(W.osc.wt.wt2, 0)} · RSI ${fx(W.osc.rsi.v, 1)}`],
+    ['Overbought on daily AND weekly with euphoric sentiment: trim into strength', (dOB && wOB) && ((pctl != null && pctl >= 90) || /Euphoric/.test(mood)), `Daily ${dOB ? 'overbought' : 'not overbought'}, weekly ${wOB ? 'overbought' : 'not overbought'}`],
+    ['Bear-market watch turned to bear', bear, CTX.bear ? CTX.bear.state : ''],
+    ['The reason I bought is no longer true (thesis, news, earnings)', null, ''],
+    ['I am selling because of the plan, not because of one red day or a scary tweet', null, ''],
+  ];
+}
+function drawChecklist() {
+  const L = checks(), key = `pt_cl_${CUR}_${SIDE}_${TODAY}`, saved = ls.get(key, {});
+  const autoTxt = a => a === true ? '<span class="bull">✔</span>' : a === false ? '<span class="bear">✖</span>' : '<span class="mu">·</span>';
+  $('#cl').innerHTML = L.map(([t, a, why], i) => `<li><input type="checkbox" data-i="${i}" ${saved[i] ? 'checked' : ''}><span class="auto">${autoTxt(a)}</span><span>${esc(t)}</span>${why ? `<span class="why">${esc(why)}</span>` : ''}</li>`).join('');
+  document.querySelectorAll('#cl input').forEach(c => c.onchange = () => { saved[c.dataset.i] = c.checked; ls.set(key, saved); score(); });
+  const score = () => { const met = L.filter(x => x[1] === true).length, auto = L.filter(x => x[1] != null).length, ticked = Object.values(saved).filter(Boolean).length;
+    $('#cl-score').textContent = SIDE == 'buy' ? `Data checks met: ${met} of ${auto} · you ticked ${ticked} of ${L.length}` : `Sell signals on: ${met} of ${auto} · you ticked ${ticked} of ${L.length}`; };
+  score();
+}
+document.querySelectorAll('[data-side]').forEach(b => b.onclick = () => { SIDE = b.dataset.side; document.querySelectorAll('[data-side]').forEach(x => x.classList.toggle('on', x == b)); drawChecklist(); });
+
+// ── 4. position size ─────────────────────────────────────────────────────────
+['acct', 'riskp', 'maxpos', 'open'].forEach(id => { const v = ls.get('pt_' + id, null); if (v != null) $('#' + id).value = v; });
+function stopOptions(d) {
+  const p = d.price, F = d.frames, D = F['1D'], H4 = F['4H'];
+  const o = [['2 daily ATRs below entry', p - 2 * D.atr], ['1.5 daily ATRs below entry', p - 1.5 * D.atr], ['Last 10 days\' low', D.low10],
+             ['2 × 4H ATR below entry', p - 2 * H4.atr], ['4H Supertrend', H4.st.dir == 'up' ? H4.st.v : null], ['Daily Supertrend', D.st.dir == 'up' ? D.st.v : null],
+             ['Daily EMA 50', D.ma.ema50.v < p ? D.ma.ema50.v * 0.99 : null], ['Daily EMA 200', D.ma.ema200.v < p ? D.ma.ema200.v * 0.99 : null]];
+  return o.filter(x => x[1] != null && x[1] < p);
+}
+function sizer(reset) {
+  const d = DATA[CUR]; if (!d) return;
+  const p = d.price, D = d.frames['1D'];
+  if (reset) {
+    $('#entry').value = fx(p);
+    const so = stopOptions(d);
+    $('#stopsel').innerHTML = so.map(([l, v]) => `<option value="${v.toFixed(2)}">${l}: ${fx(v)}</option>`).join('') + '<option value="">Custom</option>';
+    $('#stop').value = so.length ? so[0][1].toFixed(2) : '';
+  }
+  const entry = +$('#entry').value, stop = +$('#stop').value;
+  const R = entry - stop;
+  if (reset || !$('#tgt').value) {
+    const to = [['2R (twice the risk)', entry + 2 * R], ['3R', entry + 3 * R], ['20-day high', D.high20], ['Daily EMA 50', D.ma.ema50.v], ['Daily EMA 200', D.ma.ema200.v]].filter(x => x[1] > entry);
+    $('#tgtsel').innerHTML = to.map(([l, v]) => `<option value="${v.toFixed(2)}">${l}: ${fx(v)}</option>`).join('') + '<option value="">Custom</option>';
+    $('#tgt').value = to.length ? to[0][1].toFixed(2) : '';
+  }
+  const tgt = +$('#tgt').value, acct = +$('#acct').value, rp = +$('#riskp').value, maxp = +$('#maxpos').value, open = +$('#open').value, n = +$('#tr').value;
+  const riskD = acct * rp / 100;
+  let K = '', W = '';
+  if (!(R > 0)) { $('#kpis').innerHTML = '<div class="warn bad">The stop must be below the entry for a long trade.</div>'; CTX.plan = {}; return; }
+  let sh = Math.floor(riskD / R), capped = false;
+  const maxSh = Math.floor(acct * maxp / 100 / entry);
+  if (sh > maxSh) { sh = maxSh; capped = true; }
+  const pos = sh * entry, realRisk = sh * R, rr = tgt > entry ? (tgt - entry) / R : null, stopAtr = R / D.atr;
+  const total = open + realRisk / acct * 100;
+  const per = Math.floor(sh / n);
+  K += `<div class="kpi"><div class="l">Shares</div><div class="v">${sh.toLocaleString()}</div></div>`;
+  K += `<div class="kpi"><div class="l">Position value</div><div class="v">$${Math.round(pos).toLocaleString()}</div><div class="l">${fx(pos / acct * 100, 1)}% of account</div></div>`;
+  K += `<div class="kpi"><div class="l">Loss if stopped</div><div class="v bear">−$${Math.round(realRisk).toLocaleString()}</div><div class="l">${fx(realRisk / acct * 100, 2)}% · ${fx(R / entry * 100, 1)}% below entry</div></div>`;
+  K += `<div class="kpi"><div class="l">Gain at target</div><div class="v bull">${rr != null ? '+$' + Math.round(sh * (tgt - entry)).toLocaleString() : '—'}</div><div class="l">reward:risk ${rr != null ? fx(rr, 1) : '—'}</div></div>`;
+  K += `<div class="kpi"><div class="l">Tranches</div><div class="v">${n} × ${per.toLocaleString()}</div><div class="l">add only while the stop still holds</div></div>`;
+  $('#kpis').innerHTML = K;
+  if (capped) W += `<div class="warn">Capped by the ${maxp}% max position: the risk budget alone would allow ${Math.floor(riskD / R).toLocaleString()} shares. The stop is tight relative to the position.</div>`;
+  if (stopAtr < 1) W += `<div class="warn bad">The stop is only ${fx(stopAtr, 1)} daily ATRs away; normal daily noise (one ATR = ${fx(D.atr)}) can hit it. Widen the stop and buy fewer shares.</div>`;
+  if (stopAtr > 4) W += `<div class="warn">The stop is ${fx(stopAtr, 1)} daily ATRs away, a wide stop. That is fine for a long-term position, but the share count is small.</div>`;
+  if (rr != null && rr < 2) W += `<div class="warn">Reward:risk is ${fx(rr, 1)}, below 2. At a 50% hit rate, under 1 loses money after costs.</div>`;
+  if (total > 3) W += `<div class="warn bad">Open risk on SPY / QQQ / SOXX would be ${fx(total, 2)}% of the account. These three move together (correlation around 0.85–0.95), so a market drop hits all of them at once. Treat them as one trade.</div>`;
+  if (rp > 2) W += `<div class="warn">${rp}% risk per trade is aggressive: ten losers in a row (it happens) would cost about ${fx(100 - 100 * Math.pow(1 - rp / 100, 10), 0)}% of the account.</div>`;
+  $('#warns').innerHTML = W;
+  CTX.plan = {entry, stop, tgt, rr, stopOk: stopAtr >= 1, stopAtr, total, sh, pos, realRisk};
+  ['acct', 'riskp', 'maxpos', 'open'].forEach(id => ls.set('pt_' + id, +$('#' + id).value));
+  drawChecklist(); eqTable();
+}
+['entry', 'stop', 'tgt', 'acct', 'riskp', 'maxpos', 'open', 'tr'].forEach(id => $('#' + id).oninput = () => sizer(false));
+$('#stopsel').onchange = () => { if ($('#stopsel').value) $('#stop').value = $('#stopsel').value; $('#tgt').value = ''; sizer(false); };
+$('#tgtsel').onchange = () => { if ($('#tgtsel').value) $('#tgt').value = $('#tgtsel').value; sizer(false); };
+$('#stop').addEventListener('input', () => { $('#stopsel').value = ''; });
+
+function eqTable() {
+  const acct = +$('#acct').value, riskD = acct * (+$('#riskp').value) / 100;
+  let h = '<tr><th>Ticker</th><th>Price</th><th>Daily ATR</th><th>Stop (2 ATR)</th><th>Shares</th><th>Position</th><th>% of account</th></tr>';
+  for (const t of CORE) { const d = DATA[t];
+    if (!d) { h += `<tr><td>${t}</td><td colspan="6" class="mu">loading…</td></tr>`; continue; }
+    const a = d.frames['1D'].atr, R = 2 * a, sh = Math.floor(riskD / R);
+    h += `<tr><td><b>${t}</b></td><td>${fx(d.price)}</td><td>${fx(a)} (${fx(d.frames['1D'].atr_pct, 1)}%)</td><td>${fx(d.price - R)}</td><td>${sh.toLocaleString()}</td><td>$${Math.round(sh * d.price).toLocaleString()}</td><td>${fx(sh * d.price / acct * 100, 1)}%</td></tr>`; }
+  $('#eq').innerHTML = h;
+}
+
+$('#copy').onclick = () => {
+  const d = DATA[CUR], z = CTX.plan; if (!d || !z || !z.sh) return;
+  const L = checks().filter(x => x[1] != null).map(([t, a]) => `${a ? '[x]' : '[ ]'} ${t}`).join('\n');
+  const txt = `${TODAY} ${SIDE.toUpperCase()} ${CUR} @ ${fx(z.entry)}\nShares ${z.sh} ($${Math.round(z.pos)}), stop ${fx(z.stop)}, target ${fx(z.tgt)}, R:R ${fx(z.rr, 1)}, max loss $${Math.round(z.realRisk)}\n` +
+    `Read: ${$('#read').innerText.replace(/\n/g, ' ')}\nMood: ${$('#mood').value || '-'}\nChecks:\n${L}\nWhy I am in:\nWhat makes me exit:\n`;
+  navigator.clipboard.writeText(txt).then(() => $('#copied').textContent = 'Copied.', () => $('#copied').textContent = 'Copy failed.');
+};
+
+backdrop().then(() => drawChecklist());
+tabs(); show();
+CORE.forEach(t => t != CUR && load(t).then(eqTable).catch(() => {}));
+</script><script src="/nav.js" defer></script></body></html>

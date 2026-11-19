@@ -404,6 +404,90 @@ def trend_text(rows, bear=None):
     return "\n".join(L)
 
 
+
+
+
+# ── Pre-trade checklist: oscillators + moving averages per timeframe, and stop candidates ──────
+def _kama(c, n=10, fast=2, slow=30):
+    """Kaufman adaptive moving average (10, 2, 30), TradingView's default."""
+    x = c.values.astype(float)
+    out = np.full(len(x), np.nan)
+    if len(x) <= n:
+        return pd.Series(out, index=c.index)
+    fsc, ssc = 2 / (fast + 1), 2 / (slow + 1)
+    vol = np.abs(np.diff(x, prepend=x[0]))
+    out[n] = x[n]
+    for i in range(n + 1, len(x)):
+        noise = vol[i - n + 1:i + 1].sum()
+        er = abs(x[i] - x[i - n]) / noise if noise else 0.0
+        sc = (er * (fsc - ssc) + ssc) ** 2
+        out[i] = out[i - 1] + sc * (x[i] - out[i - 1])
+    return pd.Series(out, index=c.index)
+
+
+def _pt_frame(df):
+    c, h, lo = df["Close"], df["High"], df["Low"]
+    rsi = _rsi(c)
+    rsi_ma = rsi.rolling(14).mean()
+    m = _ema(c, 12) - _ema(c, 26)
+    sig = _ema(m, 9)
+    rmin, rmax = rsi.rolling(14).min(), rsi.rolling(14).max()
+    k = ((rsi - rmin) / (rmax - rmin) * 100).rolling(3).mean()
+    kd = k.rolling(3).mean()
+    hh, ll = h.rolling(10).max(), lo.rolling(10).min()
+    smi = 200 * _ema(_ema(c - (hh + ll) / 2, 3), 3) / _ema(_ema(hh - ll, 3), 3)
+    smis = _ema(smi, 10)
+    ap = (h + lo + c) / 3
+    esa = ap.ewm(span=10, adjust=False).mean()
+    dv = (ap - esa).abs().ewm(span=10, adjust=False).mean()
+    wt1 = ((ap - esa) / (0.015 * dv)).ewm(span=21, adjust=False).mean()
+    wt2 = wt1.rolling(4).mean()
+    kama = _kama(c)
+    tr = pd.concat([h - lo, (h - c.shift()).abs(), (lo - c.shift()).abs()], axis=1).max(axis=1)
+    atr = tr.ewm(alpha=1 / 14, adjust=False).mean()
+    st_line, st_dir = supertrend(df)
+    emas = {n: _ema(c, n) for n in (20, 50, 100, 200)}
+    price = float(c.iloc[-1])
+
+    def cross_ago(a, b):
+        x = (a - b).values
+        for i in range(len(x) - 1, 0, -1):
+            if np.isnan(x[i]) or np.isnan(x[i - 1]):
+                break
+            if (x[i - 1] <= 0 < x[i]) or (x[i - 1] >= 0 > x[i]):
+                return len(x) - 1 - i
+        return None
+
+    f = lambda s, nd=2: _num(s.iloc[-1], nd)
+    osc = {
+        "rsi": {"v": f(rsi, 1), "ma": f(rsi_ma, 1), "cross": cross_ago(rsi, rsi_ma)},
+        "macd": {"v": f(m, 3), "sig": f(sig, 3), "hist": f(m - sig, 3), "hist_prev": _num((m - sig).iloc[-2], 3), "cross": cross_ago(m, sig)},
+        "stoch": {"k": f(k, 1), "d": f(kd, 1), "cross": cross_ago(k, kd)},
+        "smi": {"v": f(smi, 1), "sig": f(smis, 1), "cross": cross_ago(smi, smis)},
+        "wt": {"wt1": f(wt1, 1), "wt2": f(wt2, 1), "cross": cross_ago(wt1, wt2)},
+    }
+    ma = {"kama": {"v": f(kama), "prev": _num(kama.iloc[-4], 2), "bars": int(kama.notna().sum())}}
+    for n, s in emas.items():
+        ma[f"ema{n}"] = {"v": f(s), "prev": _num(s.iloc[-4], 2), "bars": len(s), "settled": len(s) >= 2 * n}
+    return {"close": round(price, 2), "bar": f"{df.index[-1]:%Y-%m-%d %H:%M}".replace(" 00:00", ""),
+            "osc": osc, "ma": ma, "atr": f(atr), "atr_pct": _num(atr.iloc[-1] / price * 100, 2),
+            "st": {"v": _num(st_line.iloc[-1], 2), "dir": "up" if st_dir.iloc[-1] == 1 else "down"},
+            "low10": round(float(lo.iloc[-10:].min()), 2), "high20": round(float(h.iloc[-20:].max()), 2)}
+
+
+def pretrade(sym):
+    """2H / 4H / 1D / 1W: RSI, MACD, Stoch RSI, SMI, WaveTrend, KAMA and the 20/50/100/200 EMAs."""
+    try:
+        h1 = _load(sym, "60m", "730d", "1h")          # ~2 years of hourly bars so the 4H 200 EMA is settled
+    except Exception:
+        h1 = _load(sym, "60m", "1y", "1h")
+    d1 = P._append_today(_load(sym, "1d", "max", "1D"), sym)
+    frames = [("2H", P._session_bars(h1, 2)), ("4H", P._session_bars(h1, 4)), ("1D", d1), ("1W", _period_bars(d1, "W-FRI"))]
+    out = {tf: _pt_frame(df) for tf, df in frames}
+    return {"symbol": sym, "price": round(float(h1["Close"].iloc[-1]), 2), "asof": f"{h1.index[-1]:%Y-%m-%d %H:%M}",
+            "timeframes": [f[0] for f in frames], "frames": out}
+
+
 def text(l):
     L = [f"{l['symbol']} turn ladder"]
     for r in l["timeframes"]:

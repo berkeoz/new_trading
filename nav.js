@@ -1,7 +1,7 @@
 // Site menu shared by every page: a slim bar with a sidebar drawer (all pages and the main page's sections).
 (function () {
   const MENU = [
-    ['Overview', [['Today\'s signals', '/#signals'], ['Signal timeline', '/#timeline'], ['Market breakdown', '/#breakdown'], ['Buy & sell checklist', '/#checklist']]],
+    ['Overview', [['Today\'s signals', '/#signals'], ['Signal timeline', '/#timeline'], ['Market breakdown', '/#breakdown'], ['Buy & sell checklist', '/#checklist'], ['Pre-trade checklist', '/pretrade']]],
     ['Analysis', [['Chart formations', '/patterns'], ['Rotation watch', '/rotation'], ['Market brief', '/brief'], ['Twitter analysis', '/x'], ['Ask NT (chat) ↗', 'https://claude.ai/artifact/1LiRMTe1TRy8LT6sTStgZY']]],
     ['Personal', [['Finances', '/finance'], ['Discord digests', '/discord']]],
   ];
