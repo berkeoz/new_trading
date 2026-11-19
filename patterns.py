@@ -514,6 +514,48 @@ def _atr_series(df, n=14):
     return tr.rolling(n, min_periods=1).mean().values
 
 
+def fair_value_gaps(df, lookback=120, min_atr=0.3, keep_filled=False):
+    """3-candle fair value gaps (ICT style): candle 1's high below candle 3's low (bullish)
+    or candle 1's low above candle 3's high (bearish), leaving an untraded zone around candle 2.
+    Gaps smaller than `min_atr` x ATR are ignored; overlapping gaps of the same direction are merged.
+    Later bars fill a gap from the side price comes from, so each gap keeps its unfilled part:
+    bullish (support below): later lows eat it from the top; bearish (resistance above): later highs eat it from the bottom."""
+    h, l = df["High"].values.astype(float), df["Low"].values.astype(float)
+    idx, N = df.index, len(df)
+    atr = _atr_series(df)
+    raw = []
+    for i in range(max(1, N - lookback), N - 1):
+        if l[i + 1] > h[i - 1] and l[i + 1] - h[i - 1] >= min_atr * atr[i]:
+            raw.append({"type": "bullish", "i": i, "low": h[i - 1], "high": l[i + 1]})
+        elif h[i + 1] < l[i - 1] and l[i - 1] - h[i + 1] >= min_atr * atr[i]:
+            raw.append({"type": "bearish", "i": i, "low": h[i + 1], "high": l[i - 1]})
+    merged = []                                   # merge overlapping / touching zones of one direction formed back to back
+    for g in raw:
+        m = merged[-1] if merged else None
+        if m and m["type"] == g["type"] and g["i"] - m["i_end"] <= 3 and g["low"] <= m["high"] and g["high"] >= m["low"]:
+            m["low"], m["high"], m["i_end"] = min(m["low"], g["low"]), max(m["high"], g["high"]), g["i"]
+        else:
+            merged.append({**g, "i_end": g["i"]})
+    out = []
+    for g in merged:
+        after = slice(g["i_end"] + 2, N)
+        lo, hi = g["low"], g["high"]
+        if g["type"] == "bullish":
+            rem_lo, rem_hi = lo, min(hi, l[after].min()) if g["i_end"] + 2 < N else hi
+        else:
+            rem_lo, rem_hi = max(lo, h[after].max()) if g["i_end"] + 2 < N else lo, hi
+        filled = rem_hi - rem_lo <= 0.1 * atr[-1]
+        if filled and not keep_filled:
+            continue
+        status = "filled" if filled else ("open" if (rem_lo, rem_hi) == (lo, hi) else "partly filled")
+        d0, d1 = ts(idx[g["i"]]), ts(idx[g["i_end"]])
+        out.append({"type": g["type"], "date": d0 if d0 == d1 else f"{d0}→{d1}",
+                    "low": round(float(rem_lo), 2), "high": round(float(rem_hi), 2),
+                    "orig_low": round(float(lo), 2), "orig_high": round(float(hi), 2),
+                    "size_atr": round(float((hi - lo) / atr[g["i"]]), 1), "status": status})
+    return out
+
+
 def _find_boxes(c, atr):
     """Greedy scan: from each start, extend while the closing range stays within
     BOX_ATR x ATR(start); keep runs of at least BOX_MIN_BARS bars, non-overlapping."""
@@ -942,6 +984,22 @@ def read_recent(df, pats, piv, n=READ_BARS):
         add(sign, txt, "gap")
     if quiet_filled:
         add(0, f"{quiet_filled} other gap{'s' if quiet_filled > 1 else ''} on normal volume already filled", "gap")
+
+    # 3b) nearest unfilled 3-candle fair value gap on each side (zone price tends to revisit)
+    fv = fair_value_gaps(df)
+    below = [g for g in fv if g["high"] <= c[-1]]
+    above = [g for g in fv if g["low"] >= c[-1]]
+    inside = [g for g in fv if g["low"] < c[-1] < g["high"]]
+    for g in inside:
+        add(0, f"price is inside a {g['type']} fair value gap {g['low']:.2f}-{g['high']:.2f} (from {g['date']}, {g['status']})", "gap")
+    if below:
+        g = max(below, key=lambda g: g["high"])
+        add(1 if g["type"] == "bullish" else 0,
+            f"unfilled {g['type']} fair value gap below at {g['low']:.2f}-{g['high']:.2f} (from {g['date']}, {g['status']}) → support zone", "gap")
+    if above:
+        g = min(above, key=lambda g: g["low"])
+        add(-1 if g["type"] == "bearish" else 0,
+            f"unfilled {g['type']} fair value gap above at {g['low']:.2f}-{g['high']:.2f} (from {g['date']}, {g['status']}) → resistance / magnet", "gap")
 
     # 4) volume: up-day vs down-day volume, biggest volume day
     if has_vol:

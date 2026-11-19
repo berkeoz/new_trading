@@ -218,6 +218,12 @@ def key_levels(r, df, state, price):
             i0 = xs.index(pv[-1]["date"])
             v = _avwap(df, i0) if len(df) - i0 >= 3 else None
             if v: lv.append((v, f"anchored VWAP from {what} ({pv[-1]['date']})"))
+    for g in P.fair_value_gaps(df):          # 3-candle fair value gaps: the edge price meets first
+        zone = f"{g['type']} FVG {g['low']:.2f}-{g['high']:.2f} ({g['date']}, {g['status']})"
+        if g["low"] < price < g["high"]:
+            lv += [(g["low"], zone + " bottom"), (g["high"], zone + " top")]
+        else:
+            lv.append((g["high"], zone + " top") if g["high"] <= price else (g["low"], zone + " bottom"))
     look = df.tail(126)   # ~6 months of daily bars
     for i0, what in ((df.index.get_loc(look["Low"].idxmin()), "anchored VWAP from 6-month low"),
                      (df.index.get_loc(look["High"].idxmax()), "anchored VWAP from 6-month high")):
@@ -291,6 +297,7 @@ def ticker_snapshot(sym, spy=None):
         "live": _live_price(sym),
         "daily": st,
         "levels": key_levels(d, df, st, price),
+        "fvgs": [g for g in P.fair_value_gaps(df) if abs((g["low"] + g["high"]) / 2 / price - 1) <= 0.15],
         "read30": d.get("read"),
         "templates": d.get("templates"),
         "assessment": d.get("assessment"),
@@ -500,6 +507,11 @@ def summary_text(snap):
             L.append(f"  session {s['date']}: open {s['open']} high {s['high']} low {s['low']} last {s['last']} VWAP {s['vwap']}")
         L.append("  supports:    " + "; ".join(f"{x['price']} {x['what']} ({x['distance_pct']:+}%)" for x in t["levels"]["supports"]))
         L.append("  resistances: " + "; ".join(f"{x['price']} {x['what']} ({x['distance_pct']:+}%)" for x in t["levels"]["resistances"]))
+        if t.get("fvgs"):
+            L.append("  fair value gaps (daily, unfilled part, within 15%): " + "; ".join(
+                f"{g['type']} {g['low']}-{g['high']} from {g['date']} ({g['status']}, {g['size_atr']} ATR"
+                + (f", originally {g['orig_low']}-{g['orig_high']}" if g["status"] != "open" else "") + ")"
+                for g in sorted(t["fvgs"], key=lambda g: -g["high"])))
         for p in t["open_patterns"]:
             L.append(f"  open pattern: {p['type']} ({p['bias']}) {p['start']}→{p['end']}, {p['status']}"
                      + (f", target {p['target']}" if p["target"] else "") + f" — {p['note']}")
@@ -648,8 +660,7 @@ def main():
         print()
         print(rotwatch.summary(rw))
     except Exception as e:
-        print(f"
-ROTATION WATCH: unavailable ({e})")
+        print(f"\nROTATION WATCH: unavailable ({e})")
     print()
     print(context_status(now))
     # daily second opinion from the local Qwen model: at the closing brief (or the first brief after
