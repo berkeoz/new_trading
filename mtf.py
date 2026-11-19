@@ -425,6 +425,22 @@ def _kama(c, n=10, fast=2, slow=30):
     return pd.Series(out, index=c.index)
 
 
+def _flip_ago(d):
+    """Bars since the Supertrend direction last changed (None if it never did)."""
+    for i in range(len(d) - 1, 0, -1):
+        if d[i] != d[i - 1]:
+            return int(len(d) - 1 - i)
+    return None
+
+
+def _flip_time(st_dir, idx):
+    n = _flip_ago(st_dir.values)
+    if n is None:
+        return None
+    t = idx[len(idx) - 1 - n]
+    return f"{t:%Y-%m-%d}" if (t.hour, t.minute) == (0, 0) else f"{t:%Y-%m-%d %H:%M}"
+
+
 def _pt_frame(df):
     c, h, lo = df["Close"], df["High"], df["Low"]
     rsi = _rsi(c)
@@ -471,14 +487,15 @@ def _pt_frame(df):
         ma[f"ema{n}"] = {"v": f(s), "prev": _num(s.iloc[-4], 2), "bars": len(s), "settled": len(s) >= 2 * n}
     return {"close": round(price, 2), "bar": f"{df.index[-1]:%Y-%m-%d %H:%M}".replace(" 00:00", ""),
             "osc": osc, "ma": ma, "atr": f(atr), "atr_pct": _num(atr.iloc[-1] / price * 100, 2),
-            "st": {"v": _num(st_line.iloc[-1], 2), "dir": "up" if st_dir.iloc[-1] == 1 else "down"},
+            "st": {"v": _num(st_line.iloc[-1], 2), "dir": "up" if st_dir.iloc[-1] == 1 else "down", "flip": _flip_ago(st_dir.values),
+                   "flip_time": _flip_time(st_dir, df.index)},
             "low10": round(float(lo.iloc[-10:].min()), 2), "high20": round(float(h.iloc[-20:].max()), 2)}
 
 
 def pretrade(sym):
     """2H / 4H / 1D / 1W: RSI, MACD, Stoch RSI, SMI, WaveTrend, KAMA and the 20/50/100/200 EMAs."""
     try:
-        h1 = _load(sym, "60m", "730d", "1h")          # ~2 years of hourly bars so the 4H 200 EMA is settled
+        h1 = _load(sym, "60m", "720d", "1h")          # ~2 years (Yahoo allows 730 days) of hourly bars so the 4H 200 EMA is settled
     except Exception:
         h1 = _load(sym, "60m", "1y", "1h")
     d1 = P._append_today(_load(sym, "1d", "max", "1D"), sym)

@@ -223,7 +223,9 @@ function show() {
     for (const [k, lab] of MAS) h += `<tr><th>${lab}</th>` + tfs.map(t => { const m = d.frames[t].ma[k]; const pct = (price / m.v - 1) * 100; const up = m.v > m.prev;
       return `<td class="cell ${pct >= 0 ? 'c-bull' : 'c-bear'}"><b>${fx(m.v)}</b> <span class="${pct >= 0 ? 'bull' : 'bear'}">${pct >= 0 ? '+' : ''}${fx(pct, 1)}%</span><div>${up ? '↗ rising' : '↘ falling'}${m.settled === false ? ' · short history' : ''}</div></td>`; }).join('') + '</tr>';
     h += '<tr><th>EMA stack</th>' + tfs.map(t => `<td class="${cc(S[t].stack)}">${S[t].stack > 0 ? '20 > 50 > 100 > 200' : S[t].stack < 0 ? '20 < 50 < 100 < 200' : 'mixed'}</td>`).join('') + '</tr>';
-    h += '<tr><th>Supertrend (10, 3)</th>' + tfs.map(t => { const s = d.frames[t].st; return `<td class="${s.dir == 'up' ? 'c-bull' : 'c-bear'}">${s.dir} · ${fx(s.v)}</td>`; }).join('') + '</tr>';
+    h += '<tr><th>Supertrend (10, 3)</th>' + tfs.map(t => { const s = d.frames[t].st;
+      return `<td class="cell ${s.dir == 'up' ? 'c-bull' : 'c-bear'}"><b class="${s.dir == 'up' ? 'bull' : 'bear'}">${s.dir == 'up' ? '▲ up' : '▼ down'}</b> ${fx(s.v)}` +
+        `${s.flip != null && s.flip <= 3 ? `<span class="tag t-x">flipped ${s.flip} bars ago</span>` : ''}<div>${s.flip_time ? 'since ' + esc(s.flip_time) + ` (${s.flip} bars)` : ''}${s.dir == 'up' ? ` · ${fx((price / s.v - 1) * 100, 1)}% above` : ` · ${fx((s.v / price - 1) * 100, 1)}% to flip up`}</div></td>`; }).join('') + '</tr>';
     h += '<tr><th>ATR (14)</th>' + tfs.map(t => `<td>${fx(d.frames[t].atr)} <span class="mu">(${fx(d.frames[t].atr_pct, 1)}%)</span></td>`).join('') + '</tr>';
     $('#mas').innerHTML = h;
     const W = S['1W'], D = S['1D'], H4 = S['4H'], H2 = S['2H'];
@@ -231,7 +233,9 @@ function show() {
     if (W.trend > 0 && D.trend > 0) setup = H4.momS < 0 || H2.momS < 0 ? 'Uptrend with a short-term pullback: the classic buy-the-dip setup, once 2H/4H momentum turns back up.' : 'Uptrend on every timeframe: fine to hold; buying here is chasing unless it pulls back.';
     else if (W.trend < 0 && D.trend < 0) setup = H4.momS > 0 || H2.momS > 0 ? 'Downtrend with a short-term bounce: a counter-trend trade at best. Selling strength or waiting is the trend-following choice.' : 'Downtrend on the higher timeframes: no buy setup. Wait for the daily trend to repair.';
     else setup = 'Higher timeframes disagree (transition). Smaller size, tighter plan, and let the daily trend decide.';
-    $('#read').innerHTML = `Trend: weekly ${word(W.trend)}, daily ${word(D.trend)}, 4H ${word(H4.trend)}, 2H ${word(H2.trend)} · Momentum: weekly ${word(W.momS)}, daily ${word(D.momS)}, 4H ${word(H4.momS)}, 2H ${word(H2.momS)}<br><b>${setup}</b>`;
+    const stw = t => word(d.frames[t].st.dir == 'up' ? 1 : -1);
+    $('#read').innerHTML = `Trend: weekly ${word(W.trend)}, daily ${word(D.trend)}, 4H ${word(H4.trend)}, 2H ${word(H2.trend)} · Momentum: weekly ${word(W.momS)}, daily ${word(D.momS)}, 4H ${word(H4.momS)}, 2H ${word(H2.momS)}` +
+      ` · Supertrend: weekly ${stw('1W')}, daily ${stw('1D')}, 4H ${stw('4H')}, 2H ${stw('2H')}<br><b>${setup}</b>`;
     CTX.S = S;
     sizer(true); drawChecklist(); eqTable();
   }).catch(e => { $('#asof').textContent = CUR + ': ' + e.message; });
@@ -244,7 +248,9 @@ function checks() {
   const bear = CTX.bear ? /bear/i.test(CTX.bear.state) : null;
   const mood = $('#mood').value, pz = CTX.plan || {};
   const os4 = ['stoch', 'wt', 'macd'].map(k => oscState(k, F['4H'].osc[k])), os2 = ['stoch', 'wt', 'macd'].map(k => oscState(k, F['2H'].osc[k]));
-  const turned = [...os4, ...os2].some(o => o.crossUp && o.cross != null && o.cross <= 3);
+  const stFlipUp = ['2H', '4H'].filter(t => F[t].st.dir == 'up' && F[t].st.flip != null && F[t].st.flip <= 3);
+  const turned = [...os4, ...os2].some(o => o.crossUp && o.cross != null && o.cross <= 3) || stFlipUp.length > 0;
+  const stTxt = t => `${t} ${F[t].st.dir} at ${fx(F[t].st.v)}${F[t].st.flip_time ? ' since ' + F[t].st.flip_time : ''}`;
   const ext = (p - D.ma.ema20.v) / D.atr;
   const pctl = CTX.sent && CTX.sent.composite ? CTX.sent.composite.percentile_10y : null;
   const wOB = oscState('rsi', W.osc.rsi).v >= 70 || W.osc.wt.wt2 >= 53, dOB = D.osc.rsi.v >= 70 || D.osc.wt.wt2 >= 53;
@@ -252,12 +258,14 @@ function checks() {
     ['Market backdrop is not a bear market', bear == null ? null : !bear, CTX.bear ? `Bear watch: ${CTX.bear.state}, ${CTX.bear.signs_on} of ${CTX.bear.signs_total} signs` : ''],
     ['Weekly trend is up (price above weekly EMA 20, KAMA rising)', p > W.ma.ema20.v && W.ma.kama.v > W.ma.kama.prev, `Weekly EMA 20 ${fx(W.ma.ema20.v)}, KAMA ${W.ma.kama.v > W.ma.kama.prev ? 'rising' : 'falling'}`],
     ['Daily trend is up (price above daily EMA 50 and 200)', p > D.ma.ema50.v && p > D.ma.ema200.v, `EMA 50 ${fx(D.ma.ema50.v)} · EMA 200 ${fx(D.ma.ema200.v)}`],
-    ['Entry timing: 2H or 4H momentum just turned up (Stoch RSI, WaveTrend or MACD crossed up in the last 3 bars)', turned, 'Buy when the dip turns, not while it is still falling'],
+    ['Supertrend is up on the daily and the weekly', D.st.dir == 'up' && W.st.dir == 'up', `${stTxt('1D')} · ${stTxt('1W')}`],
+    ['Entry timing: 2H or 4H momentum just turned up (Stoch RSI, WaveTrend or MACD crossed up, or Supertrend flipped up, in the last 3 bars)', turned,
+      stFlipUp.length ? `Supertrend flipped up on ${stFlipUp.join(' and ')}` : 'Buy when the dip turns, not while it is still falling'],
     ['Not chasing: daily RSI under 70 and price within 1.5 daily ATRs of the daily EMA 20', D.osc.rsi.v < 70 && ext < 1.5, `Daily RSI ${fx(D.osc.rsi.v, 1)} · ${fx(ext, 1)} ATRs from the EMA 20`],
     ['Sentiment is not euphoric (composite below its 90th percentile, mood not "everyone long")', pctl == null && !mood ? null : (pctl == null || pctl < 90) && !/Euphoric/.test(mood), pctl != null ? `Composite at the ${pctl}th percentile` : ''],
     ['I read today\'s Twitter and Discord digests and nothing contradicts the trade', null, 'Section 1 above'],
     ['No CPI, FOMC, jobs report or big earnings (NVDA etc. for SOXX) in the next 2 days, or I sized down for it', null, 'Check the market brief\'s calendar'],
-    ['Stop is at a level that proves me wrong, and reward is at least 2× the risk', pz.rr != null ? pz.rr >= 2 && pz.stopOk : null, pz.rr != null ? `R:R ${fx(pz.rr, 1)} · stop ${fx(pz.stopAtr, 1)} daily ATRs away` : 'Fill in section 4'],
+    ['Stop is at a level that proves me wrong, and reward is at least 2× the risk', pz.rr != null ? pz.rr >= 1.995 && pz.stopOk : null, pz.rr != null ? `R:R ${fx(pz.rr, 1)} · stop ${fx(pz.stopAtr, 1)} daily ATRs away` : 'Fill in section 4'],
     ['Size comes from the calculator, and total open risk on SPY/QQQ/SOXX stays under 3% of the account', pz.total != null ? pz.total <= 3 : null, pz.total != null ? `Open risk after this trade: ${fx(pz.total, 2)}%` : ''],
     ['I wrote down why I am buying and what would make me exit', null, 'The "Copy trade plan" button gives you the text'],
   ];
@@ -265,7 +273,9 @@ function checks() {
     ['Stop level hit: exit, no debate', pz.stop ? p <= pz.stop : null, pz.stop ? `Stop ${fx(pz.stop)} vs price ${fx(p)}` : 'Set a stop in section 4'],
     ['Target or 2R reached: take part off and move the stop to break-even', pz.tgt ? p >= pz.tgt : null, pz.tgt ? `Target ${fx(pz.tgt)}` : ''],
     ['Daily close below the daily EMA 50, or KAMA turned down with price under it', p < D.ma.ema50.v || (p < D.ma.kama.v && D.ma.kama.v < D.ma.kama.prev), `EMA 50 ${fx(D.ma.ema50.v)} · KAMA ${fx(D.ma.kama.v)}`],
-    ['Daily Supertrend flipped down', D.st.dir == 'down', `Supertrend ${D.st.dir} at ${fx(D.st.v)}`],
+    ['4H Supertrend flipped down: early warning, tighten the stop', F['4H'].st.dir == 'down', stTxt('4H')],
+    ['Daily Supertrend flipped down: trend exit for swing trades', D.st.dir == 'down', stTxt('1D')],
+    ['Weekly Supertrend flipped down: trend exit for long-term holdings', W.st.dir == 'down', stTxt('1W')],
     ['Weekly momentum rolling over from overbought (WaveTrend or RSI crossing down from the top)', (W.osc.wt.wt1 < W.osc.wt.wt2 && W.osc.wt.wt2 >= 40) || (W.osc.rsi.v < W.osc.rsi.ma && W.osc.rsi.ma >= 65), `Weekly WT ${fx(W.osc.wt.wt1, 0)}/${fx(W.osc.wt.wt2, 0)} · RSI ${fx(W.osc.rsi.v, 1)}`],
     ['Overbought on daily AND weekly with euphoric sentiment: trim into strength', (dOB && wOB) && ((pctl != null && pctl >= 90) || /Euphoric/.test(mood)), `Daily ${dOB ? 'overbought' : 'not overbought'}, weekly ${wOB ? 'overbought' : 'not overbought'}`],
     ['Bear-market watch turned to bear', bear, CTX.bear ? CTX.bear.state : ''],
@@ -289,7 +299,7 @@ document.querySelectorAll('[data-side]').forEach(b => b.onclick = () => { SIDE =
 function stopOptions(d) {
   const p = d.price, F = d.frames, D = F['1D'], H4 = F['4H'];
   const o = [['2 daily ATRs below entry', p - 2 * D.atr], ['1.5 daily ATRs below entry', p - 1.5 * D.atr], ['Last 10 days\' low', D.low10],
-             ['2 × 4H ATR below entry', p - 2 * H4.atr], ['4H Supertrend', H4.st.dir == 'up' ? H4.st.v : null], ['Daily Supertrend', D.st.dir == 'up' ? D.st.v : null],
+             ['2 × 4H ATR below entry', p - 2 * H4.atr], ['4H Supertrend', H4.st.dir == 'up' ? H4.st.v : null], ['Daily Supertrend', D.st.dir == 'up' ? D.st.v : null], ['Weekly Supertrend', F['1W'].st.dir == 'up' ? F['1W'].st.v : null],
              ['Daily EMA 50', D.ma.ema50.v < p ? D.ma.ema50.v * 0.99 : null], ['Daily EMA 200', D.ma.ema200.v < p ? D.ma.ema200.v * 0.99 : null]];
   return o.filter(x => x[1] != null && x[1] < p);
 }
