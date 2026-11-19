@@ -1,13 +1,13 @@
 {
  "start": "2026-10-19",
- "cash": 86086.10433197021,
+ "cash": 76311.75420379639,
  "positions": {
   "EOG": {
    "shares": 33,
    "entry_price": 150.66,
    "entry_date": "2026-11-04 09:45",
    "spy_entry": 767.0499877929688,
-   "last": 149.68,
+   "last": 150.3128,
    "theme": "Energy supply squeeze",
    "thesis": "Low-cost US producer at a forward P/E of 9.3 with strong free cash flow; Minervini 7/7, Stage 2, above its 50-day average 149.19 with supports at 153.75 and 147.84. Stop raised slightly to just below the 142.53 support (6 touches).",
    "conviction": 1,
@@ -30,7 +30,7 @@
    "entry_price": 594.905,
    "entry_date": "2026-11-04 13:51",
    "spy_entry": 767.6900024414062,
-   "last": 578.01,
+   "last": 573.87,
    "theme": "Defense and geopolitics",
    "thesis": "Record backlog and multi-year munitions demand; holding above the 586.98 breakout level and both moving averages (SMA50 552.34, SMA200 564.56). Stop raised to 566, about 1 ATR below the breakout, to protect the position.",
    "conviction": 1,
@@ -53,7 +53,7 @@
    "entry_price": 337.0,
    "entry_date": "2026-11-16 15:29",
    "spy_entry": 739.2100219726562,
-   "last": 324.12,
+   "last": 326.815,
    "theme": "Higher-for-longer financials",
    "thesis": "The largest US bank earns more net interest income with a higher front end, and trading and investment banking benefit from volatility; forward P/E 13.4, Stage 2, Minervini 6/7, and the rotation model flags financials as favored in overheat. Buy a pullback toward the 330-338 area below the 50-day average 340.",
    "conviction": 1,
@@ -68,6 +68,50 @@
     "type": "zone",
     "low": 330,
     "high": 338
+   }
+  },
+  "JNJ": {
+   "shares": 18,
+   "entry_price": 267.005,
+   "entry_date": "2026-11-19 09:45",
+   "spy_entry": 736.9580078125,
+   "last": 267.005,
+   "theme": "Quality health care",
+   "thesis": "Low-beta pharma and medtech cash flows with a dividend; Stage 2, Minervini 7/7, but at 282.2 it sits on the 282.62 resistance (4 touches). Wait for the 264.8 support (5 touches) near the 50-day average 266.69.",
+   "conviction": 1,
+   "stop": 252,
+   "target": 295,
+   "invalidation": "A daily close below 252 (fails the 264.8 support by more than 2 ATR toward 249.81).",
+   "catalysts": [
+    "Q4 results in January (date n/a)",
+    "Drug-pricing policy"
+   ],
+   "entry": {
+    "type": "zone",
+    "low": 262,
+    "high": 268
+   }
+  },
+  "PGR": {
+   "shares": 22,
+   "entry_price": 225.83,
+   "entry_date": "2026-11-19 09:45",
+   "spy_entry": 736.9580078125,
+   "last": 225.83,
+   "theme": "Higher-for-longer financials",
+   "thesis": "Short rates heading toward 4.5% boost float income and auto pricing keeps pace with claims inflation; forward P/E 14.6, Stage 2, Minervini 6/7. At 236 it is at the 236.88 resistance (8 touches), so wait for the 223.75 support (7 touches).",
+   "conviction": 1,
+   "stop": 213,
+   "target": 250,
+   "invalidation": "A daily close below 213 (loses the 215.25 support) or a sharp rise in loss ratios.",
+   "catalysts": [
+    "October monthly results mid-November (date n/a)",
+    "FOMC Dec 9"
+   ],
+   "entry": {
+    "type": "zone",
+    "low": 222,
+    "high": 226
    }
   }
  },
@@ -89,45 +133,7 @@
     "Drug-pricing oversight from the new Democratic Congress (January)"
    ],
    "added": "2026-10-19",
-   "last": 1382.22
-  },
-  "JNJ": {
-   "theme": "Quality health care",
-   "thesis": "Low-beta pharma and medtech cash flows with a dividend; Stage 2, Minervini 7/7, but at 282.2 it sits on the 282.62 resistance (4 touches). Wait for the 264.8 support (5 touches) near the 50-day average 266.69.",
-   "conviction": 1,
-   "entry": {
-    "type": "zone",
-    "low": 262,
-    "high": 268
-   },
-   "stop": 252,
-   "target": 295,
-   "invalidation": "A daily close below 252 (fails the 264.8 support by more than 2 ATR toward 249.81).",
-   "catalysts": [
-    "Q4 results in January (date n/a)",
-    "Drug-pricing policy"
-   ],
-   "added": "2026-10-19",
-   "last": 272.72
-  },
-  "PGR": {
-   "theme": "Higher-for-longer financials",
-   "thesis": "Short rates heading toward 4.5% boost float income and auto pricing keeps pace with claims inflation; forward P/E 14.6, Stage 2, Minervini 6/7. At 236 it is at the 236.88 resistance (8 touches), so wait for the 223.75 support (7 touches).",
-   "conviction": 1,
-   "entry": {
-    "type": "zone",
-    "low": 222,
-    "high": 226
-   },
-   "stop": 213,
-   "target": 250,
-   "invalidation": "A daily close below 213 (loses the 215.25 support) or a sharp rise in loss ratios.",
-   "catalysts": [
-    "October monthly results mid-November (date n/a)",
-    "FOMC Dec 9"
-   ],
-   "added": "2026-10-19",
-   "last": 228.44
+   "last": 1365.74
   },
   "WMT": {
    "theme": "Defensive consumer compounder",
@@ -146,7 +152,7 @@
     "Holiday sales commentary"
    ],
    "added": "2026-11-02",
-   "last": 127.3
+   "last": 124.715
   }
  },
  "closed": [
@@ -324,8 +330,8 @@
   },
   {
    "date": "2026-11-19",
-   "equity": 100187.3,
-   "spy": 730.33
+   "equity": 100212.8,
+   "spy": 736.958
   }
  ],
  "events": [
@@ -478,12 +484,24 @@
    "kind": "sell",
    "symbol": "SLB",
    "text": "sold 163 at 48.95 (stop 49.0 hit); P&L -18 (-0.2%)"
+  },
+  {
+   "time": "2026-11-19 09:45",
+   "kind": "buy",
+   "symbol": "JNJ",
+   "text": "bought 18 at 267.01 (4,806, 5% target weight)"
+  },
+  {
+   "time": "2026-11-19 09:45",
+   "kind": "buy",
+   "symbol": "PGR",
+   "text": "bought 22 at 225.83 (4,968, 5% target weight)"
   }
  ],
  "outlook_id": "2026-11-12",
  "outlook_applied": "2026-11-12T10:22-05:00",
- "updated": "2026-11-19T09:15-05:00",
- "spy_last": 730.3300170898438,
+ "updated": "2026-11-19T09:45-05:00",
+ "spy_last": 736.9580078125,
  "outlook": {
   "id": "2026-11-12",
   "horizon": "6-12 months",
