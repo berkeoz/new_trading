@@ -25,6 +25,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** discretionary trader and educator. **Focus:** mega-cap tech, BTC, risk-management tips.
 - **Style:** short motivational and lifestyle posts, occasional breakout callouts. **Signal-to-noise:** medium-low.
 - **Calls log:**
+  - 2026-11-20 (Fri mid, 10 posts): at 10:05 ET listed "selling exhaustion" signs (QQQ tagged 634, VIX 30 buy zone, daily RSI divergence, S&P 3.3 SD below its 50-day). By 14:56 he called the week "bizarre" (QQQ -9% on the week, VIX +75%). Outcome: **failed** intraday. QQQ broke 634 and fell to ~613 (our brief, 15:06). This is the third failed bottom call this week.
   - 2026-11-20 (Fri am, 5 posts): SPY 700–705 / QQQ 634 "washout" bottom zone for a 5–7% rally; NVDA weekly RSI 28 at historic-low readings; NYMO about -70, eyeing a year-end rally. Outcome: open (futures near the zone before the open). Thursday's 13:44 bottom call failed overnight.
   - 2026-11-19 (Thu pm, 10 posts): 13:44 "real bottom right here, reverse HARD"; possible SPY false breakdown (truncated); after close: new lows, 62% of stocks Stage 4, extreme fear; NBIS still bullish at -67%. Outcome: 13:44 bottom call wrong for the session (SPY closed 715.78 on the lows).
   - 2026-11-19 (Thu mid, 16 posts): "gap holds = progress, fades = games" — it faded: QQQ 675→648, SPY 739→718, "10 AM rug pull", blames ANT/AMD; then a "high risk stab" long with a stop (text truncated). Outcome: morning squeeze flip wrong; stab open.
@@ -150,6 +151,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** swing trader using Bookmap/order-flow levels. **Focus:** momentum names (NBIS, AEHR).
 - **Style:** setups with liquidity levels, defined entries and stops; posts stop-outs openly. **Signal-to-noise:** medium-high.
 - **Calls log:**
+  - 2026-11-20 (Fri mid, 7 posts): SOXX is still inside its Bollinger Band and "needs a lower-low" before it is a setup ("buy the first test, never the second"). He made no trades all week. The QQQ yearly candle is 2.55% from turning red. Outcome: right to wait. SOXX made a much lower low (124, our brief).
   - 2026-11-19 (Thu mid, 1 post): SOXX: the gap-up killed his setup, no gap-fill backtest, "no trade for today". Outcome: right to stay out (SOXX 148.6 → 137.6).
   - 2026-11-19 (Thu am, 1 post): one-liner ("Even the traders"). No call.
   - 2026-11-18 (Wed pm, 2 posts): SOXX/SOXL no setup, gap-up makes it worse; "nothing to trade". Outcome: right (SOXX gapped +1.6% then faded to 141.85).
@@ -258,6 +260,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** options-flow tracker (Bullflow). **Focus:** large single-name and SPX call/put buys.
 - **Style:** flow and P&L screenshots posted after they win (survivorship bias), plus referral promotion for funded accounts. **Signal-to-noise:** medium for sentiment only.
 - **Calls log:**
+  - 2026-11-20 (Fri mid, 20 posts): logged a TSLA Feb-27 380C $5.9M bull (bought into a -7% day), an SPY Dec-4 630P $2.1M bear (opening) and an SBET Apr-27 5C $511K bull. He followed up on earlier bears: the NVDA Dec-4 135P (Nov 17) is "up massively" and now in the money after the SEC probe; SQQQ +11.6%; AMD puts "almost ITM" (AMD $439, -10%). Locked heatmaps said "705 has to hold". The 7000 ES level "hit". Outcome: the Nov 17 bear cluster (NVDA, AMD, SQQQ, SPY 635P) all **worked** this week.
   - 2026-11-19 (Thu pm, 7 posts): logged CSCO Dec-18-2026 87.5P $1.1M (bear, mostly opening, +56% on the day); locked SPY bear (15:01) and SQQQ bull (13:16); locked heatmap "if 720-719 can't hold..." (SPY closed 715.78, so it failed); GME/Roaring Kitty meme. Outcome: SQQQ 70C, SPY 635P and AMD 415P extended gains.
   - 2026-11-19 (Thu mid, 4 posts): logged WMT Sep-17-2027 110P $3.0M (bear, opening); AMD follow-up on the Nov 17 Dec-11 415P ($634K; AMD -9% today, logged); two locked heatmaps ("mixed", then "support building at 720"). Outcome: SQQQ 70C, SPY 635P and AMD 415P all working today.
   - 2026-11-19 (Thu am, 1 post): locked heatmap teaser, "might get that bounce". No flow logged. Outcome: Nov 17 SQQQ 70C bet going against (QQQ +1.8% pre-market).
@@ -467,6 +470,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** daily and weekly pattern calls (engulfing, channel tops, wedges, EMAs); names triggers but few price targets; argues with followers. **Signal-to-noise:** medium-high.
 - **Bias:** tends to call tops (says AMD top worked "after 20 tries"). Admits misses publicly (TSLA, 10/11).
 - **Calls log:**
+  - 2026-11-20 (Fri mid, 25 posts): TSLA daily bearish breakdown (10:39 ET); his TSLA puts were half closed at 12:15, then the rest at 5.08 (13:04). He also posted "AAPL breaking down" (below its bull flag and 20-day EMA) and PLTR H&S then bear flag (2 trades). He scratched his AAPL position at breakeven after it fell 72%, and says he "would not short anything right now". Outcome: TSLA **worked** (self-reported); his short timing beat the market again. He now leans to waiting for the relief rally.
   - 2026-11-20 (Fri am, 11 posts): closed the remaining SPY Jan-15 630P at 7.70 (bought 3.08 on Nov 9, +150%), now flat; SMH below its 1-year trendline; META below its 4-year trendline; TSLA "ugly"; SPCX dump setup. Outcome: SPY put trade worked (self-reported).
   - 2026-11-19 (Thu pm, 14 posts): QQQ closed below 3-week range and Nov 5 low, "no real pain yet"; NVDA closed below its June 2025 breakout shelf; IWM weekly and MAGS H&S breakdowns; last week = dead-cat bounce; SPY puts +100% (half held), MSFT puts 1.08→3.60 after bearish engulfing at resistance. Outcome: bearish view right today (self-reported P&L).
   - 2026-11-19 (Thu mid, 9 posts): AMD daily: chasing into the downtrend-line resistance punished; AMZN +8% V-bounce into major resistance; AAPL bull-flag chase failed; V daily reversal signal; SPCX "Gandalf" level alive. Outcome: "too early for a bottom" view right today.
@@ -628,6 +632,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** exact levels and targets; polls. **Signal-to-noise:** high.
 - **Bias:** leans bullish and buys dips.
 - **Calls log:**
+  - 2026-11-20 (Fri mid, 14 posts): "NVDA $138.84 an interim bottom" (09:52 ET), and he would not tweet for a day if it went lower; "SPY just flipped green. Here we go…?" (09:57). Then QQQ went from 643 to 631 "in a heartbeat" and he signed off at 10:24. Outcome: **failed**. NVDA fell below $133 (-9%) on the SEC report, SPY closed near 693 and QQQ near 613. The VIX-30 buy rule is also underwater on day 1 (VIX 34).
   - 2026-11-20 (Fri am, 20 posts): rule "if VIX hits 30–31 go aggressive buying equities" (barring 2008/2020), and the VIX hit 30.04 overnight; SPY 7 red days (first since Feb 2020); QQQ near a bear market; NVDA trendline near $140; gold support $3,500, BTC $60k. Outcome: open; score the VIX-30 buy from the Nov 20 open.
   - 2026-11-19 (Thu pm, 17 posts): SPY -8.7% ATH to AH trough; 6 red days (7 last in Feb 2020); VIX 3rd monthly gain unless <19.42; INTC -62%/NVDA -41%/AVGO -30%/AMD -27% from ATH; Wilson 7,100–7,300 retest done, "buy that dip"; Tom Lee 8,200 needs ~14% in 28 days; speculates US gov NVDA stake. Outcome: Wilson retest reached; dip-buy open.
   - 2026-11-19 (Thu mid, 21 posts): QQQ 675→656 then -4% peak to trough; SPY 6 red days, longest streak in 31 months; VIX 28.99 vs 30.61 unfilled gap; NVDA +4.3% open → 17-month low, most oversold >$10B name (RSI ~20); SLV $44.44 oversold; UUP near multi-year highs; promos. Outcome: Wilson 7,100–7,300 retest under way (SPX <7200); SPCX precedent played out on ANT day one.
@@ -983,6 +988,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **2026-11-03 (Tue pm, 4 posts, 14:16–18:49 ET):** AMD "massive print" (revenue $13.4B +45%, adj. EPS $2.09 +74%, DC $8.55B +97%, GAAP op income +123%); PLTR TCV concerns "silly", analysts raised PTs; Neil Dutta (RenMac) interview on 2027, labour and yields. Outcome: AMD right (+7–10% after hours); PLTR open.
 - **2026-11-02 (Mon pm, 3 posts, 15:01–17:10 ET):** PLTR first $2B+ quarter (+96% y/y); "stocks turn red in November" joke; merger joke. Outcome: n/a.
 - **Calls log:**
+  - 2026-11-20 (Fri mid, 4 posts): she explained her NVDA collar from Monday (stock ~$155): sold the $165 calls for this week and bought the $150 puts. She relayed Trump on Huang. Outcome: the collar **worked** as a hedge (NVDA ~$133).
   - 2026-11-19 (Thu mid, 2 posts): blames the ANT debut for a "vibe coded correction"; relays Hunterbrook's AMD claim, AMD -8%. Relay.
   - 2026-11-18 (Wed pm, 4 posts): Nvidia reached out to Arm CEO Haas (Bloomberg), "getting ready to move on"; FOMC minutes summary; Situational Awareness 2.0; Musk on Huang. Relay.
   - 2026-11-17 (Tue pm, 4 posts): NVDA Q3 summary (rev +103% y/y, DC +110%); guide raised 70% → 75%; board won't reinstate Huang; Kress "business as usual". Relay, bullish tone.
@@ -1043,6 +1049,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** one chart plus one table per post; specific and testable; small samples. **Signal-to-noise:** medium-high. **Bias:** leans on bull-market base rates.
 - **2026-11-03 (Tue pm, 1 post, 13:36 ET):** VIX closed above 21 while the S&P stayed near its highs; SPX higher 4 weeks later in 15 of 17 cases, "good omen" for a post-midterm November rally. Outcome: open (check ~Dec 1; SPY 754.41 at the Nov 3 close).
 - **Calls log:**
+  - 2026-11-20 (Fri mid, 2 posts): the S&P is down every day this week, and 5 days later SPY was positive in 8 of 9 prior cases, but the last two were peak-to-bear exceptions. The S&P RSI is below 30 for the first time since March, when SPX bottomed 6 days later; he notes bear markets differ. Outcome: open (score SPY ~693 on Nov 27).
   - 2026-11-20 (Fri am, 2 posts): S&P 4-hour seller-exhaustion signal after 6 down days, good for a tactical rebound, but would not add exposure. Outcome: overnight futures went lower; open.
   - 2026-11-19 (Thu pm, 3 posts): 13:21 QQQ gap-up >1.5% closing down → higher 5 days later 7/7 since 2010; "no new low in 5 days = weakness over"; 16:28 S&P below 6-month low → SPY lower within 10 days 14/17, after 1 month 15/17. Outcome: open; check by Dec 3 (SPY 715.78, QQQ 645.10 on Nov 19).
   - 2026-11-19 (Thu mid, 2 posts): Russell 2000 death cross; after such crosses SPX beat R2K in 10 of 12 cases (pair-trade idea); "nailed it" self-congratulation at 09:33 ET. Outcome: pair idea open; the tactical buy was invalidated the same day.
@@ -1118,6 +1125,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** clean sourced charts, high volume (~12 posts/day), viral framing. **Signal-to-noise:** medium-high for macro data.
 - **Reliability:** trade claims are self-reported after the fact (WTI long).
 - **Calls log:**
+  - 2026-11-20 (Fri mid, 13 posts): the S&P and the Dow are in correction (-10%); the Nasdaq Composite is negative for 2026; the S&P is below 7,000 on the NVDA SEC probe; NVDA's 45-day market-cap loss of -$2.55T is the largest ever; Fear & Greed 14; BTC $60k; ANT within 2% of its $83 IPO price. He says "the market is no longer waiting on Trump" to intervene. Data, no levels.
   - 2026-11-19 (Thu pm, 6 posts): S&P 6th red day, -$6T since Oct 6; NDX -15% from record; S&P tech P/E 16.4x (lowest since Mar 2020); BTC < $63k, MSTR -88%; tech drawdown list; Apple AI agent; CA NVDA probe. Data.
   - 2026-11-19 (Thu mid, 10 posts): S&P turns negative before ANT; SPX <7200 first time since May 5 (-230 pts from high); AMD -13% on Hunterbrook (short disclosed), then AMD denial; ANT $115, >$2T fully diluted — but one post said $1.44T at $110 (inconsistent). Data.
   - 2026-11-19 (Thu am, 7 posts): NQ futures >+2% on dip buying and ANT; ANT $81.3B record IPO; S&P 25 days of -1%+ in 2026; defensives beat NDX by 22.8pp Oct–Nov; SPR 276.4M bbl, lowest since 1982; Japan exports +20.5%. Data.
@@ -1234,6 +1242,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** one-line post plus chart images with ranked bubbles (#1 = largest since inception) and level labels (price · $ value · rank). Does not say buy or sell. **Signal-to-noise:** high for levels; low volume (a few posts a day).
 - **Reliability:** factual ranks from its own database; treat prints as levels, not direction. Open `/status/<id>/photo/1` to read the full chart. Logged in volume_leaders.jsonl.
 - **Calls log:**
+  - 2026-11-20 (Fri mid, 1 post, 11:16 ET): TLH follow-up. The Nov 12 #1 print "bought the dip"; TLH is $95.53 with local resistance near $96, and the $94.10 level ($1.2B) is now ranked #3. TMF held a test of its #2. Logged 1 line. Outcome: **worked** (10Y -13.6bp to 4.92%, our brief).
   - 2026-11-19 (Thu mid, 1 post, 12:46 ET): ANT day-one levels: $111.50 $12B #1 (public-block cluster at the open), $110 $1.6B #2, $100 $590M #3, $108 $450M #4, $105 $390M #5; dark-pool block near $104, sweeps near $96–98 at the low. Logged 5 lines. Outcome: open ($100 the pivot). The Nov 18 VXX "bounce" print gave only ~2 hours.
   - 2026-11-19 (Thu am, 1 post, 19:19 ET Wed): BUG +8.49% in one session to $47.90 after the Nov 17 prints. Logged as follow-up. Outcome: BUG turn call right.
   - 2026-11-18 (Wed pm, 4 posts): VXX just under 6M shares, largest since Mar 9 2022, read as SPY/QQQ bounce-supportive; BUG two top-10 trades at the close after a 15% decline; IQQ four more large trades at $22.00–22.40. Logged. Outcome: SPY gapped up then faded; QQQ +0.39%, +0.6% AH; BUG print preceded PANW's beat.
@@ -1297,6 +1306,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Bias:** bullish; contrarian to "late bears".
 - **Reliability:** too early to score; calls are specific enough to track.
 - **Calls log:**
+  - 2026-11-20 (Fri mid, 10 posts): "grabbed some TQQQ" (09:17 ET); "SPY nasty rejection at the previous day's low" (10:17). He admits he was "completely wrong" about a QQQ bounce to 700+ this week. He is now buying long-term exposure on repeat ("not trying to buy the bottom"). Outcome: the TQQQ entry is **underwater** (QQQ about -5%). He was honest about the miss.
   - 2026-11-20 (Fri am, 7 posts): "overnight rallies and gap ups will likely fade" (Thu 18:56 ET) played out; SPY 0.5% from a correction, expects a hard bounce near a 10% drawdown; SPY "smacked" before the open, watching a reclaim of the 710 GEX level. Outcome: fade call right; bounce open.
   - 2026-11-19 (Thu pm, 10 posts): SPY $710 "top watch" as magnet and bounce spot; wants a gap down Friday to start a (counter-trend) rally; 2022-style violent bear-market rallies; anti-permabear rants; promo video. Outcome: open (SPY 715.78 close; our 710.4 support).
   - 2026-11-19 (Thu mid, 1 post, 10:04 ET): "pre-Anthropic chop, be careful, this PA will kill many". Outcome: the warning fit; his relief-to-700 call failed for now (QQQ high 676.46, low 647.17).
