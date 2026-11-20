@@ -1,5 +1,5 @@
 {
- "generated_et": "2026-11-20 09:46",
+ "generated_et": "2026-11-20 15:07",
  "pillars": [
   "Inflation",
   "Labor",
@@ -13229,54 +13229,54 @@
    {
     "month": "2026-12",
     "symbol": "ZQZ26.CBT",
-    "implied": 4.06
+    "implied": 4.04
    },
    {
     "month": "2027-01",
     "symbol": "ZQF27.CBT",
-    "implied": 4.145
+    "implied": 4.125
    },
    {
     "month": "2027-02",
     "symbol": "ZQG27.CBT",
-    "implied": 4.285
+    "implied": 4.25
    },
    {
     "month": "2027-03",
     "symbol": "ZQH27.CBT",
-    "implied": 4.355
+    "implied": 4.31
    },
    {
     "month": "2027-04",
     "symbol": "ZQJ27.CBT",
-    "implied": 4.43
+    "implied": 4.37
    },
    {
     "month": "2027-05",
     "symbol": "ZQK27.CBT",
-    "implied": 4.475
+    "implied": 4.41
    },
    {
     "month": "2027-06",
     "symbol": "ZQM27.CBT",
-    "implied": 4.52
+    "implied": 4.45
    },
    {
     "month": "2027-07",
     "symbol": "ZQN27.CBT",
-    "implied": 4.54
+    "implied": 4.47
    }
   ],
   "meetings": [
    {
     "date": "2026-12-09",
     "rate_before": 3.88,
-    "implied_after": 4.145,
-    "change_bp": 26.5,
-    "p_hike": 100,
-    "p_hold": 0,
+    "implied_after": 4.125,
+    "change_bp": 24.5,
+    "p_hike": 98,
+    "p_hold": 2,
     "p_cut": 0,
-    "big_move": true
+    "big_move": false
    }
   ],
   "note": "Implied from 30-day fed funds futures (Yahoo, ZQ contracts) with the CME FedWatch method; approximate, assumes 25 bp steps.",
