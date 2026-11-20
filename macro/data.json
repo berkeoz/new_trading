@@ -1,5 +1,5 @@
 {
- "generated_et": "2026-11-20 15:48",
+ "generated_et": "2026-11-20 16:37",
  "pillars": [
   "Inflation",
   "Labor",
@@ -12110,18 +12110,22 @@
    "kind": "level",
    "tier1": false,
    "unit": "%",
-   "latest_obs": "2026-11-19",
-   "latest_raw": 242.422,
-   "value": 242.422,
-   "value_date": "2026-11-30",
-   "prev": 255.046,
+   "latest_obs": "2026-04-01",
+   "latest_raw": 255.046,
+   "value": 255.046,
+   "value_date": "2026-04-30",
+   "prev": 219.45,
    "trend": "rising",
-   "pct_rank_10y": 95.0,
+   "pct_rank_10y": 98.0,
    "range_10y": [
     128.76,
     255.05
    ],
    "table12": [
+    {
+     "date": "2023-07",
+     "value": 167.217
+    },
     {
      "date": "2023-10",
      "value": 181.812
@@ -12165,14 +12169,12 @@
     {
      "date": "2026-04",
      "value": 255.046
-    },
-    {
-     "date": "2026-11",
-     "value": 242.422
     }
    ],
    "hist": {
     "x": [
+     "2016-07",
+     "2016-10",
      "2017-01",
      "2017-04",
      "2017-07",
@@ -12210,10 +12212,11 @@
      "2025-07",
      "2025-10",
      "2026-01",
-     "2026-04",
-     "2026-11"
+     "2026-04"
     ],
     "y": [
+     136.767,
+     135.424,
      141.369,
      142.462,
      144.498,
@@ -12251,11 +12254,9 @@
      225.773,
      228.827,
      219.45,
-     255.046,
-     242.422
+     255.046
     ]
-   },
-   "daily_or_weekly": true
+   }
   },
   {
    "id": "DCOILWTICO",
@@ -13215,70 +13216,13 @@
   "Fed & rates": "mildly restrictive (real policy rate ~+0.9pp = fed funds 4.00% minus core PCE 3.1%)",
   "Financial conditions": "loose (NFCI -0.48, high-yield spread 3.52pp)",
   "Recession signals": "none flashing (Sahm 0.00, 10Y-2Y +0.28pp, NY Fed 12-month odds 16%, CFNAI +0.03)",
-  "Valuation": "extreme (stock market value 242% of GDP, 95th percentile of 10 years; dot-com peak 163% in 2000-01, same measure)",
+  "Valuation": "extreme (stock market value 255% of GDP, 98th percentile of 10 years; dot-com peak 163% in 2000-01, same measure)",
   "Oil": "WTI $90 (+53% y/y), price trend rising, oil volatility 51 (80th percentile)"
  },
  "fed_futures": {
   "effr": 3.88,
-  "months": [
-   {
-    "month": "2026-11",
-    "symbol": "ZQX26.CBT",
-    "implied": 3.88
-   },
-   {
-    "month": "2026-12",
-    "symbol": "ZQZ26.CBT",
-    "implied": 4.04
-   },
-   {
-    "month": "2027-01",
-    "symbol": "ZQF27.CBT",
-    "implied": 4.12
-   },
-   {
-    "month": "2027-02",
-    "symbol": "ZQG27.CBT",
-    "implied": 4.25
-   },
-   {
-    "month": "2027-03",
-    "symbol": "ZQH27.CBT",
-    "implied": 4.31
-   },
-   {
-    "month": "2027-04",
-    "symbol": "ZQJ27.CBT",
-    "implied": 4.375
-   },
-   {
-    "month": "2027-05",
-    "symbol": "ZQK27.CBT",
-    "implied": 4.41
-   },
-   {
-    "month": "2027-06",
-    "symbol": "ZQM27.CBT",
-    "implied": 4.45
-   },
-   {
-    "month": "2027-07",
-    "symbol": "ZQN27.CBT",
-    "implied": 4.47
-   }
-  ],
-  "meetings": [
-   {
-    "date": "2026-12-09",
-    "rate_before": 3.88,
-    "implied_after": 4.12,
-    "change_bp": 24.0,
-    "p_hike": 96,
-    "p_hold": 4,
-    "p_cut": 0,
-    "big_move": false
-   }
-  ],
+  "months": [],
+  "meetings": [],
   "note": "Implied from 30-day fed funds futures (Yahoo, ZQ contracts) with the CME FedWatch method; approximate, assumes 25 bp steps.",
   "target_range": [
    3.75,

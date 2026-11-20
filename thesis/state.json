@@ -1,23 +1,23 @@
 {
  "start": "2026-10-19",
- "cash": 80667.36406707764,
+ "cash": 85192.56426239014,
  "positions": {
   "EOG": {
    "shares": 33,
    "entry_price": 150.66,
    "entry_date": "2026-11-04 09:45",
    "spy_entry": 767.0499877929688,
-   "last": 149.87,
+   "last": 148.62,
    "theme": "Energy supply squeeze",
-   "thesis": "Low-cost US producer at a forward P/E of 9.3 with strong free cash flow; Minervini 7/7, Stage 2, above its 50-day average 149.19 with supports at 153.75 and 147.84. Stop raised slightly to just below the 142.53 support (6 touches).",
+   "thesis": "Low-cost US producer at a forward P/E of 8.7 with strong free cash flow; Stage 2, Minervini 6/7, holding the 146.58 support (6 touches) just under its 50-day average 150.08. Thesis intact but momentum is fading with oil.",
    "conviction": 1,
    "stop": 141.5,
    "target": 172,
-   "invalidation": "A daily close below 141.5 (breaks the 142.53 support) or WTI below $80.",
+   "invalidation": "A daily close below 141.5 (between the 146.58 and 139.39 supports) or WTI below $80 on an Iran deal.",
    "catalysts": [
-    "US-Iran diplomacy",
-    "Weekly EIA inventories",
-    "OPEC+ meeting Nov 29"
+    "OPEC+ 2027 quotas Nov 29",
+    "US decision on new Iran strikes",
+    "Weekly EIA inventories"
    ],
    "entry": {
     "type": "zone",
@@ -25,41 +25,18 @@
     "high": 152
    }
   },
-  "LMT": {
-   "shares": 8,
-   "entry_price": 594.905,
-   "entry_date": "2026-11-04 13:51",
-   "spy_entry": 767.6900024414062,
-   "last": 567.19,
-   "theme": "Defense and geopolitics",
-   "thesis": "Record backlog and multi-year munitions demand; holding above the 586.98 breakout level and both moving averages (SMA50 552.34, SMA200 564.56). Stop raised to 566, about 1 ATR below the breakout, to protect the position.",
-   "conviction": 1,
-   "stop": 566,
-   "target": 683,
-   "invalidation": "A daily close below 566 (back under the breakout and the 200-day average).",
-   "catalysts": [
-    "Government funding before the Dec 11 deadline",
-    "Iran war developments",
-    "Israel government formation"
-   ],
-   "entry": {
-    "type": "zone",
-    "low": 587,
-    "high": 600
-   }
-  },
   "JNJ": {
    "shares": 18,
    "entry_price": 267.005,
    "entry_date": "2026-11-19 09:45",
    "spy_entry": 736.9580078125,
-   "last": 270.61,
+   "last": 270.62,
    "theme": "Quality health care",
-   "thesis": "Low-beta pharma and medtech cash flows with a dividend; Stage 2, Minervini 7/7, but at 282.2 it sits on the 282.62 resistance (4 touches). Wait for the 264.8 support (5 touches) near the 50-day average 266.69.",
+   "thesis": "Low-beta pharma and medtech cash flows with a dividend; Stage 2, Minervini 7/7, at 270.47 above the 264.78 support (6 touches) and its 50-day average 267.43.",
    "conviction": 1,
    "stop": 252,
    "target": 295,
-   "invalidation": "A daily close below 252 (fails the 264.8 support by more than 2 ATR toward 249.81).",
+   "invalidation": "A daily close below 252 (fails 264.78 and approaches 249.81).",
    "catalysts": [
     "Q4 results in January (date n/a)",
     "Drug-pricing policy"
@@ -75,15 +52,15 @@
    "entry_price": 225.83,
    "entry_date": "2026-11-19 09:45",
    "spy_entry": 736.9580078125,
-   "last": 232.475,
+   "last": 231.51,
    "theme": "Higher-for-longer financials",
-   "thesis": "Short rates heading toward 4.5% boost float income and auto pricing keeps pace with claims inflation; forward P/E 14.6, Stage 2, Minervini 6/7. At 236 it is at the 236.88 resistance (8 touches), so wait for the 223.75 support (7 touches).",
+   "thesis": "Short rates heading toward 4.5% boost float income and auto pricing keeps pace with claims; forward P/E 14.4, Stage 2, Minervini 6/7, holding up in the sell-off at 231.39 below the 237.69 resistance (8 touches).",
    "conviction": 1,
    "stop": 213,
    "target": 250,
    "invalidation": "A daily close below 213 (loses the 215.25 support) or a sharp rise in loss ratios.",
    "catalysts": [
-    "October monthly results mid-November (date n/a)",
+    "November monthly results mid-December (date n/a)",
     "FOMC Dec 9"
    ],
    "entry": {
@@ -96,7 +73,7 @@
  "watch": {
   "LLY": {
    "theme": "Quality health care",
-   "thesis": "Obesity-drug volume growth gives cycle-independent earnings; Minervini 7/7 Stage 2 leader at 1442 (RSI 71, extended, 17% above its 50-day). Entry is moved up to the rising 50-day average area (1235.70) instead of the old 1180-1210 zone.",
+   "thesis": "Obesity-drug volume growth gives cycle-independent earnings; Stage 2, Minervini 7/7 at 1347 (RSI 50), 6% above its rising 50-day average 1265.59. Wait for a pullback toward the 1220-1250 zone.",
    "conviction": 2,
    "entry": {
     "type": "zone",
@@ -105,17 +82,17 @@
    },
    "stop": 1125,
    "target": 1460,
-   "invalidation": "A daily close below 1125 (under the 1136.24 support) or a GLP-1 pricing/policy shock.",
+   "invalidation": "A daily close below 1125 (under the 1134.87 support) or a GLP-1 pricing shock.",
    "catalysts": [
     "Obesity-drug data and pricing headlines",
-    "Drug-pricing oversight from the new Democratic Congress (January)"
+    "Drug-pricing oversight from the new Congress (January)"
    ],
    "added": "2026-10-19",
-   "last": 1349.885
+   "last": 1347.0601
   },
   "WMT": {
    "theme": "Defensive consumer compounder",
-   "thesis": "The largest beneficiary of consumer trade-down, with grocery share gains and growing ad and membership income; at 126.5 it is above its 50-day average 114.15. Buy a pullback to the 122.0 support (4 touches).",
+   "thesis": "The largest beneficiary of consumer trade-down with grocery share gains and growing ad income; at 127.95 just under the 129.85 resistance and well above its 50-day average 116.65. Buy a pullback to the 122.0 support (4 touches).",
    "conviction": 1,
    "entry": {
     "type": "zone",
@@ -124,13 +101,70 @@
    },
    "stop": 115.5,
    "target": 136,
-   "invalidation": "A daily close below 115.5 (under the 116.87 support and the 200-day average 118.55).",
+   "invalidation": "A daily close below 115.5 (under the 116.87 support and the 200-day average 118.68).",
    "catalysts": [
-    "Q3 FY27 results mid-November (date n/a)",
-    "Holiday sales commentary"
+    "Holiday sales commentary",
+    "Q4 FY27 results in February (date n/a)"
    ],
    "added": "2026-11-02",
-   "last": 128.47
+   "last": 128.01
+  },
+  "MCK": {
+   "theme": "Quality health care",
+   "thesis": "The largest US drug distributor grows with GLP-1 and specialty volumes without taking drug-pricing risk; Stage 2, Minervini 6/7, forward P/E 20.4, at 1069 above the 1039.94 support. Buy a pullback to that support.",
+   "conviction": 1,
+   "entry": {
+    "type": "zone",
+    "low": 1030,
+    "high": 1050
+   },
+   "stop": 990,
+   "target": 1160,
+   "invalidation": "A daily close below 990 (about 2 ATR under the 1039.94 support).",
+   "catalysts": [
+    "Q3 FY27 results late January (date n/a)",
+    "Drug-pricing policy"
+   ],
+   "added": "2026-11-20",
+   "last": 1069.72
+  },
+  "CME": {
+   "theme": "Higher-for-longer financials",
+   "thesis": "Futures volumes rise with volatility and rate uncertainty (VIX 36, Fed hiking); Stage 2, Minervini 6/7, at 307.56 on the 307.28 support. Buy a pullback toward the 289.89 support and the 50-day average 289.43.",
+   "conviction": 1,
+   "entry": {
+    "type": "zone",
+    "low": 289,
+    "high": 295
+   },
+   "stop": 280,
+   "target": 320,
+   "invalidation": "A daily close below 280 (under the 289.89 support and the 50-day average).",
+   "catalysts": [
+    "Monthly volume reports early December (date n/a)",
+    "FOMC Dec 9"
+   ],
+   "added": "2026-11-20",
+   "last": 307.67
+  },
+  "XLP": {
+   "theme": "Defensive consumer compounder",
+   "thesis": "Staples are the leading group (+10.2pp vs SPY over 1 month, +13.5pp over 3 months) as investors rotate out of AI; Stage 2, Minervini 6/7, at 90.46. Buy a pullback to the 88.63 support (5 touches).",
+   "conviction": 1,
+   "entry": {
+    "type": "zone",
+    "low": 88,
+    "high": 89.5
+   },
+   "stop": 85.5,
+   "target": 95.5,
+   "invalidation": "A daily close below 85.5 (under the 85.97 support, 7 touches).",
+   "catalysts": [
+    "October PCE Nov 25",
+    "Holiday spending data"
+   ],
+   "added": "2026-11-20",
+   "last": 90.495
   }
  },
  "closed": [
@@ -211,6 +245,19 @@
    "ret_pct": -7.68,
    "reason": "stop 318 hit",
    "spy_entry": 739.2100219726562
+  },
+  {
+   "symbol": "LMT",
+   "theme": "Defense and geopolitics",
+   "shares": 8,
+   "entry_price": 594.905,
+   "entry_date": "2026-11-04 13:51",
+   "exit_price": 565.65,
+   "exit_date": "2026-11-20 16:23",
+   "pnl": -234.04,
+   "ret_pct": -4.92,
+   "reason": "stop 566 hit",
+   "spy_entry": 767.6900024414062
   }
  ],
  "equity": [
@@ -326,8 +373,8 @@
   },
   {
    "date": "2026-11-20",
-   "equity": 100136.02,
-   "spy": 693.245
+   "equity": 100061.4,
+   "spy": 690.91
   }
  ],
  "events": [
@@ -498,73 +545,90 @@
    "kind": "sell",
    "symbol": "JPM",
    "text": "sold 14 at 311.11 (stop 318 hit); P&L -362 (-7.7%)"
+  },
+  {
+   "time": "2026-11-20 16:23",
+   "kind": "sell",
+   "symbol": "LMT",
+   "text": "sold 8 at 565.65 (stop 566 hit); P&L -234 (-4.9%)"
+  },
+  {
+   "time": "2026-11-20 16:45",
+   "kind": "watch",
+   "symbol": "MCK",
+   "text": "added to the watch list (Quality health care): buy zone 1030-1050, stop 990, target 1160, conviction 1"
+  },
+  {
+   "time": "2026-11-20 16:45",
+   "kind": "watch",
+   "symbol": "CME",
+   "text": "added to the watch list (Higher-for-longer financials): buy zone 289-295, stop 280, target 320, conviction 1"
+  },
+  {
+   "time": "2026-11-20 16:45",
+   "kind": "watch",
+   "symbol": "XLP",
+   "text": "added to the watch list (Defensive consumer compounder): buy zone 88-89.5, stop 85.5, target 95.5, conviction 1"
   }
  ],
- "outlook_id": "2026-11-12",
- "outlook_applied": "2026-11-12T10:22-05:00",
- "updated": "2026-11-20T15:45-05:00",
- "spy_last": 693.2449951171875,
+ "outlook_id": "2026-11-20",
+ "outlook_applied": "2026-11-20T16:45-05:00",
+ "updated": "2026-11-20T16:45-05:00",
+ "spy_last": 690.9099731445312,
  "outlook": {
-  "id": "2026-11-12",
+  "id": "2026-11-20",
   "horizon": "6-12 months",
-  "regime": "Overheat: strong growth (Q3 GDP 3.4%), firm labor (payrolls +165k, claims 200k) and sticky inflation (core CPI +0.3% m/m three months running) with the Fed hiking into 2027, a 5% 10Y and the AI trade being de-rated",
-  "summary": "Since Nov 2 the regime shifted from 'stagflation-lite' to 'overheat': hiring re-accelerated, October core CPI met Waller's 50bp bar, a December hike is fully priced and futures add about two more hikes by mid-2027 with the 10Y at 5.07%. Oil fell from ~$106 to the low $90s on Iran diplomacy, then bounced on Trump's 'we don't need a deal' post, and Nvidia's CEO resigned on Nov 12, deepening the AI de-rating. The portfolio keeps energy, defense, quality health care and defensive consumer, adds JPM to the higher-for-longer financials theme (the rotation data flags financials as favored and turning), drops WMB (Stage 1, below its averages) and resets the watch-list entries to current supports. COST is near its 1100 target; its stop is raised to 1015 to lock in most of the gain.",
+  "regime": "Overheat with an AI de-rating: firm growth and labor, sticky inflation (core PCE 3.1%, PPI 6.5%) and a Fed hiking into 2027, while the AI/semiconductor complex unwinds and the S&P 500 enters correction",
+  "summary": "Since Nov 12 the macro regime is unchanged (overheat, Dec 9 hike priced ~97-100%, futures near 4.5% by mid-2027), but the market regime turned: SPY fell into correction (-11% from its record), QQQ closed 0.7 above its -20% line and SMH lost 24% in a month as AI payback doubts spread from Nvidia to memory, Broadcom and the Anthropic IPO. Defensive leadership is now the clear trend (staples +10pp, health care +7pp vs SPY over 1 month), oil fell to $84-90 on growth fears, and credit is softening (HY ETF at a 3-month low). The portfolio stays defensive: energy, quality health care, higher-for-longer financials and defensive consumer; LMT is removed after closing below its invalidation, and CME, MCK and XLP are added to the watch list.",
   "drivers": [
-   "Fed funds futures: Dec 9 implied 4.17% (+29bp), about 4.7% by July 2027; core CPI 3-month annualized 3.8%",
-   "10Y 5.07%, 10Y real yield 2.66% (98th percentile); equity risk premium negative (SPY -0.92pp, QQQ -1.52pp)",
-   "Labor firm: payrolls +165k (3-month average +137k), unemployment 4.1%, claims 200k",
-   "Oil: Brent 93.76 after -11.6% in a month; Trump says no Iran deal is needed; OPEC+ Nov 29",
-   "AI de-rating: SOXX -20.8% in 30 days; Nvidia CEO resignation Nov 12; reported export-control review",
-   "Rotation: financials, materials, health care and staples lead SPY over 1-3 months; RSP/SPY breadth risk-on"
+   "Fed funds futures: Dec 9 hike fully priced, about 4.5% by mid-2027; Cook warns delay risks 'getting behind the curve'",
+   "10Y 4.91% after a -24bp haven rally in 5 days, still +78bp over 1 year; 10Y real yield 2.88% (98th pct)",
+   "AI de-rating: SMH -23.6% over 1 month, NVDA -13.7% on Nov 20; Nasdaq erased its 2026 gain",
+   "Defensive rotation: staples +10.2pp, real estate +9.6pp, utilities +9.3pp vs SPY over 1 month",
+   "Oil: WTI 83.8, Brent 90.1, -16% to -20% in a month despite Iran strikes being weighed; OPEC+ Nov 29",
+   "Credit: HY ETF 76.35 (3-month low), HY spread 3.52pp (86th pct)"
   ],
   "themes": [
    {
     "name": "Energy supply squeeze",
-    "why": "Hormuz flows remain impaired with no signed deal and Trump now saying none is needed; low-cost producers and services earn well with Brent near $90-95, but diplomacy is the key risk.",
+    "why": "Hormuz attacks continue and Trump is weighing new Iran strikes; a low-cost producer earns well even at $85-90 Brent, but the growth scare has pushed oil to 3-month lows.",
     "symbols": [
-     "SLB",
      "EOG"
     ]
    },
    {
     "name": "Quality health care",
-    "why": "Cycle-independent earnings growth; health care leads SPY by 15pp over 3 months and 28pp over 6 months.",
+    "why": "Cycle-independent earnings and the leading defensive group (XLV +7.5pp vs SPY over 1 month, +26pp over 6 months); distributors avoid drug-pricing risk.",
     "symbols": [
      "LLY",
-     "JNJ"
+     "JNJ",
+     "MCK"
     ]
    },
    {
     "name": "Higher-for-longer financials",
-    "why": "A Fed hiking into 2027 lifts float income for insurers and net interest income for money-center banks; the rotation model flags financials as favored in overheat and turning now.",
+    "why": "A Fed hiking into 2027 lifts insurer float income; exchanges earn more from record volatility and rate hedging (VIX 36, MOVE 96).",
     "symbols": [
      "PGR",
-     "JPM"
-    ]
-   },
-   {
-    "name": "Defense and geopolitics",
-    "why": "An unresolved Iran war and depleted munitions stockpiles; Lockheed's backlog is a record and the breakout above 587 holds.",
-    "symbols": [
-     "LMT"
+     "CME"
     ]
    },
    {
     "name": "Defensive consumer compounder",
-    "why": "Consumer sentiment near record lows and high prices push trade-down to warehouse and discount retail; staples lead SPY over 1 and 3 months.",
+    "why": "Consumer sentiment near record lows (UMich 51.5) pushes trade-down to discount retail; staples lead SPY by 10pp over 1 month.",
     "symbols": [
-     "COST",
-     "WMT"
+     "WMT",
+     "XLP"
     ]
    }
   ],
   "risks": [
-   "An Iran deal after all drops WTI below $80 and reverses the energy theme",
-   "The Fed overtightens (50bp in December, 10Y above 5.3%) and hits valuations broadly, including defensives on high P/Es (COST 43.8x, WMT 39.3x)",
-   "An AI-led unwind of the 258% market-cap/GDP valuation drags all equities",
-   "A sharp bond rally (10Y below 4.6%) favors the growth names the portfolio underweights",
-   "Credit: a break of the HY ETF 76.41 low would hit banks and insurers"
+   "A violent AI/growth rebound from extreme fear leaves the defensive portfolio lagging",
+   "Credit deleveraging spreads to all sectors, including defensives and financials",
+   "A hot October PCE (Nov 25) or 50bp December hike re-rates high-P/E defensives (WMT 39.6x, KO/XLP)",
+   "An Iran deal or OPEC+ supply increase sends WTI below $80 and breaks the energy theme",
+   "Drug-pricing policy or CMS rules hit health care"
   ],
-  "narrative_file": "outlook-2026-11-12.md"
+  "narrative_file": "outlook-2026-11-20.md"
  }
 }
