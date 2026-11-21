@@ -27,6 +27,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** discretionary trader and educator. **Focus:** mega-cap tech, BTC, risk-management tips.
 - **Style:** short motivational and lifestyle posts, occasional breakout callouts. **Signal-to-noise:** medium-low.
 - **Calls log:**
+  - 2026-11-21 (Sat mid, 2 posts): an Iran deal on Sunday plus oversold/flushed sentiment, indices at April breakout levels and OPEX done "set the floor" for a strong snapback; $7.5T lost since the October peak, reverse wealth effect may cool inflation faster than Fed cuts. Outcome: open (conditional on a deal; score Mon Nov 23).
   - 2026-11-21 (Sat am, 1 post, Fri 19:01 ET): list of 14 simultaneous extremes (McClellan ~-88, most oversold since Apr 2025; SPY/QQQ below lower Bollinger Bands; S&P ~4 SD below 50-day; NVDA weekly RSI lowest since 2008; F&G ~10). Outcome: open (bounce thesis, score by Nov 27).
   - 2026-11-20 (Fri pm, 5 posts): "next week's bounce secured" (contrarian signal); VIX +105% on the week; NVDA could reach $100 "eventually"; self-reported +82% trading portfolio since June. Outcome: open (score SPY 690.42 by Nov 27; NVDA $100 long-dated).
   - 2026-11-20 (Fri mid, 10 posts): at 10:05 ET listed "selling exhaustion" signs (QQQ tagged 634, VIX 30 buy zone, daily RSI divergence, S&P 3.3 SD below its 50-day). By 14:56 he called the week "bizarre" (QQQ -9% on the week, VIX +75%). Outcome: **failed** intraday. QQQ broke 634 and fell to ~613 (our brief, 15:06). This is the third failed bottom call this week.
@@ -399,6 +400,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** charting-platform brand account; chart technician plus marketing. **Focus:** pattern setups, earnings, insider buys.
 - **Style:** clean annotated charts with Fibonacci and analyst-target lines; memes; product promotion; no stops. **Signal-to-noise:** medium. **Bias:** bullish on breakouts.
 - **Calls log:**
+  - 2026-11-21 (Sat mid, 4 posts): weekly charts — GOOGL "look out below" (losing a shelf), NBIS weekly RSI oversold into the Nov 2025 floor, ORCL "lost the floor"; Black Friday promo. Bearish GOOGL/ORCL, NBIS support test; no levels in text. Outcome: open.
   - 2026-11-21 (Sat am, 3 posts): drawdowns from 52-week highs in crowd favourites (IREN/OKLO -83%, ASTS -82%, CRWV/IONQ -71%, ORCL -59%); Burry meme; newsletter promo. Stats, no call.
   - 2026-11-20 (Fri pm, 2 posts): SPY "flashed capitulation" for the 2nd time this year (daily, anchored VWAP chart); CRWD in talks to buy ZS (CRWD -9%, ZS +18% AH). Outcome: capitulation signal open (score by Nov 27; the spring signal marked the low). Earlier SPY trendline-crack call **worked**.
   - 2026-11-19 (Thu pm, 7 posts): SPY weekly: rising trendline from the Apr 2025 low "cracked", P/C 1.57; INTU double beat but cut FY27 guide, -12% AH; INTU sells Mailchimp $3.68B; ROST beat/raise; BABA bullish RSI divergence; NBIS < $100. Outcome: trendline call open (SPY 715.78).
@@ -482,6 +484,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** daily and weekly pattern calls (engulfing, channel tops, wedges, EMAs); names triggers but few price targets; argues with followers. **Signal-to-noise:** medium-high.
 - **Bias:** tends to call tops (says AMD top worked "after 20 tries"). Admits misses publicly (TSLA, 10/11).
 - **Calls log:**
+  - 2026-11-21 (Sat mid, 5 posts): did not expect Friday's flush to the bottom support zone; focusing on index long entries (SPY/QQQ/IWM/DJI); after a big weekly "F U" candle expect consolidation, not another one; AMZN evening-star reversal call worked ("lucky guess"); crashes are technical and give countertrend moves. Outcome: open (long-index lean, score by Nov 27); AMZN evening star = **worked**.
   - 2026-11-21 (Sat am, 5 posts): BTC daily RSI most oversold since 2018; the harder BTC falls into Sunday, the higher the odds of a market rally next week; ES "fun fact" (last one marked the March low) is short-term bullish but "won't be a major bottom"; TSLA shorts caught both dumps this month. Outcome: open (score vs SPY 690.42 by Nov 27).
   - 2026-11-20 (Fri pm, 11 posts): "VIX daily +49%, called it", then VIX "at major resistance"; SPY/QQQ at major support, expects a bounce Thanksgiving week; Fear & Greed ≤10 = cover shorts; new shorts now are late. Outcome: VIX call **worked**; bounce call open (score vs SPY 690.42 / QQQ 608.45 by Nov 27).
   - 2026-11-20 (Fri mid, 25 posts): TSLA daily bearish breakdown (10:39 ET); his TSLA puts were half closed at 12:15, then the rest at 5.08 (13:04). He also posted "AAPL breaking down" (below its bull flag and 20-day EMA) and PLTR H&S then bear flag (2 trades). He scratched his AAPL position at breakeven after it fell 72%, and says he "would not short anything right now". Outcome: TSLA **worked** (self-reported); his short timing beat the market again. He now leans to waiting for the relief rally.
@@ -648,6 +651,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** exact levels and targets; polls. **Signal-to-noise:** high.
 - **Bias:** leans bullish and buys dips.
 - **Calls log:**
+  - 2026-11-21 (Sat mid, 4 posts): NVDA is the only US stock above $2.2B market cap with an RSI of 15; RDDT worst S&P component YTD at -63%; BTC $35k joke (video); a video link. Stats, no call.
   - 2026-11-21 (Sat am, 2 posts): NVDA replaced Enron in the S&P 25 years ago next Sunday (market cap then $8.4B; lost ~350x that in six weeks); QQQ close-guess contest. No call.
   - 2026-11-20 (Fri mid, 14 posts): "NVDA $138.84 an interim bottom" (09:52 ET), and he would not tweet for a day if it went lower; "SPY just flipped green. Here we go…?" (09:57). Then QQQ went from 643 to 631 "in a heartbeat" and he signed off at 10:24. Outcome: **failed**. NVDA fell below $133 (-9%) on the SEC report, SPY closed near 693 and QQQ near 613. The VIX-30 buy rule is also underwater on day 1 (VIX 34).
   - 2026-11-20 (Fri am, 20 posts): rule "if VIX hits 30–31 go aggressive buying equities" (barring 2008/2020), and the VIX hit 30.04 overnight; SPY 7 red days (first since Feb 2020); QQQ near a bear market; NVDA trendline near $140; gold support $3,500, BTC $60k. Outcome: open; score the VIX-30 buy from the Nov 20 open.
@@ -968,6 +972,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** rule-based, posts rarely, candid about uncertainty. **Signal-to-noise:** high.
 - **2026-11-03 (Tue pm, 4 posts, 15:15–16:54 ET):** hedge funds heavily long Treasuries, history says don't follow them (contrarian bond-bearish); Maxim #40a: no style holds a permanent edge, SCHD now leads FDVV; one post unreadable (blocked); motivation post. Outcome: open (10Y 4.952% at the close).
 - **Calls log:**
+  - 2026-11-21 (Sat mid, 3-post thread): good — secular trend still favourable and Thanksgiving week tends to rally, so a bounce is possible; bad — inflation, breadth and rates may take time, can get worse first; reality — "oversold is a condition, not a signal". Outcome: open (Thanksgiving-week bounce, score Nov 27).
   - 2026-11-19 (Thu am, 2 posts): Fear & Greed model 50-day MA below 27, "favorable weight of evidence", not a screaming buy; commodities ugly, could get worse, possible buying opportunity early to mid December. Outcome: open (check mid-Dec; gold 3,717.6).
   - 2026-11-16 (Mon pm, 1 post): owns a losing trade idea ("aged like warm milk"), small size and stop kept it manageable. Risk-management post; no new call.
   - 2026-11-13 (Fri am, 2 posts): HY McClellan Summation 20-day MA crossed above -790 — not a standalone buy, but favourable weight of evidence for stocks; MA slope as a trading filter. Outcome: open (conflicts with kpak's HYG breakdown; HYG 76.41 low is the tiebreaker).
@@ -1071,6 +1076,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** one chart plus one table per post; specific and testable; small samples. **Signal-to-noise:** medium-high. **Bias:** leans on bull-market base rates.
 - **2026-11-03 (Tue pm, 1 post, 13:36 ET):** VIX closed above 21 while the S&P stayed near its highs; SPX higher 4 weeks later in 15 of 17 cases, "good omen" for a post-midterm November rally. Outcome: open (check ~Dec 1; SPY 754.41 at the Nov 3 close).
 - **Calls log:**
+  - 2026-11-21 (Sat mid, 1 post): S&P in a technical correction, 9th-fastest drop since 1950; waterfall declines usually see a bit more downside before bottoming but recover faster than slow grinds. Lean: more downside first, then a fast recovery. Outcome: open.
   - 2026-11-21 (Sat am, 1 post): cautioned clients since mid-October, week worse than expected; "predicting a bottom is the easiest way to lose money", wait for evidence; outlook video this weekend. Outcome: the mid-Oct caution **worked**.
   - 2026-11-20 (Fri pm, 2 posts): SPX tracking the 1978 analog (midterm year, resurgent inflation); "the market took it seriously". Outcome: open.
   - 2026-11-20 (Fri mid, 2 posts): the S&P is down every day this week, and 5 days later SPY was positive in 8 of 9 prior cases, but the last two were peak-to-bear exceptions. The S&P RSI is below 30 for the first time since March, when SPX bottomed 6 days later; he notes bear markets differ. Outcome: open (score SPY ~693 on Nov 27).
@@ -1149,6 +1155,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** clean sourced charts, high volume (~12 posts/day), viral framing. **Signal-to-noise:** medium-high for macro data.
 - **Reliability:** trade claims are self-reported after the fact (WTI long).
 - **Calls log:**
+  - 2026-11-21 (Sat mid, 2 posts): Taiwan restricts short selling (no shorts below prior close, margin 150%) from Monday after an -18% week, worst in 35 years; foreign Treasury holdings -$76B in September to $9.24T, 3rd decline in 4 months. Data, no levels.
   - 2026-11-21 (Sat am, 2 posts): $2.7B crypto liquidations in 24h (11th-largest ever) as BTC hit its lowest since Sep 2024; Japan core CPI +2.1% YoY, highest since Dec 2025. Data, no levels.
   - 2026-11-20 (Fri pm, 4 posts): NVDA -23% week, -$905B, -$2.88T since Oct 6; list of NVDA probes (SEC, FBI, California); pending home sales record low 63.0 (-4.7%); USDA hack. Data, no levels.
   - 2026-11-20 (Fri mid, 13 posts): the S&P and the Dow are in correction (-10%); the Nasdaq Composite is negative for 2026; the S&P is below 7,000 on the NVDA SEC probe; NVDA's 45-day market-cap loss of -$2.55T is the largest ever; Fear & Greed 14; BTC $60k; ANT within 2% of its $83 IPO price. He says "the market is no longer waiting on Trump" to intervene. Data, no levels.
