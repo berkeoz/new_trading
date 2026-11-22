@@ -28,6 +28,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** discretionary trader and educator. **Focus:** mega-cap tech, BTC, risk-management tips.
 - **Style:** short motivational and lifestyle posts, occasional breakout callouts. **Signal-to-noise:** medium-low.
 - **Calls log:**
+  - 2026-11-22 (Sun pm, 6 posts): QQQ correction analog (2018/2020/2025/2026): if "this time is different", QQQ should struggle to reclaim **663**; futures first look green; weekly outlook thread; jab at "I warned you" crash callers. Lean: buy-the-correction. Outcome: open (score on a QQQ reclaim of 663).
   - 2026-11-22 (Sun mid, 1 post): story of a 2018 seller who never bought back in; stay-invested message. No level. Outcome: n/a.
   - 2026-11-22 (Sun am, 2 posts, Sat 19:33–19:53 ET): crypto "holding up" — BTC $60,144.79, ETH $1,680.36 bouncing; buyers stepped in at the same levels three times in 2026; Hormuz photo post. Bounce lean, no level. Outcome: open.
   - 2026-11-21 (Sat pm, 2 posts): satire post mocking a new trader's "Black Monday like 1987/1929" call (implicitly not bearish); TradingView giveaway promo. No new call.
@@ -494,6 +495,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** daily and weekly pattern calls (engulfing, channel tops, wedges, EMAs); names triggers but few price targets; argues with followers. **Signal-to-noise:** medium-high.
 - **Bias:** tends to call tops (says AMD top worked "after 20 tries"). Admits misses publicly (TSLA, 10/11).
 - **Calls log:**
+  - 2026-11-22 (Sun pm, 3 posts): META weekly broke below its 4-year uptrend line after a relief bounce stalled at a resistance zone (VWAP); TSM -24% chart; ONDS "double your shares at half the price". Bearish META structure. Outcome: open.
   - 2026-11-22 (Sun mid, 4 posts): MAGS daily/weekly: his Nov 19 box + H&S breakdown call played out; now closed into the June-rally demand zone, "don't short" there; basketball video. Outcome: Nov 19 MAGS breakdown **worked**; no-short-at-demand open (score by Nov 27).
   - 2026-11-21 (Sat pm, 1 post): DAX chart revisiting his Nov 14 call (UK record weekly close and DAX into "mother of all resistances" = bad for US the next week); DAX fell hard from that high. Outcome: Nov 14 call **worked**.
   - 2026-11-21 (Sat mid, 5 posts): did not expect Friday's flush to the bottom support zone; focusing on index long entries (SPY/QQQ/IWM/DJI); after a big weekly "F U" candle expect consolidation, not another one; AMZN evening-star reversal call worked ("lucky guess"); crashes are technical and give countertrend moves. Outcome: open (long-index lean, score by Nov 27); AMZN evening star = **worked**.
@@ -1098,6 +1100,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** one chart plus one table per post; specific and testable; small samples. **Signal-to-noise:** medium-high. **Bias:** leans on bull-market base rates.
 - **2026-11-03 (Tue pm, 1 post, 13:36 ET):** VIX closed above 21 while the S&P stayed near its highs; SPX higher 4 weeks later in 15 of 17 cases, "good omen" for a post-midterm November rally. Outcome: open (check ~Dec 1; SPY 754.41 at the Nov 3 close).
 - **Calls log:**
+  - 2026-11-22 (Sun pm, 2 posts): S&P oversold for the first time in over a year; 5 days later SPX was higher in 13 of the last 15 cases, but 10 days out the win rate drops below 50% — tactical bounce, not necessarily a bottom. Says their risk-off stance worked. Outcome: open (5-day check ~Nov 27, 10-day ~Dec 4).
   - 2026-11-21 (Sat mid, 1 post): S&P in a technical correction, 9th-fastest drop since 1950; waterfall declines usually see a bit more downside before bottoming but recover faster than slow grinds. Lean: more downside first, then a fast recovery. Outcome: open.
   - 2026-11-21 (Sat am, 1 post): cautioned clients since mid-October, week worse than expected; "predicting a bottom is the easiest way to lose money", wait for evidence; outlook video this weekend. Outcome: the mid-Oct caution **worked**.
   - 2026-11-20 (Fri pm, 2 posts): SPX tracking the 1978 analog (midterm year, resurgent inflation); "the market took it seriously". Outcome: open.
@@ -1177,6 +1180,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** clean sourced charts, high volume (~12 posts/day), viral framing. **Signal-to-noise:** medium-high for macro data.
 - **Reliability:** trade claims are self-reported after the fact (WTI long).
 - **Calls log:**
+  - 2026-11-22 (Sun pm, 4 posts): futures reopen S&P +1.4%, NDX +2.2%, Dow +0.9%, WTI +1.5%, gold +2.0%, ES back above 7000; "in 3–6 months this will look like just a correction" (bullish AI view); Trump claims he predicted the crash; US median home price -0.4% YoY in Oct, first decline since May 2023. Outcome: correction-not-bear call open (3–6 months).
   - 2026-11-22 (Sun mid, 4 posts): SOXL -90% from June peak (2nd-largest drawdown since 2010); S&P -11.6% in 33 days (top-15 fastest since 1928); Trump: crash "will only get worse"; 10Y "+29bp last week, back above 5.00%". Data. **Note:** the 10Y claim conflicts with our brief (4.912%, -24bp/5d) and VolumeLeaders (5.15%→4.92%).
   - 2026-11-22 (Sun am, 5 posts): AI investment +1.27pp of real GDP growth Q1–Q3 (~65% of ~2%); Anthropic cash $237B after IPO ($81B IPO + $26B placement); China Oct retail sales +0.4% vs +0.8% exp.; week ahead (PMIs Mon, confidence Tue, PCE + Q3 GDP Wed); futures reopen 18:00 ET (paywalled positioning). Data, no levels.
   - 2026-11-21 (Sat pm, 2 posts): sentiment is as negative as it has ever been despite the AI revolution (contrarian-bullish framing); Trump reposted a "TrumpCare" healthcare proposal. No levels.
@@ -1370,6 +1374,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Bias:** bullish; contrarian to "late bears".
 - **Reliability:** too early to score; calls are specific enough to track.
 - **Calls log:**
+  - 2026-11-22 (Sun pm, 3 posts): META is getting closer to the **480s**, which he says will come and "will be a buy"; two live-trading videos. Outcome: open (score on a META print in the 480s).
   - 2026-11-22 (Sun mid, 2 posts): outlook tonight; VIX 30+ after Friday panic = can rip or keep falling, "don't be the hero"; "Jensen returning" rumors are this week's recycled headline. Neutral, no level yet.
   - 2026-11-21 (Sat am, 2 posts): Sunday schedule (market scan 17:00, QQQ weekly prediction 20:00, outlook 20:30 ET); asks if followers want a QQQ update. No call yet.
   - 2026-11-20 (Fri pm, 3 posts): video post-mortem: "dead wrong" on the market this week; Nasdaq -10% in ~30 hours. Outcome: owned the miss (QQQ 608.45).
