@@ -28,6 +28,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** discretionary trader and educator. **Focus:** mega-cap tech, BTC, risk-management tips.
 - **Style:** short motivational and lifestyle posts, occasional breakout callouts. **Signal-to-noise:** medium-low.
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 1 post): story of a 2018 seller who never bought back in; stay-invested message. No level. Outcome: n/a.
   - 2026-11-22 (Sun am, 2 posts, Sat 19:33–19:53 ET): crypto "holding up" — BTC $60,144.79, ETH $1,680.36 bouncing; buyers stepped in at the same levels three times in 2026; Hormuz photo post. Bounce lean, no level. Outcome: open.
   - 2026-11-21 (Sat pm, 2 posts): satire post mocking a new trader's "Black Monday like 1987/1929" call (implicitly not bearish); TradingView giveaway promo. No new call.
   - 2026-11-21 (Sat mid, 2 posts): an Iran deal on Sunday plus oversold/flushed sentiment, indices at April breakout levels and OPEX done "set the floor" for a strong snapback; $7.5T lost since the October peak, reverse wealth effect may cool inflation faster than Fed cuts. Outcome: open (conditional on a deal; score Mon Nov 23).
@@ -342,6 +343,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** subscriber day-trading room. **Focus:** intraday index and options trades.
 - **Style:** most posts locked to subscribers (daily "Weekly Open" article); occasional public trading-psychology posts and custom indicators. **Signal-to-noise:** low publicly.
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 1 post): countdown to Sunday 18:00 ET futures open. No call.
   - 2026-11-21 (Sat am, 1 post): meme video. No call.
   - 2026-11-20 (Fri pm, 1 post): signed off for the week. No call.
   - 2026-11-19 (Thu mid, 3 posts): capitulation humour ("the faster everything goes to zero..."), a video, a chart. No level.
@@ -405,6 +407,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** charting-platform brand account; chart technician plus marketing. **Focus:** pattern setups, earnings, insider buys.
 - **Style:** clean annotated charts with Fibonacci and analyst-target lines; memes; product promotion; no stops. **Signal-to-noise:** medium. **Bias:** bullish on breakouts.
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 3 posts): TXN daily "look out below" (lost rising trendline ~263.75, thin volume below); GOOG lowest P/E ever, 34% below its cheap band; ABBV "catching up to do". Mixed: TXN bearish, GOOG/ABBV bullish; no invalidation. Outcome: open (score TXN vs 263.75 by Nov 27).
   - 2026-11-22 (Sun am, 5 posts): NVDA "cheapest valuation in 7 years" with DC revenue $2.9B → $107.6B in 5 years; SKHY daily RSI bullish divergence at all-time lows; Black Friday/Sidekick promos, meme. Bullish-value lean, no levels. Outcome: open (score week of Nov 23).
   - 2026-11-21 (Sat pm, 2 posts): SPY weekly "approaching a must-hold level" — price (~690 label) on the visible-range volume POC, 2025-lows anchored VWAP at ~671 (±3% bands), weekly Williams %R oversold like Apr 2025 and Mar 2026 lows; NVDA weekly (log) trailing P/E ~18x, cheapest since 2019, price ~125.5 just above its long anchored VWAP ~125.3. Support framing, no direction stated. Outcome: open (score week of Nov 23).
   - 2026-11-21 (Sat mid, 4 posts): weekly charts — GOOGL "look out below" (losing a shelf), NBIS weekly RSI oversold into the Nov 2025 floor, ORCL "lost the floor"; Black Friday promo. Bearish GOOGL/ORCL, NBIS support test; no levels in text. Outcome: open.
@@ -491,6 +494,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** daily and weekly pattern calls (engulfing, channel tops, wedges, EMAs); names triggers but few price targets; argues with followers. **Signal-to-noise:** medium-high.
 - **Bias:** tends to call tops (says AMD top worked "after 20 tries"). Admits misses publicly (TSLA, 10/11).
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 4 posts): MAGS daily/weekly: his Nov 19 box + H&S breakdown call played out; now closed into the June-rally demand zone, "don't short" there; basketball video. Outcome: Nov 19 MAGS breakdown **worked**; no-short-at-demand open (score by Nov 27).
   - 2026-11-21 (Sat pm, 1 post): DAX chart revisiting his Nov 14 call (UK record weekly close and DAX into "mother of all resistances" = bad for US the next week); DAX fell hard from that high. Outcome: Nov 14 call **worked**.
   - 2026-11-21 (Sat mid, 5 posts): did not expect Friday's flush to the bottom support zone; focusing on index long entries (SPY/QQQ/IWM/DJI); after a big weekly "F U" candle expect consolidation, not another one; AMZN evening-star reversal call worked ("lucky guess"); crashes are technical and give countertrend moves. Outcome: open (long-index lean, score by Nov 27); AMZN evening star = **worked**.
   - 2026-11-21 (Sat am, 5 posts): BTC daily RSI most oversold since 2018; the harder BTC falls into Sunday, the higher the odds of a market rally next week; ES "fun fact" (last one marked the March low) is short-term bullish but "won't be a major bottom"; TSLA shorts caught both dumps this month. Outcome: open (score vs SPY 690.42 by Nov 27).
@@ -581,6 +585,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** news, insider trades, congressional trades, flow tools. **Focus:** insider trades, Fed and macro headlines, product.
 - **Style:** "BREAKING" headlines plus heavy self-promotion (about a third of posts). **Signal-to-noise:** medium.
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 1 post): IG tech bond yields above 6%, highest since 2009, AI funding rush "cracking" (Bloomberg). News.
   - 2026-11-22 (Sun am, 6 posts): ANTT/ANTZ 2x long/short Anthropic ETFs start Monday; 36% of October home sales had a price cut (record, Redfin), inventory 1.59M; UK inactivity; podcast/API promos. News.
   - 2026-11-21 (Sat am, 2 posts): API/AI-assistant promo; podcast clip. No market content.
   - 2026-11-20 (Fri pm, 8 posts): SPY's first 7-day losing streak since 2020, only 8–9 weeks since 1993 worse; Yardeni sees the AI sell-off as a buying opportunity; NSA network down; MSFT buyouts tied to AI. News/stats.
@@ -660,6 +665,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** exact levels and targets; polls. **Signal-to-noise:** high.
 - **Bias:** leans bullish and buys dips.
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 4 posts): NVDA daily RSI ~15, matched only in 2008 (then -73%, short rally, another ~-60%), "you decide"; SOXL annual-candle wick joke; Ackman says TA matters; Grok tally of follower +50% picks (NBIS, ASTS, SNDK, OPEN, CIFR, MU, CRWV, IREN, NVDA, MSTR) framed as a contrarian list. No call.
   - 2026-11-22 (Sun am, 6 posts): weekend QQQ indication +1.46%; QQQ -0.70% YTD poll; follower +50% picks (NBIS, ASTS, SNDK, OPEN, CIFR per Grok); holiday hours (closed Nov 26, 13:00 ET close Nov 27); turkey-chart joke. Bounce lean, no level. Outcome: open (check the Sunday 18:00 ET reopen).
   - 2026-11-21 (Sat pm, 1 post): asks followers for a +50% name by year-end (27 trading days from Friday's close); his pick IREN, self-described "gulp". Outcome: open (score Dec 31).
   - 2026-11-21 (Sat mid, 4 posts): NVDA is the only US stock above $2.2B market cap with an RSI of 15; RDDT worst S&P component YTD at -63%; BTC $35k joke (video); a video link. Stats, no call.
@@ -751,6 +757,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** commentator posting in Turkish and English; low frequency. **Focus so far:** tech-industry commentary (10/12: skeptical of tech CEOs' claims of a special edge).
 - **Signal-to-noise:** low-medium; occasional useful market stats. 10/12 also posted a "$wve" video (not reviewed).
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 1 post, Turkish): announces a long article on the AI selloff (ATH revisit? Jensen? year-end rally?). No call yet.
   - 2026-11-20 (Fri pm, 1 post): NVDA replaced Enron in the S&P 25 years ago (joke). No call.
   - 2026-11-19 (Thu pm, 2 posts, Turkish): tempted to buy a 1DTE SPY call for Friday; "suffering ends when you give back the last profit". Bounce itch, no level.
   - 2026-11-19 (Thu mid, 1 post, Turkish, video): now a "hypervigilance" phase where trauma-driven expectation bias brings trust problems. No level. Outcome: his deleveraging call fits the afternoon reversal.
@@ -865,6 +872,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Type:** trading educator and macro chartist (Jordan Lindsey). **Focus:** TNX/10Y, NQ, BTC/ETH. Low frequency (no posts 10/08–10/15 morning; 2 posts 10/15 midday).
 - **Style:** big-picture chart calls with self-promotion of past hits.
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 2 posts): CTM stocks' path through the market-structure turn; performance similar to the early-2025 correction into end of March. Analog framing, no call.
   - 2026-11-21 (Sat pm, 2 posts): Nasdaq 100 -19.8% in 33 trading days; analogs — 2025 low -22.9% on day 34 (new high by day 86), 1998 low -23.0% day 57, 2022 kept falling to -35.5% (day 253); QQQ vs 2000 (-28.1% by day 33) and 2007 (-9.3%). Asks if lows are in; no call. Data-driven framing (~-23% analog low would be ~3-4% below Friday).
   - 2026-11-21 (Sat am, 1 post): "$55k bitcoin is cheap" (BTC at its lowest since Sep 2024). Outcome: open.
   - 2026-11-18 (Wed pm, 2 posts): three straight distribution days often mark bottoms, but in crises came with deeper losses; correction vs bear start look alike in real time. Framework, no level.
@@ -904,6 +912,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** very high volume (40+ posts a day hit the cap); many political and culture posts. **Signal-to-noise:** medium-low (market posts useful).
 - **Bias:** bearish and alarmist framing.
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 13 posts): hedge-fund VIPs worst in 20 years, Goldman: cyclicals next; "Best Is Yet To Come Undone"; Iran deal talk vs Houthi missiles at Riyadh; Delta ATL automation outage; rest crime/politics. Bearish. Outcome: open.
   - 2026-11-22 (Sun am, ~24 posts): hedge funds' biggest single-stock short wave since 2022, dumping US financials fastest in 5 years; Goldman panic index record 9.8; Hartnett: S&P must give up 2026 gains (80 points away) to stop the Fed; Bessent on Trump–Xi AI military pact; rest politics/Europe. Bearish; positioning items useful. Outcome: open (score at the reopen/Monday).
   - 2026-11-21 (Sat am, ~25 posts): almost all politics/geopolitics (Ukraine, Iran, Russia–Estonia, Saudi Patriots, EU AI cyberattack, Starship costs). Very low market signal.
   - 2026-11-20 (Fri pm, 20 posts, 15:20–18:00 ET): NVDA -23% week (worst since Oct 2008), +1.8% AH; bonds jump as stocks dump most since Liberation Day; MSCI EM -21% from June; US debt $40.7T; Hertz ABS watch; many political posts. Low signal-to-noise after the close.
@@ -1168,6 +1177,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** clean sourced charts, high volume (~12 posts/day), viral framing. **Signal-to-noise:** medium-high for macro data.
 - **Reliability:** trade claims are self-reported after the fact (WTI long).
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 4 posts): SOXL -90% from June peak (2nd-largest drawdown since 2010); S&P -11.6% in 33 days (top-15 fastest since 1928); Trump: crash "will only get worse"; 10Y "+29bp last week, back above 5.00%". Data. **Note:** the 10Y claim conflicts with our brief (4.912%, -24bp/5d) and VolumeLeaders (5.15%→4.92%).
   - 2026-11-22 (Sun am, 5 posts): AI investment +1.27pp of real GDP growth Q1–Q3 (~65% of ~2%); Anthropic cash $237B after IPO ($81B IPO + $26B placement); China Oct retail sales +0.4% vs +0.8% exp.; week ahead (PMIs Mon, confidence Tue, PCE + Q3 GDP Wed); futures reopen 18:00 ET (paywalled positioning). Data, no levels.
   - 2026-11-21 (Sat pm, 2 posts): sentiment is as negative as it has ever been despite the AI revolution (contrarian-bullish framing); Trump reposted a "TrumpCare" healthcare proposal. No levels.
   - 2026-11-21 (Sat mid, 2 posts): Taiwan restricts short selling (no shorts below prior close, margin 150%) from Monday after an -18% week, worst in 35 years; foreign Treasury holdings -$76B in September to $9.24T, 3rd decline in 4 months. Data, no levels.
@@ -1291,6 +1301,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** one-line post plus chart images with ranked bubbles (#1 = largest since inception) and level labels (price · $ value · rank). Does not say buy or sell. **Signal-to-noise:** high for levels; low volume (a few posts a day).
 - **Reliability:** factual ranks from its own database; treat prints as levels, not direction. Open `/status/<id>/photo/1` to read the full chart. Logged in volume_leaders.jsonl.
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 2 posts): weekly recap: flight to bonds/dollar not cash; SPY shelf $689–$691.60 (~$54B, $689 = $22B), "heavily ranked" closing print on it; overhead $715.90, $732.60, $741–$750; hold shelf → $716 test. Says SPY closed $697.49 (our brief: 690.42). 1 line logged. Outcome: open (score at the reopen).
   - 2026-11-21 (Sat am, 3 posts, Fri 19:48–20:19 ET): NVDA closed on its #1 level (~$126) after -50% from ATH, lowest daily ATR since Oct 2018; VXX/VIXY active at the highs again = "often" long vol closing (bounce lean); ANT size near the ~$88-89 low. 3 lines logged. Outcome: open (the similar Nov 17 VXX bounce read **failed** that week).
   - 2026-11-20 (Fri mid, 1 post, 11:16 ET): TLH follow-up. The Nov 12 #1 print "bought the dip"; TLH is $95.53 with local resistance near $96, and the $94.10 level ($1.2B) is now ranked #3. TMF held a test of its #2. Logged 1 line. Outcome: **worked** (10Y -13.6bp to 4.92%, our brief).
   - 2026-11-19 (Thu mid, 1 post, 12:46 ET): ANT day-one levels: $111.50 $12B #1 (public-block cluster at the open), $110 $1.6B #2, $100 $590M #3, $108 $450M #4, $105 $390M #5; dark-pool block near $104, sweeps near $96–98 at the low. Logged 5 lines. Outcome: open ($100 the pivot). The Nov 18 VXX "bounce" print gave only ~2 hours.
@@ -1326,6 +1337,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Style:** "Portföy Güncellemesi" (portfolio update) posts with entry/exit prices and reasoning, plus technical scenario notes. **Signal-to-noise:** medium-high; a few posts a day.
 - **Reliability:** entries are self-reported with prices; no stops shown so far.
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 1 post): essay on outcome bias in Turkish fintwit. No call.
   - 2026-11-21 (Sat am, 2 posts): S&P worst November since 2008, Nasdaq since 2000; some AI names will never see old highs; Burry as a "litmus test". Bearish long-term view, no level.
   - 2026-11-20 (Fri pm, 1 post, Turkish): blames the crash on sticky inflation and rate hikes, not oil; says he moved to cash after the hike and wishes he had sold more; still up YTD on spot. Macro view, no level.
   - 2026-11-19 (Thu pm, 1 post): AMD lost ~$100B in minutes after Hunterbrook's short disclosure; summarizes the report's two claims. Relay.
@@ -1358,6 +1370,7 @@ Started 2026-10-10 (first run). Revised after each digest; last revised 2026-11-
 - **Bias:** bullish; contrarian to "late bears".
 - **Reliability:** too early to score; calls are specific enough to track.
 - **Calls log:**
+  - 2026-11-22 (Sun mid, 2 posts): outlook tonight; VIX 30+ after Friday panic = can rip or keep falling, "don't be the hero"; "Jensen returning" rumors are this week's recycled headline. Neutral, no level yet.
   - 2026-11-21 (Sat am, 2 posts): Sunday schedule (market scan 17:00, QQQ weekly prediction 20:00, outlook 20:30 ET); asks if followers want a QQQ update. No call yet.
   - 2026-11-20 (Fri pm, 3 posts): video post-mortem: "dead wrong" on the market this week; Nasdaq -10% in ~30 hours. Outcome: owned the miss (QQQ 608.45).
   - 2026-11-20 (Fri mid, 10 posts): "grabbed some TQQQ" (09:17 ET); "SPY nasty rejection at the previous day's low" (10:17). He admits he was "completely wrong" about a QQQ bounce to 700+ this week. He is now buying long-term exposure on repeat ("not trying to buy the bottom"). Outcome: the TQQQ entry is **underwater** (QQQ about -5%). He was honest about the miss.
