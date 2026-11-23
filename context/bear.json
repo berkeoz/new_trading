@@ -1,8 +1,8 @@
 {
  "asof": "2026-11-23",
- "updated": "2026-11-23 13:02",
- "state": "Bull",
- "signs_on": 2,
+ "updated": "2026-11-23 16:16",
+ "state": "Caution",
+ "signs_on": 3,
  "signs_total": 10,
  "signs": [
   {
@@ -56,7 +56,7 @@
   {
    "key": "credit",
    "label": "High-yield spread widening",
-   "on": false,
+   "on": true,
    "detail": ""
   },
   {
@@ -2142,11 +2142,11 @@
   ],
   [
    "2026-11-20",
-   3
+   4
   ],
   [
    "2026-11-23",
-   2
+   3
   ]
  ],
  "state_history": [
@@ -4228,7 +4228,7 @@
   ],
   [
    "2026-11-23",
-   "Bull"
+   "Caution"
   ]
  ],
  "test": {

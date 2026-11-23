@@ -1,5 +1,5 @@
 {
- "generated_et": "2026-11-23 13:02",
+ "generated_et": "2026-11-23 16:16",
  "pillars": [
   "Inflation",
   "Labor",
@@ -9434,13 +9434,13 @@
    "kind": "level",
    "tier1": false,
    "unit": "pp",
-   "latest_obs": "2026-11-19",
-   "latest_raw": 3.52,
-   "value": 3.52,
+   "latest_obs": "2026-11-20",
+   "latest_raw": 3.76,
+   "value": 3.76,
    "value_date": "2026-11-30",
    "prev": 3.44,
    "trend": "rising",
-   "pct_rank_10y": 86.0,
+   "pct_rank_10y": 92.0,
    "range_10y": [
     2.63,
     3.94
@@ -9492,7 +9492,7 @@
     },
     {
      "date": "2026-11",
-     "value": 3.52
+     "value": 3.76
     }
    ],
    "hist": {
@@ -9572,7 +9572,7 @@
      2.63,
      3.12,
      3.44,
-     3.52
+     3.76
     ]
    },
    "daily_or_weekly": true
@@ -9900,13 +9900,13 @@
    "kind": "level",
    "tier1": false,
    "unit": "",
-   "latest_obs": "2026-11-13",
-   "latest_raw": 122.65,
-   "value": 122.65,
+   "latest_obs": "2026-11-20",
+   "latest_raw": 123.598,
+   "value": 123.598,
    "value_date": "2026-11-30",
    "prev": 121.666,
    "trend": "rising",
-   "pct_rank_10y": 88.0,
+   "pct_rank_10y": 90.0,
    "range_10y": [
     106.77,
     129.28
@@ -9958,7 +9958,7 @@
     },
     {
      "date": "2026-11",
-     "value": 122.65
+     "value": 123.598
     }
    ],
    "hist": {
@@ -10204,10 +10204,10 @@
      118.568,
      120.969,
      121.666,
-     122.65
+     123.598
     ]
    },
-   "yoy": 1.3,
+   "yoy": 2.1,
    "daily_or_weekly": true
   },
   {
@@ -13213,7 +13213,7 @@
   "Labor": "solid (unemployment 4.1%, payrolls 3-month avg +137k)",
   "Growth": "solid (real GDP 3.4% annualized, retail sales +6.8% y/y)",
   "Fed & rates": "mildly restrictive (real policy rate ~+0.9pp = fed funds 4.00% minus core PCE 3.1%)",
-  "Financial conditions": "loose (NFCI -0.48, high-yield spread 3.52pp)",
+  "Financial conditions": "loose (NFCI -0.48, high-yield spread 3.76pp)",
   "Recession signals": "none flashing (Sahm 0.00, 10Y-2Y +0.29pp, NY Fed 12-month odds 16%, CFNAI -0.05)",
   "Valuation": "extreme (stock market value 234% of GDP, 95th percentile of 10 years; dot-com peak 163% in 2000-01, same measure)",
   "Oil": "WTI $90 (+53% y/y), price trend rising, oil volatility 54 (85th percentile)"
@@ -13239,32 +13239,32 @@
    {
     "month": "2027-02",
     "symbol": "ZQG27.CBT",
-    "implied": 4.31
+    "implied": 4.305
    },
    {
     "month": "2027-03",
     "symbol": "ZQH27.CBT",
-    "implied": 4.38
+    "implied": 4.37
    },
    {
     "month": "2027-04",
     "symbol": "ZQJ27.CBT",
-    "implied": 4.46
+    "implied": 4.445
    },
    {
     "month": "2027-05",
     "symbol": "ZQK27.CBT",
-    "implied": 4.515
+    "implied": 4.495
    },
    {
     "month": "2027-06",
     "symbol": "ZQM27.CBT",
-    "implied": 4.56
+    "implied": 4.54
    },
    {
     "month": "2027-07",
     "symbol": "ZQN27.CBT",
-    "implied": 4.58
+    "implied": 4.555
    }
   ],
   "meetings": [
