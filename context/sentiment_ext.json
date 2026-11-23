@@ -1,5 +1,5 @@
-{"updated": "2026-11-20 15:06",
- "note": "Nov 20 check: no CNN Fear & Greed value from a reliable source newer than Benzinga's 25 for Nov 17 was found (a Public.com prediction market only shows odds, not the index). No AAII release newer than the week ending Nov 18 and no newer Cboe put/call value were found. NAAIM is still subscription-only (TheStreet, Nov 13, reported an eight-week low without a number). Earlier values are kept.",
+{"updated": "2026-11-23 09:46",
+ "note": "Nov 23 check: web searches found no CNN Fear & Greed value newer than Benzinga's 25 for Nov 17, no AAII release newer than the week ending Nov 18, no newer Cboe put/call value, and NAAIM is still subscription-only. Earlier values are kept.",
  "gauges": [
   {"name": "CNN Fear & Greed index", "value": "25 (prior 31)", "date": "2026-11-17", "reading": "extreme fear, the lowest since Nov 5 (20); readings this low have tended to precede better-than-average forward returns", "source": "https://benzinga.com/markets/market-summary/26/11/63384433/dow-tumbles-over-800-points-ahead-of-anthropic-ipo-investor-sentiment-weakens-further-fear-greed-index-moves-to-extreme-fear-zone"},
   {"name": "AAII sentiment survey", "value": "Bullish 33.3% / Neutral 24.4% / Bearish 42.2% (spread -8.9)", "date": "2026-11-18", "reading": "fear, but easing: bears about 11pp above their 31.5% long-run average, down from 51.4% a week earlier", "source": "https://www.aaii.com/sentimentsurvey"},
