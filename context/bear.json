@@ -1,6 +1,6 @@
 {
  "asof": "2026-11-24",
- "updated": "2026-11-24 16:16",
+ "updated": "2026-11-25 09:14",
  "state": "Caution",
  "signs_on": 3,
  "signs_total": 10,
@@ -9,7 +9,7 @@
    "key": "below200",
    "label": "SPY below its 200-day average",
    "on": true,
-   "detail": "SPY 716.03 vs 200-day 730.61"
+   "detail": "SPY 718.78 vs 200-day 730.62"
   },
   {
    "key": "ma200_falling",
@@ -33,13 +33,13 @@
    "key": "mom12",
    "label": "12-month return negative",
    "on": false,
-   "detail": "12-month return +9.8%"
+   "detail": "12-month return +10.2%"
   },
   {
    "key": "dd10",
    "label": "10%+ below the 52-week high",
    "on": false,
-   "detail": "-8.1% from the 52-week high"
+   "detail": "-7.7% from the 52-week high"
   },
   {
    "key": "breadth",
@@ -66,7 +66,7 @@
    "detail": ""
   }
  ],
- "drawdown_pct": -8.1,
+ "drawdown_pct": -7.7,
  "history": [
   [
    "2024-10-29",
